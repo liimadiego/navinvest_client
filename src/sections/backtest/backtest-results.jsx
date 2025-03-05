@@ -186,68 +186,74 @@ export function BacktestResults() {
 
             <Grid container spacing={3}>
 
-                <Grid item xs={12} md={6}>
-                    <Card sx={{ p: 3 }}>
-                        <Typography variant="h6" sx={{ mb: 2 }}>
-                            Métricas de Desempenho
-                        </Typography>
-                        <Typography>
-                            <strong>Retorno Total:</strong> {(results.totalReturn * 100).toFixed(2)}%
-                        </Typography>
-                        <Typography>
-                            <strong>Retorno Médio Diário:</strong> {(results.avgDailyReturn * 100).toFixed(2)}%
-                        </Typography>
-                        <Typography>
-                            <strong>Volatilidade:</strong> {(results.volatility * 100).toFixed(2)}%
-                        </Typography>
-                        <Typography>
-                            <strong>Dias Computados:</strong> {results.computedDays}
-                        </Typography>
-                    </Card>
+                <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={12} sx={{ mb: 3 }}>
+                        <Card sx={{ p: 3 }}>
+                            <Typography variant="h6" sx={{ mb: 2 }}>
+                                Métricas de Desempenho
+                            </Typography>
+                            <Typography>
+                                <strong>Retorno Total:</strong> {(results.totalReturn * 100).toFixed(2)}%
+                            </Typography>
+                            <Typography>
+                                <strong>Retorno Médio Diário:</strong> {(results.avgDailyReturn * 100).toFixed(2)}%
+                            </Typography>
+                            <Typography>
+                                <strong>Volatilidade:</strong> {(results.volatility * 100).toFixed(2)}%
+                            </Typography>
+                            <Typography>
+                                <strong>Dias Computados:</strong> {results.computedDays}
+                            </Typography>
+                        </Card>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                        <Card sx={{ p: 3 }}>
+                            <Typography variant="h6" sx={{ mb: 2 }}>
+                                Intervalo de Dados dos Ativos
+                            </Typography>
+                            {Object.entries(results.assetsDates).map(([asset, { start, end }]) => (
+                                <Box key={asset} sx={{ mb: 2 }}>
+                                    <Typography>
+                                        <strong>{asset}:</strong>
+                                    </Typography>
+                                    <Typography>
+                                        Início: {format(new Date(start), 'dd/MM/yyyy')}
+                                    </Typography>
+                                    <Typography>
+                                        Término: {format(new Date(end), 'dd/MM/yyyy')}
+                                    </Typography>
+                                </Box>
+                            ))}
+                        </Card>
+                    </Grid>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
-                    <Card sx={{ p: 3 }}>
-                        <Typography variant="h6" sx={{ mb: 2 }}>
-                            Intervalo de Dados dos Ativos
-                        </Typography>
-                        {Object.entries(results.assetsDates).map(([asset, { start, end }]) => (
-                            <Box key={asset} sx={{ mb: 2 }}>
-                                <Typography>
-                                    <strong>{asset}:</strong>
-                                </Typography>
-                                <Typography>
-                                    Início: {format(new Date(start), 'dd/MM/yyyy')}
-                                </Typography>
-                                <Typography>
-                                    Término: {format(new Date(end), 'dd/MM/yyyy')}
-                                </Typography>
+                <Grid item xs={12} md={9}>
+
+                    <Grid item xs={12} md={12} sx={{ mb: 3 }}>
+                        <Card sx={{ p: 3 }}>
+                            <Typography variant="h6" sx={{ mb: 2 }}>
+                                Retorno Acumulado de Portfólio (%)
+                            </Typography>
+                            <Box sx={{ height: '400px' }}>
+                                <canvas ref={cumulativeChartRef} />
                             </Box>
-                        ))}
-                    </Card>
+                        </Card>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                        <Card sx={{ p: 3 }}>
+                            <Typography variant="h6" sx={{ mb: 2 }}>
+                                Retorno de Portfólio (%)
+                            </Typography>
+                            <Box sx={{ height: '400px' }}>
+                                <canvas ref={chartRef} />
+                            </Box>
+                        </Card>
+                    </Grid>
                 </Grid>
 
-                <Grid item xs={12}>
-                    <Card sx={{ p: 3 }}>
-                        <Typography variant="h6" sx={{ mb: 2 }}>
-                            Retorno Acumulado de Portfólio (%)
-                        </Typography>
-                        <Box sx={{ height: '400px' }}>
-                            <canvas ref={cumulativeChartRef} />
-                        </Box>
-                    </Card>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Card sx={{ p: 3 }}>
-                        <Typography variant="h6" sx={{ mb: 2 }}>
-                            Retorno de Portfólio (%)
-                        </Typography>
-                        <Box sx={{ height: '400px' }}>
-                            <canvas ref={chartRef} />
-                        </Box>
-                    </Card>
-                </Grid>
             </Grid>
         </Box>
     );
