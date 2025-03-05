@@ -13,6 +13,7 @@ import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/component
 import { LanguageProvider } from 'src/utils/languageContext.jsx';
 import { AuthProvider } from 'src/auth/context/jwt';
 import { getTranslation } from 'src/assets/data/languages';
+import { BacktestProvider } from './context/BacktestContext';
 
 globalThis.getTranslation = getTranslation;
 
@@ -25,19 +26,21 @@ export default function App({ children }) {
   return (
     <AuthProvider>
       <SettingsProvider defaultSettings={defaultSettings}>
-      <LanguageProvider>
-          <ThemeProvider
-            noSsr
-            defaultMode={themeConfig.defaultMode}
-            modeStorageKey={themeConfig.modeStorageKey}
-          >
-            <MotionLazy>
-              <ProgressBar />
-              <SettingsDrawer defaultSettings={defaultSettings} />
-              {children}
-            </MotionLazy>
-          </ThemeProvider>
-        </LanguageProvider>
+        <BacktestProvider>
+          <LanguageProvider>
+            <ThemeProvider
+              noSsr
+              defaultMode={themeConfig.defaultMode}
+              modeStorageKey={themeConfig.modeStorageKey}
+            >
+              <MotionLazy>
+                <ProgressBar />
+                <SettingsDrawer defaultSettings={defaultSettings} />
+                {children}
+              </MotionLazy>
+            </ThemeProvider>
+          </LanguageProvider>
+        </BacktestProvider>
       </SettingsProvider>
     </AuthProvider>
   );

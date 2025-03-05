@@ -13,7 +13,7 @@ import { ChatMessageInput } from '../chat-message-input';
 
 // ----------------------------------------------------------------------
 
-export function ChatView() {
+export function AIAssistantView() {
   const [messages, setMessages] = useState([]);
   const LOCAL_STORAGE_KEY = 'chat_messages';
 

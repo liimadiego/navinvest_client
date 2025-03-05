@@ -59,7 +59,7 @@ export const _notifications = [{
   category: 'Notícias',
   isUnRead: true,
   createdAt: _mock.time(1),
-  title: `<p><strong>Jayvon Hull</strong> mentioned you in <strong><a href='#'>Minimal UI</a></strong></p>`,
+  title: `<p><strong>Jayvon Hull</strong> mentioned you in <strong><a href='#'>Plataforma Invest</a></strong></p>`,
   description: `Here are some news from the team.`,
 }];
 

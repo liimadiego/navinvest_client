@@ -12,7 +12,7 @@ export const defaultSettings = {
   contrast: 'default',
   navLayout: 'vertical',
   primaryColor: 'preset3',
-  navColor: 'integrate',
+  navColor: 'apparent',
   compactLayout: false,
   fontSize: 16,
   fontFamily: themeConfig.fontFamily.primary,
