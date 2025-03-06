@@ -29,7 +29,12 @@ const availableTickers = ['BBAS3', 'ITSA4', 'TAEE11', 'AURE3', 'CMIG3', 'CSMG3',
 
 export function BacktestForm() {
   const { setResults } = useContext(BacktestContext);
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+
+  const filteredTickers = availableTickers.filter((ticker) =>
+    ticker.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const defaultValues = {
     portfolio: [],
@@ -94,7 +99,7 @@ export function BacktestForm() {
 
       data.portfolio.forEach(ticker => {
         if (!isValidNumber(ticker.allocation) || ticker.value == '' || ticker.value == 0) {
-          methods.setError('portfolio', { type: 'manual', message: 'É necessário preencher todos os portfolio' });
+          methods.setError('portfolio', { type: 'manual', message: 'É necessário preencher todos os valores dos tickers' });
           ticker_error = true;
         }
       });
@@ -165,19 +170,29 @@ export function BacktestForm() {
                         displayEmpty
                         fullWidth
                         error={!!error}
+                        renderValue={(selected) => (selected ? selected : "Selecione um ticker")}
                       >
-                        <MenuItem value="" disabled>
-                          Selecione um ticker
-                        </MenuItem>
-                        {availableTickers.map((ticker) => (
-                          <MenuItem key={ticker} value={ticker}>
-                            {ticker}
-                          </MenuItem>
-                        ))}
+                        <TextField
+                          variant="standard"
+                          placeholder="Buscar..."
+                          fullWidth
+                          autoFocus
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          value={searchTerm}
+                        />
+
+                        {filteredTickers.length > 0 ? (
+                          filteredTickers.map((ticker) => (
+                            <MenuItem key={ticker} value={ticker}>
+                              {ticker}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem disabled>Nenhum resultado encontrado</MenuItem>
+                        )}
                       </Select>
-                      {error && (
-                        <FormHelperText error>{error.message}</FormHelperText>
-                      )}
+
+                      {error && <FormHelperText error>{error.message}</FormHelperText>}
                     </>
                   )}
                 />
