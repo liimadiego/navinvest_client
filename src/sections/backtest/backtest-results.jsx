@@ -17,7 +17,6 @@ export function BacktestResults() {
     }
 
     const handleDownload = useCallback(() => {
-
         const ws = XLSX.utils.json_to_sheet(
             results.dailyReturns.map(([timestamp, returnValue], index) => ({
                 Data: format(new Date(timestamp), 'dd/MM/yyyy'),
@@ -78,10 +77,10 @@ export function BacktestResults() {
                         name: 'Retorno Diário',
                         data: results.dailyReturnsReduced.map(([timestamp, returnValue]) => (returnValue * 100).toFixed(2)),
                     },
-                    {
-                        name: 'Retorno acumulado',
-                        data: results.dailyReturnsCumulativeReduced.map(([timestamp, returnValue]) => (returnValue * 100).toFixed(2)),
-                    },
+                    // {
+                    //     name: 'Retorno acumulado',
+                    //     data: results.dailyReturnsCumulativeReduced.map(([timestamp, returnValue]) => (returnValue * 100).toFixed(2)),
+                    // },
                 ],
             },
         ],
