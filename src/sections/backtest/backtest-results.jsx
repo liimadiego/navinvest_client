@@ -12,7 +12,7 @@ import * as XLSX from 'xlsx';
 export function BacktestResults() {
     const { results } = useContext(BacktestContext);
 
-    if (!results) {
+    if (!results || !results.dailyReturns) {
         return <Typography>Nenhum resultado disponível.</Typography>;
     }
 
@@ -77,10 +77,10 @@ export function BacktestResults() {
                         name: 'Retorno Diário',
                         data: results.dailyReturnsReduced.map(([timestamp, returnValue]) => (returnValue * 100).toFixed(2)),
                     },
-                    // {
-                    //     name: 'Retorno acumulado',
-                    //     data: results.dailyReturnsCumulativeReduced.map(([timestamp, returnValue]) => (returnValue * 100).toFixed(2)),
-                    // },
+                    {
+                        name: 'Retorno acumulado',
+                        data: results.dailyReturnsCumulativeReduced.map(([timestamp, returnValue]) => (returnValue * 100).toFixed(2)),
+                    },
                 ],
             },
         ],
