@@ -6,7 +6,7 @@ import { BacktestTestView } from 'src/sections/backtest/view';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `Backtest | Dashboard - ${CONFIG.appName}` };
+const metadata = { title: `Backtest | ${CONFIG.appName}` };
 
 export default function Page() {
     return (

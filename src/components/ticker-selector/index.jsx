@@ -1,0 +1,157 @@
+import { useEffect, useRef, useState } from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+
+const availableTickers = [
+    { name: 'PETR4', current_price: 28.45, type: 'Ação', companyName: 'Petrobras', ticker: 'PETR4', image_url: 'https://investidor10.com.br/storage/companies/63d2c9ead34db.jpg', 'last_twelve_months': -0.0052 },
+    { name: 'PETR3', current_price: 29.45, type: 'Ação', companyName: 'Petrobras', ticker: 'PETR3', image_url: 'https://investidor10.com.br/storage/companies/63d2c9ead34db.jpg', 'last_twelve_months': 0.0011 },
+    { name: 'BBAS3', current_price: 32.45, type: 'Ação', companyName: 'Banco do Brasil', ticker: 'BBAS3', image_url: 'https://investidor10.com.br/storage/companies/66ad149f52cd4.jpg', 'last_twelve_months': -0.002 },
+    { name: 'ITSA4', current_price: 10.23, type: 'Ação', companyName: 'Itaúsa', ticker: 'ITSA4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
+    { name: 'TAEE3', current_price: 28.67, type: 'Ação', companyName: 'Taesa', ticker: 'TAEE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.0011 },
+    { name: 'TAEE4', current_price: 29.12, type: 'Ação', companyName: 'Taesa', ticker: 'TAEE4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': 0.001 },
+    { name: 'TAEE11', current_price: 30.45, type: 'Ação', companyName: 'Taesa', ticker: 'TAEE11', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': 0.012 },
+    { name: 'AURE3', current_price: 18.34, type: 'Ação', companyName: 'Auren Energia', ticker: 'AURE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
+    { name: 'CMIG3', current_price: 12.56, type: 'Ação', companyName: 'Cemig', 'last_twelve_months': -0.05, ticker: 'CMIG3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
+    { name: 'CSMG3', current_price: 14.78, type: 'Ação', companyName: 'Copasa', ticker: 'CSMG3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
+    { name: 'SAPR3', current_price: 7.89, type: 'Ação', companyName: 'Sanepar', ticker: 'SAPR3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
+    { name: 'KLBN4', current_price: 22.34, type: 'Ação', companyName: 'Klabin', ticker: 'KLBN4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
+    { name: 'WEGE3', current_price: 38.45, type: 'Ação', companyName: 'WEG', ticker: 'WEGE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
+];
+
+export function TickerSelector({ onAddTicker, selectedTickers = [] }) {
+    const [searchTickerText, setSearchTickerText] = useState('');
+    const [tickersSearchOptions, setTickersSearchOptions] = useState([]);
+    const searchContainerRef = useRef(null);
+
+    useEffect(() => {
+        if (searchTickerText.length > 2) {
+            fetchTickers(searchTickerText);
+        } else {
+            setTickersSearchOptions([]);
+        }
+    }, [searchTickerText, selectedTickers]);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+                setTickersSearchOptions([]);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [searchContainerRef]);
+
+    const fetchTickers = async (query) => {
+        try {
+            // const response = await fetch(`http://localhost:3000/tickers/search?query=${query}`);
+            // const tickers = await response.json();
+
+            const tickers = availableTickers.filter(ticker => {
+                console.log("selectedTickers", selectedTickers);
+                return ticker.ticker.toLowerCase().includes(query.toLowerCase()) &&
+                    !selectedTickers.some(selectedTicker => selectedTicker === ticker.ticker)
+            }
+            );
+
+            setTickersSearchOptions(tickers);
+        } catch (error) {
+            console.error('Erro ao buscar tickers:', error);
+        }
+    };
+
+    const handleSelectTicker = (ticker) => {
+        onAddTicker(ticker);
+        setSearchTickerText('');
+        setTickersSearchOptions([]);
+    };
+
+    return (
+        <div style={{ position: 'relative' }} ref={searchContainerRef}>
+            <TextField
+                label="Adicionar Ticker"
+                value={searchTickerText}
+                onChange={(e) => setSearchTickerText(e.target.value)}
+                fullWidth
+            />
+
+            {!!tickersSearchOptions.length && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        marginTop: 2,
+                        position: 'absolute',
+                        top: "45px",
+                        width: '100%',
+                        backgroundColor: 'background.default',
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 1,
+                        boxShadow: 1,
+                        zIndex: 1,
+                        padding: 1,
+                    }}
+                >
+                    {tickersSearchOptions.map((ticker, index) => (
+                        <Button
+                            key={index}
+                            variant="outlined"
+                            onClick={() => handleSelectTicker(ticker.ticker)}
+                            sx={{
+                                backgroundColor: 'background.paper',
+                                color: 'text.primary',
+                                borderRadius: index === 0 ? '5px 5px 0 0' : index === tickersSearchOptions.length - 1 ? '0 0 5px 5px' : 0,
+                                padding: "10px",
+                                border: "1px solid",
+                                borderColor: 'divider',
+                                margin: 0,
+                                '&:hover': {
+                                    backgroundColor: 'background.default',
+                                },
+                            }}
+                        >
+                            <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} style={{ width: '100%' }}>
+                                <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+                                    <img src={ticker.image_url} alt={ticker.ticker}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            marginRight: 15,
+                                            borderRadius: 5,
+                                        }}
+                                    />
+                                    <Box display={'flex'} flexDirection={'column'} alignItems={'start'}>
+                                        {ticker.ticker} - {ticker.companyName}<br></br>
+                                        <Box style={{ fontWeight: 400 }} display={'flex'} flexDirection={'row'} alignItems={'center'}>
+                                            <span style={{ fontSize: '13px', opacity: .7, marginRight: "10px" }}>R${ticker.current_price.toString().replace('.', ',')}</span>
+
+                                            {ticker.last_twelve_months && (
+                                                <Box>
+                                                    <span style={{ fontSize: '12px', color: ticker.last_twelve_months > 0 ? 'green' : 'red' }}>
+                                                        {ticker.last_twelve_months > 0 ? '+' : ''}{(ticker.last_twelve_months * 100).toFixed(2)}%
+                                                        <span style={{ color: ticker.last_twelve_months > 0 ? 'green' : 'red', marginLeft: "2px" }}>
+                                                            {ticker.last_twelve_months > 0 ? '↑' : '↓'}
+                                                        </span>
+                                                    </span>
+                                                    <span style={{ fontSize: '11px', opacity: .7 }}> (12 meses)</span>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                <Box sx={{ backgroundColor: 'primary.main', height: '100%', padding: "1px 5px", opacity: .8, borderRadius: 1 }}>
+                                    {ticker.type}
+                                </Box>
+                            </Box>
+                        </Button>
+                    ))}
+                </Box>
+            )}
+        </div>
+    );
+}

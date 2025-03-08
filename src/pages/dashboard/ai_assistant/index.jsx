@@ -6,7 +6,7 @@ import { AIAssistantView } from 'src/sections/ai_assistant/view';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `Assistente IA | Dashboard - ${CONFIG.appName}` };
+const metadata = { title: `Assistente IA | ${CONFIG.appName}` };
 
 export default function Page() {
   return (

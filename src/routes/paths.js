@@ -46,5 +46,6 @@ export const paths = {
     ai_assistant: `${ROOTS.DASHBOARD}/ai_assistant`,
     backtest: `${ROOTS.DASHBOARD}/backtest`,
     backtest_results: `${ROOTS.DASHBOARD}/backtest_results`,
+    compare_assets: `${ROOTS.DASHBOARD}/compare_assets`,
   },
 };

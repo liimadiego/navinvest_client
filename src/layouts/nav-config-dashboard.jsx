@@ -54,6 +54,7 @@ export const navData = [
       },
       { title: 'Assistente IA', path: paths.dashboard.ai_assistant, icon: ICONS.chat },
       { title: 'Backtest', path: paths.dashboard.backtest, icon: ICONS.analytics },
+      { title: 'Comparar ativos', path: paths.dashboard.compare_assets, icon: ICONS.file },
     ],
   },
   /**

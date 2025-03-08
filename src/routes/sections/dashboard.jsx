@@ -17,6 +17,7 @@ const IndexPage = lazy(() => import('src/pages/dashboard/one'));
 const AIAssistantPage = lazy(() => import('src/pages/dashboard/ai_assistant'));
 const BacktestPage = lazy(() => import('src/pages/dashboard/backtest'));
 const BacktestResults = lazy(() => import('src/pages/dashboard/backtest/results'));
+const CompareAssets = lazy(() => import('src/pages/dashboard/compare_assets'));
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +45,7 @@ export const dashboardRoutes = [
       { path: 'ai_assistant', element: <AIAssistantPage /> },
       { path: 'backtest', element: <BacktestPage /> },
       { path: 'backtest_results', element: <BacktestResults /> },
+      { path: 'compare_assets', element: <CompareAssets /> },
       // {
       //   path: 'group',
       //   children: [

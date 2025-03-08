@@ -14,8 +14,7 @@ export function BacktestTestView() {
         heading="Backtest de portfólio"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Backtest', href: paths.dashboard.backtest },
-          { name: 'Portfólio' },
+          { name: 'Backtest', href: paths.dashboard.backtest }
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
