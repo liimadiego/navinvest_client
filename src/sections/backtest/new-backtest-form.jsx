@@ -174,7 +174,7 @@ export function BacktestForm() {
           <Box sx={{ flex: 3, zIndex: 2 }}>
             <Card sx={{ p: 3, overflow: 'visible' }}>
               <TickerSelector
-                key={getSelectedTickerSymbols().join(',')} // Força re-renderização
+                key={getSelectedTickerSymbols().join(',')}
                 onAddTicker={handleAddTicker}
                 selectedTickers={getSelectedTickerSymbols()}
               />

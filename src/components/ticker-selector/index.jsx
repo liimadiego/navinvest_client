@@ -19,17 +19,31 @@ const availableTickers = [
     { name: 'WEGE3', current_price: 38.45, type: 'Ação', companyName: 'WEG', ticker: 'WEGE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
 ];
 
-export function TickerSelector({ onAddTicker, selectedTickers = [] }) {
+export function TickerSelector({ onAddTicker, selectedTickers }) {
+    if (!onAddTicker) {
+        throw new Error('onAddTicker is required');
+    }
+
+    if (!selectedTickers) {
+        throw new Error('selectedTickers is required');
+    }
+
     const [searchTickerText, setSearchTickerText] = useState('');
     const [tickersSearchOptions, setTickersSearchOptions] = useState([]);
     const searchContainerRef = useRef(null);
 
     useEffect(() => {
-        if (searchTickerText.length > 2) {
-            fetchTickers(searchTickerText);
-        } else {
+        if (searchTickerText.length < 3) {
             setTickersSearchOptions([]);
         }
+
+        const delayDebounceFn = setTimeout(() => {
+            if (searchTickerText.length > 2) {
+                fetchTickers(searchTickerText);
+            }
+        }, 1000);
+
+        return () => clearTimeout(delayDebounceFn);
     }, [searchTickerText, selectedTickers]);
 
     useEffect(() => {
@@ -52,7 +66,6 @@ export function TickerSelector({ onAddTicker, selectedTickers = [] }) {
             // const tickers = await response.json();
 
             const tickers = availableTickers.filter(ticker => {
-                console.log("selectedTickers", selectedTickers);
                 return ticker.ticker.toLowerCase().includes(query.toLowerCase()) &&
                     !selectedTickers.some(selectedTicker => selectedTicker === ticker.ticker)
             }
