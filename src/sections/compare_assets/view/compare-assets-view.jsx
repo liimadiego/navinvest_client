@@ -1,7 +1,7 @@
 import { paths } from 'src/routes/paths';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
-import { CompareAssetsForm } from '../new-comparison-form';
+import { CompareAssets } from '../compare-assets';
 import { LocalizationProvider } from 'src/locales';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -19,7 +19,7 @@ export function CompareAssetsView() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <CompareAssetsForm />
+        <CompareAssets />
       </LocalizationProvider>
 
     </DashboardContent>

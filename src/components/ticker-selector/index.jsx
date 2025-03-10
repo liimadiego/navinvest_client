@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import Box from '@mui/material/Box';
+import { Box, InputAdornment, CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { set } from 'nprogress';
 
 const availableTickers = [
     { name: 'PETR4', current_price: 28.45, type: 'Ação', companyName: 'Petrobras', ticker: 'PETR4', image_url: 'https://investidor10.com.br/storage/companies/63d2c9ead34db.jpg', 'last_twelve_months': -0.0052 },
@@ -19,7 +20,7 @@ const availableTickers = [
     { name: 'WEGE3', current_price: 38.45, type: 'Ação', companyName: 'WEG', ticker: 'WEGE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
 ];
 
-export function TickerSelector({ onAddTicker, selectedTickers }) {
+export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompany = false }) {
     if (!onAddTicker) {
         throw new Error('onAddTicker is required');
     }
@@ -30,6 +31,7 @@ export function TickerSelector({ onAddTicker, selectedTickers }) {
 
     const [searchTickerText, setSearchTickerText] = useState('');
     const [tickersSearchOptions, setTickersSearchOptions] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const searchContainerRef = useRef(null);
 
     useEffect(() => {
@@ -62,15 +64,27 @@ export function TickerSelector({ onAddTicker, selectedTickers }) {
 
     const fetchTickers = async (query) => {
         try {
-            // const response = await fetch(`http://localhost:3000/tickers/search?query=${query}`);
-            // const tickers = await response.json();
-
+            setIsLoading(true);
             const tickers = availableTickers.filter(ticker => {
+                if (doNotRepeatCompany) {
+                    const tickerCompany = ticker.ticker.substring(0, 4);
+                    const hasTickerCompany = selectedTickers.some(selectedTicker => {
+                        if (selectedTicker) {
+                            return selectedTicker.substring(0, 4) === tickerCompany;
+                        }
+                        return false
+                    });
+                    if (hasTickerCompany) {
+                        return false;
+                    }
+                }
                 return ticker.ticker.toLowerCase().includes(query.toLowerCase()) &&
                     !selectedTickers.some(selectedTicker => selectedTicker === ticker.ticker)
-            }
-            );
+            });
 
+            //simula demora
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            setIsLoading(false);
             setTickersSearchOptions(tickers);
         } catch (error) {
             console.error('Erro ao buscar tickers:', error);
@@ -90,6 +104,13 @@ export function TickerSelector({ onAddTicker, selectedTickers }) {
                 value={searchTickerText}
                 onChange={(e) => setSearchTickerText(e.target.value)}
                 fullWidth
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            {isLoading && <CircularProgress size={20} color='grey' />}
+                        </InputAdornment>
+                    ),
+                }}
             />
 
             {!!tickersSearchOptions.length && (
