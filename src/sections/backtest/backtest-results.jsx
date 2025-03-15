@@ -1,30 +1,39 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { Box, Typography, Card, Grid, Button } from '@mui/material';
 import { format } from 'date-fns';
 import { BacktestContext } from 'src/context/BacktestContext';
 import DownloadIcon from '@mui/icons-material/Download';
 
 import CardHeader from '@mui/material/CardHeader';
-import { Chart, useChart, ChartLegends } from 'src/components/chart';
+import { Chart, useChart, ChartLegends, ChartSelect } from 'src/components/chart';
 import { useTheme } from '@emotion/react';
 import * as XLSX from 'xlsx';
 
 export function BacktestResults() {
     const { results } = useContext(BacktestContext);
+    const [currentDividendMode, setCurrentDividendMode] = useState('Com Dividendos');
+    const dividendsKeyValue = {
+        'Com Dividendos': 'withDividends',
+        'Sem Dividendos': 'withoutDividends',
+    };
 
-    if (!results || !results.dailyReturns) {
+    const handleChangeDividendMode = useCallback((dividendMode) => {
+        setCurrentDividendMode(dividendMode);
+    }, []);
+
+    if (!results || !results.withDividends.dailyReturns || !results.withoutDividends.dailyReturns) {
         return <Typography>Nenhum resultado disponível.</Typography>;
-    }
+    };
 
     const handleDownload = useCallback(() => {
         const ws = XLSX.utils.json_to_sheet(
-            results.dailyReturns.map(([timestamp, returnValue], index) => ({
-                Data: format(new Date(timestamp), 'dd/MM/yyyy'),
-                'Retorno Diário': (returnValue * 100).toFixed(2),
-                'Retorno Acumulado': (results.dailyReturnsCumulative[index][1] * 100).toFixed(2),
-                'Retorno Total': index === 0 ? (results.totalReturn * 100).toFixed(2) : '',
-                'Retorno Médio Diário': index === 0 ? (results.avgDailyReturn * 100).toFixed(2) : '',
-                'Volatilidade': index === 0 ? (results.volatility * 100).toFixed(2) : '',
+            results[dividendsKeyValue[currentDividendMode]].dailyReturns.map(({ accumulated, current, date }, index) => ({
+                Data: format(new Date(date), 'dd/MM/yyyy'),
+                'Retorno Diário': `${(current * 100).toFixed(2)}%`,
+                'Retorno Acumulado': `${(accumulated * 100).toFixed(2)}%`,
+                'Retorno Total': index === 0 ? `${(results[dividendsKeyValue[currentDividendMode]].totalReturn * 100).toFixed(2)}%` : '',
+                'Retorno Médio Diário': index === 0 ? `${(results[dividendsKeyValue[currentDividendMode]].avgDailyReturn * 100).toFixed(2)}%` : '',
+                'Volatilidade': index === 0 ? `${(results[dividendsKeyValue[currentDividendMode]].volatility * 100).toFixed(2)}%` : '',
                 'Dias Computados': index === 0 ? results.computedDays : ''
             }))
         );
@@ -33,53 +42,32 @@ export function BacktestResults() {
         XLSX.writeFile(wb, 'backtest_results.xlsx');
     }, [results]);
 
-    results.totalReturn = results.dailyReturns.reduce((acc, [, returnValue]) => acc * (1 + returnValue), 1) - 1;
-
-    results.dailyReturnsCumulative = results.dailyReturns.reduce((acc, [timestamp, returnValue]) => {
-        const lastValue = acc.length ? acc[acc.length - 1][1] : 0;
-        const newValue = (1 + lastValue) * (1 + returnValue) - 1;
-        acc.push([timestamp, newValue]);
-        return acc;
-    }, []);
-
-
-    if (results.dailyReturns.length > 30) {
-        const step = Math.ceil(results.dailyReturns.length / 30);
-        const reducedData = results.dailyReturns.filter((_, index) => index % step === 0);
-        if (reducedData[reducedData.length - 1][0] !== results.dailyReturns[results.dailyReturns.length - 1][0]) {
-            reducedData.push(results.dailyReturns[results.dailyReturns.length - 1]);
+    if (results[dividendsKeyValue[currentDividendMode]].dailyReturns.length > 30) {
+        const step = Math.ceil(results[dividendsKeyValue[currentDividendMode]].dailyReturns.length / 30);
+        const reducedData = results[dividendsKeyValue[currentDividendMode]].dailyReturns.filter((_, index) => index % step === 0);
+        if (reducedData[reducedData.length - 1].date !== results[dividendsKeyValue[currentDividendMode]].dailyReturns[results[dividendsKeyValue[currentDividendMode]].dailyReturns.length - 1].date) {
+            reducedData.push(results[dividendsKeyValue[currentDividendMode]].dailyReturns[results[dividendsKeyValue[currentDividendMode]].dailyReturns.length - 1]);
         }
-        results.dailyReturnsReduced = reducedData;
+        results[dividendsKeyValue[currentDividendMode]].dailyReturnsReduced = reducedData;
     } else {
-        results.dailyReturnsReduced = results.dailyReturns;
-    }
-
-    if (results.dailyReturnsCumulative.length > 30) {
-        const step = Math.ceil(results.dailyReturnsCumulative.length / 30);
-        const reducedData = results.dailyReturnsCumulative.filter((_, index) => index % step === 0);
-        if (reducedData[reducedData.length - 1][0] !== results.dailyReturnsCumulative[results.dailyReturnsCumulative.length - 1][0]) {
-            reducedData.push(results.dailyReturnsCumulative[results.dailyReturnsCumulative.length - 1]);
-        }
-        results.dailyReturnsCumulativeReduced = reducedData;
-    } else {
-        results.dailyReturnsCumulativeReduced = results.dailyReturnsCumulative;
+        results[dividendsKeyValue[currentDividendMode]].dailyReturnsReduced = results[dividendsKeyValue[currentDividendMode]].dailyReturns;
     }
 
     /********************************************* */
 
     const chart = {
-        categories: results.dailyReturnsReduced.map(([timestamp]) => format(new Date(timestamp), 'dd/MM/yyyy')),
+        categories: results[dividendsKeyValue[currentDividendMode]].dailyReturnsReduced.map(({ date }) => format(new Date(date), 'dd/MM/yyyy')),
         series: [
             {
                 name: 'backtest_results',
                 data: [
                     {
                         name: 'Retorno Diário',
-                        data: results.dailyReturnsReduced.map(([timestamp, returnValue]) => (returnValue * 100).toFixed(2)),
+                        data: results[dividendsKeyValue[currentDividendMode]].dailyReturnsReduced.map(({ current }) => (current * 100).toFixed(2)),
                     },
                     {
                         name: 'Retorno acumulado',
-                        data: results.dailyReturnsCumulativeReduced.map(([timestamp, returnValue]) => (returnValue * 100).toFixed(2)),
+                        data: results[dividendsKeyValue[currentDividendMode]].dailyReturnsReduced.map(({ accumulated }) => (accumulated * 100).toFixed(2)),
                     },
                 ],
             },
@@ -136,13 +124,13 @@ export function BacktestResults() {
                                 Métricas de Desempenho
                             </Typography>
                             <Typography>
-                                <strong>Retorno Total:</strong> {(results.totalReturn * 100).toFixed(2)}%
+                                <strong>Retorno Total:</strong> {(results[dividendsKeyValue[currentDividendMode]].totalReturn * 100).toFixed(2)}%
                             </Typography>
                             <Typography>
-                                <strong>Retorno Médio Diário:</strong> {(results.avgDailyReturn * 100).toFixed(2)}%
+                                <strong>Retorno Médio Diário:</strong> {(results[dividendsKeyValue[currentDividendMode]].avgDailyReturn * 100).toFixed(2)}%
                             </Typography>
                             <Typography>
-                                <strong>Volatilidade:</strong> {(results.volatility * 100).toFixed(2)}%
+                                <strong>Volatilidade:</strong> {(results[dividendsKeyValue[currentDividendMode]].volatility * 100).toFixed(2)}%
                             </Typography>
                             <Typography>
                                 <strong>Dias Computados:</strong> {results.computedDays}
@@ -177,6 +165,14 @@ export function BacktestResults() {
                         <CardHeader
                             title={"Retorno Acumulado de Portfólio (%)"}
                             sx={{ mb: 3 }}
+                            // toggle para dados com ou sem dividendos
+                            action={
+                                <ChartSelect
+                                    value={currentDividendMode}
+                                    onChange={handleChangeDividendMode}
+                                    options={['Com Dividendos', 'Sem Dividendos']}
+                                />
+                            }
                         />
 
                         <ChartLegends
