@@ -4,7 +4,8 @@ import { useBoolean } from 'minimal-shared/hooks';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
-import { iconButtonClasses } from '@mui/material/IconButton';
+import IconButton, { iconButtonClasses } from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
 
 import { _notifications } from 'src/_mock';
 
@@ -18,7 +19,7 @@ import { layoutClasses } from '../core/classes';
 import { NavHorizontal } from './nav-horizontal';
 import { _account } from '../nav-config-account';
 import { MainSection } from '../core/main-section';
-import { _workspaces } from '../nav-config-workspace';
+// import { _workspaces } from '../nav-config-workspace';
 import { MenuButton } from '../components/menu-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
@@ -30,6 +31,8 @@ import { WorkspacesPopover } from '../components/workspaces-popover';
 import { navData as dashboardNavData } from '../nav-config-dashboard';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
 import { NotificationsDrawer } from '../components/notifications-drawer';
+import { SearchModal } from 'src/components/searchModal';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +44,15 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const navVars = dashboardNavColorVars(theme, settings.state.navColor, settings.state.navLayout);
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
+
+  const handleCloseModalSearch = () => {
+    setSearchModalOpen(false);
+  };
+
+  const handleOpenModalSearch = () => {
+    setSearchModalOpen(true);
+  };
 
   const navData = slotProps?.nav?.data ?? dashboardNavData;
 
@@ -97,10 +109,10 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           )}
 
           {/** @slot Workspace popover */}
-          <WorkspacesPopover
+          {/* <WorkspacesPopover
             data={_workspaces}
             sx={{ color: 'var(--layout-nav-text-primary-color)' }}
-          />
+          /> */}
         </>
       ),
       rightArea: (
@@ -112,6 +124,11 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
               { value: 'en', label: 'English', countryCode: 'US' }
             ]}
           />
+
+          {/* iconbutton de pesquisar */}
+          <IconButton onClick={handleOpenModalSearch}>
+            <SearchIcon />
+          </IconButton>
 
           {/** @slot Notifications popover */}
           <NotificationsDrawer data={_notifications} />
@@ -157,39 +174,42 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const renderMain = () => <MainSection {...slotProps?.main}>{children}</MainSection>;
 
   return (
-    <LayoutSection
-      /** **************************************
-       * @Header
-       *************************************** */
-      headerSection={renderHeader()}
-      /** **************************************
-       * @Sidebar
-       *************************************** */
-      sidebarSection={isNavHorizontal ? null : renderSidebar()}
-      /** **************************************
-       * @Footer
-       *************************************** */
-      footerSection={renderFooter()}
-      /** **************************************
-       * @Styles
-       *************************************** */
-      cssVars={{ ...dashboardLayoutVars(theme), ...navVars.layout, ...cssVars }}
-      sx={[
-        {
-          [`& .${layoutClasses.sidebarContainer}`]: {
-            [theme.breakpoints.up(layoutQuery)]: {
-              pl: isNavMini ? 'var(--layout-nav-mini-width)' : 'var(--layout-nav-vertical-width)',
-              transition: theme.transitions.create(['padding-left'], {
-                easing: 'var(--layout-transition-easing)',
-                duration: 'var(--layout-transition-duration)',
-              }),
+    <>
+      <SearchModal handleClose={handleCloseModalSearch} isOpen={searchModalOpen}></SearchModal>
+      <LayoutSection
+        /** **************************************
+         * @Header
+         *************************************** */
+        headerSection={renderHeader()}
+        /** **************************************
+         * @Sidebar
+         *************************************** */
+        sidebarSection={isNavHorizontal ? null : renderSidebar()}
+        /** **************************************
+         * @Footer
+         *************************************** */
+        footerSection={renderFooter()}
+        /** **************************************
+         * @Styles
+         *************************************** */
+        cssVars={{ ...dashboardLayoutVars(theme), ...navVars.layout, ...cssVars }}
+        sx={[
+          {
+            [`& .${layoutClasses.sidebarContainer}`]: {
+              [theme.breakpoints.up(layoutQuery)]: {
+                pl: isNavMini ? 'var(--layout-nav-mini-width)' : 'var(--layout-nav-vertical-width)',
+                transition: theme.transitions.create(['padding-left'], {
+                  easing: 'var(--layout-transition-easing)',
+                  duration: 'var(--layout-transition-duration)',
+                }),
+              },
             },
           },
-        },
-        ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
-    >
-      {renderMain()}
-    </LayoutSection>
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
+      >
+        {renderMain()}
+      </LayoutSection>
+    </>
   );
 }

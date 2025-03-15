@@ -11,7 +11,7 @@ export function CompareAssetsView() {
   return (
     <DashboardContent>
       <CustomBreadcrumbs
-        heading="Backtest de portfólio"
+        heading="Comparar ativos"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           { name: 'Comparar ativos', href: paths.dashboard.compare_assets }

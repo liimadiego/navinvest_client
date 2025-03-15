@@ -40,39 +40,17 @@ const ICONS = {
 // ----------------------------------------------------------------------
 
 export const navData = [
-  /**
-   * Overview
-   */
   {
     subheader: 'Overview',
     items: [
       {
         title: 'Dashboard',
         path: paths.dashboard.root,
-        icon: ICONS.dashboard,
-        // info: <Label>v{CONFIG.appVersion}</Label>,
+        icon: ICONS.dashboard
       },
       { title: 'Assistente IA', path: paths.dashboard.ai_assistant, icon: ICONS.chat },
       { title: 'Backtest', path: paths.dashboard.backtest, icon: ICONS.analytics },
       { title: 'Comparar ativos', path: paths.dashboard.compare_assets, icon: ICONS.file },
     ],
   },
-  /**
-   * Management
-   */
-  // {
-  //   subheader: 'Management',
-  //   items: [
-  //     {
-  //       title: 'Group',
-  //       path: paths.dashboard.group.root,
-  //       icon: ICONS.user,
-  //       children: [
-  //         { title: 'Four', path: paths.dashboard.group.root },
-  //         { title: 'Five', path: paths.dashboard.group.five },
-  //         { title: 'Six', path: paths.dashboard.group.six },
-  //       ],
-  //     },
-  //   ],
-  // },
 ];

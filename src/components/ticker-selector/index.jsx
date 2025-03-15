@@ -20,7 +20,7 @@ const availableTickers = [
     { name: 'WEGE3', current_price: 38.45, type: 'Ação', companyName: 'WEG', ticker: 'WEGE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
 ];
 
-export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompany = false }) {
+export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompany = false, placeholder = 'Adicionar Ticker', openModalTrigger = false }) {
     if (!onAddTicker) {
         throw new Error('onAddTicker is required');
     }
@@ -28,6 +28,14 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
     if (!selectedTickers) {
         throw new Error('selectedTickers is required');
     }
+
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (openModalTrigger && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [openModalTrigger]);
 
     const [searchTickerText, setSearchTickerText] = useState('');
     const [tickersSearchOptions, setTickersSearchOptions] = useState([]);
@@ -82,8 +90,6 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                     !selectedTickers.some(selectedTicker => selectedTicker === ticker.ticker)
             });
 
-            //simula demora
-            await new Promise(resolve => setTimeout(resolve, 1000));
             setIsLoading(false);
             setTickersSearchOptions(tickers);
         } catch (error) {
@@ -100,10 +106,12 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
     return (
         <div style={{ position: 'relative' }} ref={searchContainerRef}>
             <TextField
-                label="Adicionar Ticker"
+                inputRef={inputRef}
+                label={placeholder}
                 value={searchTickerText}
                 onChange={(e) => setSearchTickerText(e.target.value)}
                 fullWidth
+                autoComplete='off'
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">

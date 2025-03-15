@@ -47,5 +47,6 @@ export const paths = {
     backtest: `${ROOTS.DASHBOARD}/backtest`,
     backtest_results: `${ROOTS.DASHBOARD}/backtest_results`,
     compare_assets: `${ROOTS.DASHBOARD}/compare_assets`,
+    asset_details: `${ROOTS.DASHBOARD}/asset_details`,
   },
 };
