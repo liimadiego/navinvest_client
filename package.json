@@ -48,6 +48,7 @@
     "@tiptap/extension-underline": "^2.11.5",
     "@tiptap/react": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
+    "apexcharts": "^4.5.0",
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.7.9",
     "chart.js": "^4.4.8",
