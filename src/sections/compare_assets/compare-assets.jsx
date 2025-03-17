@@ -87,7 +87,7 @@ export function CompareAssets() {
         alignItems: 'flex-start',
       }}>
       <Box flex={1.5} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} maxWidth={"100%"} sx={{ width: inComparison ? '100%' : "100%" }}>
-        <Paper elevation={12} sx={{ padding: 2 }} style={{ overflow: 'visible', width: "100%", maxWidth: "100%", zIndex: 2 }}>
+        <Paper elevation={3} sx={{ padding: 2 }} style={{ overflow: 'visible', width: "100%", maxWidth: "100%", zIndex: 2 }}>
           <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
             <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"}>
               Comparador de Ativos

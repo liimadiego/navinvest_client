@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/global-config';
 
-import { BlankView } from 'src/sections/blank/view';
+import { DashboardView } from 'src/sections/dashboard/view';
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ export default function Page() {
         <title>{`${globalThis.getTranslation('page-one-title')} | Dashboard - ${CONFIG.appName}`}</title>
       </Helmet>
 
-      <BlankView title={globalThis.getTranslation('page-one-title')} />
+      <DashboardView />
     </>
   );
 }

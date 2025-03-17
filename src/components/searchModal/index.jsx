@@ -26,7 +26,7 @@ export function SearchModal({ isOpen, handleClose }) {
             }}
         >
             <Paper
-                elevation={12}
+                elevation={3}
                 sx={{
                     width: 1000,
                     minHeight: 100,

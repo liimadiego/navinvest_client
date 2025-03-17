@@ -12,7 +12,7 @@ import { usePathname } from '../hooks';
 
 // ----------------------------------------------------------------------
 
-const IndexPage = lazy(() => import('src/pages/dashboard/one'));
+const IndexPage = lazy(() => import('src/pages/dashboard'));
 
 const AIAssistantPage = lazy(() => import('src/pages/dashboard/ai_assistant'));
 const BacktestPage = lazy(() => import('src/pages/dashboard/backtest'));
