@@ -43,12 +43,19 @@ export function DividendsHistoric({ ticker }) {
 
     const chartOptions = useChart({
         colors: chartColors,
-        stroke: { width: 2, colors: ['transparent'] },
+        // stroke: { width: 2, colors: ['transparent'] },
         xaxis: { categories: chart.categories },
         legend: { show: true },
         tooltip: {
-            y: { formatter: (value) => `${value}%` },
-            style: { backgroundColor: "red" }
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'inherit'
+            },
+            fillSeriesColor: false,
+            y: {
+                formatter: (value) => `${value}%`,
+            }
         },
         yaxis: {
             labels: {

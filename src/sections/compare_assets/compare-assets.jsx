@@ -4,7 +4,7 @@ import { Box, Button, Paper, Typography } from '@mui/material';
 import { CardAssetInfo } from './card-asset-info';
 import { ComparisonColumn } from './comparison-column';
 import { MiddleComparisonColumn } from './middle-comparison-column';
-import { WarningComparison } from './warning_comparison';
+import { WarningComparison } from './warning-comparison';
 
 export function CompareAssets() {
 
@@ -79,84 +79,108 @@ export function CompareAssets() {
   }
 
   return (
-    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'}>
-      <Paper elevation={12} sx={{ padding: 2 }} style={{ overflow: 'visible', width: '900px', maxWidth: '100%', zIndex: 2 }}>
-        <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-          <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"}>
-            Comparador de Ativos
-          </Typography>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: 3,
+        alignItems: 'flex-start',
+      }}>
+      <Box flex={1.5} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} maxWidth={"100%"} sx={{ width: inComparison ? '100%' : "100%" }}>
+        <Paper elevation={12} sx={{ padding: 2 }} style={{ overflow: 'visible', width: "100%", maxWidth: "100%", zIndex: 2 }}>
+          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+            <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"}>
+              Comparador de Ativos
+            </Typography>
 
-          {inComparison && <Button onClick={handleNewCompare} variant="outlined" type="button" color="primary">
-            Nova Comparação
-          </Button>}
-        </Box>
-
-        <Box component="form" noValidate autoComplete="off">
-          <Box display={'flex'} gap={2} style={{ width: '100%' }}>
-            <Box style={{ width: inComparison ? '40%' : '50%' }}>
-              {!inComparison && <TickerSelector doNotRepeatCompany={true} onAddTicker={onAddTicker1} selectedTickers={selectedTickers} />}
-              {leftAsset && leftAsset.name && <CardAssetInfo inComparison={inComparison} assetInfo={leftAsset} onDelete={deleteLeftAsset} />}
-            </Box>
-            {inComparison && <Paper elevation={4} sx={{ width: '20%', padding: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              VS
-            </Paper>}
-            <Box style={{ width: inComparison ? '40%' : '50%' }}>
-              {!inComparison && <TickerSelector doNotRepeatCompany={true} onAddTicker={onAddTicker2} selectedTickers={selectedTickers} />}
-              {rightAsset && rightAsset.name && <CardAssetInfo side='right' inComparison={inComparison} assetInfo={rightAsset} onDelete={deleteRightAsset} />}
-            </Box>
+            {inComparison && <Button onClick={handleNewCompare} variant="outlined" type="button" color="primary">
+              Nova Comparação
+            </Button>}
           </Box>
 
-          {!inComparison && <Box paddingTop={2} width={"100%"} display={'flex'} justifyContent={'end'}>
-            <Button onClick={handleCompare} variant="contained" color="primary" type="submit">
-              Comparar
-            </Button>
-          </Box>}
-        </Box>
-      </Paper>
+          <Box component="form" noValidate autoComplete="off">
+            <Box display={'flex'} gap={2} style={{ width: '100%' }}>
+              <Box style={{ width: inComparison ? '40%' : '50%' }}>
+                {!inComparison && <TickerSelector doNotRepeatCompany={true} onAddTicker={onAddTicker1} selectedTickers={selectedTickers} />}
+                {leftAsset && leftAsset.name && <CardAssetInfo inComparison={inComparison} assetInfo={leftAsset} onDelete={deleteLeftAsset} />}
+              </Box>
+              {inComparison && <Paper elevation={4} sx={{ width: '20%', padding: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                VS
+              </Paper>}
+              <Box style={{ width: inComparison ? '40%' : '50%' }}>
+                {!inComparison && <TickerSelector doNotRepeatCompany={true} onAddTicker={onAddTicker2} selectedTickers={selectedTickers} />}
+                {rightAsset && rightAsset.name && <CardAssetInfo side='right' inComparison={inComparison} assetInfo={rightAsset} onDelete={deleteRightAsset} />}
+              </Box>
+            </Box>
 
-      {inComparison && <Box width={"900px"} maxWidth={"100%"} mt={2}>
-        <WarningComparison text={warningMessage} />
-      </Box>}
+            {!inComparison && <Box paddingTop={2} width={"100%"} display={'flex'} justifyContent={'end'}>
+              <Button onClick={handleCompare} variant="contained" color="primary" type="submit">
+                Comparar
+              </Button>
+            </Box>}
+          </Box>
+        </Paper>
 
-      {inComparison && <Box>
-        <Box display={'flex'} gap={2} style={{ width: '900px', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
-          <ComparisonColumn content={12} />
-          <MiddleComparisonColumn title={"P/L"} description={"O P/L (Preço sobre Lucro) é um indicador financeiro que mede a relação entre o preço da ação de uma empresa e o seu lucro por ação. É utilizado para avaliar se uma ação está cara ou barata em relação ao seu histórico de lucros."} />
-          <ComparisonColumn content={13.4} />
-        </Box>
+        {inComparison && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
+          <WarningComparison text={warningMessage} />
+        </Box>}
 
-        <Box display={'flex'} gap={2} style={{ width: '900px', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
-          <ComparisonColumn content={"13,74%"} />
-          <MiddleComparisonColumn title={"P/VP"} description={"Compara o preço da ação com seu valor patrimonial."} />
-          <ComparisonColumn content={"29,45%"} />
-        </Box>
+        {inComparison && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"}>
+          <Box display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
+            <ComparisonColumn content={12} />
+            <MiddleComparisonColumn title={"P/L"} description={"O P/L (Preço sobre Lucro) é um indicador financeiro que mede a relação entre o preço da ação de uma empresa e o seu lucro por ação. É utilizado para avaliar se uma ação está cara ou barata em relação ao seu histórico de lucros."} />
+            <ComparisonColumn content={13.4} />
+          </Box>
 
-        <Box display={'flex'} gap={2} style={{ width: '900px', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
-          <ComparisonColumn
-            type="donut_chart"
-            chart={{
-              series: [
-                { label: 'Brasil', value: 80290000000 },
-                { label: 'Uruguai', value: 3010000000 },
-                { label: 'Paraguai', value: 1470000000 },
-                { label: 'Chile', value: 1420000000 },
-              ],
-            }}
-          />
-          <MiddleComparisonColumn title={"Regiões de receita"} description={"Compara o preço da ação com seu valor patrimonial."} />
-          <ComparisonColumn
-            type="donut_chart"
-            chart={{
-              series: [
-                { label: 'Brasil', value: 85290000000 },
-                { label: 'China', value: 1510000000 },
-                { label: 'Estados Unidos', value: 3470000000 },
-                { label: 'Singapura', value: 3420000000 },
-                { label: 'Outros', value: 14010000000 },
-              ],
-            }}
-          />
-        </Box>
+          <Box display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
+            <ComparisonColumn content={"13,74%"} />
+            <MiddleComparisonColumn title={"P/VP"} description={"Compara o preço da ação com seu valor patrimonial."} />
+            <ComparisonColumn content={"29,45%"} />
+          </Box>
+
+          <Box display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
+            <ComparisonColumn
+              type="donut_chart"
+              chart={{
+                series: [
+                  { label: 'Brasil', value: 80290000000 },
+                  { label: 'Uruguai', value: 3010000000 },
+                  { label: 'Paraguai', value: 1470000000 },
+                  { label: 'Chile', value: 1420000000 },
+                ],
+              }}
+            />
+            <MiddleComparisonColumn title={"Regiões de receita"} description={"Compara o preço da ação com seu valor patrimonial."} />
+            <ComparisonColumn
+              type="donut_chart"
+              chart={{
+                series: [
+                  { label: 'Brasil', value: 85290000000 },
+                  { label: 'China', value: 1510000000 },
+                  { label: 'Estados Unidos', value: 3470000000 },
+                  { label: 'Singapura', value: 3420000000 },
+                  { label: 'Outros', value: 14010000000 },
+                ],
+              }}
+            />
+          </Box>
+        </Box>}
+      </Box>
+
+      {!inComparison && <Box sx={{ flex: 1 }}>
+        <Paper elevation={3} sx={{ p: 3, pb: 4 }}>
+          <Box>
+            <h2 style={{ marginTop: 0 }}>📊 Compare Empresas e Tome Decisões Mais Inteligentes</h2>
+            <p>Escolha duas empresas e compare seus principais indicadores fundamentalistas! Descubra qual delas apresenta os melhores números em lucratividade, endividamento, crescimento e outros fatores essenciais para um investimento bem-sucedido.</p>
+
+            <p>✅ Adicione empresas e veja uma análise lado a lado
+              <br />📈 Compare indicadores financeiros e operacionais
+              <br />📊 Identifique oportunidades com base em dados reais
+            </p>
+
+            Selecione os ativos e clique em Comparar para uma visão clara e objetiva do desempenho das empresas! 🚀
+          </Box>
+        </Paper>
       </Box>}
     </Box>
   );

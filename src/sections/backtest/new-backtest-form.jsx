@@ -21,7 +21,8 @@ import {
   IconButton,
   InputAdornment,
   FormHelperText,
-  Select
+  Select,
+  Paper
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useContext, useEffect, useState } from 'react';
@@ -168,110 +169,129 @@ export function BacktestForm() {
           sx={{
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
-            gap: 3,
+            gap: 3
           }}
         >
-          <Box sx={{ flex: 3, zIndex: 2 }}>
-            <Card sx={{ p: 3, overflow: 'visible' }}>
-              <TickerSelector
-                key={getSelectedTickerSymbols().join(',')}
-                onAddTicker={handleAddTicker}
-                selectedTickers={getSelectedTickerSymbols()}
-              />
-
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <FormControlLabel
-                  sx={{ mt: 1 }}
-                  control={
-                    <Switch
-                      checked={allocationType === 'value'}
-                      onChange={handleAllocationTypeChange}
-                      color="primary"
-                    />
-                  }
-                  label={allocationType === 'value' ? 'Valor' : 'Porcentagem'}
+          <Box sx={{ flex: 1 }}>
+            <Box sx={{ mb: 2 }}>
+              <Paper elevation={3} sx={{ p: 3, overflow: 'visible', zIndex: 3 }}>
+                <TickerSelector
+                  key={getSelectedTickerSymbols().join(',')}
+                  onAddTicker={handleAddTicker}
+                  selectedTickers={getSelectedTickerSymbols()}
                 />
-              </Box>
 
-              <div>
-                <Controller
-                  name="portfolio"
-                  control={control}
-                  render={({ field }) => (
-                    <>
-                      <List>
-                        {field.value.map((item, index) => (
-                          <ListItem key={index}>
-                            <ListItemText primary={item.ticker} />
-                            <TextField
-                              type="number"
-                              value={item.allocation}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                if (isValidNumber(value)) {
-                                  handleAllocationChange(index, value);
-                                }
-                              }}
-                              placeholder="0"
-                              InputProps={{
-                                startAdornment: allocationType === 'value' ? <InputAdornment position="start">R$</InputAdornment> : null,
-                                endAdornment: allocationType === 'percentage' ? <InputAdornment position="end">%</InputAdornment> : null,
-                              }}
-                              sx={{ width: 150 }}
-                            />
-                            <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveTicker(item.ticker)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </ListItem>
-                        ))}
-                      </List>
-                      <FormHelperText error>{methods.formState.errors?.portfolio?.message}</FormHelperText>
-                    </>
-                  )}
-                />
-              </div>
-            </Card>
-          </Box>
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <FormControlLabel
+                    sx={{ mt: 1 }}
+                    control={
+                      <Switch
+                        checked={allocationType === 'value'}
+                        onChange={handleAllocationTypeChange}
+                        color="primary"
+                      />
+                    }
+                    label={allocationType === 'value' ? 'Valor' : 'Porcentagem'}
+                  />
+                </Box>
 
-          <Box sx={{ zIndex: 1, flex: 5, display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <Card sx={{ p: 3 }}>
-              <Box
-                sx={{
-                  rowGap: 3,
-                  columnGap: 2,
-                  display: 'grid',
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
-                }}
-              >
-                <Field.DatePicker name="startDate" label="Data de Início" />
+                <div>
+                  <Controller
+                    name="portfolio"
+                    control={control}
+                    render={({ field }) => (
+                      <>
+                        <List>
+                          {field.value.map((item, index) => (
+                            <ListItem key={index}>
+                              <ListItemText primary={item.ticker} />
+                              <TextField
+                                type="number"
+                                value={item.allocation}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  if (isValidNumber(value)) {
+                                    handleAllocationChange(index, value);
+                                  }
+                                }}
+                                placeholder="0"
+                                InputProps={{
+                                  startAdornment: allocationType === 'value' ? <InputAdornment position="start">R$</InputAdornment> : null,
+                                  endAdornment: allocationType === 'percentage' ? <InputAdornment position="end">%</InputAdornment> : null,
+                                }}
+                                sx={{ width: 150 }}
+                              />
+                              <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveTicker(item.ticker)}>
+                                <DeleteIcon />
+                              </IconButton>
+                            </ListItem>
+                          ))}
+                        </List>
+                        <FormHelperText error>{methods.formState.errors?.portfolio?.message}</FormHelperText>
+                      </>
+                    )}
+                  />
+                </div>
+              </Paper>
+            </Box>
 
-                <Field.DatePicker name="endDate" label="Data de Fim" />
-
-                <Field.Select
-                  name="baseCurrency"
-                  label="Moeda Base"
-                  options={[
-                    { value: 'BRL', label: 'BRL' },
-                    { value: 'USD', label: 'USD' },
-                  ]}
+            <Box sx={{ zIndex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <Paper elevation={3} sx={{ p: 3 }}>
+                <Box
+                  sx={{
+                    rowGap: 3,
+                    columnGap: 2,
+                    display: 'grid',
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                  }}
                 >
-                  {[
-                    { value: 'BRL', label: 'BRL' },
-                    { value: 'USD', label: 'USD' },
-                  ].map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Field.Select>
-              </Box>
+                  <Field.DatePicker name="startDate" label="Data de Início" />
 
-              <Stack sx={{ mt: 3, alignItems: 'flex-end' }}>
-                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  Executar Backtest
-                </LoadingButton>
-              </Stack>
-            </Card>
+                  <Field.DatePicker name="endDate" label="Data de Fim" />
+
+                  <Field.Select
+                    name="baseCurrency"
+                    label="Moeda Base"
+                    options={[
+                      { value: 'BRL', label: 'BRL' },
+                      { value: 'USD', label: 'USD' },
+                    ]}
+                  >
+                    {[
+                      { value: 'BRL', label: 'BRL' },
+                      { value: 'USD', label: 'USD' },
+                    ].map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Field.Select>
+                </Box>
+
+                <Stack sx={{ mt: 3, alignItems: 'flex-end' }}>
+                  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                    Executar Backtest
+                  </LoadingButton>
+                </Stack>
+              </Paper>
+            </Box>
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <Paper elevation={3} sx={{ p: 3, pb: 4 }}>
+              <Box>
+                <h2 style={{ marginTop: 0 }}>📈 Simule sua Estratégia com Backtest</h2>
+                <p>Teste sua estratégia de investimento antes de aplicá-la no mercado real! Nosso backtest permite que você analise o desempenho de um ativo com base em dados históricos, simulando como sua estratégia teria se saído em diferentes cenários do passado. Com isso, você pode identificar padrões, ajustar parâmetros e tomar decisões mais embasadas, reduzindo riscos e aumentando suas chances de sucesso no mercado.</p>
+
+                <p>✅ Escolha um ativo e veja seu comportamento no passado
+                  <br />📅 Defina o período de análise para ajustar os dados ao seu interesse
+                  <br />💰 Selecione a moeda base para converter os resultados corretamente
+                </p>
+
+                Clique em Executar Backtest e descubra se sua estratégia teria sido lucrativa! 🚀
+
+
+              </Box>
+            </Paper>
           </Box>
         </Box>
       </Form>

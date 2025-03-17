@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Box, InputAdornment, CircularProgress } from '@mui/material';
+import { Box, InputAdornment, CircularProgress, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { set } from 'nprogress';
@@ -135,8 +135,8 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                         borderColor: 'divider',
                         borderRadius: 1,
                         boxShadow: 1,
-                        zIndex: 1,
                         padding: 1,
+                        zIndex: 9999,
                     }}
                 >
                     {tickersSearchOptions.map((ticker, index) => (
@@ -148,46 +148,107 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                                 backgroundColor: 'background.paper',
                                 color: 'text.primary',
                                 borderRadius: index === 0 ? '5px 5px 0 0' : index === tickersSearchOptions.length - 1 ? '0 0 5px 5px' : 0,
-                                padding: "10px",
+                                padding: { xs: "8px", sm: "10px" },
                                 border: "1px solid",
                                 borderColor: 'divider',
                                 margin: 0,
+                                width: '100%',
                                 '&:hover': {
                                     backgroundColor: 'background.default',
                                 },
                             }}
                         >
-                            <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} style={{ width: '100%' }}>
-                                <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                                    <img src={ticker.image_url} alt={ticker.ticker}
+                            <Box
+                                display="flex"
+                                alignItems={{ xs: "flex-start", sm: "center" }}
+                                justifyContent="space-between"
+                                flexDirection={{ xs: "column", sm: "row" }}
+                                width="100%"
+                            >
+                                <Box
+                                    display="flex"
+                                    alignItems="center"
+                                    width={{ xs: "100%", sm: "auto" }}
+                                    mb={{ xs: 1, sm: 0 }}
+                                >
+                                    <img
+                                        src={ticker.image_url}
+                                        alt={ticker.ticker}
                                         style={{
-                                            width: 40,
-                                            height: 40,
-                                            marginRight: 15,
+                                            width: 32,
+                                            height: 32,
+                                            marginRight: 10,
                                             borderRadius: 5,
                                         }}
                                     />
-                                    <Box display={'flex'} flexDirection={'column'} alignItems={'start'}>
-                                        {ticker.ticker} - {ticker.companyName}<br></br>
-                                        <Box style={{ fontWeight: 400 }} display={'flex'} flexDirection={'row'} alignItems={'center'}>
-                                            <span style={{ fontSize: '13px', opacity: .7, marginRight: "10px" }}>R${ticker.current_price.toString().replace('.', ',')}</span>
+                                    <Box
+                                        display="flex"
+                                        flexDirection="column"
+                                        alignItems="start"
+                                        sx={{
+                                            maxWidth: { xs: "calc(100% - 42px)", sm: "auto" },
+                                            overflow: "hidden"
+                                        }}
+                                    >
+                                        <Typography
+                                            noWrap
+                                            sx={{
+                                                fontSize: "14px",
+                                                width: "100%",
+                                                textAlign: "left"
+                                            }}
+                                        >
+                                            <Box display={'flex'}>
+                                                {ticker.ticker} - {ticker.companyName}
+                                                <Box
+                                                    sx={{
+                                                        backgroundColor: 'primary.main',
+                                                        padding: "1px 5px",
+                                                        opacity: 0.8,
+                                                        borderRadius: 1,
+                                                        alignSelf: { xs: "flex-start", sm: "center" },
+                                                        mt: { xs: 0, sm: 0 },
+                                                        fontSize: "10px",
+                                                        marginLeft: "5px"
+                                                    }}
+                                                >
+                                                    {ticker.type}
+                                                </Box>
+                                            </Box>
+                                        </Typography>
+                                        <Box
+                                            display="flex"
+                                            flexDirection={{ xs: "column", sm: "row" }}
+                                            alignItems={{ xs: "flex-start", sm: "center" }}
+                                            sx={{ fontWeight: 400 }}
+                                        >
+                                            <Typography sx={{ fontSize: "13px", opacity: 0.7, mr: 1 }}>
+                                                R${ticker.current_price.toString().replace('.', ',')}
+                                            </Typography>
 
                                             {ticker.last_twelve_months && (
-                                                <Box>
-                                                    <span style={{ fontSize: '12px', color: ticker.last_twelve_months > 0 ? 'green' : 'red' }}>
-                                                        {ticker.last_twelve_months > 0 ? '+' : ''}{(ticker.last_twelve_months * 100).toFixed(2)}%
-                                                        <span style={{ color: ticker.last_twelve_months > 0 ? 'green' : 'red', marginLeft: "2px" }}>
+                                                <Box display="flex" alignItems="center">
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: "12px",
+                                                            color: ticker.last_twelve_months > 0 ? 'green' : 'red',
+                                                            display: "flex",
+                                                            alignItems: "center"
+                                                        }}
+                                                    >
+                                                        {ticker.last_twelve_months > 0 ? '+' : ''}
+                                                        {(ticker.last_twelve_months * 100).toFixed(2)}%
+                                                        <span style={{ marginLeft: "2px" }}>
                                                             {ticker.last_twelve_months > 0 ? '↑' : '↓'}
                                                         </span>
-                                                    </span>
-                                                    <span style={{ fontSize: '11px', opacity: .7 }}> (12 meses)</span>
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: "11px", opacity: 0.7, ml: 0.5 }}>
+                                                        (12 meses)
+                                                    </Typography>
                                                 </Box>
                                             )}
                                         </Box>
                                     </Box>
-                                </Box>
-                                <Box sx={{ backgroundColor: 'primary.main', height: '100%', padding: "1px 5px", opacity: .8, borderRadius: 1 }}>
-                                    {ticker.type}
                                 </Box>
                             </Box>
                         </Button>

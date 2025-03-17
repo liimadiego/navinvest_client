@@ -20,6 +20,10 @@ export function SearchModal({ isOpen, handleClose }) {
             BackdropProps={{
                 onClick: handleClose,
             }}
+
+            sx={{
+                backdropFilter: 'blur(2px)',
+            }}
         >
             <Paper
                 elevation={12}

@@ -51,8 +51,9 @@ export function ComparisonColumn({ _width = '40%', content = <></>, chart, title
         });
 
         return (
-            <Paper elevation={12} sx={{ width: _width, ...sx }} {...other}>
-                <Chart
+            <Paper elevation={12} sx={{ width: _width, display: 'flex', alignItems: 'center', justifyContent: 'center', ...sx }} {...other}>
+                GRAFICO_AQUI
+                {/* <Chart
                     type="donut"
                     series={chartSeries}
                     options={chartOptions}
@@ -70,7 +71,7 @@ export function ComparisonColumn({ _width = '40%', content = <></>, chart, title
                     labels={chartOptions?.labels}
                     colors={chartOptions?.colors}
                     sx={{ p: 3, justifyContent: 'center' }}
-                />
+                /> */}
             </Paper>
         );
     }
