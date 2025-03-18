@@ -44,7 +44,7 @@ export function CompareAssets() {
 
   const getCoreAssetInfo = async (ticker) => {
     try {
-      // const response = await fetch(`http://localhost:3000/tickers/${ticker}`);
+      // const response = await fetch(`${import.meta.env.VITE_SERVER_URL2}/tickers/${ticker}`);
       // const tickerInfo = await response.json();
       // return tickerInfo;
       return availableTickers.find(t => t.ticker === ticker);

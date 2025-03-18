@@ -23,7 +23,7 @@ export async function sendMessage(messageData) {
   }
   );
 
-  await fetch(`http://localhost:3000${AI_ASSISTANT_ENDPOINT}`, {
+  await fetch(`${import.meta.env.VITE_SERVER_URL2}${AI_ASSISTANT_ENDPOINT}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

@@ -141,7 +141,7 @@ export function BacktestForm() {
       data.startDate = new Date(data.startDate).getTime();
       data.endDate = new Date(data.endDate).getTime();
 
-      const response = await fetch('http://localhost:3000/backtest/test', {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL2}/backtest/test`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
