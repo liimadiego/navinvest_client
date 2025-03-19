@@ -43,11 +43,12 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
-    ai_assistant: `${ROOTS.DASHBOARD}/ai_assistant`,
+    ai_assistant: `${ROOTS.DASHBOARD}/assistente-ia`,
     backtest: `${ROOTS.DASHBOARD}/backtest`,
-    backtest_results: `${ROOTS.DASHBOARD}/backtest_results`,
-    compare_assets: `${ROOTS.DASHBOARD}/compare_assets`,
+    backtest_results: `${ROOTS.DASHBOARD}/resultado-backtest`,
+    compare_assets: `${ROOTS.DASHBOARD}/comparar-ativos`,
     asset_details: `${ROOTS.DASHBOARD}/asset_details`,
     news: `${ROOTS.DASHBOARD}/noticias`,
+    wallet_management: `${ROOTS.DASHBOARD}/gerenciar-carteira`,
   },
 };

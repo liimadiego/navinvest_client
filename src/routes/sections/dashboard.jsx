@@ -20,6 +20,7 @@ const BacktestResults = lazy(() => import('src/pages/dashboard/backtest/results'
 const CompareAssets = lazy(() => import('src/pages/dashboard/compare_assets'));
 const AssetDetails = lazy(() => import('src/pages/dashboard/asset_details'));
 const NewsPage = lazy(() => import('src/pages/dashboard/news'));
+const WalletManagementPage = lazy(() => import('src/pages/dashboard/wallet_management'));
 
 // ----------------------------------------------------------------------
 
@@ -44,12 +45,13 @@ export const dashboardRoutes = [
     element: CONFIG.auth.skip ? dashboardLayout() : <AuthGuard>{dashboardLayout()}</AuthGuard>,
     children: [
       { element: <IndexPage />, index: true },
-      { path: 'ai_assistant', element: <AIAssistantPage /> },
+      { path: 'assistente-ia', element: <AIAssistantPage /> },
       { path: 'backtest', element: <BacktestPage /> },
-      { path: 'backtest_results', element: <BacktestResults /> },
-      { path: 'compare_assets', element: <CompareAssets /> },
+      { path: 'resultado-backtest', element: <BacktestResults /> },
+      { path: 'comparar-ativos', element: <CompareAssets /> },
       { path: 'asset_details/:ticker', element: <AssetDetails /> },
       { path: 'noticias/:news_id', element: <NewsPage /> },
+      { path: 'gerenciar-carteira', element: <WalletManagementPage /> },
     ],
   },
 ];

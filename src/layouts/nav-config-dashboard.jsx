@@ -4,6 +4,8 @@ import { CONFIG } from 'src/global-config';
 
 import { SvgColor } from 'src/components/svg-color';
 
+import WalletIcon from '@mui/icons-material/Wallet';
+
 // ----------------------------------------------------------------------
 
 const icon = (name) => <SvgColor src={`${CONFIG.assetsDir}/assets/icons/navbar/${name}.svg`} />;
@@ -50,7 +52,8 @@ export const navData = [
       },
       { title: 'Assistente IA', path: paths.dashboard.ai_assistant, icon: ICONS.chat },
       { title: 'Backtest', path: paths.dashboard.backtest, icon: ICONS.analytics },
-      { title: 'Comparar ativos', path: paths.dashboard.compare_assets, icon: ICONS.file },
+      { title: 'Comparar Ativos', path: paths.dashboard.compare_assets, icon: ICONS.file },
+      { title: 'Gerenciar Carteira', path: paths.dashboard.wallet_management, icon: <WalletIcon /> },
     ],
   },
 ];
