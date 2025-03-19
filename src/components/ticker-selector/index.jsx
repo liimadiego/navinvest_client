@@ -190,8 +190,7 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                                             overflow: "hidden"
                                         }}
                                     >
-                                        <Typography
-                                            noWrap
+                                        <Box
                                             sx={{
                                                 fontSize: "14px",
                                                 width: "100%",
@@ -215,7 +214,7 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                                                     {ticker.type}
                                                 </Box>
                                             </Box>
-                                        </Typography>
+                                        </Box>
                                         <Box
                                             display="flex"
                                             flexDirection={{ xs: "column", sm: "row" }}

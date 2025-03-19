@@ -48,6 +48,6 @@ export const paths = {
     backtest_results: `${ROOTS.DASHBOARD}/backtest_results`,
     compare_assets: `${ROOTS.DASHBOARD}/compare_assets`,
     asset_details: `${ROOTS.DASHBOARD}/asset_details`,
-    news: `${ROOTS.DASHBOARD}/news`,
+    news: `${ROOTS.DASHBOARD}/noticias`,
   },
 };

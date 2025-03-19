@@ -3,12 +3,15 @@ import { Box, Modal, Paper, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
 import { TickerSelector } from '../ticker-selector';
+import { useNavigate } from 'react-router-dom';
 
 export function SearchModal({ isOpen, handleClose }) {
     const [selectedTickers, setSelectedTickers] = useState([]);
+    const navigate = useNavigate();
 
     const onAddTicker = (ticker) => {
-        window.location.href = `/dashboard/asset_details/${ticker}`;
+        navigate(`/dashboard/asset_details/${ticker}`);
+        handleClose();
     }
 
     return (

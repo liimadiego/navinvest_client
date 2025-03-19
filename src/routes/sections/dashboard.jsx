@@ -49,7 +49,7 @@ export const dashboardRoutes = [
       { path: 'backtest_results', element: <BacktestResults /> },
       { path: 'compare_assets', element: <CompareAssets /> },
       { path: 'asset_details/:ticker', element: <AssetDetails /> },
-      { path: 'news/:news_id', element: <NewsPage /> },
+      { path: 'noticias/:news_id', element: <NewsPage /> },
     ],
   },
 ];

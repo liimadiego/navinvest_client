@@ -18,7 +18,7 @@ export function News({ news, otherNews }) {
                                 component="img"
                                 src={news.coverUrl}
                                 alt={news.title}
-                                sx={{ width: '800px', maxWidth: '100%', height: 'auto', borderRadius: 1, mb: 2 }}
+                                sx={{ width: '100%', height: 'auto', borderRadius: 1, mb: 2 }}
                             />
                         </Box>
                     )}
@@ -37,7 +37,7 @@ export function News({ news, otherNews }) {
                                     component="img"
                                     src={item.coverUrl}
                                     alt={item.title}
-                                    sx={{ width: '800px', maxWidth: '100%', height: 'auto', borderRadius: 1, mb: 2 }}
+                                    sx={{ width: '100%', height: 'auto', borderRadius: 1, mb: 2 }}
                                 />
                             </Box>}
                             <Typography variant="subtitle1">

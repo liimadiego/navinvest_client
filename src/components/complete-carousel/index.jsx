@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Image } from 'src/components/image';
 import { Carousel, useCarousel, CarouselDotButtons } from 'src/components/carousel';
 
-// ----------------------------------------------------------------------
+import { useNavigate } from 'react-router-dom';
 
 export function CompleteCarousel({ list, sx, ...other }) {
     const carousel = useCarousel({ loop: true }, [Autoplay({ playOnInit: true, delay: 8000 })]);
@@ -37,9 +37,12 @@ export function CompleteCarousel({ list, sx, ...other }) {
     );
 }
 
-// ----------------------------------------------------------------------
-
 function CarouselItem({ item, ...other }) {
+    const navigate = useNavigate();
+
+    const handleNavigate = () => {
+        navigate(`${item.newsUrl}`);
+    };
     return (
         <Box sx={{ width: 1, position: 'relative', ...other }}>
             <Box
@@ -63,7 +66,7 @@ function CarouselItem({ item, ...other }) {
                     {item.title}
                 </Link>
 
-                <Button href={item.newsUrl} color="primary" variant="contained" sx={{ alignSelf: 'flex-start' }}>
+                <Button onClick={handleNavigate} color="primary" variant="contained" sx={{ alignSelf: 'flex-start' }}>
                     {item.buttonText}
                 </Button>
             </Box>
