@@ -6,7 +6,7 @@ export function News({ news, otherNews }) {
     const navigate = useNavigate();
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: { sm: 'column', md: 'row' }, mt: 3, gap: 3, px: { xs: "2%", sm: "3%", md: "6%", xl: "10%" } }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'column', md: 'row' }, mt: 3, gap: 3, px: { xs: "2%", sm: "3%", md: "6%", xl: "10%" } }}>
             <Box flex={2}>
                 <Paper sx={{ p: 3, pt: 2, borderRadius: 1 }}>
                     <Typography variant="h4" sx={{ mb: 2 }}>
