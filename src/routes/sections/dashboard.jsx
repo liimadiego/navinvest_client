@@ -19,6 +19,7 @@ const BacktestPage = lazy(() => import('src/pages/dashboard/backtest'));
 const BacktestResults = lazy(() => import('src/pages/dashboard/backtest/results'));
 const CompareAssets = lazy(() => import('src/pages/dashboard/compare_assets'));
 const AssetDetails = lazy(() => import('src/pages/dashboard/asset_details'));
+const NewsPage = lazy(() => import('src/pages/dashboard/news'));
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ export const dashboardRoutes = [
       { path: 'backtest_results', element: <BacktestResults /> },
       { path: 'compare_assets', element: <CompareAssets /> },
       { path: 'asset_details/:ticker', element: <AssetDetails /> },
+      { path: 'news/:news_id', element: <NewsPage /> },
     ],
   },
 ];

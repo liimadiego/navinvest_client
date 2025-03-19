@@ -60,10 +60,10 @@ function CarouselItem({ item, ...other }) {
                 </Typography>
 
                 <Link color="inherit" underline="none" variant="h5" noWrap sx={{ mt: 1, mb: 3 }}>
-                    {item.name}
+                    {item.title}
                 </Link>
 
-                <Button href={item.buttonUrl} color="primary" variant="contained" sx={{ alignSelf: 'flex-start' }}>
+                <Button href={item.newsUrl} color="primary" variant="contained" sx={{ alignSelf: 'flex-start' }}>
                     {item.buttonText}
                 </Button>
             </Box>
