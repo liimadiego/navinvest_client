@@ -39,25 +39,25 @@ export function AssetDetailsHeader({ tickerData }) {
                 </Box>
             </Box>
             <Box sx={{ mt: { xs: 4, md: 0 }, justifyContent: { xs: 'center', md: 'flex-end' } }} style={{ color: "#fff" }} flexDirection='row' display="flex" gap={2}>
-                <Box display="flex" gap={2} justifyContent={'center'} flexDirection='row' flexWrap={'wrap'}>
-                    <Box display={'flex'} gap={2}>
-                        <IconButton title="Detalhes da empres" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <ApartmentIcon sx={{ fontSize: { xs: "25px", md: "30px" } }} />
-                            <Typography sx={{ fontSize: { xs: "13px", md: "15px" } }}>Empresa</Typography>
+                <Box display="flex" gap={2} justifyContent={'center'} flexDirection='row'>
+                    <Box display={'flex'} gap={1}>
+                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 } }}>
+                            <ApartmentIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
+                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Empresa</Typography>
                         </IconButton>
-                        <IconButton title="Detalhes da empres" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <MonetizationOnIcon sx={{ fontSize: { xs: "25px", md: "30px" } }} />
-                            <Typography sx={{ fontSize: { xs: "13px", md: "15px" } }}>Contábil</Typography>
+                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 } }}>
+                            <MonetizationOnIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
+                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Contábil</Typography>
                         </IconButton>
                     </Box>
-                    <Box display={'flex'} gap={2}>
-                        <IconButton title="Detalhes da empres" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <BarChartIcon sx={{ fontSize: { xs: "25px", md: "30px" } }} />
-                            <Typography sx={{ fontSize: { xs: "13px", md: "15px" } }}>Indicadores</Typography>
+                    <Box display={'flex'} gap={1}>
+                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 } }}>
+                            <BarChartIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
+                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Indicadores</Typography>
                         </IconButton>
-                        <IconButton title="Detalhes da empres" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <TimelineIcon sx={{ fontSize: { xs: "25px", md: "30px" } }} />
-                            <Typography sx={{ fontSize: { xs: "13px", md: "15px" } }}>Cotação</Typography>
+                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 } }}>
+                            <TimelineIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
+                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Cotação</Typography>
                         </IconButton >
                     </Box>
                 </Box >
