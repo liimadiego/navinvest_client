@@ -39,7 +39,7 @@ export function News({ news, otherNews }) {
                                             component="img"
                                             src={item.coverUrl}
                                             alt={item.title}
-                                            sx={{ width: '100%', height: 'auto', borderRadius: 1, mb: 2 }}
+                                            sx={{ width: '100%', height: 'auto', borderRadius: 1, mb: 2, aspectRatio: '16/9', objectFit: 'cover' }}
                                         />
                                     </Box>}
                                     <Typography variant="subtitle1">
