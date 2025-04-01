@@ -19,7 +19,7 @@ export function AssetDetails({ ticker }) {
                 currency: 'BRL',
                 name: 'Petrobras',
                 ticker: 'PETR4',
-                companyName: 'PETROLEO BRASILEIRO S.A. PETROBRAS',
+                asset_name: 'PETROLEO BRASILEIRO S.A. PETROBRAS',
                 type: 'Ação',
                 image_url: 'https://investidor10.com.br/storage/companies/63d2c9ead34db.jpg',
                 current_price: 28.45,

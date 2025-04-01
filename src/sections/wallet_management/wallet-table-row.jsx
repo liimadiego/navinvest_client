@@ -48,7 +48,7 @@ export function WalletTableRow({ row, onDeleteRow }) {
       case 'USD':
         return `$${amount}`;
       case 'BRL':
-        return `R$${amount.toFixed(2).replace('.', ',')}`;
+        return `R$${parseFloat(amount).toFixed(2).replace('.', ',')}`;
       default:
         return `${currency}${amount}`;
     }
@@ -57,26 +57,30 @@ export function WalletTableRow({ row, onDeleteRow }) {
   return (
     <>
       <TableRow hover tabIndex={-1}>
-        <TableCell>
+        <TableCell width={250}>
           <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
             <img alt={row.name} src={row.assetImageUrl} style={{ borderRadius: 8, width: 40, height: 40 }} />
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
               {row.asset}
               <Box component="span" sx={{ color: 'text.disabled' }}>
-                {row.companyName}
+                {row.asset_name}
               </Box>
             </Stack>
           </Box>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.quantity}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.category_name === "Criptomoedas" ? row.quantity : Math.round(row.quantity)}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.averagePrice)}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.currentPrice)}</TableCell>
 
-        <TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>
+          {formatCurrency(row.currency, row.currentPrice * row.quantity)}
+        </TableCell>
+
+        <TableCell width={100} sx={{ whiteSpace: 'nowrap' }}>
           <Label
             variant="soft"
             color={
@@ -89,7 +93,7 @@ export function WalletTableRow({ row, onDeleteRow }) {
           </Label>
         </TableCell>
 
-        <TableCell width={100}>
+        {/* <TableCell width={100}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Tooltip title="Editar" placement="top" arrow>
               <IconButton
@@ -106,7 +110,7 @@ export function WalletTableRow({ row, onDeleteRow }) {
               </IconButton>
             </Tooltip>
           </Box>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       {renderQuickEditForm()}

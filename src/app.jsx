@@ -14,6 +14,7 @@ import { LanguageProvider } from 'src/utils/languageContext.jsx';
 import { AuthProvider } from 'src/auth/context/jwt';
 import { getTranslation } from 'src/assets/data/languages';
 import { BacktestProvider } from './context/BacktestContext';
+import { WalletProvider } from './context/WalletContext';
 
 globalThis.getTranslation = getTranslation;
 
@@ -26,21 +27,23 @@ export default function App({ children }) {
   return (
     <AuthProvider>
       <SettingsProvider defaultSettings={defaultSettings}>
-        <BacktestProvider>
-          <LanguageProvider>
-            <ThemeProvider
-              noSsr
-              defaultMode={themeConfig.defaultMode}
-              modeStorageKey={themeConfig.modeStorageKey}
-            >
-              <MotionLazy>
-                <ProgressBar />
-                <SettingsDrawer defaultSettings={defaultSettings} />
-                {children}
-              </MotionLazy>
-            </ThemeProvider>
-          </LanguageProvider>
-        </BacktestProvider>
+        <WalletProvider>
+          <BacktestProvider>
+            <LanguageProvider>
+              <ThemeProvider
+                noSsr
+                defaultMode={themeConfig.defaultMode}
+                modeStorageKey={themeConfig.modeStorageKey}
+              >
+                <MotionLazy>
+                  <ProgressBar />
+                  <SettingsDrawer defaultSettings={defaultSettings} />
+                  {children}
+                </MotionLazy>
+              </ThemeProvider>
+            </LanguageProvider>
+          </BacktestProvider>
+        </WalletProvider>
       </SettingsProvider>
     </AuthProvider>
   );

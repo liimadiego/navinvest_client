@@ -2,23 +2,17 @@ import { CONFIG } from 'src/global-config';
 
 // ----------------------------------------------------------------------
 
-export const _workspaces = [
+export const _wallets = [
   {
-    id: 'team-1',
-    name: 'Team 1',
-    logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-1.webp`,
-    plan: 'Free',
+    id: 'a12c4e3f-3f12-448b-ba13-9ccceb47f666',
+    name: 'Primeira carteira',
+    // logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-1.webp`,
+    objective: 'Dividendos',
   },
   {
-    id: 'team-2',
-    name: 'Team 2',
-    logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-2.webp`,
-    plan: 'Pro',
-  },
-  {
-    id: 'team-3',
-    name: 'Team 3',
-    logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-3.webp`,
-    plan: 'Pro',
-  },
+    id: '07667ddb-8e7b-4c87-8d3a-40139cfbbf53',
+    name: 'Segunda carteira',
+    // logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-2.webp`,
+    objective: 'Val. de Capital',
+  }
 ];

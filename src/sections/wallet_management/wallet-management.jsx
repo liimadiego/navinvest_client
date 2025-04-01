@@ -1,5 +1,4 @@
-import { useState, useCallback } from 'react';
-import { useBoolean } from 'minimal-shared/hooks';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -11,13 +10,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { paths } from 'src/routes/paths';
-
-import { DashboardContent } from 'src/layouts/dashboard';
 
 import { toast } from 'src/components/snackbar';
 import { Scrollbar } from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import {
     useTable,
     emptyRows,
@@ -38,33 +33,20 @@ const TABLE_HEAD = [
     { id: 'quantity', label: 'Quantidade', alignRight: false },
     { id: 'averagePrice', label: 'Preço Médio', alignRight: false },
     { id: 'currentPrice', label: 'Preço Atual', alignRight: false },
-    { id: 'variation', label: 'Variação', alignRight: false },
-    { id: 'options', label: 'Opções', alignRight: false },
+    { id: 'total', label: 'Total', alignRight: false },
+    { id: 'variation', label: 'Variação', alignRight: false }
 ];
 
-// ----------------------------------------------------------------------
-
-export function WalletManagement({ _tableData, sx, accordionOpened = false }) {
+export function WalletManagement({ _tableData, sx, accordionOpened = false, title, category_summary }) {
     const table = useTable();
 
     const [tableData, setTableData] = useState(_tableData);
 
-    const dataInPage = rowInPage(tableData, table.page, table.rowsPerPage);
+    useEffect(() => {
+        setTableData(_tableData);
+    }, [_tableData]);
 
     const notFound = !tableData.length;
-
-    const handleDeleteRow = useCallback(
-        (id) => {
-            const deleteRow = tableData.filter((row) => row.id !== id);
-
-            toast.success('Delete success!');
-
-            setTableData(deleteRow);
-
-            table.onUpdatePageDeleteRow(dataInPage.length);
-        },
-        [dataInPage.length, table, tableData]
-    );
 
     return (
         <Box sx={{ ...sx }}>
@@ -76,31 +58,71 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false }) {
                         id="panel1a-header"
                         sx={{ px: 4, py: 1 }}
                     >
-                        <Box display={'flex'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
-                            <Box display={'flex'} flex={1} alignItems={'center'}>
-                                <Typography sx={{ mr: 2, fontSize: '16pt' }}>Ações</Typography>
-                                <Typography sx={{ fontStyle: 'italic', transform: 'translateY(1px)' }}>9 ativos</Typography>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flex: { xs: 1, sm: 0.5, md: 1 },
+                                    alignItems: { xs: 'flex-start', sm: 'flex-start', md: 'center' },
+                                    flexDirection: { xs: 'column', sm: 'column', md: 'row' },
+                                }}
+                            >
+                                <Typography sx={{ opacity: 0.95, mr: 2, fontSize: { xs: '12pt', sm: '12pt', md: '16pt' } }}>{title}</Typography>
+                                <Typography sx={{ opacity: 0.75, fontStyle: 'italic', transform: 'translateY(1px)', fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>
+                                    {_tableData.length} ativo{_tableData.length > 1 ? 's' : ''}
+                                </Typography>
                             </Box>
-                            <Box display={'flex'} flex={1.5} justifyContent={'flex-end'} alignItems={'center'}>
-                                <Typography sx={{ mr: 1 }}>Valor total:</Typography>
-                                <Typography sx={{ fontWeight: 'bold' }}>R$ 9.365,72</Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flex: { xs: 1.7, sm: 1, md: 1.5 },
+                                    flexDirection: { xs: 'column', sm: 'column', md: 'row' },
+                                    justifyContent: 'flex-end',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Typography sx={{ opacity: 0.75, mr: 1, fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>Valor total:</Typography>
+                                <Typography sx={{ opacity: 0.75, fontWeight: 'bold', fontSize: { xs: '10pt', sm: '10pt', md: '12pt' } }}>{`R$${parseFloat(category_summary.totalCurrent).toFixed(2).replace('.', ',')}`}</Typography>
                             </Box>
-                            <Box display={'flex'} flex={1} justifyContent={'flex-end'} alignItems={'center'}>
-                                <Typography sx={{ mr: 1 }}>Variação:</Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flex: 1,
+                                    justifyContent: { xs: 'center', sm: 'center', md: 'flex-end' },
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Typography sx={{ opacity: 0.75, mr: 1, fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>Variação:</Typography>
                                 <Typography
+                                    sx={{ opacity: 0.75, fontSize: { xs: '10pt', sm: '10pt', md: '12pt' } }}
                                     color={
-                                        (0.0173 > 0 && 'success') ||
-                                        (0.0173 < 0 && 'error') ||
+                                        (category_summary.percentageChange > 0 && 'success') ||
+                                        (category_summary.percentageChange < 0 && 'error') ||
                                         (row.status === 0 && 'default')
                                     }
                                 >
-                                    {`${0.0173 * 100}%`}
+                                    {`${category_summary.percentageChange ? category_summary.percentageChange.toFixed(2) : ""}%`}
                                 </Typography>
                             </Box>
-                            <Box display={'flex'} flex={2} justifyContent={'flex-end'}>
-                                <Typography sx={{ mr: 1 }}>% NA CARTEIRA:</Typography>
-                                <Typography sx={{ mr: 1, fontWeight: 'bold' }}>33,20%</Typography>
-                                <Typography>(Meta: 40%)</Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flex: { xs: 1, sm: 1, md: 2 },
+                                    flexDirection: { xs: 'column', sm: 'column', md: 'row' },
+                                    alignItems: 'flex-end',
+                                    justifyContent: 'flex-end',
+                                }}
+                            >
+                                <Typography sx={{ opacity: 0.75, mr: 1, fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>% NA CARTEIRA:</Typography>
+                                <Typography sx={{ opacity: 0.75, mr: 1, fontWeight: 'bold', fontSize: { xs: '10pt', sm: '10pt', md: '12pt' } }}>{category_summary.portfolioPercentage}%</Typography>
+                                <Typography sx={{ fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>(Meta: 40%)</Typography>
                             </Box>
                         </Box>
                     </AccordionSummary>
@@ -114,15 +136,10 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false }) {
                                     />
                                     <TableBody>
                                         {tableData
-                                            .slice(
-                                                table.page * table.rowsPerPage,
-                                                table.page * table.rowsPerPage + table.rowsPerPage
-                                            )
                                             .map((row) => (
                                                 <WalletTableRow
                                                     key={row.id}
                                                     row={row}
-                                                    onDeleteRow={() => handleDeleteRow(row.id)}
                                                 />
                                             ))}
 
@@ -137,14 +154,14 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false }) {
                             </Scrollbar>
                         </Box>
 
-                        <TablePaginationCustom
+                        {/* <TablePaginationCustom
                             page={table.page}
                             count={tableData.length}
                             rowsPerPage={table.rowsPerPage}
                             onPageChange={table.onChangePage}
                             onChangeDense={table.onChangeDense}
                             onRowsPerPageChange={table.onChangeRowsPerPage}
-                        />
+                        /> */}
                     </AccordionDetails>
                 </Accordion>
             </Card>

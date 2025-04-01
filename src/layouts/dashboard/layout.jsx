@@ -19,7 +19,7 @@ import { layoutClasses } from '../core/classes';
 import { NavHorizontal } from './nav-horizontal';
 import { _account } from '../nav-config-account';
 import { MainSection } from '../core/main-section';
-// import { _workspaces } from '../nav-config-workspace';
+import { _wallets } from '../nav-config-workspace';
 import { MenuButton } from '../components/menu-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
@@ -27,12 +27,12 @@ import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
 import { LanguagePopover } from '../components/language-popover';
 // import { ContactsPopover } from '../components/contacts-popover';
-import { WorkspacesPopover } from '../components/workspaces-popover';
+import { WalletsPopover } from '../components/wallets-popover';
 import { navData as dashboardNavData } from '../nav-config-dashboard';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
 import { NotificationsDrawer } from '../components/notifications-drawer';
 import { SearchModal } from 'src/components/searchModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +45,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [wallets, setWallets] = useState([]);
 
   const handleCloseModalSearch = () => {
     setSearchModalOpen(false);
@@ -59,6 +60,11 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const isNavMini = settings.state.navLayout === 'mini';
   const isNavHorizontal = settings.state.navLayout === 'horizontal';
   const isNavVertical = isNavMini || settings.state.navLayout === 'vertical';
+
+  useEffect(() => {
+    //faz a pesquisa de wallets
+    setWallets(_wallets);
+  }, []);
 
   const renderHeader = () => {
     const headerSlotProps = {
@@ -109,10 +115,10 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           )}
 
           {/** @slot Workspace popover */}
-          {/* <WorkspacesPopover
-            data={_workspaces}
+          <WalletsPopover
+            data={wallets}
             sx={{ color: 'var(--layout-nav-text-primary-color)' }}
-          /> */}
+          />
         </>
       ),
       rightArea: (

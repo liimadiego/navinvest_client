@@ -35,7 +35,7 @@ export function AssetDetailsHeader({ tickerData }) {
                 <img src={tickerData.image_url} alt="" style={{ width: 70, height: 70, borderRadius: 8 }} />
                 <Box style={{ height: 70 }}>
                     <Typography variant="h5">{tickerData.ticker}</Typography>
-                    <Typography variant="subtitle2">{tickerData.companyName}</Typography>
+                    <Typography variant="subtitle2">{tickerData.asset_name}</Typography>
                 </Box>
             </Box>
             <Box sx={{ mt: { xs: 4, md: 0 }, justifyContent: { xs: 'center', md: 'flex-end' } }} style={{ color: "#fff" }} flexDirection='row' display="flex" gap={2}>

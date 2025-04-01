@@ -9,8 +9,6 @@ import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 import { toast } from 'src/components/snackbar';
 import { Form, Field } from 'src/components/hook-form';
-import { BannerCard } from 'src/components/banner-card';
-import { SeoIllustration } from 'src/assets/illustrations';
 import {
   MenuItem,
   TextField,
@@ -27,10 +25,9 @@ import {
   Paper
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { BacktestContext } from 'src/context/BacktestContext';
 import { TickerSelector } from 'src/components/ticker-selector';
-import MotivationIllustration from 'src/assets/illustrations/motivation-illustration';
 
 export const newBacktestSchema = zod.object({
   portfolio: zod.array(zod.object({
