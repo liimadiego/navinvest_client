@@ -31,7 +31,7 @@ import { WalletsPopover } from '../components/wallets-popover';
 import { navData as dashboardNavData } from '../nav-config-dashboard';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
 import { NotificationsDrawer } from '../components/notifications-drawer';
-import { SearchModal } from 'src/components/searchModal';
+import { SearchModal } from 'src/components/search-modal';
 import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------

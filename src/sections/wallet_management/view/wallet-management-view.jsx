@@ -122,7 +122,6 @@ export function WalletManagementView() {
                 });
 
                 setTableData(formatted_arr);
-                console.log(formatted_arr);
             });
     }
 
