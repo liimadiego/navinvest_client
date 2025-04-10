@@ -52,10 +52,12 @@ export function WalletManagementView() {
     const [tableData, setTableData] = useState([]);
     const [transactionModal, setTransactionModal] = useState(false);
     const { currentWallet } = useWallet();
+    const [isTransactionModalLoading, setIsTransactionModalLoading] = useState(false);
 
     const handleOpenTransactionModal = () => {
         setTransactionModal(true);
     }
+
     const handleCloseTransactionModal = () => {
         setTransactionModal(false);
     }
@@ -65,7 +67,11 @@ export function WalletManagementView() {
     }
 
     const handleSaveTransaction = (transaction) => {
+        setIsTransactionModalLoading(true);
+        console.log(transaction);
+
         if (!currentWallet?.id || !transaction) {
+            setIsTransactionModalLoading(false);
             return;
         }
 
@@ -87,12 +93,14 @@ export function WalletManagementView() {
             }),
         })
             .then(response => response.json())
-            .then(data => {
+            .then(async (data) => {
                 setTransactionModal(false);
                 fetchTableData(currentWallet?.id);
+                setIsTransactionModalLoading(false);
             })
             .catch(error => {
                 console.error('Error saving transaction:', error);
+                setIsTransactionModalLoading(false);
             });
     }
 
@@ -215,7 +223,7 @@ export function WalletManagementView() {
                         )}
                     </Box>
 
-                    <AddEditTransactionModal open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
+                    <AddEditTransactionModal isLoading={isTransactionModalLoading} open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
                 </> :
 
                 <ShowWarningImageAndMessage

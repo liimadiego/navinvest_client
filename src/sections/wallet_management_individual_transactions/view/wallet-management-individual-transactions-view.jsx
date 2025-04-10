@@ -18,6 +18,7 @@ export function WalletManagementIndividualTransactionsView() {
     const [transactionModal, setTransactionModal] = useState(false);
     const { currentWallet } = useWallet();
     const navigate = useNavigate();
+    const [isTransactionModalLoading, setIsTransactionModalLoading] = useState(false);
 
     if (!currentWallet || tableData.length === 0) {
         navigate(paths.dashboard.wallet_management);
@@ -63,7 +64,9 @@ export function WalletManagementIndividualTransactionsView() {
     }
 
     const handleSaveTransaction = (transaction) => {
+        setIsTransactionModalLoading(true);
         if (!currentWallet?.id || !transaction) {
+            setIsTransactionModalLoading(false);
             return;
         }
 
@@ -85,11 +88,13 @@ export function WalletManagementIndividualTransactionsView() {
             }),
         })
             .then(response => response.json())
-            .then(data => {
+            .then(async (data) => {
                 setTransactionModal(false);
                 fetchTableData(currentWallet?.id);
+                setIsTransactionModalLoading(false);
             })
             .catch(error => {
+                setIsTransactionModalLoading(false);
                 console.error('Error saving transaction:', error);
             });
     }
@@ -181,7 +186,7 @@ export function WalletManagementIndividualTransactionsView() {
                         )}
                     </Box>
 
-                    <AddEditTransactionModal open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
+                    <AddEditTransactionModal isLoading={isTransactionModalLoading} open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
                 </>}
         </DashboardContent>
     );

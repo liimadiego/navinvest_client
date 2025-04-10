@@ -14,7 +14,7 @@ import {
 import { TickerSelector } from 'src/components/ticker-selector';
 import { CardAssetInfo } from 'src/components/card-asset-info';
 
-export default function AddEditTransactionModal({ open, onClose, onSave, editData }) {
+export default function AddEditTransactionModal({ open, onClose, onSave, editData, isLoading = false }) {
     const [type, setType] = useState('BUY');
     const [tickerInfo, setTickerInfo] = useState(null);
     const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -95,7 +95,6 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         setPrice('');
         setCosts('0.00');
         setErrors({});
-        onClose();
 
     };
 
@@ -198,8 +197,8 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                 <Button onClick={onClose} color="inherit">
                     Cancelar
                 </Button>
-                <Button onClick={handleSave} variant="contained" color="primary">
-                    Salvar
+                <Button loading={isLoading} loadingPosition="end" onClick={handleSave} variant="contained" color="primary">
+                    {editData ? "Salvar" : "Adicionar"}
                 </Button>
             </DialogActions>
         </Dialog>

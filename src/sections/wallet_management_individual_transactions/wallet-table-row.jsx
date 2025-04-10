@@ -22,10 +22,13 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   const confirmDialog = useBoolean();
   const [editFormOpen, setEditFormOpen] = useState(false);
   const [editFormData, setEditFormData] = useState(null);
+  const [isEditFormLoading, setIsEditFormLoading] = useState(false);
   const { currentWallet } = useWallet();
 
   const handleSaveEditForm = async (transaction) => {
+    setIsEditFormLoading(true);
     if (!currentWallet?.id || !transaction) {
+      setIsEditFormLoading(false);
       return;
     }
 
@@ -47,12 +50,14 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
       }),
     })
       .then(response => response.json())
-      .then(data => {
+      .then(async (data) => {
         setEditFormOpen(false);
         fetchTableData(currentWallet?.id);
+        setIsEditFormLoading(false);
       })
       .catch(error => {
         console.error('Error saving transaction:', error);
+        setIsEditFormLoading(false);
       });
 
   }
@@ -174,7 +179,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
         </TableCell>
       </TableRow>
 
-      <AddEditTransactionModal onClose={() => setEditFormOpen(false)} onSave={handleSaveEditForm} open={editFormOpen} editData={editFormData} />
+      <AddEditTransactionModal isLoading={isEditFormLoading} onClose={() => setEditFormOpen(false)} onSave={handleSaveEditForm} open={editFormOpen} editData={editFormData} />
       {renderConfirmDialog()}
     </>
   );
