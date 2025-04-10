@@ -47,8 +47,9 @@ export const paths = {
     backtest: `${ROOTS.DASHBOARD}/backtest`,
     backtest_results: `${ROOTS.DASHBOARD}/resultado-backtest`,
     compare_assets: `${ROOTS.DASHBOARD}/comparar-ativos`,
-    asset_details: `${ROOTS.DASHBOARD}/asset_details`,
+    asset_details: `${ROOTS.DASHBOARD}/detalhes-ativo`,
     news: `${ROOTS.DASHBOARD}/noticias`,
     wallet_management: `${ROOTS.DASHBOARD}/gerenciar-carteira`,
+    wallet_management_individual_transactions: `${ROOTS.DASHBOARD}/gerenciar-carteira/transacoes-individuais`,
   },
 };

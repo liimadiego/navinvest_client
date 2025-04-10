@@ -14,7 +14,7 @@ import {
 import { TickerSelector } from 'src/components/ticker-selector';
 import { CardAssetInfo } from 'src/components/card-asset-info';
 
-export default function AddTransactionModal({ open, onClose, onSave }) {
+export default function AddEditTransactionModal({ open, onClose, onSave, editData }) {
     const [type, setType] = useState('BUY');
     const [tickerInfo, setTickerInfo] = useState(null);
     const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -75,10 +75,9 @@ export default function AddTransactionModal({ open, onClose, onSave }) {
         setQuantity(value);
     }
 
-
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-            <DialogTitle>Adicionar Transação</DialogTitle>
+            <DialogTitle>{editData ? "Editar" : "Adicionar"} Lançamento</DialogTitle>
             <DialogContent>
                 <ToggleButtonGroup
                     value={type}

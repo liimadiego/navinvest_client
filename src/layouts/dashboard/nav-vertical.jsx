@@ -1,6 +1,5 @@
 import { varAlpha, mergeClasses } from 'minimal-shared/utils';
 
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 import { Logo } from 'src/components/logo';
@@ -10,6 +9,8 @@ import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
 import { layoutClasses } from '../core/classes';
 import { NavUpgrade } from '../components/nav-upgrade';
 import { NavToggleButton } from '../components/nav-toggle-button';
+import { Divider, Box } from '@mui/material';
+import { NavSearch } from 'src/components/nav-search';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +34,12 @@ export function NavVertical({
       )}
 
       <Scrollbar fillContent>
+        <NavSearch />
+
+        <Box sx={{ px: 2, mb: 1 }}>
+          <Divider sx={{ borderStyle: 'dashed', borderColor: 'divider' }} />
+        </Box>
+
         <NavSectionVertical data={data} cssVars={cssVars} sx={{ px: 2, flex: '1 1 auto' }} />
 
         {slots?.bottomArea ?? <NavUpgrade />}

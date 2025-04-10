@@ -10,7 +10,7 @@ export function SearchModal({ isOpen, handleClose }) {
     const navigate = useNavigate();
 
     const onAddTicker = (ticker) => {
-        navigate(`/dashboard/asset_details/${ticker}`);
+        navigate(`/dashboard/detalhes-ativo/${ticker}`);
         handleClose();
     }
 

@@ -9,14 +9,10 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
-
-import { toast } from 'src/components/snackbar';
 import { Scrollbar } from 'src/components/scrollbar';
 import {
     useTable,
     emptyRows,
-    rowInPage,
     TableNoData,
     TableEmptyRows,
     TableHeadCustom,
@@ -36,6 +32,21 @@ const TABLE_HEAD = [
     { id: 'total', label: 'Total', alignRight: false },
     { id: 'variation', label: 'Variação', alignRight: false }
 ];
+
+const formatCurrency = (currency, amount) => {
+    const formatWithDots = (value) => {
+        return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
+
+    switch (currency) {
+        case 'USD':
+            return `$${amount}`;
+        case 'BRL':
+            return `R$${formatWithDots(parseFloat(amount).toFixed(2).replace('.', ','))}`;
+        default:
+            return `${currency}${amount}`;
+    }
+};
 
 export function WalletManagement({ _tableData, sx, accordionOpened = false, title, category_summary }) {
     const table = useTable();
@@ -89,7 +100,7 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false, titl
                                 }}
                             >
                                 <Typography sx={{ opacity: 0.75, mr: 1, fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>Valor total:</Typography>
-                                <Typography sx={{ opacity: 0.75, fontWeight: 'bold', fontSize: { xs: '10pt', sm: '10pt', md: '12pt' } }}>{`R$${parseFloat(category_summary.totalCurrent).toFixed(2).replace('.', ',')}`}</Typography>
+                                <Typography sx={{ opacity: 0.75, fontWeight: 'bold', fontSize: { xs: '10pt', sm: '10pt', md: '12pt' } }}>{formatCurrency("BRL", category_summary.totalCurrent)}</Typography>
                             </Box>
                             <Box
                                 sx={{
@@ -105,7 +116,7 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false, titl
                                     color={
                                         (category_summary.percentageChange > 0 && 'success') ||
                                         (category_summary.percentageChange < 0 && 'error') ||
-                                        (row.status === 0 && 'default')
+                                        (category_summary.percentageChange === 0 && 'default')
                                     }
                                 >
                                     {`${category_summary.percentageChange ? category_summary.percentageChange.toFixed(2) : ""}%`}

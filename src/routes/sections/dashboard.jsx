@@ -21,6 +21,7 @@ const CompareAssets = lazy(() => import('src/pages/dashboard/compare_assets'));
 const AssetDetails = lazy(() => import('src/pages/dashboard/asset_details'));
 const NewsPage = lazy(() => import('src/pages/dashboard/news'));
 const WalletManagementPage = lazy(() => import('src/pages/dashboard/wallet_management'));
+const WalletManagementTransactionsPage = lazy(() => import('src/pages/dashboard/wallet_management_individual_transactions'));
 
 // ----------------------------------------------------------------------
 
@@ -49,9 +50,10 @@ export const dashboardRoutes = [
       { path: 'backtest', element: <BacktestPage /> },
       { path: 'resultado-backtest', element: <BacktestResults /> },
       { path: 'comparar-ativos', element: <CompareAssets /> },
-      { path: 'asset_details/:ticker', element: <AssetDetails /> },
+      { path: 'detalhes-ativo/:ticker', element: <AssetDetails /> },
       { path: 'noticias/:news_id', element: <NewsPage /> },
       { path: 'gerenciar-carteira', element: <WalletManagementPage /> },
+      { path: 'gerenciar-carteira/transacoes-individuais', element: <WalletManagementTransactionsPage /> },
     ],
   },
 ];

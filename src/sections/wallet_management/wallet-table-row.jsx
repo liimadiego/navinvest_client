@@ -17,38 +17,16 @@ import { UserQuickEditForm } from './wallet-quick-edit-form';
 // ----------------------------------------------------------------------
 
 export function WalletTableRow({ row, onDeleteRow }) {
-  const confirmDialog = useBoolean();
-  const quickEditForm = useBoolean();
-
-  const renderQuickEditForm = () => (
-    //precisa adaptar esse form, ele espera compas do user e não da acao
-    <UserQuickEditForm
-      currentUser={row}
-      open={quickEditForm.value}
-      onClose={quickEditForm.onFalse}
-    />
-  );
-
-  const renderConfirmDialog = () => (
-    <ConfirmDialog
-      open={confirmDialog.value}
-      onClose={confirmDialog.onFalse}
-      title="Deletar"
-      content="Tem certeza que deseja deletar?"
-      action={
-        <Button variant="contained" color="error" onClick={onDeleteRow}>
-          Deletar
-        </Button>
-      }
-    />
-  );
-
   const formatCurrency = (currency, amount) => {
+    const formatWithDots = (value) => {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
+
     switch (currency) {
       case 'USD':
         return `$${amount}`;
       case 'BRL':
-        return `R$${parseFloat(amount).toFixed(2).replace('.', ',')}`;
+        return `R$${formatWithDots(parseFloat(amount).toFixed(2).replace('.', ','))}`;
       default:
         return `${currency}${amount}`;
     }
@@ -70,7 +48,7 @@ export function WalletTableRow({ row, onDeleteRow }) {
           </Box>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.category_name === "Criptomoedas" ? row.quantity : Math.round(row.quantity)}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.quantity}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.averagePrice)}</TableCell>
 
@@ -112,9 +90,6 @@ export function WalletTableRow({ row, onDeleteRow }) {
           </Box>
         </TableCell> */}
       </TableRow>
-
-      {renderQuickEditForm()}
-      {renderConfirmDialog()}
     </>
   );
 }

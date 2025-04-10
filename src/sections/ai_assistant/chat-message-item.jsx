@@ -34,7 +34,12 @@ export function ChatMessageItem({ message }) {
         ...(me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
       }}
     >
-      {body}
+      {/* replace \n para queda de linha */}
+      {body.split('\n').map((line, index) => (
+        <Typography key={index} variant="body2" sx={{ mb: 0.5 }}>
+          {line}
+        </Typography>
+      ))}
     </Stack>
   );
 

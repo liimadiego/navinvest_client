@@ -6,9 +6,11 @@ import { paths } from 'src/routes/paths';
 import { Button, Box } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 import { DashboardContent } from 'src/layouts/dashboard';
-import AddTransactionModal from '../add-transaction-modal';
+import AddTransactionModal from '../add-edit-transaction-modal';
 import { useWallet } from 'src/context/WalletContext';
 import Interrogacao from 'src/assets/characters/character-6.webp';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useNavigate } from 'react-router-dom';
 
 function calculateCategorySummary(category, fullPortfolio) {
     let totalPortfolioInvested = 0;
@@ -43,6 +45,7 @@ function calculateCategorySummary(category, fullPortfolio) {
 }
 
 export function WalletManagementView() {
+    const navigate = useNavigate();
     const [tableData, setTableData] = useState([]);
     const [transactionModal, setTransactionModal] = useState(false);
     const { currentWallet } = useWallet();
@@ -52,6 +55,10 @@ export function WalletManagementView() {
     }
     const handleCloseTransactionModal = () => {
         setTransactionModal(false);
+    }
+
+    const handleSeeIndividualTransactions = () => {
+        navigate(paths.dashboard.wallet_management_individual_transactions);
     }
 
     const handleSaveTransaction = (transaction) => {
@@ -91,7 +98,7 @@ export function WalletManagementView() {
             return;
         }
 
-        fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions/${wallet_id}`)
+        fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions/consolidated-transactions/${wallet_id}`)
             .then(response => response.json())
             .then(data => {
                 let formatted_arr = [];
@@ -138,13 +145,23 @@ export function WalletManagementView() {
                     { name: 'Gerenciar carteira', href: paths.dashboard.wallet_management }
                 ]}
                 action={
-                    <Button
-                        onClick={handleOpenTransactionModal}
-                        variant="contained"
-                        startIcon={<Iconify icon="mingcute:add-line" />}
-                    >
-                        Adicionar lançamento
-                    </Button>
+                    <>
+
+                        <Button
+                            onClick={handleSeeIndividualTransactions}
+                            variant="contained"
+                            startIcon={<VisibilityIcon />}
+                        >
+                            Ver lançamentos
+                        </Button>
+                        <Button
+                            onClick={handleOpenTransactionModal}
+                            variant="contained"
+                            startIcon={<Iconify icon="mingcute:add-line" />}
+                        >
+                            Adicionar lançamento
+                        </Button>
+                    </>
                 }
                 sx={{ mb: { xs: 3, md: 5 } }}
             />
