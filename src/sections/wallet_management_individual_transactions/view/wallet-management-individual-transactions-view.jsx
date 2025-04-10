@@ -11,11 +11,17 @@ import Interrogacao from 'src/assets/characters/character-6.webp';
 import { Scrollbar } from 'src/components/scrollbar';
 import { TableEmptyRows, TableHeadCustom, TableNoData, emptyRows, useTable } from 'src/components/table';
 import { WalletTableRow } from '../wallet-table-row';
+import { useNavigate } from 'react-router-dom';
 
 export function WalletManagementIndividualTransactionsView() {
     const [tableData, setTableData] = useState([]);
     const [transactionModal, setTransactionModal] = useState(false);
     const { currentWallet } = useWallet();
+    const navigate = useNavigate();
+
+    if (!currentWallet || tableData.length === 0) {
+        navigate(paths.dashboard.wallet_management);
+    }
 
     const TABLE_HEAD = [
         { id: 'investment_type', label: 'Tipo', align: 'left' },
@@ -136,51 +142,47 @@ export function WalletManagementIndividualTransactionsView() {
                 }
                 sx={{ mb: { xs: 3, md: 5 } }}
             />
-            <Box display="flex" flexDirection="column" gap={2}>
-                {tableData.length > 0 ? (
-                    <Scrollbar>
-                        <Table size={'small'} sx={{ minWidth: 960 }}>
-                            <TableHeadCustom
-                                headCells={TABLE_HEAD}
-                                rowCount={tableData.length}
-                            />
-                            <TableBody>
-                                {tableData.map((row, index) => (
-                                    <WalletTableRow
-                                        key={row.id}
-                                        row={row}
-                                        onDeleteRow={() => handleDeleteTransaction(row.id)}
-                                        fetchTableData={fetchTableData}
+            {currentWallet?.id &&
+                <>
+                    <Box display="flex" flexDirection="column" gap={2}>
+                        {tableData.length > 0 ? (
+                            <Scrollbar>
+                                <Table size={'small'} sx={{ minWidth: 960 }}>
+                                    <TableHeadCustom
+                                        headCells={TABLE_HEAD}
+                                        rowCount={tableData.length}
                                     />
-                                ))}
-
-                                {/* <TableEmptyRows
-                                    height={56}
-                                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                                />
-
-                                <TableNoData notFound={notFound} /> */}
-                            </TableBody>
-                        </Table>
-                    </Scrollbar>
-                ) : (
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={{ mt: 5 }}
-                    >
-                        <img src={Interrogacao} alt="Sem dados disponíveis nesta carteira" width={150} />
-                        <Box textAlign="center">
-                            <h3>Nenhum dado disponível nesta carteira</h3>
-                            <p>Adicione um lançamento para começar a visualizar os dados da sua carteira.</p>
-                        </Box>
+                                    <TableBody>
+                                        {tableData.map((row, index) => (
+                                            <WalletTableRow
+                                                key={row.id}
+                                                row={row}
+                                                onDeleteRow={() => handleDeleteTransaction(row.id)}
+                                                fetchTableData={fetchTableData}
+                                            />
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </Scrollbar>
+                        ) : (
+                            <Box
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="center"
+                                justifyContent="center"
+                                sx={{ mt: 5 }}
+                            >
+                                <img src={Interrogacao} alt="Sem dados disponíveis nesta carteira" width={150} />
+                                <Box textAlign="center">
+                                    <h3>Nenhum dado disponível nesta carteira</h3>
+                                    <p>Adicione um lançamento para começar a visualizar os dados da sua carteira.</p>
+                                </Box>
+                            </Box>
+                        )}
                     </Box>
-                )}
-            </Box>
 
-            <AddEditTransactionModal open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
+                    <AddEditTransactionModal open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
+                </>}
         </DashboardContent>
     );
 }

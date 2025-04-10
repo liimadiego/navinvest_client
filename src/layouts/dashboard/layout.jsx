@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import IconButton, { iconButtonClasses } from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
+import { Search as SearchIcon, AddCircle } from '@mui/icons-material';
 
 import { _notifications } from 'src/_mock';
 
@@ -33,11 +33,15 @@ import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
 import { NotificationsDrawer } from '../components/notifications-drawer';
 import { SearchModal } from 'src/components/search-modal';
 import { useEffect, useState } from 'react';
+import AddEditWalletModal from 'src/components/create-edit-wallet-modal';
+import { useWallet } from 'src/context/WalletContext';
+import { Button, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery = 'lg' }) {
   const theme = useTheme();
+  const { currentWallet, setCurrentWallet } = useWallet();
 
   const settings = useSettingsContext();
 
@@ -45,7 +49,10 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [wallets, setWallets] = useState([]);
+  const [walletModalLoading, setWalletModalLoading] = useState(false);
+  const [walletModalError, setWalletModalError] = useState(false);
 
   const handleCloseModalSearch = () => {
     setSearchModalOpen(false);
@@ -53,6 +60,52 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
 
   const handleOpenModalSearch = () => {
     setSearchModalOpen(true);
+  };
+
+  const handleOpenWalletModal = () => {
+    setWalletModalOpen(true);
+  }
+
+  const handleCloseWalletModal = () => {
+    setWalletModalOpen(false);
+  }
+
+  const handleSaveWallet = async (wallet) => {
+    wallet = wallet?.data;
+    setWalletModalLoading(true);
+    setWalletModalError(false);
+
+    if (!wallet || !wallet.name || !wallet.objective) {
+      setWalletModalLoading(false);
+      setWalletModalError(true);
+      return;
+    }
+
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URL2}/investment-portfolio`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "userId": "0737f150-0561-49c7-a59c-f61e0fc59cc6",
+        "name": wallet.name,
+        "objective": wallet.objective
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      setWalletModalLoading(false);
+      setWalletModalError(true);
+      return;
+    }
+
+    setWallets(data);
+    setCurrentWallet(data[0]);
+
+    setWalletModalLoading(false);
+    setWalletModalError(false);
+    setWalletModalOpen(false);
   };
 
   const navData = slotProps?.nav?.data ?? dashboardNavData;
@@ -64,7 +117,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   useEffect(() => {
     //faz a pesquisa de wallets
     setWallets(_wallets);
-  }, []);
+  }, [_wallets]);
 
   const renderHeader = () => {
     const headerSlotProps = {
@@ -115,10 +168,29 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           )}
 
           {/** @slot Workspace popover */}
-          <WalletsPopover
+          {!!wallets.length && <WalletsPopover
             data={wallets}
             sx={{ color: 'var(--layout-nav-text-primary-color)' }}
-          />
+          />}
+          {/* icone circle plus mui */}
+          {!wallets.length ?
+            //botao de adicionar só que com Criar Carteira + icone
+            <Button
+              onClick={handleOpenWalletModal}
+              variant="contained"
+              startIcon={<AddCircle />}
+            >
+              Criar carteira
+            </Button>
+            : <IconButton
+              onClick={handleOpenWalletModal}
+              sx={{
+                color: 'var(--layout-nav-text-primary-color)',
+                [theme.breakpoints.up(layoutQuery)]: { display: 'flex' },
+              }}
+            >
+              <AddCircle />
+            </IconButton>}
         </>
       ),
       rightArea: (
@@ -181,6 +253,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
 
   return (
     <>
+      <AddEditWalletModal open={walletModalOpen} onClose={handleCloseWalletModal} onSave={handleSaveWallet} isLoading={walletModalLoading} />
       <SearchModal handleClose={handleCloseModalSearch} isOpen={searchModalOpen}></SearchModal>
       <LayoutSection
         /** **************************************

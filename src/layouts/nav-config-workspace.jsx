@@ -1,18 +1,30 @@
-import { CONFIG } from 'src/global-config';
+import { useState, useEffect } from 'react';
 
-// ----------------------------------------------------------------------
+export let _wallets = [];
 
-export const _wallets = [
-  {
-    id: 'a12c4e3f-3f12-448b-ba13-9ccceb47f666',
-    name: 'Primeira carteira',
-    // logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-1.webp`,
-    objective: 'Dividendos',
-  },
-  {
-    id: '07667ddb-8e7b-4c87-8d3a-40139cfbbf53',
-    name: 'Segunda carteira',
-    // logo: `${CONFIG.assetsDir}/assets/icons/workspaces/logo-2.webp`,
-    objective: 'Val. de Capital',
+export const fetchWallets = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URL2}/investment-portfolio/0737f150-0561-49c7-a59c-f61e0fc59cc6`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error('Failed to fetch wallets');
+    }
+    const wallets = data.map(wallet => ({
+      id: wallet.id,
+      name: wallet.name,
+      objective: wallet.objective,
+    }));
+    _wallets = wallets;
+  } catch (error) {
+    console.error(error);
+    return [];
   }
-];
+};
+
+fetchWallets();
+

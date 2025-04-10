@@ -42,6 +42,20 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         }
     }, [editData]);
 
+    useEffect(() => {
+        if (!open) {
+            setTickerInfo(null);
+            setDate(new Date().toISOString().slice(0, 10));
+            setQuantity(1);
+            setPrice('');
+            setType('BUY');
+            setCosts('0.00');
+            setErrors({});
+            setTransactionId(null);
+            return;
+        }
+    }, [open]);
+
     const total = ((parseFloat(price || 0) * quantity) + parseFloat(costs || 0)).toFixed(2);
 
     const handleSave = async () => {

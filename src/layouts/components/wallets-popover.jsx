@@ -110,7 +110,7 @@ export function WalletsPopover({ data = [], sx, ...other }) {
         paper: { sx: { mt: 0.5, ml: -1.55 } },
       }}
     >
-      <MenuList >
+      <MenuList>
         {data.map((option) => (
           <MenuItem
             key={option.id}

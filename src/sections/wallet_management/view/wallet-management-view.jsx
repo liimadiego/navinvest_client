@@ -9,8 +9,11 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useWallet } from 'src/context/WalletContext';
 import Interrogacao from 'src/assets/characters/character-6.webp';
+import ChillWoman2 from 'src/assets/characters/character-8.webp';
+import ChillWoman from 'src/assets/characters/character-3.webp';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
+import { AddCircle } from '@mui/icons-material';
 
 function calculateCategorySummary(category, fullPortfolio) {
     let totalPortfolioInvested = 0;
@@ -133,6 +136,24 @@ export function WalletManagementView() {
             });
     }
 
+    const ShowWarningImageAndMessage = ({ image, title, message }) => {
+        return (
+            <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                sx={{ mt: 5 }}
+            >
+                <img src={image} alt={message} height={250} />
+                <Box textAlign="center">
+                    <h3>{title}</h3>
+                    <p>{message}</p>
+                </Box>
+            </Box>
+        );
+    }
+
     useEffect(() => {
         fetchTableData(currentWallet?.id);
     }, [currentWallet]);
@@ -147,18 +168,17 @@ export function WalletManagementView() {
                 ]}
                 action={
                     <>
-
-                        <Button
+                        {currentWallet?.id && Object.keys(tableData).length > 0 && <Button
                             onClick={handleSeeIndividualTransactions}
                             variant="contained"
                             startIcon={<VisibilityIcon />}
                         >
                             Ver lançamentos
-                        </Button>
-                        {tableData && <Button
+                        </Button>}
+                        {currentWallet?.id && <Button
                             onClick={handleOpenTransactionModal}
                             variant="contained"
-                            startIcon={<Iconify icon="mingcute:add-line" />}
+                            startIcon={<AddCircle />}
                         >
                             Adicionar lançamento
                         </Button>}
@@ -166,42 +186,45 @@ export function WalletManagementView() {
                 }
                 sx={{ mb: { xs: 3, md: 5 } }}
             />
-            <Box display="flex" flexDirection="column" gap={2}>
-                {Object.keys(tableData).length > 0 ? (
-                    Object.keys(tableData).map((category, index) => {
-                        const rows = tableData[category];
+            {currentWallet?.id ?
+                <>
+                    <Box display="flex" flexDirection="column" gap={2}>
+                        {Object.keys(tableData).length > 0 ? (
+                            Object.keys(tableData).map((category, index) => {
+                                const rows = tableData[category];
 
-                        if (!rows || rows.length === 0) return null;
+                                if (!rows || rows.length === 0) return null;
 
-                        return (
-                            <WalletManagement
-                                key={category}
-                                _tableData={rows.data}
-                                category_summary={rows.category_summary}
-                                title={category}
-                                percentage={0}
-                                accordionOpened={index === 0}
+                                return (
+                                    <WalletManagement
+                                        key={category}
+                                        _tableData={rows.data}
+                                        category_summary={rows.category_summary}
+                                        title={category}
+                                        percentage={0}
+                                        accordionOpened={index === 0}
+                                    />
+                                );
+                            })
+                        ) : (
+                            <ShowWarningImageAndMessage
+                                image={ChillWoman}
+                                title="Você ainda não possui lançamentos nesta carteira"
+                                message="Adicione um lançamento para começar a visualizar os dados da sua nova carteira."
                             />
-                        );
-                    })
-                ) : (
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={{ mt: 5 }}
-                    >
-                        <img src={Interrogacao} alt="Sem dados disponíveis nesta carteira" width={150} />
-                        <Box textAlign="center">
-                            <h3>Nenhum dado disponível nesta carteira</h3>
-                            <p>Adicione um lançamento para começar a visualizar os dados da sua carteira.</p>
-                        </Box>
+                        )}
                     </Box>
-                )}
-            </Box>
 
-            <AddEditTransactionModal open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
+                    <AddEditTransactionModal open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
+                </> :
+
+                <ShowWarningImageAndMessage
+                    image={ChillWoman2}
+                    title="Nenhuma carteira selecionada"
+                    message='Crie uma nova carteira clicando em "Criar carteira" no topo da página para começar a visualizar os dados'
+                />
+            }
+
         </DashboardContent>
     );
 }
