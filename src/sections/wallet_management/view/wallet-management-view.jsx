@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 import { Button, Box } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 import { DashboardContent } from 'src/layouts/dashboard';
-import AddTransactionModal from '../add-edit-transaction-modal';
+import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useWallet } from 'src/context/WalletContext';
 import Interrogacao from 'src/assets/characters/character-6.webp';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -80,6 +80,7 @@ export function WalletManagementView() {
                 "amount": transaction.quantity * transaction.price,
                 "price_per_unit": transaction.price,
                 "transaction_date": transaction.date,
+                "quantity": transaction.quantity
             }),
         })
             .then(response => response.json())
@@ -154,13 +155,13 @@ export function WalletManagementView() {
                         >
                             Ver lançamentos
                         </Button>
-                        <Button
+                        {tableData && <Button
                             onClick={handleOpenTransactionModal}
                             variant="contained"
                             startIcon={<Iconify icon="mingcute:add-line" />}
                         >
                             Adicionar lançamento
-                        </Button>
+                        </Button>}
                     </>
                 }
                 sx={{ mb: { xs: 3, md: 5 } }}
@@ -200,7 +201,7 @@ export function WalletManagementView() {
                 )}
             </Box>
 
-            <AddTransactionModal open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
+            <AddEditTransactionModal open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
         </DashboardContent>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Dialog,
     DialogTitle,
@@ -22,12 +22,35 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
     const [price, setPrice] = useState('');
     const [costs, setCosts] = useState('0.00');
     const [errors, setErrors] = useState({});
+    const [transactionId, setTransactionId] = useState(null);
+
+    useEffect(() => {
+        if (editData) {
+            setTransactionId(editData.id);
+            setType(editData.type);
+            setTickerInfo({
+                current_price: editData.ticker.current_price,
+                id: editData.ticker.id,
+                image_url: editData.ticker.asset_image_url,
+                name: `${editData.ticker.ticker} - ${editData.ticker.asset_name}`,
+                type: 'stock',
+            });
+            setDate(editData.date?.slice(0, 10));
+            setQuantity(editData.quantity);
+            setPrice(editData.price);
+            setCosts(editData.costs ?? '0.00');
+        }
+    }, [editData]);
 
     const total = ((parseFloat(price || 0) * quantity) + parseFloat(costs || 0)).toFixed(2);
 
     const handleSave = async () => {
         setErrors({});
         const newErrors = {};
+
+        if (editData && !transactionId) {
+            newErrors.transaction = 'Lançamento não encontrado';
+        }
 
         if (!tickerInfo) {
             newErrors.ticker = 'Selecione um ativo';
@@ -50,7 +73,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
             return;
         }
 
-        await onSave({ errors: newErrors, data: { type, tickerInfo, date, quantity: parseInt(quantity), price: parseFloat(price), costs: parseFloat(costs) } });
+        await onSave({ errors: newErrors, data: { id: transactionId, type, tickerInfo, date, quantity: parseInt(quantity), price: parseFloat(price), costs: parseFloat(costs) } });
 
         setTickerInfo(null);
         setDate(new Date().toISOString().slice(0, 10));
@@ -74,6 +97,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         value = value.replace(/^0+/, '');
         setQuantity(value);
     }
+
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
@@ -109,7 +133,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    sx={{ mb: 2 }}
+                    sx={{ mb: 2, textAlign: 'left' }}
                     InputLabelProps={{ shrink: true }}
                     error={!!errors.date}
                     helperText={errors.date}
@@ -167,3 +191,4 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         </Dialog>
     );
 }
+

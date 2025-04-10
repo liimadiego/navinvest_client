@@ -12,7 +12,7 @@ import { UserQuickEditForm } from './wallet-quick-edit-form';
 import { Tooltip, Typography } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
-import AddEditTransactionModal from './add-edit-transaction-modal';
+import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useState } from 'react';
 import { useWallet } from 'src/context/WalletContext';
 
@@ -112,6 +112,17 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
         <TableCell sx={{ minWidth: "100px" }} height={45}>
           <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
             <Box display={'flex'} gap={.5} alignItems={'center'}>
+              <Box sx={{
+                width: "5px",
+                height: "100%",
+                backgroundColor: row.transaction_type === "BUY" ? "#4caf50" : "#f44336",
+                borderRadius: "5px",
+                userSelect: "none",
+                color: row.transaction_type === "BUY" ? "#4caf50" : "#f44336",
+                marginRight: 1,
+              }}>
+                l
+              </Box>
               <Typography component="span" sx={{ fontSize: 14, fontWeight: 400 }}>
                 {row.ticker?.asset_type}
               </Typography>

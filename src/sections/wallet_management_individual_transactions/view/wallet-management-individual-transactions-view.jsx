@@ -5,7 +5,7 @@ import { paths } from 'src/routes/paths';
 import { Button, Box, Table, TableBody } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 import { DashboardContent } from 'src/layouts/dashboard';
-import AddEditTransactionModal from '../add-edit-transaction-modal';
+import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useWallet } from 'src/context/WalletContext';
 import Interrogacao from 'src/assets/characters/character-6.webp';
 import { Scrollbar } from 'src/components/scrollbar';
@@ -36,6 +36,26 @@ export function WalletManagementIndividualTransactionsView() {
         setTransactionModal(false);
     }
 
+    const handleDeleteTransaction = (transactionId) => {
+        if (!currentWallet?.id || !transactionId) {
+            return;
+        }
+
+        fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions/${transactionId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                fetchTableData(currentWallet?.id);
+            })
+            .catch(error => {
+                console.error('Error deleting transaction:', error);
+            });
+    }
+
     const handleSaveTransaction = (transaction) => {
         if (!currentWallet?.id || !transaction) {
             return;
@@ -49,7 +69,6 @@ export function WalletManagementIndividualTransactionsView() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-
                 "portfolio_id": currentWallet.id,
                 "ticker_id": 22,
                 "transaction_type": transaction.type,
@@ -130,6 +149,7 @@ export function WalletManagementIndividualTransactionsView() {
                                     <WalletTableRow
                                         key={row.id}
                                         row={row}
+                                        onDeleteRow={() => handleDeleteTransaction(row.id)}
                                         fetchTableData={fetchTableData}
                                     />
                                 ))}
