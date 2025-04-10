@@ -166,13 +166,13 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
 
                 <TextField
                     fullWidth
-                    label="Preço em R$"
+                    label={`Preço em ${tickerInfo ? (tickerInfo.currency == "BRL" ? "R$" : "US$") : "R$"}`}
                     type="number"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     sx={{ mb: 2 }}
                     InputProps={{
-                        startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                        startAdornment: <InputAdornment position="start">{tickerInfo ? (tickerInfo.currency == "BRL" ? "R$" : "US$") : "R$"}</InputAdornment>,
                     }}
                     error={!!errors.price}
                     helperText={errors.price}
@@ -190,7 +190,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                 />
 
                 <Typography align="center" variant="subtitle1" sx={{ mt: 1 }}>
-                    Valor total: <strong>R$ {total}</strong>
+                    Valor total: <strong>{tickerInfo ? (tickerInfo.currency == "BRL" ? "R$" : "US$") : "R$"} {total}</strong>
                 </Typography>
             </DialogContent>
 
