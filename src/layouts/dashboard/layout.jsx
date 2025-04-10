@@ -196,12 +196,12 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
       rightArea: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.75 } }}>
           {/** @slot Language popover */}
-          <LanguagePopover
+          {/* <LanguagePopover
             data={[
               { value: 'pt-br', label: 'Português', countryCode: 'BR' },
               { value: 'en', label: 'English', countryCode: 'US' }
             ]}
-          />
+          /> */}
 
           {/* iconbutton de pesquisar */}
           <IconButton onClick={handleOpenModalSearch}>

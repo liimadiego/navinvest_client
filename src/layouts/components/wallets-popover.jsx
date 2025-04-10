@@ -80,7 +80,7 @@ export function WalletsPopover({ data = [], sx, ...other }) {
     >
       <Box
         component="span"
-        sx={{ typography: 'subtitle2', display: { xs: 'none', [mediaQuery]: 'inline-flex' } }}
+        sx={{ typography: 'subtitle2', display: 'inline-flex', fontSize: { xs: 12, md: 14 } }}
       >
         {wallet?.name}
       </Box>
