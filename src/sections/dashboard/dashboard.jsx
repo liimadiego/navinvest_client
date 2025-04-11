@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { WelcomeBack } from './welcome-back';
 import { CompleteCarousel } from 'src/components/complete-carousel';
-import { Box, Skeleton } from '@mui/material';
+import { Box, colors, Skeleton } from '@mui/material';
+
+import Grid from '@mui/material/Grid2';
+import { IndicatorChartMini } from 'src/components/indicator-chart-mini';
+import { useTheme } from '@emotion/react';
+import { DonutChart } from 'src/components/donut-chart';
+import { WealthEvolution } from 'src/components/wealth-evolution';
+import { AssetRankings } from 'src/components/asset-rankings';
+import { _appRelated } from 'src/_mock';
+import { ComparisonChart } from 'src/components/comparison-chart';
 
 export function Dashboard() {
     const [news, setNews] = useState(null);
     const [errorNews, setErrorNews] = useState(false);
+    const theme = useTheme();
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_SERVER_URL2}/news/latest_news`)
@@ -29,9 +39,12 @@ export function Dashboard() {
     }, []);
 
     return (
-        <>
-            <Box display={'flex'} gap={2} flexDirection={{ xs: 'column', md: 'row' }}>
-                <WelcomeBack sx={{ flex: 2 }} />
+        <Grid container spacing={3} mt={3}>
+            <Grid size={{ xs: 12, md: 8 }}>
+                <WelcomeBack />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 4 }}>
                 {news && !errorNews ? (
                     <CompleteCarousel sx={{ flex: 1 }} list={news} />
                 ) : (
@@ -41,9 +54,162 @@ export function Dashboard() {
                             <Skeleton variant="rounded" width="100%" height={"100%"} />
                         </Box>
                 )}
-            </Box>
+            </Grid>
 
-            
-        </>
+            <Grid size={{ xs: 12, md: 4 }}>
+                <IndicatorChartMini
+                    title="Patrimônio total"
+                    percent={2.6}
+                    total={18765}
+                    chart={{
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                        series: [15, 18, 12, 51, 68, 11, 39, 37],
+                    }}
+                />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 4 }}>
+                <IndicatorChartMini
+                    title="Valor total investido"
+                    // percent={-0.1}
+                    total={678}
+                    chart={{
+                        colors: [theme.palette.info.main],
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                        series: [20, 41, 63, 33, 28, 35, 50, 46],
+                    }}
+                />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 4 }}>
+                <IndicatorChartMini
+                    title="Desempenho da carteira (12 meses)"
+                    percent={0.2}
+                    type="percent"
+                    total={48.3}
+                    chart={{
+                        colors: [theme.palette.error.main],
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                        series: [18, 19, 31, 8, 16, 37, 12, 33],
+                    }}
+                />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+                <DonutChart
+                    title="Ativos na carteira"
+                    subheader="Divididos por tipo"
+                    chart={{
+                        series: [
+                            { label: 'Ações', value: 12244 },
+                            { label: 'Stocks', value: 53345 },
+                            { label: 'Criptomoedas', value: 44313 },
+                            { label: 'FIIs', value: 78343 },
+                        ],
+                    }}
+                />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+                <WealthEvolution
+                    sx={{ height: 1 }}
+                    title="Evolução da carteira (12 meses)"
+                    subheader="(+43%) no último ano"
+                    chart={{
+                        colors: [
+                            theme.palette.info.dark,
+                            theme.palette.info.light,
+                        ],
+                        categories: [
+                            'Jan',
+                            'Feb',
+                            'Mar',
+                            'Apr',
+                            'May',
+                            'Jun',
+                            'Jul',
+                            'Aug',
+                            'Sep',
+                            'Oct',
+                            'Nov',
+                            'Dec',
+                        ],
+                        series: [
+                            {
+                                name: '2023',
+                                data: [
+                                    { name: 'Valor aplicado', data: [120.23, 120, 140, 190, 200, 220, 250, 310, 300, 340, 250, 290] },
+                                    { name: 'Ganho de capital', data: [12, -12, 14, 19, 20, 22, 25, 31, 30, 34, 25, 29] },
+                                ],
+                            },
+                        ],
+                    }}
+                />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+                <AssetRankings title="Ranking de ativos" list={_appRelated} />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+                <ComparisonChart
+                    sx={{ height: 1 }}
+                    title="Carteira X Mercado"
+                    subheader="Comparação com ativos do mercado"
+                    chart={{
+                        categories: [
+                            'Jan',
+                            'Feb',
+                            'Mar',
+                            'Apr',
+                            'May',
+                            'Jun',
+                            'Jul',
+                            'Aug',
+                            'Sep',
+                            'Oct',
+                            'Nov',
+                            'Dec',
+                        ],
+                        series: [
+                            {
+                                name: '2022',
+                                data: [
+                                    {
+                                        name: 'IBOV11',
+                                        data: [1, 2, -3, -2, -2.5, -2.7, -2, 1.7, 1.5, 1.55, 1.60, 1.65],
+                                    },
+                                    {
+                                        name: 'CDI',
+                                        data: [0, 1, -4, -2, -2.7, -3.5, -2, 2.7, 3.5, 2.55, 2.60, 3.65],
+                                    },
+                                    {
+                                        name: 'Carteira',
+                                        data: [1, 2, 3, 2, 3, 3.5, 2, 4.7, 4.5, 5.55, 6.26, 6.65],
+                                    }
+                                ],
+                            },
+                            {
+                                name: '2023',
+                                data: [
+                                    {
+                                        name: 'IBOV11',
+                                        data: [2, 3, -2, -1, -1.5, -1.7, -1, 2.7, 2.5, 2.55, 2.60, 4.65],
+                                    },
+                                    {
+                                        name: 'CDI',
+                                        data: [1, 2, -3, -1, -1.7, -2.5, -1, 3.7, 4.5, 3.55, 3.66, 5.65],
+                                    },
+                                    {
+                                        name: 'Carteira',
+                                        data: [2, 3, 4, 3, 4, 4.5, 3, 5.7, 5.5, 6.55, 7.26, 7.65],
+                                    }
+                                ],
+                            },
+                        ],
+                    }}
+                />
+            </Grid>
+        </Grid>
     );
 }

@@ -1,6 +1,6 @@
 import { formatNumberLocale } from 'src/locales';
 
-const DEFAULT_LOCALE = { code: 'en-US', currency: 'USD' };
+const DEFAULT_LOCALE = { code: 'pt-BR', currency: 'BRL' };
 
 function processInput(inputValue) {
   if (inputValue == null || Number.isNaN(inputValue)) return null;
@@ -10,7 +10,7 @@ function processInput(inputValue) {
 // ----------------------------------------------------------------------
 
 export function fNumber(inputValue, options) {
-  const locale = formatNumberLocale() || DEFAULT_LOCALE;
+  const locale = DEFAULT_LOCALE; {/*formatNumberLocale() || */ }
 
   const number = processInput(inputValue);
   if (number === null) return '';
@@ -27,7 +27,7 @@ export function fNumber(inputValue, options) {
 // ----------------------------------------------------------------------
 
 export function fCurrency(inputValue, options) {
-  const locale = formatNumberLocale() || DEFAULT_LOCALE;
+  const locale = DEFAULT_LOCALE; {/*formatNumberLocale() || */ }
 
   const number = processInput(inputValue);
   if (number === null) return '';

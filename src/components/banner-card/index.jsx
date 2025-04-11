@@ -14,7 +14,7 @@ export function BannerCard({ title, description, action, img, sx, ...other }) {
         (theme) => ({
           ...theme.mixins.bgGradient({
             images: [
-              `linear-gradient(to right, rgba(20,26,36, .88) 0%, #141A21 75%)`,
+              `linear-gradient(to right, ${varAlpha(theme.vars.palette.grey['900Channel'], 0.88)} 0%, ${theme.vars.palette.grey[900]} 75%)`,
               `url(${CONFIG.assetsDir}/assets/background/background-5.webp)`,
             ],
           }),
@@ -25,16 +25,13 @@ export function BannerCard({ title, description, action, img, sx, ...other }) {
           borderRadius: 2,
           display: 'flex',
           height: { md: 1 },
-          width: "100%",
           position: 'relative',
           pl: { xs: 3, md: 5 },
           alignItems: 'center',
           color: 'common.white',
           textAlign: { xs: 'center', md: 'left' },
           flexDirection: { xs: 'column', md: 'row' },
-          border: `1px solid #1C252E`,
-          outline: '2px solid #1C252E',
-          outlineOffset: '-2px'
+          border: `solid 1px ${theme.vars.palette.grey[800]}`,
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

@@ -11,7 +11,7 @@ export function WelcomeBack({ sx }) {
     }
 
     return (
-        <Box display='flex' sx={{ ...sx }}>
+        <>
             <BannerCard
                 title={`Que bom te ver por aqui de novo, Diego! 👋`}
                 description="Continue de onde parou e explore novas oportunidades para aprimorar suas estratégias. Se precisar de algo, estamos por aqui!"
@@ -22,6 +22,6 @@ export function WelcomeBack({ sx }) {
                     </Button>
                 }
             />
-        </Box>
+        </>
     );
 }

@@ -6,7 +6,7 @@ import { Dashboard } from '../dashboard';
 
 export function DashboardView() {
     return (
-        <DashboardContent>
+        <DashboardContent maxWidth='xl'>
             <Dashboard />
         </DashboardContent>
     );
