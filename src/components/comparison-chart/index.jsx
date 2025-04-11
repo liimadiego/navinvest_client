@@ -17,8 +17,6 @@ export function ComparisonChart({ title, subheader, chart, sx, ...other }) {
 
   const chartColors = chart.colors ?? [theme.palette.primary.main, theme.palette.warning.main];
 
-  console.log(chartColors);
-
   const chartOptions = useChart({
     colors: chartColors,
     xaxis: { categories: chart.categories },

@@ -19,13 +19,12 @@ import { layoutClasses } from '../core/classes';
 import { NavHorizontal } from './nav-horizontal';
 import { _account } from '../nav-config-account';
 import { MainSection } from '../core/main-section';
-import { _wallets } from '../nav-config-workspace';
 import { MenuButton } from '../components/menu-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
 import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
-import { LanguagePopover } from '../components/language-popover';
+// import { LanguagePopover } from '../components/language-popover';
 // import { ContactsPopover } from '../components/contacts-popover';
 import { WalletsPopover } from '../components/wallets-popover';
 import { navData as dashboardNavData } from '../nav-config-dashboard';
@@ -35,13 +34,38 @@ import { SearchModal } from 'src/components/search-modal';
 import { useEffect, useState } from 'react';
 import AddEditWalletModal from 'src/components/create-edit-wallet-modal';
 import { useWallet } from 'src/context/WalletContext';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
+import { useWallets } from 'src/context/WalletsContext';
 
 // ----------------------------------------------------------------------
 
 export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery = 'lg' }) {
   const theme = useTheme();
   const { currentWallet, setCurrentWallet } = useWallet();
+  const { _wallets, _setWallets } = useWallets();
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_SERVER_URL2}/investment-portfolio/0737f150-0561-49c7-a59c-f61e0fc59cc6`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    }).then((data) => {
+      const wallets = data.map(wallet => ({
+        id: wallet.id,
+        name: wallet.name,
+        objective: wallet.objective,
+      }));
+
+      _setWallets(wallets);
+      setCurrentWallet(wallets[0]);
+    });
+  }, []);
 
   const settings = useSettingsContext();
 
@@ -50,9 +74,8 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
-  const [wallets, setWallets] = useState([]);
   const [walletModalLoading, setWalletModalLoading] = useState(false);
-  const [walletModalError, setWalletModalError] = useState(false);
+  const [_, setWalletModalError] = useState(false);
 
   const handleCloseModalSearch = () => {
     setSearchModalOpen(false);
@@ -100,7 +123,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
       return;
     }
 
-    setWallets(data);
+    _setWallets(data);
     setCurrentWallet(data[0]);
 
     setWalletModalLoading(false);
@@ -113,11 +136,6 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const isNavMini = settings.state.navLayout === 'mini';
   const isNavHorizontal = settings.state.navLayout === 'horizontal';
   const isNavVertical = isNavMini || settings.state.navLayout === 'vertical';
-
-  useEffect(() => {
-    //faz a pesquisa de wallets
-    setWallets(_wallets);
-  }, [_wallets]);
 
   const renderHeader = () => {
     const headerSlotProps = {
@@ -168,12 +186,12 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           )}
 
           {/** @slot Workspace popover */}
-          {!!wallets.length && <WalletsPopover
-            data={wallets}
+          {!!_wallets.length > 0 && <WalletsPopover
+            data={_wallets}
             sx={{ color: 'var(--layout-nav-text-primary-color)' }}
           />}
           {/* icone circle plus mui */}
-          {!wallets.length ?
+          {!_wallets.length > 0 ?
             //botao de adicionar só que com Criar Carteira + icone
             <Button
               onClick={handleOpenWalletModal}

@@ -42,7 +42,6 @@ const TABLE_HEAD = [
 
 export function WalletManagement({ _tableData, sx }) {
     const table = useTable();
-    console.log('_tableData', _tableData);
 
     const [tableData, setTableData] = useState(_tableData);
 

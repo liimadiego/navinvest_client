@@ -98,7 +98,7 @@ export function Dashboard() {
             <Grid size={{ xs: 12, md: 6, lg: 4 }}>
                 <DonutChart
                     title="Ativos na carteira"
-                    subheader="Divididos por tipo"
+                    subheader="Classificados por tipo"
                     chart={{
                         series: [
                             { label: 'Ações', value: 12244 },

@@ -3,7 +3,7 @@ import { WalletManagement } from '../wallet-management';
 import { _userList } from 'src/_mock';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
-import { Button, Box } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 import { DashboardContent } from 'src/layouts/dashboard';
 import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
@@ -68,7 +68,6 @@ export function WalletManagementView() {
 
     const handleSaveTransaction = (transaction) => {
         setIsTransactionModalLoading(true);
-        console.log(transaction);
 
         if (!currentWallet?.id || !transaction) {
             setIsTransactionModalLoading(false);
@@ -144,7 +143,7 @@ export function WalletManagementView() {
             });
     }
 
-    const ShowWarningImageAndMessage = ({ image, title, message }) => {
+    const ShowWarningImageAndMessage = ({ image, title, message, imageSx }) => {
         return (
             <Box
                 display="flex"
@@ -153,10 +152,18 @@ export function WalletManagementView() {
                 justifyContent="center"
                 sx={{ mt: 5 }}
             >
-                <img src={image} alt={message} height={250} />
+                <img src={image} alt={message} height={250} style={{ ...imageSx }} />
                 <Box textAlign="center">
-                    <h3>{title}</h3>
-                    <p>{message}</p>
+                    <Typography
+                        sx={{ fontWeight: 600, fontSize: 22, mt: 2, mb: 1, color: 'text.secondary' }}
+                    >{title}
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{ color: 'text.secondary' }}
+                    >{message}
+                    </Typography>
+
                 </Box>
             </Box>
         );
@@ -217,8 +224,9 @@ export function WalletManagementView() {
                         ) : (
                             <ShowWarningImageAndMessage
                                 image={ChillWoman}
-                                title="Você ainda não possui lançamentos nesta carteira"
-                                message="Adicione um lançamento para começar a visualizar os dados da sua nova carteira."
+                                imageSx={{ transform: 'translateX(20px)' }}
+                                title="Quase lá! Só falta um passo"
+                                message="Adicione lançamentos na sua carteira para visualizar os dados"
                             />
                         )}
                     </Box>
