@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { WelcomeBack } from './welcome-back';
 import { CompleteCarousel } from 'src/components/complete-carousel';
 import { Box, colors, Skeleton } from '@mui/material';
@@ -11,11 +11,13 @@ import { WealthEvolution } from 'src/components/wealth-evolution';
 import { AssetRankings } from 'src/components/asset-rankings';
 import { _appRelated } from 'src/_mock';
 import { ComparisonChart } from 'src/components/comparison-chart';
+import { WalletContext } from 'src/context/WalletContext';
 
 export function Dashboard() {
     const [news, setNews] = useState(null);
     const [errorNews, setErrorNews] = useState(false);
     const theme = useTheme();
+    const { currentWallet } = useContext(WalletContext);
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_SERVER_URL2}/news/latest_news`)
@@ -72,7 +74,7 @@ export function Dashboard() {
                 <IndicatorChartMini
                     title="Valor total investido"
                     // percent={-0.1}
-                    total={678}
+                    total={17367}
                     chart={{
                         colors: [theme.palette.info.main],
                         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
