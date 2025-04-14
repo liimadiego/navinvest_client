@@ -63,7 +63,6 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
       }));
 
       _setWallets(wallets);
-      setCurrentWallet(wallets[0]);
     });
   }, []);
 

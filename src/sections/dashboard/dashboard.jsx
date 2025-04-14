@@ -12,7 +12,6 @@ import { AssetRankings } from 'src/components/asset-rankings';
 import { _appRelated } from 'src/_mock';
 import { ComparisonChart } from 'src/components/comparison-chart';
 import { WalletContext } from 'src/context/WalletContext';
-import { set } from 'nprogress';
 import { numToMonth } from 'src/utils/format-date';
 
 export function Dashboard() {
@@ -26,6 +25,7 @@ export function Dashboard() {
     const [totalAssetEvolutionThisMonth, setTotalAssetEvolutionThisMonth] = useState(null);
     const [totalAssetEvolutionTwelveMonths, setTotalAssetEvolutionTwelveMonths] = useState(null);
     const [totalInvested, setTotalInvested] = useState(null);
+    const [portfolioDivision, setPortfolioDivision] = useState(null);
     const theme = useTheme();
     const { currentWallet } = useContext(WalletContext);
 
@@ -84,6 +84,15 @@ export function Dashboard() {
 
                     setTotalAssetEvolutionTwelveMonths(evolutionTwelveMonths);
 
+                    const portfolioDivisionChartSeries = data.portfolioDivision.map((item) => {
+                        return {
+                            label: item.category,
+                            value: Number(item.total_percentage) || 0
+                        }
+                    });
+
+                    setPortfolioDivision(portfolioDivisionChartSeries);
+
                     setLoading(false);
                 })
                 .catch((error) => {
@@ -139,13 +148,12 @@ export function Dashboard() {
                     percent={totalAssetEvolutionThisMonth || 0}
                     total={totalAssets || 0}
                     chart={historicalTotalAssets}
-                /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
+                /> : <Skeleton variant="rounded" width="100%" height={"160px"} />}
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
                 {historicalTotalInvested && totalInvested ? <IndicatorChartMini
                     title="Valor total investido"
-                    // percent={-0.1}
                     total={totalInvested || 0}
                     chart={historicalTotalInvested}
                 /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
@@ -161,18 +169,13 @@ export function Dashboard() {
             </Grid>
 
             <Grid size={{ xs: 12, md: 6, lg: 4 }}>
-                <DonutChart
+                {portfolioDivision ? <DonutChart
                     title="Ativos na carteira"
                     subheader="Classificados por tipo"
                     chart={{
-                        series: [
-                            { label: 'Ações', value: 12244 },
-                            { label: 'Stocks', value: 53345 },
-                            { label: 'Criptomoedas', value: 44313 },
-                            { label: 'FIIs', value: 78343 },
-                        ],
+                        series: portfolioDivision
                     }}
-                />
+                /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
             </Grid>
 
             <Grid size={{ xs: 12, md: 6, lg: 8 }}>

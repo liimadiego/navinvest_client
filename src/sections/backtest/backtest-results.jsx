@@ -85,7 +85,7 @@ export function BacktestResults() {
         const yearText = year > 0 ? `${year} ano${year > 1 ? 's' : ''}` : '';
         const monthText = month > 0 ? `${month} ${month > 1 ? 'meses' : 'mês'}` : '';
         const dayText = day > 0 ? `${day} dia${day > 1 ? 's' : ''}` : '';
-        return `${yearText} ${monthText} ${dayText}`.trim().replace(/\s+/g, ' ');
+        return `${yearText} ${monthText} ${monthText ? 'e' : ''} ${dayText}`.trim().replace(/\s+/g, ' ');
     }
 
     const theme = useTheme();
