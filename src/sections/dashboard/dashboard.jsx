@@ -37,6 +37,7 @@ export function Dashboard() {
             setHistoricalTotalInvested(null);
             setTotalAssetEvolutionThisMonth(null);
             setTotalAssetEvolutionTwelveMonths(null);
+            setPortfolioDivision(null);
             setError(false);
             setLoading(true);
 
