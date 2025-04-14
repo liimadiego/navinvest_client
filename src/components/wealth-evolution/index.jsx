@@ -13,7 +13,7 @@ import { Chart, useChart, ChartSelect, ChartLegends } from 'src/components/chart
 export function WealthEvolution({ title, subheader, chart, sx, ...other }) {
   const theme = useTheme();
 
-  const [selectedSeries, setSelectedSeries] = useState('2023');
+  const [selectedSeries, setSelectedSeries] = useState('Evolução da carteira');
 
   const chartColors = chart.colors ?? [
     theme.palette.primary.dark,
@@ -46,13 +46,13 @@ export function WealthEvolution({ title, subheader, chart, sx, ...other }) {
       <CardHeader
         title={title}
         subheader={subheader}
-        action={
-          <ChartSelect
-            options={chart.series.map((item) => item.name)}
-            value={selectedSeries}
-            onChange={handleChangeSeries}
-          />
-        }
+        // action={
+        //   <ChartSelect
+        //     options={chart.series.map((item) => item.name)}
+        //     value={selectedSeries}
+        //     onChange={handleChangeSeries}
+        //   />
+        // }
         sx={{ mb: 3 }}
       />
 

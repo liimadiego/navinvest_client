@@ -19,6 +19,7 @@ export function Dashboard() {
     const [errorNews, setErrorNews] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+
     const [totalAssets, setTotalAssets] = useState(null);
     const [historicalTotalAssets, setHistoricalTotalAssets] = useState(null);
     const [historicalTotalInvested, setHistoricalTotalInvested] = useState(null);
@@ -26,6 +27,8 @@ export function Dashboard() {
     const [totalAssetEvolutionTwelveMonths, setTotalAssetEvolutionTwelveMonths] = useState(null);
     const [totalInvested, setTotalInvested] = useState(null);
     const [portfolioDivision, setPortfolioDivision] = useState(null);
+    const [walletEvolution, setWalletEvolution] = useState(null);
+
     const theme = useTheme();
     const { currentWallet } = useContext(WalletContext);
 
@@ -38,6 +41,7 @@ export function Dashboard() {
             setTotalAssetEvolutionThisMonth(null);
             setTotalAssetEvolutionTwelveMonths(null);
             setPortfolioDivision(null);
+            setWalletEvolution(null);
             setError(false);
             setLoading(true);
 
@@ -67,14 +71,17 @@ export function Dashboard() {
                         return item.totalInvested;
                     });
 
+                    const totalAssetReversed = totalAssetsChartSeries.reverse();
+                    const totalInvestedReversed = totalInvestedChartSeries.reverse();
+
                     setHistoricalTotalAssets({
                         categories: monthsReversed,
-                        series: totalAssetsChartSeries.reverse(),
+                        series: totalAssetReversed,
                     });
 
                     setHistoricalTotalInvested({
                         categories: monthsReversed,
-                        series: totalInvestedChartSeries.reverse(),
+                        series: totalInvestedReversed,
                     });
 
                     const evolutionTotalAssets = (data.currentTotalAssets / totalAssetsChartSeries[totalAssetsChartSeries.length - 1]) * 100 - 100;
@@ -93,6 +100,27 @@ export function Dashboard() {
                     });
 
                     setPortfolioDivision(portfolioDivisionChartSeries);
+
+                    setWalletEvolution({
+                        categories: monthsReversed,
+                        series: [
+                            {
+                                name: "Evolução da carteira",
+                                data: [
+                                    {
+                                        name: 'Valor aplicado',
+                                        data: totalInvestedReversed
+                                    },
+                                    {
+                                        name: 'Ganho de capital',
+                                        data: totalAssetReversed.map((item, index) => {
+                                            return Number((item - totalInvestedReversed[index]).toFixed(2)) || 0;
+                                        })
+                                    },
+                                ],
+                            }
+                        ]
+                    })
 
                     setLoading(false);
                 })
@@ -180,7 +208,7 @@ export function Dashboard() {
             </Grid>
 
             <Grid size={{ xs: 12, md: 6, lg: 8 }}>
-                <WealthEvolution
+                {walletEvolution ? <WealthEvolution
                     sx={{ height: 1 }}
                     title="Evolução da carteira (12 meses)"
                     subheader="(+43%) no último ano"
@@ -189,38 +217,17 @@ export function Dashboard() {
                             theme.palette.info.dark,
                             theme.palette.info.light,
                         ],
-                        categories: [
-                            'Jan',
-                            'Feb',
-                            'Mar',
-                            'Apr',
-                            'May',
-                            'Jun',
-                            'Jul',
-                            'Aug',
-                            'Sep',
-                            'Oct',
-                            'Nov',
-                            'Dec',
-                        ],
-                        series: [
-                            {
-                                name: '2023',
-                                data: [
-                                    { name: 'Valor aplicado', data: [120.23, 120, 140, 190, 200, 220, 250, 310, 300, 340, 250, 290] },
-                                    { name: 'Ganho de capital', data: [12, -12, 14, 19, 20, 22, 25, 31, 30, 34, 25, 29] },
-                                ],
-                            },
-                        ],
+                        categories: walletEvolution?.categories,
+                        series: walletEvolution?.series,
                     }}
-                />
+                /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+            {/* <Grid size={{ xs: 12, md: 6, lg: 4 }}>
                 <AssetRankings title="Ranking de ativos" list={_appRelated} />
-            </Grid>
+            </Grid> */}
 
-            <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+            {/* <Grid size={{ xs: 12, md: 12, lg: 12 }}>
                 <ComparisonChart
                     sx={{ height: 1 }}
                     title="Carteira X Mercado"
@@ -278,7 +285,7 @@ export function Dashboard() {
                         ],
                     }}
                 />
-            </Grid>
+            </Grid> */}
         </Grid>
     );
 }
