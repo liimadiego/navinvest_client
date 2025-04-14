@@ -12,12 +12,87 @@ import { AssetRankings } from 'src/components/asset-rankings';
 import { _appRelated } from 'src/_mock';
 import { ComparisonChart } from 'src/components/comparison-chart';
 import { WalletContext } from 'src/context/WalletContext';
+import { set } from 'nprogress';
+import { numToMonth } from 'src/utils/format-date';
 
 export function Dashboard() {
     const [news, setNews] = useState(null);
     const [errorNews, setErrorNews] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [totalAssets, setTotalAssets] = useState(null);
+    const [historicalTotalAssets, setHistoricalTotalAssets] = useState(null);
+    const [historicalTotalInvested, setHistoricalTotalInvested] = useState(null);
+    const [totalAssetEvolutionThisMonth, setTotalAssetEvolutionThisMonth] = useState(null);
+    const [totalAssetEvolutionTwelveMonths, setTotalAssetEvolutionTwelveMonths] = useState(null);
+    const [totalInvested, setTotalInvested] = useState(null);
     const theme = useTheme();
     const { currentWallet } = useContext(WalletContext);
+
+    useEffect(() => {
+        if (currentWallet && currentWallet.id) {
+            setTotalAssets(null);
+            setTotalInvested(null);
+            setHistoricalTotalAssets(null);
+            setHistoricalTotalInvested(null);
+            setTotalAssetEvolutionThisMonth(null);
+            setTotalAssetEvolutionTwelveMonths(null);
+            setError(false);
+            setLoading(true);
+
+            fetch(`${import.meta.env.VITE_SERVER_URL2}/investment-portfolio/portfolio-data/${currentWallet.id}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data.currentTotalAssets || !data.currentTotalInvested) {
+                        setError(true);
+                        setLoading(false);
+                        return;
+                    }
+                    setTotalAssets(data.currentTotalAssets);
+                    setTotalInvested(data.currentTotalInvested);
+
+                    const totalAssetsChartCategories = data.historicalData.map((item) => {
+                        const month = numToMonth(item.month);
+                        return month;
+                    });
+
+                    const monthsReversed = totalAssetsChartCategories.reverse();
+
+                    const totalAssetsChartSeries = data.historicalData.map((item) => {
+                        return item.totalAssets;
+                    });
+
+                    const totalInvestedChartSeries = data.historicalData.map((item) => {
+                        return item.totalInvested;
+                    });
+
+                    setHistoricalTotalAssets({
+                        categories: monthsReversed,
+                        series: totalAssetsChartSeries.reverse(),
+                    });
+
+                    setHistoricalTotalInvested({
+                        categories: monthsReversed,
+                        series: totalInvestedChartSeries.reverse(),
+                    });
+
+                    const evolutionTotalAssets = (data.currentTotalAssets / totalAssetsChartSeries[totalAssetsChartSeries.length - 1]) * 100 - 100;
+
+                    setTotalAssetEvolutionThisMonth(evolutionTotalAssets);
+
+                    const evolutionTwelveMonths = (data.currentTotalAssets / data.historicalData[data.historicalData.length - 1].totalAssets) * 100 - 100;
+
+                    setTotalAssetEvolutionTwelveMonths(evolutionTwelveMonths);
+
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error('Error fetching wallet data:', error);
+                    setError(true);
+                    setLoading(false);
+                });
+        }
+    }, [currentWallet]);
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_SERVER_URL2}/news/latest_news`)
@@ -59,42 +134,30 @@ export function Dashboard() {
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
-                <IndicatorChartMini
+                {historicalTotalAssets && totalAssets ? <IndicatorChartMini
                     title="Patrimônio total"
-                    percent={2.6}
-                    total={18765}
-                    chart={{
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                        series: [15, 18, 12, 51, 68, 11, 39, 37],
-                    }}
-                />
+                    percent={totalAssetEvolutionThisMonth || 0}
+                    total={totalAssets || 0}
+                    chart={historicalTotalAssets}
+                /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
-                <IndicatorChartMini
+                {historicalTotalInvested && totalInvested ? <IndicatorChartMini
                     title="Valor total investido"
                     // percent={-0.1}
-                    total={17367}
-                    chart={{
-                        colors: [theme.palette.info.main],
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                        series: [20, 41, 63, 33, 28, 35, 50, 46],
-                    }}
-                />
+                    total={totalInvested || 0}
+                    chart={historicalTotalInvested}
+                /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
-                <IndicatorChartMini
+                {totalAssetEvolutionTwelveMonths ? <IndicatorChartMini
                     title="Desempenho da carteira (12 meses)"
-                    percent={0.2}
+                    message={totalAssetEvolutionThisMonth > 0 ? "Aumento de patrimônio" : "Redução de patrimônio"}
                     type="percent"
-                    total={48.3}
-                    chart={{
-                        colors: [theme.palette.error.main],
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                        series: [18, 19, 31, 8, 16, 37, 12, 33],
-                    }}
-                />
+                    total={totalAssetEvolutionTwelveMonths || 0}
+                /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
             </Grid>
 
             <Grid size={{ xs: 12, md: 6, lg: 4 }}>
