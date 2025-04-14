@@ -22,6 +22,7 @@ const AssetDetails = lazy(() => import('src/pages/dashboard/asset_details'));
 const NewsPage = lazy(() => import('src/pages/dashboard/news'));
 const WalletManagementPage = lazy(() => import('src/pages/dashboard/wallet_management'));
 const WalletManagementTransactionsPage = lazy(() => import('src/pages/dashboard/wallet_management_individual_transactions'));
+const AiWalletImporter = lazy(() => import('src/pages/dashboard/ai_wallet_importer'));
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +55,7 @@ export const dashboardRoutes = [
       { path: 'noticias/:news_id', element: <NewsPage /> },
       { path: 'gerenciar-carteira', element: <WalletManagementPage /> },
       { path: 'gerenciar-carteira/transacoes-individuais', element: <WalletManagementTransactionsPage /> },
+      { path: 'importar-carteira', element: <AiWalletImporter /> },
     ],
   },
 ];

@@ -51,5 +51,6 @@ export const paths = {
     news: `${ROOTS.DASHBOARD}/noticias`,
     wallet_management: `${ROOTS.DASHBOARD}/gerenciar-carteira`,
     wallet_management_individual_transactions: `${ROOTS.DASHBOARD}/gerenciar-carteira/transacoes-individuais`,
+    ai_wallet_importer: `${ROOTS.DASHBOARD}/importar-carteira`,
   },
 };
