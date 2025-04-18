@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { _userList } from 'src/_mock';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
-import { Button, Box, Table, TableBody } from '@mui/material';
+import { Button, Box, Table, TableBody, Skeleton } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 import { DashboardContent } from 'src/layouts/dashboard';
 import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function WalletManagementIndividualTransactionsView() {
     const [tableData, setTableData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [transactionModal, setTransactionModal] = useState(false);
     const { currentWallet } = useWallet();
     const navigate = useNavigate();
@@ -100,8 +101,10 @@ export function WalletManagementIndividualTransactionsView() {
     }
 
     const fetchTableData = wallet_id => {
+        setIsLoading(true);
         if (!wallet_id) {
             setTableData([]);
+            setIsLoading(false);
             return;
         }
 
@@ -110,6 +113,7 @@ export function WalletManagementIndividualTransactionsView() {
             .then(data => {
                 if (Array.isArray(data)) {
                     setTableData(data);
+                    setIsLoading(false);
                 }
                 else {
                     console.error('Error fetching data:', data);
@@ -118,6 +122,7 @@ export function WalletManagementIndividualTransactionsView() {
             }).catch(error => {
                 console.error('Error fetching data:', error);
                 toast.error('Erro ao buscar dados da carteira. Tente novamente mais tarde.');
+                setIsLoading(false);
             });
     }
 
@@ -149,42 +154,44 @@ export function WalletManagementIndividualTransactionsView() {
             />
             {currentWallet?.id &&
                 <>
-                    <Box display="flex" flexDirection="column" gap={2}>
-                        {tableData.length > 0 ? (
-                            <Scrollbar>
-                                <Table size={'small'} sx={{ minWidth: 960 }}>
-                                    <TableHeadCustom
-                                        headCells={TABLE_HEAD}
-                                        rowCount={tableData.length}
-                                    />
-                                    <TableBody>
-                                        {tableData.map((row, index) => (
-                                            <WalletTableRow
-                                                key={row.id}
-                                                row={row}
-                                                onDeleteRow={() => handleDeleteTransaction(row.id)}
-                                                fetchTableData={fetchTableData}
-                                            />
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Scrollbar>
-                        ) : (
-                            <Box
-                                display="flex"
-                                flexDirection="column"
-                                alignItems="center"
-                                justifyContent="center"
-                                sx={{ mt: 5 }}
-                            >
-                                <img src={Interrogacao} alt="Sem dados disponíveis nesta carteira" width={150} />
-                                <Box textAlign="center">
-                                    <h3>Nenhum dado disponível nesta carteira</h3>
-                                    <p>Adicione um lançamento para começar a visualizar os dados da sua carteira.</p>
+                    {
+                        !isLoading ? <Box display="flex" flexDirection="column" gap={2}>
+                            {tableData.length > 0 ? (
+                                <Scrollbar>
+                                    <Table size={'small'} sx={{ minWidth: 960 }}>
+                                        <TableHeadCustom
+                                            headCells={TABLE_HEAD}
+                                            rowCount={tableData.length}
+                                        />
+                                        <TableBody>
+                                            {tableData.map((row, index) => (
+                                                <WalletTableRow
+                                                    key={row.id}
+                                                    row={row}
+                                                    onDeleteRow={() => handleDeleteTransaction(row.id)}
+                                                    fetchTableData={fetchTableData}
+                                                />
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </Scrollbar>
+                            ) : (
+                                <Box
+                                    display="flex"
+                                    flexDirection="column"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    sx={{ mt: 5 }}
+                                >
+                                    <img src={Interrogacao} alt="Sem dados disponíveis nesta carteira" width={150} />
+                                    <Box textAlign="center">
+                                        <h3>Nenhum dado disponível nesta carteira</h3>
+                                        <p>Adicione um lançamento para começar a visualizar os dados da sua carteira.</p>
+                                    </Box>
                                 </Box>
-                            </Box>
-                        )}
-                    </Box>
+                            )}
+                        </Box> : <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: 2 }} />
+                    }
 
                     <AddEditTransactionModal isLoading={isTransactionModalLoading} open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
                 </>}

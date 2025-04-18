@@ -3,7 +3,7 @@ import { WalletManagement } from '../wallet-management';
 import { _userList } from 'src/_mock';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box, Typography, Skeleton } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 import { DashboardContent } from 'src/layouts/dashboard';
 import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
@@ -52,6 +52,7 @@ export function WalletManagementView() {
     const [tableData, setTableData] = useState([]);
     const [transactionModal, setTransactionModal] = useState(false);
     const { currentWallet } = useWallet();
+    const [isLoading, setIsLoading] = useState(true);
     const [isTransactionModalLoading, setIsTransactionModalLoading] = useState(false);
 
     const handleOpenTransactionModal = () => {
@@ -104,8 +105,10 @@ export function WalletManagementView() {
     }
 
     const fetchTableData = wallet_id => {
+        setIsLoading(true);
         if (!wallet_id) {
             setTableData([]);
+            setIsLoading(false);
             return;
         }
 
@@ -140,6 +143,10 @@ export function WalletManagementView() {
                 });
 
                 setTableData(formatted_arr);
+                setIsLoading(false);
+            }).catch(error => {
+                console.error('Error fetching table data:', error);
+                setIsLoading(false);
             });
     }
 
@@ -203,7 +210,7 @@ export function WalletManagementView() {
             />
             {currentWallet?.id ?
                 <>
-                    <Box display="flex" flexDirection="column" gap={2}>
+                    {!isLoading ? <Box display="flex" flexDirection="column" gap={2}>
                         {Object.keys(tableData).length > 0 ? (
                             Object.keys(tableData).map((category, index) => {
                                 const rows = tableData[category];
@@ -229,7 +236,7 @@ export function WalletManagementView() {
                                 message="Adicione lançamentos na sua carteira para visualizar os dados"
                             />
                         )}
-                    </Box>
+                    </Box> : <Skeleton variant="rectangular" width={'100%'} height={500} sx={{ borderRadius: 2 }} />}
 
                     <AddEditTransactionModal isLoading={isTransactionModalLoading} open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
                 </> :
