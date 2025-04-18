@@ -115,9 +115,15 @@ export function AiWalletImporter({ }) {
     return (
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column-reverse', sm: 'column-reverse', md: 'row' }, gap: 2, mb: 4, mt: 2 }}>
             <Paper elevation={3} sx={{ p: 3, pb: 4, flex: 1 }}>
-                <Box>
+                <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <Upload multiple value={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
+                    {loading && <Box sx={{ mb: 3 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '12px', sm: '14px', md: '16px' } }}>
+                            ⚠️ O processo de importação pode um ou dois minutos, dependendo do tamanho dos arquivos. Por favor, aguarde até que a importação seja concluída.
+                        </Typography>
+                    </Box>}
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: files.length > 0 ? 0 : 3 }}>
+                        {/* Aviso que demora em media 1 minuto */}
                         {!!files.length && (
                             <Button
                                 variant="contained"
@@ -133,8 +139,10 @@ export function AiWalletImporter({ }) {
                             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
                             onClick={handleUpload}
                             disabled={loading}
+                            loading={loading}
+                            loadingPosition="end"
                         >
-                            {loading ? 'Importando...' : 'Importar Transações'}
+                            Importar Transações
                         </Button>
                     </Box>
                 </Box>

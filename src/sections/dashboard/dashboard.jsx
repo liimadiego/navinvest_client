@@ -191,7 +191,7 @@ export function Dashboard() {
             <Grid size={{ xs: 12, md: 4 }}>
                 {totalAssetEvolutionTwelveMonths ? <IndicatorChartMini
                     title="Desempenho da carteira (12 meses)"
-                    message={totalAssetEvolutionThisMonth > 0 ? "Aumento de patrimônio" : "Redução de patrimônio"}
+                    message={totalAssetEvolutionTwelveMonths > 0 ? "Aumento de patrimônio" : "Redução de patrimônio"}
                     type="percent"
                     total={totalAssetEvolutionTwelveMonths || 0}
                 /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
