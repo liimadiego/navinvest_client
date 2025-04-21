@@ -5,10 +5,7 @@ import Button from '@mui/material/Button';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-import { Label } from 'src/components/label';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-
-import { UserQuickEditForm } from './wallet-quick-edit-form';
 import { Tooltip, Typography } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
@@ -16,8 +13,6 @@ import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useState } from 'react';
 import { useWallet } from 'src/context/WalletContext';
 import { translateAssetType } from 'src/utils/handle-asset-type';
-
-// ----------------------------------------------------------------------
 
 export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   const confirmDialog = useBoolean();
@@ -58,7 +53,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
     } else {
       objectToSend = {
         "portfolio_id": currentWallet.id,
-        "ticker_id": 10,
+        "ticker_id": 10, //MEXER AQUI
         "asset_type": transaction.asset_type,
         "transaction_type": transaction.type,
         "amount": transaction.quantity * transaction.price,
