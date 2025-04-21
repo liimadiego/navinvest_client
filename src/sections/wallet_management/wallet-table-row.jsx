@@ -1,22 +1,13 @@
-import { useBoolean } from 'minimal-shared/hooks';
-
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import IconButton from '@mui/material/IconButton';
 
 import { Label } from 'src/components/label';
-import { Iconify } from 'src/components/iconify';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-
-import { UserQuickEditForm } from './wallet-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export function WalletTableRow({ row, onDeleteRow }) {
+export function WalletTableRow({ row, isFixedIncome }) {
   const formatCurrency = (currency, amount) => {
     const formatWithDots = (value) => {
       return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -40,22 +31,21 @@ export function WalletTableRow({ row, onDeleteRow }) {
             <img alt={row.name} src={row.assetImageUrl} style={{ borderRadius: 8, width: 40, height: 40 }} />
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
-              {row.asset}
-              <Box component="span" sx={{ color: 'text.disabled' }}>
+              {isFixedIncome ? row.asset_name : row.asset}
+              {!isFixedIncome && <Box component="span" sx={{ color: 'text.disabled' }}>
                 {row.asset_name}
-              </Box>
+              </Box>}
             </Stack>
           </Box>
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.quantity}</TableCell>
+        {!isFixedIncome && <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.averagePrice)}</TableCell>}
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.averagePrice)}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.currentPrice)}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, isFixedIncome ? row.total_amount : row.currentPrice)}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
-          {formatCurrency(row.currency, row.currentPrice * row.quantity)}
+          {formatCurrency(row.currency, isFixedIncome ? row.current_value : row.currentPrice * row.quantity)}
         </TableCell>
 
         <TableCell width={100} sx={{ whiteSpace: 'nowrap' }}>

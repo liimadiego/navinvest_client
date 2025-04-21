@@ -9,7 +9,7 @@ import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useWallet } from 'src/context/WalletContext';
 import Interrogacao from 'src/assets/characters/character-6.webp';
 import { Scrollbar } from 'src/components/scrollbar';
-import { TableEmptyRows, TableHeadCustom, TableNoData, emptyRows, useTable } from 'src/components/table';
+import { TableHeadCustom } from 'src/components/table';
 import { WalletTableRow } from '../wallet-table-row';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,9 +21,11 @@ export function WalletManagementIndividualTransactionsView() {
     const navigate = useNavigate();
     const [isTransactionModalLoading, setIsTransactionModalLoading] = useState(false);
 
-    if (!currentWallet || tableData.length === 0) {
-        navigate(paths.dashboard.wallet_management);
-    }
+    useEffect(() => {
+        if (!currentWallet?.id && !isLoading) {
+            navigate(paths.dashboard.wallet_management);
+        }
+    }, [currentWallet, isLoading, navigate]);
 
     const TABLE_HEAD = [
         { id: 'investment_type', label: 'Tipo', align: 'left' },
@@ -40,6 +42,7 @@ export function WalletManagementIndividualTransactionsView() {
     const handleOpenTransactionModal = () => {
         setTransactionModal(true);
     }
+
     const handleCloseTransactionModal = () => {
         setTransactionModal(false);
     }
@@ -73,6 +76,8 @@ export function WalletManagementIndividualTransactionsView() {
 
         transaction = transaction.data;
 
+        const isFixedIncome = transaction.asset_type === 'FIXED_INCOME';
+
         fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions`, {
             method: 'POST',
             headers: {
@@ -80,12 +85,20 @@ export function WalletManagementIndividualTransactionsView() {
             },
             body: JSON.stringify({
                 "portfolio_id": currentWallet.id,
-                "ticker_id": 22,
+                "ticker_id": !isFixedIncome ? 10 : null, //MEXER AQUI
+                "asset_type": transaction.asset_type,
                 "transaction_type": transaction.type,
                 "amount": transaction.quantity * transaction.price,
-                "quantity": transaction.quantity,
-                "price_per_unit": transaction.price,
+                "price_per_unit": !isFixedIncome ? transaction.price : null,
                 "transaction_date": transaction.date,
+                "quantity": transaction.quantity,
+                "issuer": transaction.issuer || null,
+                "investment_type": transaction.investment_type || null,
+                "indexation_type": transaction.indexation_type || null,
+                "expiration_date": transaction.expiration_date || null,
+                "indexer": transaction.indexer || null,
+                "indexer_rate": transaction.indexer_rate || null,
+                "currency": transaction.currency || "BRL",
             }),
         })
             .then(response => response.json())

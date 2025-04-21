@@ -15,6 +15,7 @@ import { Iconify } from 'src/components/iconify';
 import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useState } from 'react';
 import { useWallet } from 'src/context/WalletContext';
+import { translateAssetType } from 'src/utils/handle-asset-type';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   const [editFormData, setEditFormData] = useState(null);
   const [isEditFormLoading, setIsEditFormLoading] = useState(false);
   const { currentWallet } = useWallet();
+  const isFixedIncome = row.asset_type === "FIXED_INCOME";
 
   const handleSaveEditForm = async (transaction) => {
     setIsEditFormLoading(true);
@@ -33,21 +35,45 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
     }
 
     transaction = transaction.data;
+    let objectToSend = {};
+
+    if (transaction.asset_type === "FIXED_INCOME") {
+      objectToSend = {
+        "portfolio_id": currentWallet.id,
+        "ticker_id": null,
+        "asset_type": transaction.asset_type,
+        "transaction_type": transaction.type,
+        "amount": transaction.quantity * transaction.price,
+        "quantity": transaction.quantity,
+        "price_per_unit": null,
+        "transaction_date": transaction.date,
+        "issuer": transaction.issuer || null,
+        "investment_type": transaction.investment_type || null,
+        "indexation_type": transaction.indexation_type || null,
+        "expiration_date": transaction.expiration_date || null,
+        "indexer": transaction.indexer || null,
+        "indexer_rate": transaction.indexer_rate || null,
+        "currency": transaction.currency || "BRL",
+      }
+    } else {
+      objectToSend = {
+        "portfolio_id": currentWallet.id,
+        "ticker_id": 10,
+        "asset_type": transaction.asset_type,
+        "transaction_type": transaction.type,
+        "amount": transaction.quantity * transaction.price,
+        "quantity": transaction.quantity,
+        "price_per_unit": !isFixedIncome ? transaction.price : null,
+        "transaction_date": transaction.date
+      }
+    }
 
     fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions/${transaction.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        "portfolio_id": currentWallet.id,
-        "ticker_id": 22,
-        "transaction_type": transaction.type,
-        "amount": transaction.quantity * transaction.price,
-        "quantity": transaction.quantity,
-        "price_per_unit": transaction.price,
-        "transaction_date": transaction.date,
-      }),
+      body: JSON.stringify(objectToSend),
     })
       .then(response => response.json())
       .then(async (data) => {
@@ -97,16 +123,20 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   }
 
   const handleEditTransaction = async (data) => {
-    const { type, tickerInfo, date, quantity, price, costs, id } = data;
+    const { type, tickerInfo, date, quantity, price, costs, amount, id, asset_type, fixed_income_details } = data;
     const transactionData = {
+      asset_type,
       type,
       ticker: tickerInfo,
+      fixed_income_details: fixed_income_details,
       date,
       quantity,
+      amount,
       price,
       costs,
       id
     };
+
     setEditFormData(transactionData);
     setEditFormOpen(true)
   }
@@ -114,7 +144,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   return (
     <>
       <TableRow hover>
-        <TableCell sx={{ minWidth: "100px" }} height={45}>
+        <TableCell sx={{ minWidth: "150px" }} height={45}>
           <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
             <Box display={'flex'} gap={.5} alignItems={'center'}>
               <Box sx={{
@@ -126,16 +156,16 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
                 color: row.transaction_type === "BUY" ? "#4caf50" : "#f44336",
                 marginRight: 1,
               }}>
-                l
+                .
               </Box>
               <Typography component="span" sx={{ fontSize: 14, fontWeight: 400 }}>
-                {row.ticker?.asset_type}
+                {translateAssetType(row.asset_type, row.ticker?.currency)}
               </Typography>
             </Box>
           </Box>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{row.ticker?.ticker}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{isFixedIncome ? `${row.fixed_income_details?.issuer} - ${row.fixed_income_details?.investment_type}` : row.ticker?.ticker}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{row.transaction_type === "BUY" ? "Compra" : "Venda"}</TableCell>
 
@@ -143,9 +173,15 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{row.quantity}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(row.ticker?.currency, row.price_per_unit)}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(
+          isFixedIncome ? row.fixed_income_details?.currency : row.ticker?.currency,
+          isFixedIncome ? row.amount : row.price_per_unit
+        )}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(row.ticker?.currency, row.amount)}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(
+          isFixedIncome ? row.fixed_income_details?.currency : row.ticker?.currency,
+          row.amount
+        )}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>
           Manual
@@ -162,8 +198,10 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
                   tickerInfo: row.ticker,
                   date: row.transaction_date,
                   quantity: row.quantity,
-                  price: row.price_per_unit,
-                  costs: row.costs
+                  price: row.fixed_income_details ? row.amount : row.price_per_unit,
+                  costs: row.costs,
+                  asset_type: row.asset_type,
+                  fixed_income_details: row.fixed_income_details
                 })}
               >
                 <Iconify icon="solar:pen-bold" />

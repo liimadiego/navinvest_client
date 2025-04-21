@@ -4,11 +4,9 @@ import { _userList } from 'src/_mock';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
 import { Button, Box, Typography, Skeleton } from '@mui/material';
-import { Iconify } from 'src/components/iconify';
 import { DashboardContent } from 'src/layouts/dashboard';
 import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useWallet } from 'src/context/WalletContext';
-import Interrogacao from 'src/assets/characters/character-6.webp';
 import ChillWoman2 from 'src/assets/characters/character-8.webp';
 import ChillWoman from 'src/assets/characters/character-3.webp';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -77,6 +75,8 @@ export function WalletManagementView() {
 
         transaction = transaction.data;
 
+        const isFixedIncome = transaction.asset_type === 'FIXED_INCOME';
+
         fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions`, {
             method: 'POST',
             headers: {
@@ -84,12 +84,20 @@ export function WalletManagementView() {
             },
             body: JSON.stringify({
                 "portfolio_id": currentWallet.id,
-                "ticker_id": 22,
+                "ticker_id": !isFixedIncome ? 10 : null, //MEXER AQUI
+                "asset_type": transaction.asset_type,
                 "transaction_type": transaction.type,
                 "amount": transaction.quantity * transaction.price,
-                "price_per_unit": transaction.price,
+                "price_per_unit": !isFixedIncome ? transaction.price : null,
                 "transaction_date": transaction.date,
-                "quantity": transaction.quantity
+                "quantity": transaction.quantity,
+                "issuer": transaction.issuer || null,
+                "investment_type": transaction.investment_type || null,
+                "indexation_type": transaction.indexation_type || null,
+                "expiration_date": transaction.expiration_date || null,
+                "indexer": transaction.indexer || null,
+                "indexer_rate": transaction.indexer_rate || null,
+                "currency": transaction.currency || "BRL",
             }),
         })
             .then(response => response.json())
@@ -137,6 +145,8 @@ export function WalletManagementView() {
                             currency: row.currency,
                             percentage: row.percentage,
                             category_name: row.category_name,
+                            total_amount: row.total_amount,
+                            current_value: parseFloat(row.current_value),
                         });
                     });
                     formatted_arr[group.category].category_summary = calculateCategorySummary(group.assets, data);

@@ -18,6 +18,7 @@ const availableTickers = [
     { id: 12, name: 'KLBN4', current_price: 22.34, type: 'Ação', companyName: 'Klabin', ticker: 'KLBN4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
     { id: 13, name: 'WEGE3', current_price: 38.45, type: 'Ação', companyName: 'WEG', ticker: 'WEGE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
     { id: 14, name: 'USD3', current_price: 15.45, type: 'Ação', companyName: 'Dólar', ticker: 'USD3', image_url: 'https://g2.img-dpreview.com/81C81CB44922409EA3C99FA3E42369CD.jpg', 'currency': 'USD', 'last_twelve_months': 0.45 },
+    { id: 15, name: 'KNRI11', current_price: 12.45, type: 'FII', asset_name: 'Kinea Renda Imobiliária', ticker: 'KNRI11', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
 ];
 
 export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompany = false, placeholder = 'Adicionar Ticker', openModalTrigger = false, error = false, helperText = "", sx }) {

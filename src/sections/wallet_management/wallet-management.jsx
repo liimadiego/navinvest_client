@@ -1,9 +1,8 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
 import TableBody from '@mui/material/TableBody';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -24,15 +23,6 @@ import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-    { id: 'asset', label: 'Ativo', alignRight: false },
-    { id: 'quantity', label: 'Quantidade', alignRight: false },
-    { id: 'averagePrice', label: 'Preço Médio', alignRight: false },
-    { id: 'currentPrice', label: 'Preço Atual', alignRight: false },
-    { id: 'total', label: 'Total', alignRight: false },
-    { id: 'variation', label: 'Variação', alignRight: false }
-];
-
 const formatCurrency = (currency, amount) => {
     const formatWithDots = (value) => {
         return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -49,6 +39,24 @@ const formatCurrency = (currency, amount) => {
 };
 
 export function WalletManagement({ _tableData, sx, accordionOpened = false, title, category_summary }) {
+    const isFixedIncome = title === 'FIXED_INCOME';
+
+    const TABLE_HEAD = isFixedIncome ?
+        [
+            { id: 'asset', label: 'Ativo', alignRight: false },
+            { id: 'quantity', label: 'Quantidade', alignRight: false },
+            { id: 'applied', label: 'Aplicado', alignRight: false },
+            { id: 'balance', label: 'Saldo', alignRight: false },
+            { id: 'variation', label: 'Variação', alignRight: false },
+        ] : [
+            { id: 'asset', label: 'Ativo', alignRight: false },
+            { id: 'quantity', label: 'Quantidade', alignRight: false },
+            { id: 'averagePrice', label: 'Preço Médio', alignRight: false },
+            { id: 'currentPrice', label: 'Preço Atual', alignRight: false },
+            { id: 'total', label: 'Total', alignRight: false },
+            { id: 'variation', label: 'Variação', alignRight: false }
+        ];
+
     const table = useTable();
 
     const [tableData, setTableData] = useState(_tableData);
@@ -149,6 +157,7 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false, titl
                                         {tableData
                                             .map((row) => (
                                                 <WalletTableRow
+                                                    isFixedIncome={isFixedIncome}
                                                     key={row.id}
                                                     row={row}
                                                 />

@@ -6,6 +6,7 @@ import { Edit } from '@mui/icons-material';
 export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inComparison = false, side = 'left', sx }) {
 
     const image_content = (assetInfo) => (
+        assetInfo.image_url &&
         <img src={assetInfo.image_url}
             style={{ width: 40, height: 40, borderRadius: 4 }}
             alt={assetInfo.name}

@@ -78,7 +78,6 @@ export function AiWalletImporter({ }) {
 
                 setFiles([]);
             }).catch((error) => {
-                console.log("error", error)
                 setNotification({
                     open: true,
                     message: `Erro ao importar arquivos: ${error}`,
@@ -88,7 +87,6 @@ export function AiWalletImporter({ }) {
 
 
         } catch (error) {
-            console.log(error)
             setNotification({
                 open: true,
                 message: `Erro ao importar arquivos: ${error}`,
