@@ -39,7 +39,7 @@ const formatCurrency = (currency, amount) => {
 };
 
 export function WalletManagement({ _tableData, sx, accordionOpened = false, title, category_summary }) {
-    const isFixedIncome = title === 'FIXED_INCOME';
+    const isFixedIncome = title === 'Renda Fixa';
 
     const TABLE_HEAD = isFixedIncome ?
         [

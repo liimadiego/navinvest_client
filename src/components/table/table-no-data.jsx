@@ -10,7 +10,7 @@ export function TableNoData({ notFound, sx }) {
     <TableRow>
       {notFound ? (
         <TableCell colSpan={12}>
-          <EmptyContent filled sx={[{ py: 10 }, ...(Array.isArray(sx) ? sx : [sx])]} />
+          <EmptyContent title="Sem dados" filled sx={[{ py: 10 }, ...(Array.isArray(sx) ? sx : [sx])]} />
         </TableCell>
       ) : (
         <TableCell colSpan={12} sx={{ p: 0 }} />
