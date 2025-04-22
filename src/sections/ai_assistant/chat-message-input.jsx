@@ -14,6 +14,8 @@ import { initialConversation } from './utils/initial-conversation';
 
 import EmojiPicker from 'emoji-picker-react';
 
+import SendIcon from '@mui/icons-material/Send';
+
 // ----------------------------------------------------------------------
 
 export function ChatMessageInput() {
@@ -38,7 +40,7 @@ export function ChatMessageInput() {
     setMessage(event.target.value);
   }, []);
 
-  const handleSendMessage = useCallback(
+  const handleSendMessageEnter = useCallback(
     async (event) => {
       if (event.key !== 'Enter' || !message) return;
 
@@ -55,6 +57,19 @@ export function ChatMessageInput() {
     },
     [conversationData, message, messageData, router]
   );
+
+  const handleSendMessage = async () => {
+    try {
+      const messagesLS = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+      const messages = messagesLS || [];
+
+      messages.push(messageData);
+      setMessage('');
+      await sendMessage(messageData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
@@ -73,13 +88,19 @@ export function ChatMessageInput() {
         name="chat-message"
         id="chat-message-input"
         value={message}
-        onKeyUp={handleSendMessage}
+        onKeyUp={handleSendMessageEnter}
         onChange={handleChangeMessage}
         placeholder={globalThis.getTranslation('type_message')}
         autoComplete='off'
         startAdornment={
           <IconButton onClick={handleToggleEmojiPicker}>
             <Iconify icon="eva:smiling-face-fill" />
+          </IconButton>
+        }
+        //sendMessage Icon
+        endAdornment={
+          <IconButton onClick={handleSendMessage}>
+            <SendIcon />
           </IconButton>
         }
         sx={[
