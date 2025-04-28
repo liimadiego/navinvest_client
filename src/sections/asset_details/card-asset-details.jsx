@@ -5,7 +5,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 // ----------------------------------------------------------------------
 
-export function CardAssetDetails({ sx, icon, title, total, type = false, color = 'warning', currency = false, description = false, ...other }) {
+export function CardAssetDetails({ sx, icon, title, total, type = false, color = 'warning', currency = false, description = false, assetType, ...other }) {
   return (
     <Paper elevation={3} sx={[{ py: 3, pl: 3, pr: 2.5, position: "relative", overflow: "hidden", zIndex: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
       <Box sx={{ flexGrow: 1 }}>

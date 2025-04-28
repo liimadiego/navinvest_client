@@ -7,7 +7,7 @@ import { Label } from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
-export function WalletTableRow({ row, isFixedIncome }) {
+export function WalletTableRow({ row, isFixedIncome, isTreasury }) {
   const formatCurrency = (currency, amount) => {
     const formatWithDots = (value) => {
       return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -23,12 +23,21 @@ export function WalletTableRow({ row, isFixedIncome }) {
     }
   };
 
+  if (isTreasury) {
+    console.log({ row });
+  }
+
   return (
     <>
       <TableRow hover tabIndex={-1}>
         <TableCell width={250}>
           <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
-            <img alt={row.name} src={row.assetImageUrl} style={{ borderRadius: 8, width: 40, height: 40 }} />
+            <img
+              src={`/src/assets/tickers/${row.asset}.jpg`}
+              alt={row.name}
+              onError={(e) => e.target.src = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg"}
+              style={{ borderRadius: 8, width: 40, height: 40 }}
+            />
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
               {isFixedIncome ? row.asset_name : row.asset}
@@ -40,12 +49,12 @@ export function WalletTableRow({ row, isFixedIncome }) {
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.quantity}</TableCell>
-        {!isFixedIncome && <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.averagePrice)}</TableCell>}
+        {!isFixedIncome && !isTreasury && <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.averagePrice)}</TableCell>}
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, isFixedIncome ? row.total_amount : row.currentPrice)}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
-          {formatCurrency(row.currency, isFixedIncome ? row.current_value : row.currentPrice * row.quantity)}
+          {formatCurrency(row.currency, isFixedIncome || isTreasury ? row.current_value : row.currentPrice * row.quantity)}
         </TableCell>
 
         <TableCell width={100} sx={{ whiteSpace: 'nowrap' }}>

@@ -56,18 +56,27 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
     };
 
     useEffect(() => {
+        if (!editData) {
+            clearFields();
+        }
+    }, [assetType]);
+
+    useEffect(() => {
         if (editData) {
             const fixedIncomeDetails = editData.fixed_income_details || false;
+            const treasuryDetails = editData.treasury || false;
+            const isFixedIncome = editData.asset_type === "FIXED_INCOME";
+            const isTreasury = editData.asset_type === "TREASURY";
 
             setAssetType(editData.asset_type);
             setTransactionId(editData.id);
             setType(editData.type);
-            setTickerInfo(!!editData.ticker ? {
-                current_price: editData.ticker?.current_price,
-                id: editData.ticker.id,
-                image_url: editData.ticker.asset_image_url,
-                name: `${editData.ticker.ticker} - ${editData.ticker.asset_name}`,
-                currency: editData.ticker.currency,
+            setTickerInfo(!isFixedIncome ? {
+                current_price: isTreasury ? treasuryDetails.amount : editData.ticker?.current_price,
+                id: isTreasury ? treasuryDetails.id : editData.ticker.id,
+                image_url: isTreasury ? "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg" : editData.ticker.asset_image_url,
+                name: isTreasury ? treasuryDetails.name : `${editData.ticker.ticker} - ${editData.ticker.asset_name}`,
+                currency: isTreasury ? "BRL" : editData.ticker.currency,
             } : null);
             setDate(editData.date?.slice(0, 10));
             setQuantity(editData.quantity);
@@ -75,7 +84,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
             setCosts(editData.costs ?? '0.00');
             setCurrency(editData.ticker?.currency ?? 'BRL');
 
-            if (editData.asset_type == 'FIXED_INCOME' && fixedIncomeDetails) {
+            if (isFixedIncome && fixedIncomeDetails) {
                 setIssuer(fixedIncomeDetails.issuer);
                 setInvestmentType(fixedIncomeDetails.investment_type);
                 setIndexationType(fixedIncomeDetails.indexation_type);
@@ -221,7 +230,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     <ToggleButton value="SELL">VENDA ↓</ToggleButton>
                 </ToggleButtonGroup>
 
-                <TextField
+                {!editData && <TextField
                     select
                     label="Tipo de ativo"
                     value={assetType}
@@ -243,12 +252,13 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     <option value="ETF">ETF</option>
                     <option value="REIT">REIT</option>
                     <option value="MUTUAL_FUND">Fundo Mútuo</option>
-                </TextField>
+                </TextField>}
 
                 {!tickerInfo && assetType !== "FIXED_INCOME" && (
                     <TickerSelector
                         sx={{ mb: 2, mt: 0 }}
                         onAddTicker={handleAddTicker}
+                        assetType={assetType}
                         selectedTickers={[]}
                         placeholder="Buscar ativo"
                         error={!!errors.ticker}
@@ -256,7 +266,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     />
                 )}
 
-                {tickerInfo && <CardAssetInfo sx={{ mb: 3, mt: 0 }} assetInfo={tickerInfo} onEdit={handleEditTicker} />}
+                {tickerInfo && <CardAssetInfo sx={{ mb: 3, mt: 0 }} assetType={assetType} assetInfo={tickerInfo} onEdit={handleEditTicker} />}
 
                 {assetType === "FIXED_INCOME" && <TextField
                     fullWidth
@@ -365,7 +375,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     <option value="IPCA+">IPCA+</option>
                 </TextField>}
 
-                {assetType !== "FIXED_INCOME" && <TextField
+                {assetType !== "FIXED_INCOME" && assetType !== "TREASURY" && <TextField
                     fullWidth
                     label="Quantidade"
                     type="number"

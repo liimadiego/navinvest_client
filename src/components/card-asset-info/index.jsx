@@ -41,9 +41,9 @@ export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inC
                     >
                         <Box sx={{ fontSize: '14px' }} display={'flex'}>
                             {!inComparison && assetInfo.name}
-                            {assetInfo.asset_name && <Typography sx={{ display: { xs: 'none', sm: 'block' }, fontSize: "14px" }}>{!inComparison ? " - " : ""} {assetInfo.asset_name}</Typography>}
+                            {assetInfo.asset_name && assetInfo.type !== "treasury" && <Typography sx={{ display: { xs: 'none', sm: 'block' }, fontSize: "14px" }}>{!inComparison ? " - " : ""} {assetInfo.asset_name}</Typography>}
                         </Box>
-                        {!inComparison && assetInfo.last_twelve_months && (
+                        {!inComparison && assetInfo.last_twelve_months && assetInfo.type !== "treasury" ? (
                             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                                 <span>
                                     <span style={{ fontSize: '12px', color: assetInfo.last_twelve_months > 0 ? 'green' : 'red' }}>
@@ -55,7 +55,9 @@ export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inC
                                     <span style={{ fontSize: '11px', opacity: .7 }}> (12 meses)</span>
                                 </span>
                             </Box>
-                        )}
+                        ) : <Typography sx={{ fontSize: "11px", opacity: 0.7 }}>
+                            {assetInfo.indexer ? camelize(assetInfo.indexer) : ""}
+                        </Typography>}
                     </Box>
                     {assetInfo.image_url && side === 'right' && image_content(assetInfo)}
                 </Box>
@@ -79,3 +81,10 @@ export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inC
         </Paper>
     );
 };
+
+function camelize(str) {
+    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
+        if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+        return index === 0 ? match.toUpperCase() : match.toLowerCase();
+    });
+}

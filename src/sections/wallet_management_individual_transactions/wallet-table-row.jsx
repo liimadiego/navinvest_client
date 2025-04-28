@@ -21,6 +21,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   const [isEditFormLoading, setIsEditFormLoading] = useState(false);
   const { currentWallet } = useWallet();
   const isFixedIncome = row.asset_type === "FIXED_INCOME";
+  const isTreasury = row.asset_type === "TREASURY";
 
   const handleSaveEditForm = async (transaction) => {
     setIsEditFormLoading(true);
@@ -35,12 +36,10 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
     if (transaction.asset_type === "FIXED_INCOME") {
       objectToSend = {
         "portfolio_id": currentWallet.id,
-        "ticker_id": null,
         "asset_type": transaction.asset_type,
         "transaction_type": transaction.type,
         "amount": transaction.quantity * transaction.price,
         "quantity": transaction.quantity,
-        "price_per_unit": null,
         "transaction_date": transaction.date,
         "issuer": transaction.issuer || null,
         "investment_type": transaction.investment_type || null,
@@ -50,10 +49,21 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
         "indexer_rate": transaction.indexer_rate || null,
         "currency": transaction.currency || "BRL",
       }
-    } else {
+    } else if (transaction.asset_type === "TREASURY") {
       objectToSend = {
         "portfolio_id": currentWallet.id,
-        "ticker_id": 10, //MEXER AQUI
+        "treasury_id": transaction.tickerInfo.id,
+        "asset_type": transaction.asset_type,
+        "transaction_type": transaction.type,
+        "amount": transaction.quantity * transaction.price,
+        "quantity": 1,
+        "transaction_date": transaction.date
+      }
+    }
+    else {
+      objectToSend = {
+        "portfolio_id": currentWallet.id,
+        "ticker_id": transaction.tickerInfo.id,
         "asset_type": transaction.asset_type,
         "transaction_type": transaction.type,
         "amount": transaction.quantity * transaction.price,
@@ -118,12 +128,13 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   }
 
   const handleEditTransaction = async (data) => {
-    const { type, tickerInfo, date, quantity, price, costs, amount, id, asset_type, fixed_income_details } = data;
+    const { type, tickerInfo, date, quantity, price, costs, amount, id, asset_type, fixed_income_details, treasury } = data;
     const transactionData = {
       asset_type,
       type,
       ticker: tickerInfo,
-      fixed_income_details: fixed_income_details,
+      fixed_income_details,
+      treasury,
       date,
       quantity,
       amount,
@@ -160,7 +171,11 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
           </Box>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{isFixedIncome ? `${row.fixed_income_details?.issuer} - ${row.fixed_income_details?.investment_type}` : row.ticker?.ticker}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{
+          isFixedIncome ?
+            `${row.fixed_income_details?.issuer} - ${row.fixed_income_details?.investment_type}` :
+            (isTreasury ? row.treasury?.name : row.ticker?.ticker)}
+        </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{row.transaction_type === "BUY" ? "Compra" : "Venda"}</TableCell>
 
@@ -169,12 +184,16 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{row.quantity}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(
-          isFixedIncome ? row.fixed_income_details?.currency : row.ticker?.currency,
-          isFixedIncome ? row.amount : row.price_per_unit
+          isFixedIncome ?
+            row.fixed_income_details?.currency :
+            (isTreasury ? "BRL" : row.ticker?.currency),
+          isFixedIncome ?
+            row.amount :
+            (isTreasury ? row.amount : row.price_per_unit)
         )}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(
-          isFixedIncome ? row.fixed_income_details?.currency : row.ticker?.currency,
+          isFixedIncome ? row.fixed_income_details?.currency : (isTreasury ? "BRL" : row.ticker?.currency),
           row.amount
         )}</TableCell>
 
@@ -190,13 +209,14 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
                 onClick={() => handleEditTransaction({
                   id: row.id,
                   type: row.transaction_type,
-                  tickerInfo: row.ticker,
+                  tickerInfo: row.asset_type == "TREASURY" ? row.treasury : row.ticker,
                   date: row.transaction_date,
                   quantity: row.quantity,
-                  price: row.fixed_income_details ? row.amount : row.price_per_unit,
+                  price: row.fixed_income_details || row.treasury ? row.amount : row.price_per_unit,
                   costs: row.costs,
                   asset_type: row.asset_type,
-                  fixed_income_details: row.fixed_income_details
+                  fixed_income_details: row.fixed_income_details,
+                  treasury: row.treasury,
                 })}
               >
                 <Iconify icon="solar:pen-bold" />

@@ -155,21 +155,13 @@ export function Dashboard() {
 
     return (
         <Grid container spacing={3} mt={3}>
-            <Grid size={{ xs: 12, md: 8 }}>
+            <Grid size={{ xs: 12, md: (news && news.length > 0) ? 8 : 12 }}>
                 <WelcomeBack />
             </Grid>
 
-            <Grid size={{ xs: 12, md: 4 }}>
-                {news && !errorNews ? (
-                    <CompleteCarousel sx={{ flex: 1 }} list={news} />
-                ) : (
-                    errorNews ?
-                        "" :
-                        <Box sx={{ flex: 1 }}>
-                            <Skeleton variant="rounded" width="100%" height={"100%"} />
-                        </Box>
-                )}
-            </Grid>
+            {news && news.length > 0 && <Grid size={{ xs: 12, md: 4 }}>
+                <CompleteCarousel sx={{ flex: 1 }} list={news} />
+            </Grid>}
 
             <Grid size={{ xs: 12, md: 4 }}>
                 {historicalTotalAssets && totalAssets ? <IndicatorChartMini
