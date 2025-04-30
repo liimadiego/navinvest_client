@@ -60,10 +60,10 @@ export function WalletManagement({ _tableData, sx }) {
                                     />
                                 ))}
 
-                            <TableEmptyRows
+                            {/* <TableEmptyRows
                                 height={56}
                                 emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                            />
+                            /> */}
 
                             <TableNoData notFound={notFound} />
                         </TableBody>

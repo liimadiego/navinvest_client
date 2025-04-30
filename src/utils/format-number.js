@@ -26,8 +26,8 @@ export function fNumber(inputValue, options) {
 
 // ----------------------------------------------------------------------
 
-export function fCurrency(inputValue, options) {
-  const locale = DEFAULT_LOCALE; {/*formatNumberLocale() || */ }
+export function fCurrency(inputValue, currency = 'BRL') {
+  const locale = currency == 'BRL' ? DEFAULT_LOCALE : { code: 'en-US', currency: 'USD' };
 
   const number = processInput(inputValue);
   if (number === null) return '';
@@ -37,7 +37,6 @@ export function fCurrency(inputValue, options) {
     currency: locale.currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-    ...options,
   }).format(number);
 
   return fm;

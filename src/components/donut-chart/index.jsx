@@ -28,7 +28,7 @@ export function DonutChart({ title, subheader, chart, sx, ...other }) {
     stroke: { width: 0 },
     tooltip: {
       y: {
-        formatter: (value) => fNumber(value),
+        formatter: (value) => `${fNumber(value)}%`,
         title: { formatter: (seriesName) => `${seriesName}` },
       },
     },
@@ -37,11 +37,10 @@ export function DonutChart({ title, subheader, chart, sx, ...other }) {
         donut: {
           size: '72%',
           labels: {
-            value: { formatter: (value) => fNumber(value) },
+            value: { formatter: (value) => `${fNumber(value)}%` },
             total: {
               formatter: (w) => {
-                const sum = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                return fNumber(sum);
+                return "100%";
               },
             },
           },

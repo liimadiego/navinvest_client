@@ -20,6 +20,7 @@ import {
 
 import { WalletTableRow } from './wallet-table-row';
 import { Typography } from '@mui/material';
+import { translateAssetType } from 'src/utils/handle-asset-type';
 
 // ----------------------------------------------------------------------
 
@@ -39,9 +40,11 @@ const formatCurrency = (currency, amount) => {
 };
 
 export function WalletManagement({ _tableData, sx, accordionOpened = false, title, category_summary }) {
-    const isFixedIncome = title === 'Renda Fixa';
+    const isFixedIncome = title === translateAssetType('fixed_income', 'BRL');
+    const isTreasury = title === translateAssetType('treasury', 'BRL');
+    // console.log({ _tableData, sx, accordionOpened, title, category_summary })
 
-    const TABLE_HEAD = isFixedIncome ?
+    const TABLE_HEAD = isFixedIncome || isTreasury ?
         [
             { id: 'asset', label: 'Ativo', alignRight: false },
             { id: 'quantity', label: 'Quantidade', alignRight: false },
@@ -158,6 +161,7 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false, titl
                                             .map((row) => (
                                                 <WalletTableRow
                                                     isFixedIncome={isFixedIncome}
+                                                    isTreasury={isTreasury}
                                                     key={row.id}
                                                     row={row}
                                                 />

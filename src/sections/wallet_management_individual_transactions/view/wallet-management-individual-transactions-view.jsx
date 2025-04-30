@@ -77,6 +77,7 @@ export function WalletManagementIndividualTransactionsView() {
         transaction = transaction.data;
 
         const isFixedIncome = transaction.asset_type === 'FIXED_INCOME';
+        const isTreasury = transaction.asset_type === 'TREASURY';
 
         fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions`, {
             method: 'POST',
@@ -85,11 +86,12 @@ export function WalletManagementIndividualTransactionsView() {
             },
             body: JSON.stringify({
                 "portfolio_id": currentWallet.id,
-                "ticker_id": !isFixedIncome ? 10 : null, //MEXER AQUI
+                "ticker_id": !isFixedIncome && !isTreasury ? transaction.tickerInfo.id : null,
+                "treasury_id": isTreasury ? transaction.tickerInfo.id : null,
                 "asset_type": transaction.asset_type,
                 "transaction_type": transaction.type,
                 "amount": transaction.quantity * transaction.price,
-                "price_per_unit": !isFixedIncome ? transaction.price : null,
+                "price_per_unit": !isFixedIncome && !isTreasury ? transaction.price : null,
                 "transaction_date": transaction.date,
                 "quantity": transaction.quantity,
                 "issuer": transaction.issuer || null,

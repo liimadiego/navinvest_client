@@ -2,26 +2,21 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, InputAdornment, CircularProgress, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { getTickerList } from 'src/utils/tickers';
+import { translateAssetType } from 'src/utils/handle-asset-type';
+import { fCurrency } from 'src/utils/format-number';
 
-const availableTickers = [
-    { id: 1, name: 'PETR4', current_price: 28.45, type: 'Ação', companyName: 'Petrobras', ticker: 'PETR4', image_url: 'https://investidor10.com.br/storage/companies/63d2c9ead34db.jpg', 'currency': 'BRL', 'last_twelve_months': -0.0052 },
-    { id: 2, name: 'PETR3', current_price: 29.45, type: 'Ação', companyName: 'Petrobras', ticker: 'PETR3', image_url: 'https://investidor10.com.br/storage/companies/63d2c9ead34db.jpg', 'currency': 'BRL', 'last_twelve_months': 0.0011 },
-    { id: 3, name: 'BBAS3', current_price: 32.45, type: 'Ação', companyName: 'Banco do Brasil', ticker: 'BBAS3', image_url: 'https://investidor10.com.br/storage/companies/66ad149f52cd4.jpg', 'currency': 'BRL', 'last_twelve_months': -0.002 },
-    { id: 4, name: 'ITSA4', current_price: 10.23, type: 'Ação', companyName: 'Itaúsa', ticker: 'ITSA4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
-    { id: 5, name: 'TAEE3', current_price: 28.67, type: 'Ação', companyName: 'Taesa', ticker: 'TAEE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.0011 },
-    { id: 6, name: 'TAEE4', current_price: 29.12, type: 'Ação', companyName: 'Taesa', ticker: 'TAEE4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': 0.001 },
-    { id: 7, name: 'TAEE11', current_price: 30.45, type: 'Ação', companyName: 'Taesa', ticker: 'TAEE11', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': 0.012 },
-    { id: 8, name: 'AURE3', current_price: 18.34, type: 'Ação', companyName: 'Auren Energia', ticker: 'AURE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
-    { id: 9, name: 'CMIG3', current_price: 12.56, type: 'Ação', companyName: 'Cemig', 'currency': 'BRL', 'last_twelve_months': -0.05, ticker: 'CMIG3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
-    { id: 10, name: 'CSMG3', current_price: 14.78, type: 'Ação', companyName: 'Copasa', ticker: 'CSMG3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
-    { id: 11, name: 'SAPR3', current_price: 7.89, type: 'Ação', companyName: 'Sanepar', ticker: 'SAPR3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
-    { id: 12, name: 'KLBN4', current_price: 22.34, type: 'Ação', companyName: 'Klabin', ticker: 'KLBN4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
-    { id: 13, name: 'WEGE3', current_price: 38.45, type: 'Ação', companyName: 'WEG', ticker: 'WEGE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'currency': 'BRL', 'last_twelve_months': -0.05 },
-    { id: 14, name: 'USD3', current_price: 15.45, type: 'Ação', companyName: 'Dólar', ticker: 'USD3', image_url: 'https://g2.img-dpreview.com/81C81CB44922409EA3C99FA3E42369CD.jpg', 'currency': 'USD', 'last_twelve_months': 0.45 },
-    { id: 15, name: 'KNRI11', current_price: 12.45, type: 'FII', asset_name: 'Kinea Renda Imobiliária', ticker: 'KNRI11', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
-];
-
-export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompany = false, placeholder = 'Adicionar Ticker', openModalTrigger = false, error = false, helperText = "", sx }) {
+export function TickerSelector({
+    onAddTicker,
+    selectedTickers,
+    doNotRepeatCompany = false,
+    placeholder = 'Adicionar Ticker',
+    openModalTrigger = false,
+    error = false,
+    helperText = "",
+    sx,
+    assetType = 'all'
+}) {
     if (!onAddTicker) {
         throw new Error('onAddTicker is required');
     }
@@ -74,7 +69,8 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
     const fetchTickers = async (query) => {
         try {
             setIsLoading(true);
-            const tickers = availableTickers.filter(ticker => {
+            const response = await getTickerList(query, 4, assetType !== 'all' ? assetType.toLowerCase() : '');
+            const tickers = response.filter(ticker => {
                 if (doNotRepeatCompany) {
                     const tickerCompany = ticker.ticker.substring(0, 4);
                     const hasTickerCompany = selectedTickers.some(selectedTicker => {
@@ -87,8 +83,7 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                         return false;
                     }
                 }
-                return ticker.ticker.toLowerCase().includes(query.toLowerCase()) &&
-                    !selectedTickers.some(selectedTicker => selectedTicker === ticker.ticker)
+                return !selectedTickers.some(selectedTicker => selectedTicker === ticker.ticker)
             });
 
             setIsLoading(false);
@@ -108,7 +103,7 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
         <Box style={{ position: 'relative' }} ref={searchContainerRef} sx={sx}>
             <TextField
                 inputRef={inputRef}
-                label={placeholder}
+                label={assetType == "TREASURY" ? "Buscar título" : placeholder}
                 value={searchTickerText}
                 onChange={(e) => setSearchTickerText(e.target.value)}
                 fullWidth
@@ -171,12 +166,17 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                                 <Box
                                     display="flex"
                                     alignItems="center"
-                                    width={{ xs: "100%", sm: "auto" }}
+                                    width={{ xs: "100%", sm: "100%" }}
                                     mb={{ xs: 1, sm: 0 }}
                                 >
                                     <img
                                         src={ticker.image_url}
                                         alt={ticker.ticker}
+                                        onError={(e) => {
+                                            if (ticker.fallback_image_url) {
+                                                e.target.src = ticker.fallback_image_url;
+                                            }
+                                        }}
                                         style={{
                                             width: 32,
                                             height: 32,
@@ -188,6 +188,7 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                                         display="flex"
                                         flexDirection="column"
                                         alignItems="start"
+                                        flex={1}
                                         sx={{
                                             maxWidth: { xs: "calc(100% - 42px)", sm: "auto" },
                                             overflow: "hidden"
@@ -200,21 +201,23 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                                                 textAlign: "left"
                                             }}
                                         >
-                                            <Box display={'flex'}>
-                                                {ticker.ticker} - {ticker.companyName}
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: "100%" }}>
+                                                <Typography sx={{ maxWidth: "200px" }}>
+                                                    {ticker.ticker} {ticker.type === "treasury" ? "" : `- ${ticker.asset_name}`}
+                                                </Typography>
                                                 <Box
                                                     sx={{
                                                         backgroundColor: 'primary.main',
                                                         padding: "1px 5px",
                                                         opacity: 0.8,
                                                         borderRadius: 1,
-                                                        alignSelf: { xs: "flex-start", sm: "center" },
+                                                        alignSelf: "flex-start",
                                                         mt: { xs: 0, sm: 0 },
                                                         fontSize: "10px",
                                                         marginLeft: "5px"
                                                     }}
                                                 >
-                                                    {ticker.type}
+                                                    {translateAssetType(ticker?.type || "treasury")}
                                                 </Box>
                                             </Box>
                                         </Box>
@@ -224,12 +227,11 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                                             alignItems={{ xs: "flex-start", sm: "center" }}
                                             sx={{ fontWeight: 400 }}
                                         >
-                                            <Typography sx={{ fontSize: "13px", opacity: 0.7, mr: 1 }}>
-                                                {ticker.currency == "USD" ? 'US$' : 'R$'}
-                                                {ticker.current_price.toString().replace('.', ',')}
+                                            <Typography sx={{ fontSize: "13px", opacity: 0.7, mr: ticker.type != "treasury" ? 1 : 0 }}>
+                                                {ticker.type !== "treasury" ? fCurrency(ticker.current_price, ticker.currency) : ""}
                                             </Typography>
 
-                                            {ticker.last_twelve_months && (
+                                            {(ticker.last_twelve_months !== null && ticker.type !== "treasury") ?
                                                 <Box display="flex" alignItems="center">
                                                     <Typography
                                                         sx={{
@@ -249,7 +251,10 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
                                                         (12 meses)
                                                     </Typography>
                                                 </Box>
-                                            )}
+                                                : <Typography sx={{ fontSize: "11px", opacity: 0.7 }}>
+                                                    {ticker.indexer ? camelize(ticker.indexer) : ""}
+                                                </Typography>
+                                            }
                                         </Box>
                                     </Box>
                                 </Box>
@@ -260,4 +265,11 @@ export function TickerSelector({ onAddTicker, selectedTickers, doNotRepeatCompan
             )}
         </Box>
     );
+}
+
+function camelize(str) {
+    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
+        if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+        return index === 0 ? match.toUpperCase() : match.toLowerCase();
+    });
 }
