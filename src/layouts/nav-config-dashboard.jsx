@@ -7,6 +7,7 @@ import { SvgColor } from 'src/components/svg-color';
 import WalletIcon from '@mui/icons-material/Wallet';
 import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 import AssistantIcon from '@mui/icons-material/Assistant';
+import { default as CurrencyConverterIcon } from '@mui/icons-material/CurrencyExchangeOutlined';
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +57,8 @@ export const navData = [
       { title: 'Backtest', path: paths.dashboard.backtest, icon: ICONS.analytics },
       { title: 'Comparar Ativos', path: paths.dashboard.compare_assets, icon: ICONS.file },
       { title: 'Gerenciar Carteira', path: paths.dashboard.wallet_management, icon: <WalletIcon /> },
-      { title: 'Importar Carteira', path: paths.dashboard.ai_wallet_importer, icon: <SimCardDownloadIcon /> }
+      { title: 'Importar Carteira', path: paths.dashboard.ai_wallet_importer, icon: <SimCardDownloadIcon /> },
+      { title: 'Conversor de Moedas', path: paths.dashboard.currency_converter, icon: <CurrencyConverterIcon /> },
     ],
   },
 ];
