@@ -3,10 +3,10 @@ import { TextField, Typography, Autocomplete, Grid2, Button, Divider, Paper, Box
 import Alert from '@mui/material/Alert';
 
 import { default as InfoIcon } from '@mui/icons-material/InfoOutlined';
-import { default as ErrorIcon} from '@mui/icons-material/ReportOutlined';
+import { default as ErrorIcon } from '@mui/icons-material/ReportOutlined';
 import { default as SwapIcon } from '@mui/icons-material/SwapHoriz';
 
-function formatNumberInput (input) {
+function formatNumberInput(input) {
   let sanitizedValue = input.replace(/[^\d,]/g, '');
   if (!sanitizedValue) return { formatted: '', number: null };
 
@@ -16,8 +16,8 @@ function formatNumberInput (input) {
     splitNumber.splice(1, splitNumber.length - 1, splitNumber.slice(1).join('').replace(/\./g, ''));
   else if (splitNumber.length > 1)
     splitNumber[1] = splitNumber[1].replace(/\./g, '');
-  
-  if (!splitNumber[0]) 
+
+  if (!splitNumber[0])
     splitNumber[0] = '0';
   else
     splitNumber[0] = new Intl.NumberFormat('pt-BR').format(parseInt(splitNumber[0].replace(/\./g, '')));
@@ -27,11 +27,11 @@ function formatNumberInput (input) {
 
   const formatted = splitNumber.join(',');
   const number = parseFloat(formatted.replaceAll('.', '').replace(',', '.'));
- 
+
   return { formatted, number };
 }
 
-export function CurrencyConverter () {
+export function CurrencyConverter() {
   const [fromAmount, setFromAmount] = React.useState(null);
   const [fromCurrency, setFromCurrency] = React.useState('');
   const [toAmount, setToAmount] = React.useState(null);
@@ -39,7 +39,7 @@ export function CurrencyConverter () {
   const [exchangeRate, setExchangeRate] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  
+
   // Define currency options
   const currencyOptions = ['USD', 'EUR', 'BRL', 'GBP', 'JPY', 'CAD', 'AUD', 'CHF'];
 
@@ -66,7 +66,7 @@ export function CurrencyConverter () {
 
       const { formatted } = formatNumberInput(((fromAmount * data.rate).toFixed(8) * 1 + '').replace('.', ','));
       setToAmount(formatted);
-      
+
       document.getElementById('toAmount').focus();
     } catch (err) {
       setError(err.message);
@@ -113,38 +113,38 @@ export function CurrencyConverter () {
         gap: 3
       }}
     >
-      <Box sx={{ flex: 1, maxWidth: 360 }}>
-        <Paper elevation={3} sx={{ p: 0 }}>
-          <Grid2 container spacing={1} direction="column" sx={{ /*p: '20px'*/ p: 3, pb: 4 }}>
+      <Box sx={{ flex: 2, display: 'flex' }}>
+        <Paper elevation={3} sx={{ p: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Grid2 container spacing={1} direction="column" sx={{ p: 3, pb: 4, flexGrow: 1 }}>
             {/* Header */}
             {/* <Grid2 xs={12} sx={{ px: 1, mb: 1 }}>
               <Typography variant="overline" gutterBottom sx={{ display: 'block', mb: 0, width: '100%', textAlign: 'left', fontSize: 14 }}>
                 CONVERSOR DE MOEDAS
               </Typography>
             </Grid2> */}
-            
+
             {/* From: */}
             <Grid2 container spacing={0} sx={{ px: 1 }}>
-              <Grid2 size={12} direction="row" flexDirection="row" sx={{ display: 'flex' }}>
+              <Grid2 size={12} flexDirection="row" sx={{ display: 'flex' }}>
                 <TextField
                   id="fromAmount"
-                  variant="standard"
+                  // variant="standard"
                   label="Valor original:"
                   onChange={handleFromAmountChange}
                   onBlur={handleFromAmountBlur}
                   fullWidth
-                  slotProps={{ 
-                    htmlInput: { 
-                      style: { textAlign: 'center', paddingLeft: '10px', paddingRight: '10px' } 
+                  slotProps={{
+                    htmlInput: {
+                      style: { textAlign: 'center', paddingLeft: '10px', paddingRight: '10px' }
                     },
-                    inputLabel: {
-                      style: { paddingLeft: '10px' }
-                    }
+                    // inputLabel: {
+                    //   style: { paddingLeft: '10px' }
+                    // }
                   }}
                 />
               </Grid2>
             </Grid2>
-            
+
             {/* Middle controls */}
             <Grid2 container spacing={1} sx={{ px: 1, my: 1, display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center' }}>
               <Grid2 size={5}>
@@ -157,20 +157,20 @@ export function CurrencyConverter () {
                   value={fromCurrency ? fromCurrency : ''}
                   onInputChange={handleFromCurrencyChange}
                   renderInput={(params) => (
-                    <TextField 
-                      {...params} 
-                      variant="standard"
-                      label="De:" 
+                    <TextField
+                      {...params}
+                      // variant="standard"
+                      label="De:"
                       onFocus={(event) => event.target.select()}
                       slotProps={{
                         htmlInput: {
                           ...params.inputProps,
                           style: { textTransform: 'uppercase', textAlign: 'center', paddingLeft: '10px', paddingRight: '10px' }
                         },
-                        inputLabel: {
-                          ...params.inputLabel,
-                          style: { paddingLeft: '10px' }
-                        }
+                        // inputLabel: {
+                        //   ...params.inputLabel,
+                        //   style: { paddingLeft: '10px' }
+                        // }
                       }}
                     />
                   )}
@@ -185,7 +185,7 @@ export function CurrencyConverter () {
                     const tempFromCurrency = fromCurrency;
                     const tempToAmount = toAmount;
                     const tempToCurrency = toCurrency;
-                    
+
                     document.getElementById('fromAmount').value = tempToAmount;
                     setFromAmount(formatNumberInput(tempToAmount).number);
                     setFromCurrency(tempToCurrency);
@@ -193,7 +193,7 @@ export function CurrencyConverter () {
                     const { formatted } = formatNumberInput((tempFromAmount + '').replace('.', ','));
                     setToAmount(formatted);
                     setToCurrency(tempFromCurrency);
-                    
+
                     setExchangeRate(null);
                     setError(null);
                   }}
@@ -211,21 +211,21 @@ export function CurrencyConverter () {
                   disableClearable
                   value={toCurrency ? toCurrency : ''}
                   onInputChange={handleToCurrencyChange}
-                  renderInput={(params) => 
-                    <TextField 
-                      {...params} 
-                      variant="standard"
-                      label="Para:" 
+                  renderInput={(params) =>
+                    <TextField
+                      {...params}
+                      // variant="standard"
+                      label="Para:"
                       onFocus={(event) => event.target.select()}
                       slotProps={{
                         htmlInput: {
                           ...params.inputProps,
                           style: { textTransform: 'uppercase', textAlign: 'center', paddingLeft: '10px', paddingRight: '10px' }
                         },
-                        inputLabel: {
-                          ...params.inputLabel,
-                          style: { paddingLeft: '10px' }
-                        }
+                        // inputLabel: {
+                        //   ...params.inputLabel,
+                        //   style: { paddingLeft: '10px' }
+                        // }
                       }}
                     />
                   }
@@ -235,21 +235,21 @@ export function CurrencyConverter () {
 
             {/* To: */}
             <Grid2 container spacing={0} sx={{ px: 1 }}>
-              <Grid2 size={12} direction="row" flexDirection={'row'} sx={{ display: 'flex' }}>
+              <Grid2 size={12} flexDirection={'row'} sx={{ display: 'flex' }}>
                 <TextField
                   disabled
                   fullWidth
-                  variant="standard"
+                  // variant="standard"
                   label="Valor após conversão:"
                   id="toAmount"
                   value={toAmount ? toAmount : ''}
                   slotProps={{
-                    htmlInput: { 
-                      style: { textAlign: 'center', paddingLeft: '10px', paddingRight: '10px' } 
+                    htmlInput: {
+                      style: { textAlign: 'center', paddingLeft: '10px', paddingRight: '10px' }
                     },
-                    inputLabel: {
-                      style: { paddingLeft: '10px' }
-                    }
+                    // inputLabel: {
+                    //   style: { paddingLeft: '10px' }
+                    // }
                   }}
                 />
               </Grid2>
@@ -269,58 +269,58 @@ export function CurrencyConverter () {
             </Grid2>
 
             {/* Multi info box */}
-            <Grid2 xs={12} sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-            {
-              (error && (
-                <Alert 
-                  sx={{ 
-                    p: 0,
-                    py: '2px',
-                    fontSize: 14,
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    '& .MuiAlert-icon': { p: 0 },
-                    '& .MuiAlert-message': { p: 0 }
-                  }} 
-                  icon={<ErrorIcon sx={{ fontSize: 20, display: 'flex', alignItems: 'center' }} />}
-                  severity="error" 
-                  variant="outlined"
-                >
-                  {error}
-                </Alert>
-              )) ||
-              (exchangeRate && (
-                <Alert 
-                  sx={{ 
-                    p: 0,
-                    py: '2px',
-                    fontSize: 14,
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    '& .MuiAlert-icon': { p: 0 },
-                    '& .MuiAlert-message': { p: 0 }
-                  }} 
-                  icon={<InfoIcon sx={{ fontSize: 20, display: 'flex', alignItems: 'center' }} />}
-                  severity="info" 
-                  variant="outlined"
-                >
-                  1 {fromCurrency} = {formatNumberInput(((exchangeRate * 1).toFixed(5) * 1 + '').replace('.', ',')).formatted} {toCurrency}
-                </Alert>
-              ))
-            }
+            <Grid2 sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+              {
+                (error && (
+                  <Alert
+                    sx={{
+                      p: 0,
+                      py: '2px',
+                      fontSize: 14,
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      '& .MuiAlert-icon': { p: 0 },
+                      '& .MuiAlert-message': { p: 0 }
+                    }}
+                    icon={<ErrorIcon sx={{ fontSize: 20, display: 'flex', alignItems: 'center' }} />}
+                    severity="error"
+                    variant="outlined"
+                  >
+                    {error}
+                  </Alert>
+                )) ||
+                (exchangeRate && (
+                  <Alert
+                    sx={{
+                      p: 0,
+                      py: '2px',
+                      fontSize: 14,
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      '& .MuiAlert-icon': { p: 0 },
+                      '& .MuiAlert-message': { p: 0 }
+                    }}
+                    icon={<InfoIcon sx={{ fontSize: 20, display: 'flex', alignItems: 'center' }} />}
+                    severity="info"
+                    variant="outlined"
+                  >
+                    1 {fromCurrency} = {formatNumberInput(((exchangeRate * 1).toFixed(5) * 1 + '').replace('.', ',')).formatted} {toCurrency}
+                  </Alert>
+                ))
+              }
             </Grid2>
 
           </Grid2>
         </Paper>
       </Box>
-      
-      <Box sx={{ flex: 1 }}>
-        <Paper elevation={3} sx={{ p: 3, pb: 4 }}>
-          <Box>
+
+      <Box sx={{ flex: 3.5, display: 'flex' }}>
+        <Paper elevation={3} sx={{ p: 3, pb: 4, width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ flexGrow: 1 }}>
             <h2 style={{ marginTop: 0 }}>📊 Converta Moedas com Facilidade e Precisão</h2>
             <p>Quer saber quanto vale o seu dinheiro em outras moedas? Com o nosso conversor, você pode calcular rapidamente valores entre diversas moedas com taxas atualizadas em tempo real. Ideal para viagens, investimentos internacionais ou compras no exterior. Simplifique suas conversões monetárias e tome decisões financeiras com confiança!</p>
 
@@ -330,8 +330,6 @@ export function CurrencyConverter () {
             </p>
 
             Clique em Converter e simplifique sua vida financeira! 💸
-
-
           </Box>
         </Paper>
       </Box>
