@@ -11,6 +11,28 @@ import { DividendsHistoric } from './dividends-historic';
 
 export function AssetDetails({ ticker, tickerData, chart }) {
 
+    function isEmpty(obj) {
+        for (const prop in obj) {
+            if (Object.hasOwn(obj, prop)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const tickerInfo = tickerData?.tickerCompanyInfo;
+    const companyInfo = tickerData?.tickerCompanyInfo?.company;
+    const companyMarketData = tickerData?.companyMarketData;
+    const historicalDividendYieldData = tickerData?.historicalDividendYieldData;
+    const historicalQuotesData = tickerData?.historicalQuotesData;
+
+    const price12MAgo = tickerInfo ? tickerInfo.price_twelve_months_ago : 0;
+    const priceNow = tickerInfo ? tickerInfo.current_price : 0;
+
+    const variation12M = !isEmpty(tickerData?.historicalQuotesData) ? (priceNow / price12MAgo) - 1 : 0;
+
+    // console.log({ tickerInfo, companyInfo, companyMarketData, historicalQuotesData, historicalDividendYieldData });
+
     return (
         <>
             <Paper elevation={3} style={{ padding: '1rem' }}>
@@ -21,17 +43,17 @@ export function AssetDetails({ ticker, tickerData, chart }) {
                 <CardAssetDetails
                     sx={{ flex: '1', minWidth: '200px' }}
                     title="Cotação"
-                    total={tickerData?.current_price}
+                    total={tickerInfo?.current_price}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
                     color='success'
-                    currency={tickerData?.currency}
+                    currency={tickerInfo?.currency}
                     type='currency'
                     description='Valor atual da ação'
                 />
                 <CardAssetDetails
                     sx={{ flex: '1', minWidth: '200px' }}
                     title="Variação (12M)"
-                    total={tickerData?.last_twelve_months}
+                    total={variation12M}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
                     color='warning'
                     type='percentage'
@@ -40,7 +62,7 @@ export function AssetDetails({ ticker, tickerData, chart }) {
                 <CardAssetDetails
                     sx={{ flex: '1', minWidth: '200px' }}
                     title="P/L"
-                    total={tickerData?.p_l}
+                    total={companyMarketData?.market_ratios?.price_earnings ? companyMarketData?.market_ratios?.price_earnings.toFixed(2) : 0}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
                     color='info'
                     description='Preço da ação dividido pelo lucro por ação'
@@ -48,7 +70,7 @@ export function AssetDetails({ ticker, tickerData, chart }) {
                 <CardAssetDetails
                     sx={{ flex: '1', minWidth: '200px' }}
                     title="P/VP"
-                    total={tickerData?.p_vp}
+                    total={companyMarketData?.market_ratios?.price_to_book ? companyMarketData?.market_ratios?.price_to_book.toFixed(2) : 0}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
                     color='error'
                     description='Preço da ação dividido pelo valor patrimonial por ação'
@@ -56,16 +78,16 @@ export function AssetDetails({ ticker, tickerData, chart }) {
                 <CardAssetDetails
                     sx={{ flex: '1', minWidth: '200px' }}
                     title="DY"
-                    total={tickerData?.dividend_yield}
+                    total={companyMarketData?.dividendYieldLast12Months ? companyMarketData?.dividendYieldLast12Months : 0}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
                     color='primary'
                     type='percentage'
-                    description='Dividend Yield (DY) é o indicador que mostra quanto a empresa paga de dividendos em relação ao preço da ação'
+                    description='Dividend Yield (DY) é o indicador que mostra quanto a empresa paga de dividendos em relação ao preço da ação. Cálculo dos últimos 12 meses'
                 />
             </Box>
 
             <Box>
-                <ChartComplete chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${tickerData?.name ?? ""} (${ticker.toUpperCase()})`} />
+                <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${tickerData?.name ?? ""} (${ticker.toUpperCase()})`} />
             </Box>
 
             <VerticalTable tickerData={tickerData} />

@@ -1,9 +1,9 @@
 import { m } from 'framer-motion';
 
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 
 import { varTap, varHover, AnimateBorder, transitionTap } from 'src/components/animate';
+import { IconButton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

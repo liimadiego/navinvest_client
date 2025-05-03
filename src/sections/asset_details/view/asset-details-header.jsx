@@ -29,13 +29,21 @@ export function AssetDetailsHeader({ tickerData }) {
         );
     }
 
+    const companyData = tickerData.tickerCompanyInfo.company;
+    tickerData = tickerData.tickerCompanyInfo;
+
     return (
         <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1, position: "relative" }} flexDirection={{ xs: 'column', md: 'row' }}>
             <Box display="flex" alignItems="center" gap={2} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
-                <img src={tickerData.image_url} alt="" style={{ width: 70, height: 70, borderRadius: 8 }} />
+                <img
+                    src={`/src/assets/tickers/${tickerData.ticker}.jpg`}
+                    onError={(e) => e.target.src = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg"}
+                    alt=""
+                    style={{ width: 70, height: 70, borderRadius: 8 }}
+                />
                 <Box style={{ height: 70 }}>
                     <Typography variant="h5">{tickerData.ticker}</Typography>
-                    <Typography variant="subtitle2">{tickerData.asset_name}</Typography>
+                    <Typography variant="subtitle2">{companyData?.name}</Typography>
                 </Box>
             </Box>
             <Box sx={{ mt: { xs: 4, md: 0 }, justifyContent: { xs: 'center', md: 'flex-end' } }} style={{ color: "#fff" }} flexDirection='row' display="flex" gap={2}>

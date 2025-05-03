@@ -6,15 +6,16 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 // ----------------------------------------------------------------------
 
 export function CardAssetDetails({ sx, icon, title, total, type = false, color = 'warning', currency = false, description = false, assetType, ...other }) {
+
   return (
     <Paper elevation={3} sx={[{ py: 3, pl: 3, pr: 2.5, position: "relative", overflow: "hidden", zIndex: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
       <Box sx={{ flexGrow: 1 }}>
-        {total ? (
+        {total !== null && total !== undefined ? (
           <Box sx={{ typography: 'h3' }}>
             {type === 'currency' ? (
               currency === 'USD' ? `$${total.toLocaleString('en-US')}` : `R$${total.toLocaleString('pt-BR')}`
             ) : type === 'percentage' ? (
-              `${total * 100}%`
+              `${total ? (total * 100).toFixed(2) : 0}%`
             ) : (
               total.toLocaleString().replace('.', ',')
             )}
