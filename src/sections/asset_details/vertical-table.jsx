@@ -12,7 +12,7 @@ const TableCellProftability = ({ data, label }) => {
                     variant="subtitle2"
                     style={{ color: data > 0 ? 'green' : data < 0 ? 'red' : 'inherit' }}
                 >
-                    {data !== undefined ? (data * 100).toFixed(2).toString().replace('.', ',') + '%' : '-'}
+                    {data !== null ? (data * 100).toFixed(2).toString().replace('.', ',') + '%' : '-'}
                 </Typography>
                 <Typography variant="subtitle2">{label}</Typography>
             </Box>
@@ -20,22 +20,22 @@ const TableCellProftability = ({ data, label }) => {
     );
 }
 
-export function VerticalTable({ tickerData }) {
+export function VerticalTable({ proftability }) {
     return (
         <>
-            {tickerData ?
+            {proftability ?
                 <Box sx={{ mt: 2 }}>
                     <TableContainer component={Paper} elevation={3}>
                         <Table>
                             <TableBody>
                                 <TableRow>
                                     <TableCell align="center">Rentabilidade</TableCell>
-                                    <TableCellProftability label='1 mês' data={tickerData?.proftability.proftability.last_month} />
-                                    <TableCellProftability label='3 meses' data={tickerData?.proftability.proftability.last_three_months} />
-                                    <TableCellProftability label='12 meses' data={tickerData?.proftability.proftability.last_twelve_months} />
-                                    <TableCellProftability label='2 anos' data={tickerData?.proftability.proftability.last_two_years} />
-                                    <TableCellProftability label='5 anos' data={tickerData?.proftability.proftability.last_five_years} />
-                                    <TableCellProftability label='10 anos' data={tickerData?.proftability.proftability.last_ten_years} />
+                                    <TableCellProftability label='1 mês' data={proftability.one_month?.nominal || null} />
+                                    <TableCellProftability label='3 meses' data={proftability.three_months?.nominal || null} />
+                                    <TableCellProftability label='12 meses' data={proftability.one_year?.nominal || null} />
+                                    <TableCellProftability label='2 anos' data={proftability.two_years?.nominal || null} />
+                                    <TableCellProftability label='5 anos' data={proftability.five_years?.nominal || null} />
+                                    <TableCellProftability label='10 anos' data={proftability.ten_years?.nominal || null} />
                                 </TableRow>
                                 <TableRow>
                                     <TableCell align="center">
@@ -47,12 +47,12 @@ export function VerticalTable({ tickerData }) {
                                         </Tooltip>
 
                                     </TableCell>
-                                    <TableCellProftability label='1 mês' data={tickerData?.proftability.real_proftability.last_month} />
-                                    <TableCellProftability label='3 meses' data={tickerData?.proftability.real_proftability.last_three_months} />
-                                    <TableCellProftability label='12 meses' data={tickerData?.proftability.real_proftability.last_twelve_months} />
-                                    <TableCellProftability label='2 anos' data={tickerData?.proftability.real_proftability.last_two_years} />
-                                    <TableCellProftability label='5 anos' data={tickerData?.proftability.real_proftability.last_five_years} />
-                                    <TableCellProftability label='10 anos' data={tickerData?.proftability.real_proftability.last_ten_years} />
+                                    <TableCellProftability label='1 mês' data={proftability.one_month?.real || null} />
+                                    <TableCellProftability label='3 meses' data={proftability.three_months?.real || null} />
+                                    <TableCellProftability label='12 meses' data={proftability.one_year?.real || null} />
+                                    <TableCellProftability label='2 anos' data={proftability.two_years?.real || null} />
+                                    <TableCellProftability label='5 anos' data={proftability.five_years?.real || null} />
+                                    <TableCellProftability label='10 anos' data={proftability.ten_years?.real || null} />
                                 </TableRow>
                             </TableBody>
                         </Table>

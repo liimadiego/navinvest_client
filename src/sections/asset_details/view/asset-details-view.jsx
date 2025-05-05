@@ -17,10 +17,27 @@ export function AssetDetailsView() {
   const [tickerData, setTickerData] = useState(null);
   const [chart, setChart] = useState({ series: [] });
   const [reportData, setReportData] = useState(null);
+  const [proftability, setProftability] = useState(null);
 
   const tickerString = String(ticker || '').toUpperCase();
 
   useEffect(() => {
+    ///ticker/get-proftability-by-ticker-id/7871
+    fetch(`${import.meta.env.VITE_SERVER_URL2}/ticker/get-proftability-by-ticker/${tickerString}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setProftability(data);
+      })
+      .catch(error => {
+        console.error('Error fetching ticker data:', error);
+      });
+
+
     fetch(`${import.meta.env.VITE_SERVER_URL2}/companies/${tickerString}`)
       .then(response => {
         if (!response.ok) {
@@ -30,7 +47,7 @@ export function AssetDetailsView() {
       }
       )
       .then(data => {
-        setChart({ series: transformarDadosSemMedia(data.historicalQuotesData) });
+        setChart({ series: handleHistoricalQuotes(data.historicalQuotesData) });
 
         setTickerData({
           ...data, proftability: {
@@ -59,7 +76,7 @@ export function AssetDetailsView() {
       });
   }, []);
 
-  function transformarDadosSemMedia(historicalQuotesData) {
+  function handleHistoricalQuotes(historicalQuotesData) {
     const monthlyMap = {};
 
     historicalQuotesData.forEach(item => {
@@ -94,14 +111,16 @@ export function AssetDetailsView() {
       }]
     };
 
+    const dividerTenYears = orderedMonths.length > 60 ? 4 : 2;
+
     const tenYears = {
       name: '10 anos',
-      categories: orderedMonths.slice(-120).filter((_, index) => index % 4 === 0),
+      categories: orderedMonths.slice(-120).filter((_, index) => index % dividerTenYears === 0),
       data: [{
         name: 'Cotação',
         data: orderedMonths
           .slice(-120)
-          .filter((_, index) => index % 4 === 0)
+          .filter((_, index) => index % dividerTenYears === 0)
           .map(label => monthlyMap[label].map(v => v.toFixed(2)).join(', ')),
       }]
     };
@@ -169,7 +188,7 @@ export function AssetDetailsView() {
         }
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <AssetDetails ticker={tickerString} chart={chart} tickerData={tickerData} />
+        <AssetDetails proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} />
       </LocalizationProvider>
     </DashboardContent>
   );
