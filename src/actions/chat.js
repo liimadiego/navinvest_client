@@ -18,7 +18,7 @@ export async function sendMessage(messageData) {
   const formattedMessages = lastMessages.map((message) => {
     return {
       role: message.senderId === 'ai-id' ? "assistant" : "user",
-      content: message.body
+      content: typeof message.body === 'object' ? JSON.stringify(message.body) : message.body,
     }
   }
   );
@@ -36,14 +36,25 @@ export async function sendMessage(messageData) {
     .then(response => {
       if (response.success) {
         if (response.data.valid_question) {
-          insertMessage({
-            id: uuidv4(),
-            attachments: [],
-            body: response.data.answer,
-            contentType: 'text',
-            createdAt: new Date().toISOString(),
-            senderId: 'ai-id',
-          });
+          for (const { messageType, answer } of response.data.data) {
+            insertMessage({
+              id: uuidv4(),
+              attachments: [],
+              body: answer,
+              contentType: messageType,
+              createdAt: new Date().toISOString(),
+              senderId: 'ai-id',
+            });
+          }
+
+          // insertMessage({
+          //   id: uuidv4(),
+          //   attachments: [],
+          //   body: response.data.answer,
+          //   contentType: response.data.messageType,
+          //   createdAt: new Date().toISOString(),
+          //   senderId: 'ai-id',
+          // });
         } else {
           insertMessage({
             id: uuidv4(),
