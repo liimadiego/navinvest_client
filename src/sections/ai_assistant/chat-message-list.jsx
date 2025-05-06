@@ -22,12 +22,14 @@ export function ChatMessageList({ messages = [] }) {
           flex: '1 1 auto',
         }}
       >
-        {messages.map((message) => (
-          <ChatMessageItem
-            key={message.id}
-            message={message}
-          />
-        ))}
+        {messages.map((message) => {
+          return (
+            <ChatMessageItem
+              key={message.id}
+              message={message}
+            />
+          );
+        })}
       </Scrollbar>
     </>
   );

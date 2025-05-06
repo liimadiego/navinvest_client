@@ -190,8 +190,8 @@ export function BacktestResults() {
 
                         <Chart
                             type="area"
-                            series={currentSeries?.data}
-                            options={chartOptions}
+                            series={currentSeries?.data} // [ { data: [ '2.75', '-3.44', '-0.76', ... ], name: "Retorno Diário" }, ... ] Y-Axis
+                            options={chartOptions} // { xaxis: { categories: [ '2023-01-01', '2023-01-02', ... ] }, ... } X-Axis
                             slotProps={{ loading: { p: 2.5 } }}
                             sx={{
                                 pl: 1,
