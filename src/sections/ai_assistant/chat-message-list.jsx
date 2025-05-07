@@ -20,6 +20,7 @@ export function ChatMessageList({ messages = [] }) {
           pt: 5,
           pb: 3,
           flex: '1 1 auto',
+          width: '100%',
         }}
       >
         {messages.map((message) => {

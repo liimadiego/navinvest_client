@@ -30,8 +30,7 @@ export function ChatMessageItem({ message }) {
         <Stack
           sx={{
             p: 1.5,
-            minWidth: 48,
-            maxWidth: 320,
+            maxWidth: '80%',
             borderRadius: 1,
             typography: 'body2',
             bgcolor: message.warning ? '#7A4100' : 'background.neutral',
@@ -77,10 +76,8 @@ export function ChatMessageItem({ message }) {
       return (
         <Stack
           sx={{
-            width : contentType === 'chart' ? '1000px' : 'auto',
             p: 1.5,
-            // minWidth: 48,
-            maxWidth: '100%',
+            width: '80%',
             borderRadius: 1,
             typography: 'body2',
             bgcolor: message.warning ? '#7A4100' : 'background.neutral',
@@ -118,18 +115,20 @@ export function ChatMessageItem({ message }) {
   }
 
   return (
-    <Box sx={{ mb: 1, display: 'flex', justifyContent: me ? 'flex-end' : 'unset' }}>
+    <Box sx={{ mb: 1, display: 'flex', width: '100%' }}>
       {!me && <Avatar alt={firstName} src={avatarUrl} sx={{ width: 32, height: 32, mr: 2 }} />}
 
-      <Stack alignItems={me ? 'flex-end' : 'flex-start'}>
+      <Stack alignItems={me ? 'flex-end' : 'flex-start'} sx={{ width: '100%' }}>
         {renderInfo()}
 
         <Box
           sx={{
+            width: '100%',
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
             '&:hover': { '& .message-actions': { opacity: 1 } },
+            justifyContent: me ? 'flex-end' : 'flex-start',
           }}
         >
           {renderBody()}
