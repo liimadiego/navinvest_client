@@ -5,6 +5,10 @@ import Typography from '@mui/material/Typography';
 import { fToNow } from 'src/utils/format-time';
 import { Chart, ChartLegends, useChart } from 'src/components/chart';
 import { useTheme } from '@emotion/react';
+import { useState } from 'react';
+import { IconButton, Modal } from '@mui/material';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import { CloseFullscreen } from '@mui/icons-material';
 
 export function ChatMessageItem({ message }) {
   const user = { id: 1 };
@@ -48,63 +52,145 @@ export function ChatMessageItem({ message }) {
 
     } else if (contentType === 'chart') {
       const chart = {
-          series: body.series,
-          categories: body.categories,
+        series: body.series,
+        categories: body.categories,
       };
-    
+
       const theme = useTheme();
-  
+
       const chartColors = chart.colors ?? [theme.palette.primary.main, theme.palette.warning.main];
 
       const chartOptions = useChart({
-          colors: chartColors,
-          xaxis: { categories: chart.categories },
-          tooltip: {
-              theme: 'dark',
-              style: {
-                  fontSize: '12px',
-                  fontFamily: 'inherit'
-              },
-              fillSeriesColor: false,
-              // y: {
-              //     formatter: (value) => `R$ ${value}`,
-              // }
+        colors: chartColors,
+        xaxis: { categories: chart.categories },
+        tooltip: {
+          theme: 'dark',
+          style: {
+            fontSize: '12px',
+            fontFamily: 'inherit'
           },
-          ...chart.options,
+          fillSeriesColor: false,
+          // y: {
+          //     formatter: (value) => `R$ ${value}`,
+          // }
+        },
+        ...chart.options,
       });
 
-      return (
-        <Stack
-          sx={{
-            p: 1.5,
-            width: '80%',
-            borderRadius: 1,
-            typography: 'body2',
-            bgcolor: message.warning ? '#7A4100' : 'background.neutral',
-            ...(me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
-          }}
-        >
-        
-          <ChartLegends
-              colors={chartOptions?.colors}
-              labels={[ chart.series[0].name]}
-              sx={{ px: 3, pt: 2 }}
-          />
+      const [isFullscreen, setIsFullscreen] = useState(false);
 
-          <Chart
+      const handleToggleFullscreen = () => {
+        setIsFullscreen(!isFullscreen);
+      };
+
+      return (
+        <>
+          <Modal
+            open={isFullscreen}
+            onClose={handleToggleFullscreen}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            BackdropProps={{
+              onClick: handleToggleFullscreen,
+            }}
+
+            sx={{
+              backdropFilter: 'blur(2px)',
+            }}
+          >
+            <Box sx={{ width: '100%', height: '100%', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <IconButton
+                onClick={handleToggleFullscreen}
+                sx={{ position: 'absolute', top: -40, right: -5, color: 'white' }}
+              >
+                <CloseFullscreen />
+              </IconButton>
+
+              <Stack
+                sx={{
+                  p: 1.5,
+                  width: '80%',
+                  borderRadius: 1,
+                  typography: 'body2',
+                  bgcolor: message.warning ? '#7A4100' : 'background.neutral',
+                  ...(me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
+                  position: 'relative',
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <IconButton
+                    size="small"
+                    onClick={handleToggleFullscreen}
+                    sx={{ position: 'absolute', top: 5, right: 5 }}
+                  >
+                    <FullscreenIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+
+                <ChartLegends
+                  colors={chartOptions?.colors}
+                  labels={[chart.series[0].name]}
+                  sx={{ px: 3, pt: 2 }}
+                />
+
+                <Chart
+                  type="area"
+                  series={body.series}
+                  options={chartOptions}
+                  sx={{
+                    pl: 1,
+                    py: 2.5,
+                    pr: 2.5,
+                    height: 470,
+                  }}
+                />
+              </Stack>
+            </Box>
+          </Modal>
+
+
+          <Stack
+            sx={{
+              p: 1.5,
+              width: '80%',
+              borderRadius: 1,
+              typography: 'body2',
+              bgcolor: message.warning ? '#7A4100' : 'background.neutral',
+              ...(me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
+              position: 'relative',
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <IconButton
+                size="small"
+                onClick={handleToggleFullscreen}
+                sx={{ position: 'absolute', top: 5, right: 5 }}
+              >
+                <FullscreenIcon fontSize="small" />
+              </IconButton>
+            </Box>
+
+            <ChartLegends
+              colors={chartOptions?.colors}
+              labels={[chart.series[0].name]}
+              sx={{ px: 3, pt: 2 }}
+            />
+
+            <Chart
               type="area"
               series={body.series}
               options={chartOptions}
               sx={{
-                  pl: 1,
-                  py: 2.5,
-                  pr: 2.5,
-                  height: 320,
+                pl: 1,
+                py: 2.5,
+                pr: 2.5,
+                height: 320,
               }}
-          />
-        </Stack>
+            />
+          </Stack>
+        </>
       );
-    
+
     } else {
       console.error('Unsupported content type:', contentType, '\n ');
     }
