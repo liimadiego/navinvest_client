@@ -22,7 +22,6 @@ export function AssetDetailsView() {
   const tickerString = String(ticker || '').toUpperCase();
 
   useEffect(() => {
-    ///ticker/get-proftability-by-ticker-id/7871
     fetch(`${import.meta.env.VITE_SERVER_URL2}/ticker/get-proftability-by-ticker/${tickerString}`)
       .then(response => {
         if (!response.ok) {
@@ -48,27 +47,7 @@ export function AssetDetailsView() {
       )
       .then(data => {
         setChart({ series: handleHistoricalQuotes(data.historicalQuotesData) });
-
-        setTickerData({
-          ...data, proftability: {
-            proftability: {
-              last_ten_years: 10.1052,
-              last_five_years: 4.012,
-              last_two_years: -0.0232,
-              last_twelve_months: 0.0252,
-              last_three_months: 0.0052,
-              last_month: 0.0052,
-            },
-            real_proftability: {
-              last_ten_years: 12.1052,
-              last_five_years: 2.012,
-              last_two_years: -0.0242,
-              last_twelve_months: 0.0222,
-              last_three_months: 0.0049,
-              last_month: 0.0051,
-            },
-          }
-        });
+        setTickerData(data);
       }
       )
       .catch(error => {

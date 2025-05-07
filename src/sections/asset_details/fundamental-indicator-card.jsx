@@ -3,7 +3,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Box, Paper, Skeleton, Tooltip, Typography } from '@mui/material';
 
 export function FundamentalIndicatorCard({ tickerData }) {
-    const companyMarketData = tickerData?.companyMarketData;
+    const companyMarketData = tickerData?.companyMarketData[0];
     const {
         EV,
         EBIT,
@@ -37,13 +37,16 @@ export function FundamentalIndicatorCard({ tickerData }) {
         dividendYieldLast12Months
     } = companyMarketData || {};
 
-    const _n = 0;
-
     const fundamentalIndicatorsData = [
         {
             "title": "P/L",
             "total": market_ratios?.price_earnings || null,
             "description": "Preço da ação dividido pelo lucro por ação"
+        },
+        {
+            "title": "P/Receita",
+            "total": market_ratios?.price_to_sales || null,
+            "description": "Preço da ação dividido pela receita líquida por ação"
         },
         {
             "title": "P/VP",
@@ -55,11 +58,6 @@ export function FundamentalIndicatorCard({ tickerData }) {
             "total": dividendYieldLast12Months || null,
             "type": "percentage",
             "description": "Dividend Yield (DY) é o indicador que mostra quanto a empresa paga de dividendos em relação ao preço da ação"
-        },
-        {
-            "title": "P/Receita",
-            "total": market_ratios?.price_to_sales || null,
-            "description": "Preço da ação dividido pela receita líquida por ação"
         },
         {
             "title": "Payout",
@@ -197,7 +195,6 @@ export function FundamentalIndicatorCard({ tickerData }) {
             "description": "Taxa de crescimento anual composta dos lucros nos últimos 5 anos"
         },
     ];
-
 
     const FundamentalIndicator = ({ title, total, type, description, currency }) => {
         return (

@@ -11,6 +11,8 @@ import { DividendsHistoric } from './dividends-historic';
 
 export function AssetDetails({ ticker, tickerData, chart, proftability }) {
 
+    console.log({ tickerData });
+
     function isEmpty(obj) {
         for (const prop in obj) {
             if (Object.hasOwn(obj, prop)) {
@@ -22,7 +24,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
 
     const tickerInfo = tickerData?.tickerCompanyInfo;
     const companyInfo = tickerData?.tickerCompanyInfo?.company;
-    const companyMarketData = tickerData?.companyMarketData;
+    const companyMarketData = tickerData?.companyMarketData[0];
     const historicalDividendYieldData = tickerData?.historicalDividendYieldData;
     const historicalQuotesData = tickerData?.historicalQuotesData;
 
@@ -30,8 +32,6 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
     const priceNow = tickerInfo ? tickerInfo.current_price : 0;
 
     const variation12M = !isEmpty(tickerData?.historicalQuotesData) ? (priceNow / price12MAgo) - 1 : 0;
-
-    // console.log({ tickerInfo, companyInfo, companyMarketData, historicalQuotesData, historicalDividendYieldData });
 
     return (
         <>
@@ -102,7 +102,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
             <Box sx={{ mt: 3 }}>
-                <AssetHistoricTable ticker={ticker} />
+                <AssetHistoricTable companyMarketData={tickerData?.companyMarketData} historicalDividendYieldData={historicalDividendYieldData} />
             </Box>
 
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
