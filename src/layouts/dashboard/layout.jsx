@@ -36,6 +36,8 @@ import AddEditWalletModal from 'src/components/create-edit-wallet-modal';
 import { useWallet } from 'src/context/WalletContext';
 import { Button } from '@mui/material';
 import { useWallets } from 'src/context/WalletsContext';
+import { useAuthContext } from 'src/auth/hooks';
+import axios from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
 
@@ -43,27 +45,25 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const theme = useTheme();
   const { currentWallet, setCurrentWallet } = useWallet();
   const { _wallets, _setWallets } = useWallets();
+  const { user } = useAuthContext();
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_SERVER_URL2}/investment-portfolio/0737f150-0561-49c7-a59c-f61e0fc59cc6`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    }).then((data) => {
-      const wallets = data.map(wallet => ({
-        id: wallet.id,
-        name: wallet.name,
-        objective: wallet.objective,
-      }));
+    if (!user) {
+      return;
+    }
 
-      _setWallets(wallets);
-    });
+    axios.get(`/investment-portfolio`)
+      .then(({ data }) => {
+        const wallets = data.map(wallet => ({
+          id: wallet.id,
+          name: wallet.name,
+          objective: wallet.objective,
+        }));
+
+        _setWallets(wallets);
+      }).catch(error => {
+        console.error(error);
+      });
   }, []);
 
   const settings = useSettingsContext();
@@ -103,31 +103,25 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
       return;
     }
 
-    const response = await fetch(`${import.meta.env.VITE_SERVER_URL2}/investment-portfolio`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "userId": "0737f150-0561-49c7-a59c-f61e0fc59cc6",
-        "name": wallet.name,
-        "objective": wallet.objective
-      }),
-    });
+    await axios.post(`/investment-portfolio`, {
+      "name": wallet.name,
+      "objective": wallet.objective
+    },
+    ).then(({ data }) => {
+      _setWallets(data);
+      setCurrentWallet(data[0]);
 
-    const data = await response.json();
-    if (!response.ok) {
+      setWalletModalLoading(false);
+      setWalletModalError(false);
+      setWalletModalOpen(false);
+    }).catch(error => {
+      console.error(error)
       setWalletModalLoading(false);
       setWalletModalError(true);
       return;
-    }
+    })
 
-    _setWallets(data);
-    setCurrentWallet(data[0]);
 
-    setWalletModalLoading(false);
-    setWalletModalError(false);
-    setWalletModalOpen(false);
   };
 
   const navData = slotProps?.nav?.data ?? dashboardNavData;

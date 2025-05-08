@@ -3,7 +3,7 @@ import { CONFIG } from 'src/global-config';
 import { NewsView } from 'src/sections/news/view/news-view';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ConstructionOutlined } from '@mui/icons-material';
+import axios from 'src/lib/axios';
 
 export default function Page() {
   const { news_id } = useParams();
@@ -11,9 +11,8 @@ export default function Page() {
   const [otherNews, setOtherNews] = useState([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_SERVER_URL2}/news/${news_id}`)
-      .then((response) => response.json())
-      .then((data) => {
+    axios.get(`/news/${news_id}`)
+      .then(({ data }) => {
         const formattedData = {
           id: data.uuid,
           title: data.title,
@@ -28,9 +27,8 @@ export default function Page() {
         console.error('Error:', error);
       });
 
-    fetch(`${import.meta.env.VITE_SERVER_URL2}/news/other_news/${news_id}`)
-      .then((response) => response.json())
-      .then((data) => {
+    axios.get(`/news/other_news/${news_id}`)
+      .then(({ data }) => {
         const formattedData = data.map((item) => {
           return {
             id: item.uuid,

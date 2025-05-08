@@ -28,6 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useContext, useState } from 'react';
 import { BacktestContext } from 'src/context/BacktestContext';
 import { TickerSelector } from 'src/components/ticker-selector';
+import axios from 'src/lib/axios';
 
 export const newBacktestSchema = zod.object({
   portfolio: zod.array(zod.object({
@@ -138,19 +139,15 @@ export function BacktestForm() {
       data.startDate = new Date(data.startDate).getTime();
       data.endDate = new Date(data.endDate).getTime();
 
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL2}/backtest/test`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await axios.post(`/backtest/test`, { ...data })
+        .then(({ data }) => {
+          setResults(data);
 
-      const result = await response.json();
+          router.push(paths.dashboard.backtest_results)
+        }).catch(error => {
+          console.error(error)
+        })
 
-      setResults(result);
-
-      router.push(paths.dashboard.backtest_results)
 
     } catch (error) {
       console.error('Erro ao enviar dados:', error);

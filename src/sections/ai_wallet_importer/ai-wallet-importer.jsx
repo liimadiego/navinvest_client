@@ -8,6 +8,7 @@ import { Iconify } from 'src/components/iconify';
 import { Paper, Typography, Snackbar, Alert } from '@mui/material';
 import { useWallet } from 'src/context/WalletContext';
 import { CompleteInsertDataModal } from 'src/components/complete-insert-data-modal';
+import axios from 'src/lib/axios';
 
 export function AiWalletImporter({ }) {
     const { currentWallet } = useWallet();
@@ -45,15 +46,8 @@ export function AiWalletImporter({ }) {
             variable_income: tempWalletData.variable_income ?? []
         }
 
-        fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions/create-transaction-from-wallet-import-data/${currentWallet.id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ data: payload }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
+        axios.post(`/portfolio-transactions/create-transaction-from-wallet-import-data/${currentWallet.id}`, { data: payload })
+            .then(({ data }) => {
                 if (!data.success) {
                     setNotification({
                         open: true,
@@ -117,12 +111,9 @@ export function AiWalletImporter({ }) {
             });
 
 
-            await fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions/import-wallet/${walletId}`, {
-                method: 'POST',
-                body: formData,
-            }).then((res) => {
-                return res.json()
-            }).then((data) => {
+            await axios.post(`/portfolio-transactions/import-wallet/${walletId}`, formData
+
+            ).then(({ data }) => {
                 if (!data.success) {
                     setNotification({
                         open: true,
@@ -187,7 +178,7 @@ export function AiWalletImporter({ }) {
                         <Upload multiple value={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
                         {loading && <Box sx={{ mb: 3 }}>
                             <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '12px', sm: '14px', md: '16px' } }}>
-                                ⚠️ O processo de importação pode um ou dois minutos, dependendo do tamanho dos arquivos. Por favor, aguarde até que a importação seja concluída.
+                                ⚠️ O processo de importação pode levar um ou dois minutos, dependendo do tamanho dos arquivos. Por favor, aguarde até que a importação seja concluída.
                             </Typography>
                         </Box>}
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: files.length > 0 ? 0 : 3 }}>

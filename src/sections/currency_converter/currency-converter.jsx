@@ -5,6 +5,7 @@ import Alert from '@mui/material/Alert';
 import { default as InfoIcon } from '@mui/icons-material/InfoOutlined';
 import { default as ErrorIcon } from '@mui/icons-material/ReportOutlined';
 import { default as SwapIcon } from '@mui/icons-material/SwapHoriz';
+import axios from 'src/lib/axios';
 
 function formatNumberInput(input) {
   let sanitizedValue = input.replace(/[^\d,]/g, '');
@@ -22,9 +23,6 @@ function formatNumberInput(input) {
   else
     splitNumber[0] = new Intl.NumberFormat('pt-BR').format(parseInt(splitNumber[0].replace(/\./g, '')));
 
-  // const countDots = sanitizedValue.split('').reduce((s, c) => s + (c === '.'), 0);
-  // if (countDots === 1) sanitizedValue = sanitizedValue.replace('.', ',');
-
   const formatted = splitNumber.join(',');
   const number = parseFloat(formatted.replaceAll('.', '').replace(',', '.'));
 
@@ -40,34 +38,25 @@ export function CurrencyConverter() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
 
-  // Define currency options
   const currencyOptions = ['USD', 'EUR', 'BRL', 'GBP', 'JPY', 'CAD', 'AUD', 'CHF'];
-
-  // Remove the useEffect that was triggering requests on each input change
 
   const fetchExchangeRate = async () => {
     setLoading(true);
     setError(null);
     setExchangeRate(null);
     try {
-      // Replace with your actual API endpoint
-      const response = await fetch(`http://localhost:3000/currency-converter/convert`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: fromCurrency, to: toCurrency }),
-      });
-      if (!response.ok) {
-        throw new Error('Falha ao obter a taxa de câmbio');
-      }
-      const data = await response.json();
-      data.rate = Math.round(data.rate * 1e5) / 1e5; // Round to 6 decimal places
+      await axios.post(`/currency-converter/convert`, { from: fromCurrency, to: toCurrency })
+        .then(({ data }) => {
+          data.rate = Math.round(data.rate * 1e5) / 1e5;
 
-      setExchangeRate(data.rate);
+          setExchangeRate(data.rate);
 
-      const { formatted } = formatNumberInput(((fromAmount * data.rate).toFixed(8) * 1 + '').replace('.', ','));
-      setToAmount(formatted);
+          const { formatted } = formatNumberInput(((fromAmount * data.rate).toFixed(8) * 1 + '').replace('.', ','));
+          setToAmount(formatted);
 
-      document.getElementById('toAmount').focus();
+          document.getElementById('toAmount').focus();
+        });
+
     } catch (err) {
       setError(err.message);
       setExchangeRate(null);
@@ -116,14 +105,6 @@ export function CurrencyConverter() {
       <Box sx={{ flex: 2, display: 'flex' }}>
         <Paper elevation={3} sx={{ p: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
           <Grid2 container spacing={1} direction="column" sx={{ p: 3, pb: 4, flexGrow: 1 }}>
-            {/* Header */}
-            {/* <Grid2 xs={12} sx={{ px: 1, mb: 1 }}>
-              <Typography variant="overline" gutterBottom sx={{ display: 'block', mb: 0, width: '100%', textAlign: 'left', fontSize: 14 }}>
-                CONVERSOR DE MOEDAS
-              </Typography>
-            </Grid2> */}
-
-            {/* From: */}
             <Grid2 container spacing={0} sx={{ px: 1 }}>
               <Grid2 size={12} flexDirection="row" sx={{ display: 'flex' }}>
                 <TextField
@@ -145,7 +126,6 @@ export function CurrencyConverter() {
               </Grid2>
             </Grid2>
 
-            {/* Middle controls */}
             <Grid2 container spacing={1} sx={{ px: 1, my: 1, display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center' }}>
               <Grid2 size={5}>
                 <Autocomplete
@@ -233,7 +213,6 @@ export function CurrencyConverter() {
               </Grid2>
             </Grid2>
 
-            {/* To: */}
             <Grid2 container spacing={0} sx={{ px: 1 }}>
               <Grid2 size={12} flexDirection={'row'} sx={{ display: 'flex' }}>
                 <TextField
@@ -255,7 +234,6 @@ export function CurrencyConverter() {
               </Grid2>
             </Grid2>
 
-            {/* Buttton */}
             <Grid2 container spacing={1} sx={{ mt: 1 }}>
               <Button
                 fullWidth
@@ -268,7 +246,6 @@ export function CurrencyConverter() {
               </Button>
             </Grid2>
 
-            {/* Multi info box */}
             <Grid2 sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
               {
                 (error && (

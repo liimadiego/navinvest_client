@@ -13,6 +13,7 @@ import { _appRelated } from 'src/_mock';
 import { ComparisonChart } from 'src/components/comparison-chart';
 import { WalletContext } from 'src/context/WalletContext';
 import { numToMonth } from 'src/utils/format-date';
+import axios from 'src/lib/axios';
 
 export function Dashboard() {
     const [news, setNews] = useState(null);
@@ -45,9 +46,8 @@ export function Dashboard() {
             setError(false);
             setLoading(true);
 
-            fetch(`${import.meta.env.VITE_SERVER_URL2}/investment-portfolio/portfolio-data/${currentWallet.id}`)
-                .then((response) => response.json())
-                .then((data) => {
+            axios.get(`/investment-portfolio/portfolio-data/${currentWallet.id}`)
+                .then(({ data }) => {
                     if (!data.currentTotalAssets || !data.currentTotalInvested) {
                         setError(true);
                         setLoading(false);
@@ -133,9 +133,8 @@ export function Dashboard() {
     }, [currentWallet]);
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_SERVER_URL2}/news/latest_news`)
-            .then((response) => response.json())
-            .then((data) => {
+        axios.get(`/news/latest_news`)
+            .then(({ data }) => {
                 const formattedData = data.map((item) => {
                     return {
                         id: item.uuid,

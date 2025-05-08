@@ -25,7 +25,7 @@ import { signInWithPassword } from '../../context/jwt';
 
 // ----------------------------------------------------------------------
 
-export const SignInSchema = zod.object({
+const SignInSchema = zod.object({
   email: zod
     .string()
     .min(1, { message: 'Email is required!' })
@@ -47,14 +47,12 @@ export function JwtSignInView() {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: '@2Minimal',
-  };
-
   const methods = useForm({
     resolver: zodResolver(SignInSchema),
-    defaultValues,
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   const {
@@ -77,7 +75,7 @@ export function JwtSignInView() {
 
   const renderForm = () => (
     <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
-      <Field.Text name="email" label="Email address" slotProps={{ inputLabel: { shrink: true } }} />
+      <Field.Text name="email" placeholder="exemplo@email.com" label="Email" slotProps={{ inputLabel: { shrink: true } }} />
 
       <Box sx={{ gap: 1.5, display: 'flex', flexDirection: 'column' }}>
         <Link
@@ -87,13 +85,13 @@ export function JwtSignInView() {
           color="inherit"
           sx={{ alignSelf: 'flex-end' }}
         >
-          Forgot password?
+          Esqueceu a senha?
         </Link>
 
         <Field.Text
           name="password"
-          label="Password"
-          placeholder="6+ characters"
+          label="Senha"
+          placeholder="********"
           type={showPassword.value ? 'text' : 'password'}
           slotProps={{
             inputLabel: { shrink: true },
@@ -119,9 +117,9 @@ export function JwtSignInView() {
         type="submit"
         variant="contained"
         loading={isSubmitting}
-        loadingIndicator="Sign in..."
+        loadingIndicator="Entrando..."
       >
-        Sign in
+        Entrar
       </LoadingButton>
     </Box>
   );
@@ -129,23 +127,17 @@ export function JwtSignInView() {
   return (
     <>
       <FormHead
-        title="Sign in to your account"
+        title="Entre na sua conta"
         description={
           <>
-            {`Don’t have an account? `}
+            {`Ainda não tem uma conta? `}
             <Link component={RouterLink} href={paths.auth.jwt.signUp} variant="subtitle2">
-              Get started
+              Conheça os nossos planos
             </Link>
           </>
         }
         sx={{ textAlign: { xs: 'center', md: 'left' } }}
       />
-
-      <Alert severity="info" sx={{ mb: 3 }}>
-        Use <strong>{defaultValues.email}</strong>
-        {' with password '}
-        <strong>{defaultValues.password}</strong>
-      </Alert>
 
       {!!errorMessage && (
         <Alert severity="error" sx={{ mb: 3 }}>

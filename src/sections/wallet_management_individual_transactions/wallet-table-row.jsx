@@ -13,6 +13,7 @@ import AddEditTransactionModal from 'src/components/add-edit-transaction-modal';
 import { useState } from 'react';
 import { useWallet } from 'src/context/WalletContext';
 import { translateAssetType } from 'src/utils/handle-asset-type';
+import axios from 'src/lib/axios';
 
 export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   const confirmDialog = useBoolean();
@@ -73,15 +74,8 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
       }
     }
 
-    fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions/${transaction.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(objectToSend),
-    })
-      .then(response => response.json())
-      .then(async (data) => {
+    axios.put(`/portfolio-transactions/${transaction.id}`, { ...objectToSend })
+      .then(() => {
         setEditFormOpen(false);
         fetchTableData(currentWallet?.id);
         setIsEditFormLoading(false);

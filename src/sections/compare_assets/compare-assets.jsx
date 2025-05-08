@@ -44,9 +44,8 @@ export function CompareAssets() {
 
   const getCoreAssetInfo = async (ticker) => {
     try {
-      // const response = await fetch(`${import.meta.env.VITE_SERVER_URL2}/tickers/${ticker}`);
-      // const tickerInfo = await response.json();
-      // return tickerInfo;
+      // const tickerInfo = await axios(`/tickers/${ticker}`);
+      //  tickerInfo;
       return availableTickers.find(t => t.ticker === ticker);
     } catch (error) {
       console.error(error);

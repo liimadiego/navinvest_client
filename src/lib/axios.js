@@ -8,7 +8,10 @@ const axiosInstance = axios.create({ baseURL: CONFIG.serverUrl });
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong!')
+  (error) => {
+    console.log('Error in Axios:', error);
+    return Promise.reject((error.response && error.response.data) || 'Something went wrong!')
+  }
 );
 
 export default axiosInstance;
@@ -36,8 +39,8 @@ export const endpoints = {
   kanban: '/api/kanban',
   calendar: '/api/calendar',
   auth: {
-    me: '/api/auth/me',
-    signIn: '/api/auth/sign-in',
+    me: '/auth/me',
+    signIn: '/auth/login',
     signUp: '/api/auth/sign-up',
   },
   mail: {

@@ -12,6 +12,7 @@ import ChillWoman from 'src/assets/characters/character-3.webp';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
 import { AddCircle } from '@mui/icons-material';
+import axios from 'src/lib/axios';
 
 function calculateCategorySummary(category, fullPortfolio) {
     let totalPortfolioInvested = 0;
@@ -78,32 +79,25 @@ export function WalletManagementView() {
         const isFixedIncome = transaction.asset_type === 'FIXED_INCOME';
         const isTreasury = transaction.asset_type === 'TREASURY';
 
-        fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "portfolio_id": currentWallet.id,
-                "treasury_id": isTreasury ? transaction.tickerInfo.id : null,
-                "ticker_id": !isFixedIncome && !isTreasury ? transaction.tickerInfo.id : null,
-                "asset_type": transaction.asset_type,
-                "transaction_type": transaction.type,
-                "amount": transaction.quantity * transaction.price,
-                "price_per_unit": !isFixedIncome && !isTreasury ? transaction.price : null,
-                "transaction_date": transaction.date,
-                "quantity": transaction.quantity,
-                "issuer": transaction.issuer || null,
-                "investment_type": transaction.investment_type || null,
-                "indexation_type": transaction.indexation_type || null,
-                "expiration_date": transaction.expiration_date || null,
-                "indexer": transaction.indexer || null,
-                "indexer_rate": transaction.indexer_rate || null,
-                "currency": transaction.currency || "BRL",
-            }),
+        axios.post(`/portfolio-transactions`, {
+            "portfolio_id": currentWallet.id,
+            "treasury_id": isTreasury ? transaction.tickerInfo.id : null,
+            "ticker_id": !isFixedIncome && !isTreasury ? transaction.tickerInfo.id : null,
+            "asset_type": transaction.asset_type,
+            "transaction_type": transaction.type,
+            "amount": transaction.quantity * transaction.price,
+            "price_per_unit": !isFixedIncome && !isTreasury ? transaction.price : null,
+            "transaction_date": transaction.date,
+            "quantity": transaction.quantity,
+            "issuer": transaction.issuer || null,
+            "investment_type": transaction.investment_type || null,
+            "indexation_type": transaction.indexation_type || null,
+            "expiration_date": transaction.expiration_date || null,
+            "indexer": transaction.indexer || null,
+            "indexer_rate": transaction.indexer_rate || null,
+            "currency": transaction.currency || "BRL",
         })
-            .then(response => response.json())
-            .then(async (data) => {
+            .then(async ({ data }) => {
                 setTransactionModal(false);
                 fetchTableData(currentWallet?.id);
                 setIsTransactionModalLoading(false);
@@ -122,9 +116,8 @@ export function WalletManagementView() {
             return;
         }
 
-        fetch(`${import.meta.env.VITE_SERVER_URL2}/portfolio-transactions/consolidated-transactions/${wallet_id}`)
-            .then(response => response.json())
-            .then(data => {
+        axios.get(`/portfolio-transactions/consolidated-transactions/${wallet_id}`)
+            .then(({ data }) => {
                 let formatted_arr = [];
 
                 data.forEach(group => {

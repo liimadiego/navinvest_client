@@ -23,17 +23,12 @@ export async function sendMessage(messageData) {
   }
   );
 
-  await fetch(`${import.meta.env.VITE_SERVER_URL2}${AI_ASSISTANT_ENDPOINT}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      message: messageData.body,
-      messageHistoric: formattedMessages
-    })
-  }).then(r => r.json())
+  axios.post(`${AI_ASSISTANT_ENDPOINT}`, {
+    message: messageData.body,
+    messageHistoric: formattedMessages
+  })
     .then(response => {
+      response = response.data;
       if (response.success) {
         if (response.data.valid_question) {
           for (const { messageType, answer } of response.data.data) {
@@ -46,15 +41,6 @@ export async function sendMessage(messageData) {
               senderId: 'ai-id',
             });
           }
-
-          // insertMessage({
-          //   id: uuidv4(),
-          //   attachments: [],
-          //   body: response.data.answer,
-          //   contentType: response.data.messageType,
-          //   createdAt: new Date().toISOString(),
-          //   senderId: 'ai-id',
-          // });
         } else {
           insertMessage({
             id: uuidv4(),
@@ -71,7 +57,6 @@ export async function sendMessage(messageData) {
     .catch(error => {
       console.error(error);
     });
-
 }
 
 function insertMessage(message) {

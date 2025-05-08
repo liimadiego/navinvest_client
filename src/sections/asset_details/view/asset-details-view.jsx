@@ -9,6 +9,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { IconButton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { AssetReportAIModal } from 'src/components/asset-report-ai-modal';
+import axios from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
 
@@ -22,14 +23,8 @@ export function AssetDetailsView() {
   const tickerString = String(ticker || '').toUpperCase();
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_SERVER_URL2}/ticker/get-proftability-by-ticker/${tickerString}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
+    axios.get(`/ticker/get-proftability-by-ticker/${tickerString}`)
+      .then(({ data }) => {
         setProftability(data);
       })
       .catch(error => {
@@ -37,19 +32,11 @@ export function AssetDetailsView() {
       });
 
 
-    fetch(`${import.meta.env.VITE_SERVER_URL2}/companies/${tickerString}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      }
-      )
-      .then(data => {
+    axios.get(`/companies/${tickerString}`)
+      .then(({ data }) => {
         setChart({ series: handleHistoricalQuotes(data.historicalQuotesData) });
         setTickerData(data);
-      }
-      )
+      })
       .catch(error => {
         console.error('Error fetching ticker data:', error);
       });
@@ -111,17 +98,10 @@ export function AssetDetailsView() {
     setReportData(null);
     handleOpenModaAssetReport();
 
-    fetch(`${import.meta.env.VITE_SERVER_URL2}/asset-report-ai/generate-report`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        company_data: TEMP_TICKER_DATA,
-      }),
+    axios.post(`${import.meta.env.VITE_SERVER_URL2}/asset-report-ai/generate-report`, {
+      company_data: tickerData,
     })
-      .then(response => response.json())
-      .then(data => {
+      .then(({ data }) => {
         setReportData(data)
       })
       .catch(error => {
