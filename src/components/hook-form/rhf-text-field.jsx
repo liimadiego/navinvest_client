@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 
 // ----------------------------------------------------------------------
 
-export function RHFTextField({ name, helperText, slotProps, type = 'text', ...other }) {
+export function RHFTextField({ name, helperText, slotProps, type = 'text', autocomplete = "off", ...other }) {
   const { control } = useFormContext();
 
   const isNumberType = type === 'number';
@@ -39,7 +39,7 @@ export function RHFTextField({ name, helperText, slotProps, type = 'text', ...ot
           slotProps={{
             ...slotProps,
             htmlInput: {
-              autoComplete: 'off',
+              autoComplete: autocomplete,
               ...slotProps?.htmlInput,
               ...(isNumberType && { inputMode: 'decimal', pattern: '[0-9]*\\.?[0-9]*' }),
             },

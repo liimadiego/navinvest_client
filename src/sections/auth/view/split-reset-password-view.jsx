@@ -99,6 +99,7 @@ export function SplitResetPasswordView() {
         autoFocus
         name="email"
         label="Email"
+        autocomplete="on"
         placeholder="exemplo@email.com"
         slotProps={{ inputLabel: { shrink: true } }}
       />

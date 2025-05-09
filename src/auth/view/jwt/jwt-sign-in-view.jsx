@@ -75,7 +75,7 @@ export function JwtSignInView() {
 
   const renderForm = () => (
     <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
-      <Field.Text name="email" placeholder="exemplo@email.com" label="Email" slotProps={{ inputLabel: { shrink: true } }} />
+      <Field.Text autocomplete="on" name="email" placeholder="exemplo@email.com" label="Email" slotProps={{ inputLabel: { shrink: true } }} />
 
       <Box sx={{ gap: 1.5, display: 'flex', flexDirection: 'column' }}>
         <Link

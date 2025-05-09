@@ -59,6 +59,7 @@ export function tokenExpired(exp) {
     try {
       alert('Token expired!');
       sessionStorage.removeItem(JWT_STORAGE_KEY);
+      localStorage.removeItem('selectedWallet');
       window.location.href = paths.auth.jwt.signIn;
     } catch (error) {
       console.error('Error during token expiration:', error);
@@ -85,6 +86,7 @@ export async function setSession(accessToken) {
       }
     } else {
       sessionStorage.removeItem(JWT_STORAGE_KEY);
+      localStorage.removeItem('selectedWallet');
       delete axios.defaults.headers.common.Authorization;
     }
   } catch (error) {

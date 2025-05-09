@@ -17,6 +17,7 @@ export function SignOutButton({ onClose, sx, ...other }) {
   const handleLogout = useCallback(async () => {
     try {
       await signOut();
+      localStorage.removeItem('selectedWallet');
       await checkUserSession?.();
 
       onClose?.();
