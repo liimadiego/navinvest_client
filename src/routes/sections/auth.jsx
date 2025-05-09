@@ -20,10 +20,10 @@ const Jwt = {
 };
 
 const authJwt = {
-  path: 'jwt',
+  path: '',
   children: [
     {
-      path: 'sign-in',
+      path: 'login',
       element: (
         <GuestGuard>
           <AuthSplitLayout
@@ -37,7 +37,7 @@ const authJwt = {
       ),
     },
     {
-      path: 'sign-up',
+      path: 'registrar',
       element: (
         <GuestGuard>
           <AuthSplitLayout>
@@ -47,7 +47,7 @@ const authJwt = {
       ),
     },
     {
-      path: 'reset-password',
+      path: 'resetar-senha',
       element: (
         <GuestGuard>
           <AuthSplitLayout
@@ -61,7 +61,7 @@ const authJwt = {
       ),
     },
     {
-      path: 'update-password',
+      path: 'atualizar-senha',
       element: (
         <GuestGuard>
           <AuthSplitLayout

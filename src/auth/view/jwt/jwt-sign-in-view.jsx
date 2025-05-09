@@ -132,7 +132,7 @@ export function JwtSignInView() {
           <>
             {`Ainda não tem uma conta? `}
             <Link component={RouterLink} href={paths.auth.jwt.signUp} variant="subtitle2">
-              Conheça os nossos planos
+              Registrar
             </Link>
           </>
         }

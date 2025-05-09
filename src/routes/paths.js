@@ -20,10 +20,10 @@ export const paths = {
       resetPassword: `${ROOTS.AUTH}/amplify/reset-password`,
     },
     jwt: {
-      signIn: `${ROOTS.AUTH}/jwt/sign-in`,
-      signUp: `${ROOTS.AUTH}/jwt/sign-up`,
-      resetPassword: `${ROOTS.AUTH}/jwt/reset-password`,
-      updatePassword: `${ROOTS.AUTH}/jwt/update-password`,
+      signIn: `${ROOTS.AUTH}/login`,
+      signUp: `${ROOTS.AUTH}/registrar`,
+      resetPassword: `${ROOTS.AUTH}/resetar-senha`,
+      updatePassword: `${ROOTS.AUTH}/atualizar-senha`,
     },
     firebase: {
       signIn: `${ROOTS.AUTH}/firebase/sign-in`,
