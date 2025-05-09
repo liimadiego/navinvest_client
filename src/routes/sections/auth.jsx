@@ -47,12 +47,12 @@ const authJwt = {
       ),
     },
     {
-      path: 'resetar-senha',
+      path: 'redefinir-senha',
       element: (
         <GuestGuard>
           <AuthSplitLayout
             slotProps={{
-              section: { title: 'Recuperar a senha' },
+              section: { title: 'Redefinir senha' },
             }}
           >
             <Jwt.ResetPasswordPage />

@@ -6,7 +6,7 @@ import { SplitResetPasswordView } from 'src/sections/auth/view/split-reset-passw
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `Reset password | Layout split - ${CONFIG.appName}` };
+const metadata = { title: `Redefinir senha | ${CONFIG.appName}` };
 
 export default function Page() {
   return (

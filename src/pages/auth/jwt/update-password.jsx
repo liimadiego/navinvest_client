@@ -6,7 +6,7 @@ import { SplitUpdatePasswordView } from 'src/sections/auth/view/split-update-pas
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `Update password | Layout split - ${CONFIG.appName}` };
+const metadata = { title: `Redefinir senha | ${CONFIG.appName}` };
 
 export default function Page() {
   return (

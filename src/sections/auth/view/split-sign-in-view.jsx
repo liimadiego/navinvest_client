@@ -117,9 +117,9 @@ export function SplitSignInView() {
         type="submit"
         variant="contained"
         loading={isSubmitting}
-        loadingIndicator="Sign in..."
+        loadingIndicator="Login..."
       >
-        Sign in
+        Login
       </LoadingButton>
     </Box>
   );
@@ -127,7 +127,7 @@ export function SplitSignInView() {
   return (
     <>
       <FormHead
-        title="Sign in to your account"
+        title="Login to your account"
         description={
           <>
             {`Don’t have an account? `}

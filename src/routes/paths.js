@@ -22,7 +22,7 @@ export const paths = {
     jwt: {
       signIn: `${ROOTS.AUTH}/login`,
       signUp: `${ROOTS.AUTH}/registrar`,
-      resetPassword: `${ROOTS.AUTH}/resetar-senha`,
+      resetPassword: `${ROOTS.AUTH}/redefinir-senha`,
       updatePassword: `${ROOTS.AUTH}/atualizar-senha`,
     },
     firebase: {
