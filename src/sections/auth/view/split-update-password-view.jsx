@@ -19,6 +19,10 @@ import { FormHead } from '../../../auth/components/form-head';
 import { FormResendCode } from '../../../auth/components/form-resend-code';
 import { FormReturnLink } from '../../../auth/components/form-return-link';
 import { useEffect, useState } from 'react';
+import { Alert, Snackbar } from '@mui/material';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { set } from 'nprogress';
 
 // ----------------------------------------------------------------------
 
@@ -42,12 +46,24 @@ export const UpdatePasswordSchema = zod
 // ----------------------------------------------------------------------
 
 export function SplitUpdatePasswordView() {
+  const navigate = useNavigate();
+
+  const [notification, setNotification] = useState({
+    open: false,
+    message: '',
+    severity: 'info'
+  });
   const showPassword = useBoolean();
 
   const defaultValues = {
     code: '',
     password: '',
     confirmPassword: '',
+  };
+
+
+  const handleCloseNotification = () => {
+    setNotification({ ...notification, open: false });
   };
 
   const methods = useForm({
@@ -62,10 +78,48 @@ export function SplitUpdatePasswordView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
+      const { code, password } = data;
+      const userMail = localStorage.getItem('reset_password_mail');
+      if (!userMail) {
+        setNotification({
+          open: true,
+          message: `Ocorreu um erro ao tentar redefinir a senha`,
+          severity: 'error'
+        });
+
+        return;
+      }
+
+      await axios.post(`${import.meta.env.VITE_SERVER_URL2}/auth/update-password`, {
+        email: userMail,
+        code: code,
+        newPassword: password
+      })
+        .then(async () => {
+          setNotification({
+            open: true,
+            message: `Senha atualizada com sucesso!`,
+            severity: 'success'
+          });
+          localStorage.removeItem('reset_password_mail');
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          await navigate(paths.auth.jwt.signIn);
+        }).catch((error) => {
+          setNotification({
+            open: true,
+            message: `Erro ao atualizar a senha: Confira se o código está correto`,
+            severity: 'error'
+          });
+          console.error('Error:', error);
+        });
+
     } catch (error) {
-      console.error(error);
+      setNotification({
+        open: true,
+        message: `Erro ao enviar o pedido de redefinição de senha: ${error.message}`,
+        severity: 'error'
+      });
     }
   });
 
@@ -166,6 +220,22 @@ export function SplitUpdatePasswordView() {
       />
 
       <FormReturnLink href={paths.auth.jwt.signIn} />
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={30000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
