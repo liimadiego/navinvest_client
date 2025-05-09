@@ -16,7 +16,7 @@ export function FormResendCode({ value, disabled, onResendCode, sx, ...other }) 
       ]}
       {...other}
     >
-      {`Don’t have a code? `}
+      {`Não chegou? `}
       <Link
         variant="subtitle2"
         onClick={onResendCode}
@@ -25,7 +25,7 @@ export function FormResendCode({ value, disabled, onResendCode, sx, ...other }) 
           ...(disabled && { color: 'text.disabled', pointerEvents: 'none' }),
         }}
       >
-        Resend {disabled && value && value > 0 && `(${value}s)`}
+        Reenvie {disabled && value && value > 0 && `(${value}s)`}
       </Link>
     </Box>
   );

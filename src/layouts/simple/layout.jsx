@@ -37,7 +37,7 @@ export function SimpleLayout({ sx, cssVars, children, slotProps, layoutQuery = '
             color="inherit"
             sx={{ typography: 'subtitle2' }}
           >
-            Need help?
+            Precisa de ajuda?
           </Link>
 
           {/** @slot Settings button */}

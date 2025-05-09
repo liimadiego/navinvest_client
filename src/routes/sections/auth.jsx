@@ -15,6 +15,8 @@ import { GuestGuard } from 'src/auth/guard';
 const Jwt = {
   SignInPage: lazy(() => import('src/pages/auth/jwt/sign-in')),
   SignUpPage: lazy(() => import('src/pages/auth/jwt/sign-up')),
+  ResetPasswordPage: lazy(() => import('src/pages/auth/jwt/reset-password')),
+  UpdatePasswordPage: lazy(() => import('src/pages/auth/jwt/update-password')),
 };
 
 const authJwt = {
@@ -26,7 +28,7 @@ const authJwt = {
         <GuestGuard>
           <AuthSplitLayout
             slotProps={{
-              section: { title: 'Hi, Welcome back' },
+              section: { title: 'Olá, bem vindo(a) de volta' },
             }}
           >
             <Jwt.SignInPage />
@@ -40,6 +42,34 @@ const authJwt = {
         <GuestGuard>
           <AuthSplitLayout>
             <Jwt.SignUpPage />
+          </AuthSplitLayout>
+        </GuestGuard>
+      ),
+    },
+    {
+      path: 'reset-password',
+      element: (
+        <GuestGuard>
+          <AuthSplitLayout
+            slotProps={{
+              section: { title: 'Recuperar a senha' },
+            }}
+          >
+            <Jwt.ResetPasswordPage />
+          </AuthSplitLayout>
+        </GuestGuard>
+      ),
+    },
+    {
+      path: 'update-password',
+      element: (
+        <GuestGuard>
+          <AuthSplitLayout
+            slotProps={{
+              section: { title: 'Atualizar a senha' },
+            }}
+          >
+            <Jwt.UpdatePasswordPage />
           </AuthSplitLayout>
         </GuestGuard>
       ),
