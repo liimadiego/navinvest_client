@@ -16,25 +16,22 @@ import EmojiPicker from 'emoji-picker-react';
 
 import SendIcon from '@mui/icons-material/Send';
 
+import { useChat } from 'src/context/ChatContext';
+
+import { uuidv4 } from 'minimal-shared/utils';
+import { fSub } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
+
 // ----------------------------------------------------------------------
 
 export function ChatMessageInput() {
+  const { user } = useAuthContext();
+  const me = user?.id || 1;
+  const { chatId, chatHistory, setChatHistory } = useChat();
   const router = useRouter();
-  const LOCAL_STORAGE_KEY = 'chat_messages';
-
-  const fileRef = useRef(null);
-
   const [message, setMessage] = useState('');
 
-  const { messageData, conversationData } = initialConversation({
-    message,
-  });
-
-  const handleAttach = useCallback(() => {
-    if (fileRef.current) {
-      fileRef.current.click();
-    }
-  }, []);
 
   const handleChangeMessage = useCallback((event) => {
     setMessage(event.target.value);
@@ -43,29 +40,46 @@ export function ChatMessageInput() {
   const handleSendMessageEnter = useCallback(
     async (event) => {
       if (event.key !== 'Enter' || !message) return;
-
       try {
-        const messagesLS = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-        const messages = messagesLS || [];
-
-        messages.push(messageData);
+        const formattedMessage = {
+          id: uuidv4(),
+          answer: message,
+          messageType: 'text',
+          createdAt: fSub({ minutes: 1 }),
+          senderId: me,
+        }
+        setChatHistory((prev) => [...prev, formattedMessage]);
         setMessage('');
-        await sendMessage(messageData);
+        const responseMessages = await sendMessage(message, chatId);
+        setChatHistory((prev) => [
+          ...prev,
+          ...responseMessages,
+        ]);
+
       } catch (error) {
         console.error(error);
       }
     },
-    [conversationData, message, messageData, router]
+    [message, router]
   );
 
   const handleSendMessage = async () => {
     try {
-      const messagesLS = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-      const messages = messagesLS || [];
-
-      messages.push(messageData);
+      const formattedMessage = {
+        id: uuidv4(),
+        answer: message,
+        messageType: 'text',
+        createdAt: fSub({ minutes: 1 }),
+        senderId: me,
+      }
+      setChatHistory((prev) => [...prev, formattedMessage]);
       setMessage('');
-      await sendMessage(messageData);
+      const responseMessages = await sendMessage(message, chatId);
+      setChatHistory((prev) => [
+        ...prev,
+        ...responseMessages,
+      ]);
+
     } catch (error) {
       console.error(error);
     }

@@ -10,27 +10,17 @@ import { EmptyContent } from 'src/components/empty-content';
 import { ChatLayout } from '../layout';
 import { ChatMessageList } from '../chat-message-list';
 import { ChatMessageInput } from '../chat-message-input';
+import { useChat } from 'src/context/ChatContext';
 
 // ----------------------------------------------------------------------
 
 export function AIAssistantView() {
   const [messages, setMessages] = useState([]);
-  const LOCAL_STORAGE_KEY = 'chat_messages';
+  const { chatHistory } = useChat();
 
   useEffect(() => {
-    const loadMessages = () => {
-      const messagesLS = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-      setMessages(messagesLS || []);
-    };
-
-    loadMessages();
-
-    window.addEventListener("storage", loadMessages);
-
-    return () => {
-      window.removeEventListener("storage", loadMessages);
-    };
-  }, []);
+    setMessages(chatHistory);
+  }, [chatHistory]);
 
   return (
     <DashboardContent

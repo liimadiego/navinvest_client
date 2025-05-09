@@ -9,13 +9,13 @@ import { useState } from 'react';
 import { IconButton, Modal } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { CloseFullscreen } from '@mui/icons-material';
+import { useAuthContext } from 'src/auth/hooks';
 
 export function ChatMessageItem({ message }) {
-  const user = { id: 1 };
-
-  const me = message.senderId === user.id;
-  const { firstName, avatarUrl } = { firstName: 'Assistente de Investimentos', avatarUrl: 'https://cdn.fakercloud.com/avatars/brunodesign1202_128.jpg' };
-  const { contentType, body, createdAt } = message;
+  const { user } = useAuthContext();
+  const me = message.senderId === user?.id;
+  const { firstName, avatarUrl } = { firstName: 'Assistente de Investimentos', avatarUrl: "" };
+  const { messageType, answer, createdAt } = message;
 
   const renderInfo = () => (
     <Typography
@@ -29,7 +29,7 @@ export function ChatMessageItem({ message }) {
   );
 
   const renderBody = () => {
-    if (contentType === 'text') {
+    if (messageType === 'text') {
       return (
         <Stack
           sx={{
@@ -41,8 +41,7 @@ export function ChatMessageItem({ message }) {
             ...(me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
           }}
         >
-          {/* replace \n para queda de linha */}
-          {body.split('\n').map((line, index) => (
+          {answer.split('\n').map((line, index) => (
             <Typography key={index} variant="body2" sx={{ mb: 0.5 }}>
               {line}
             </Typography>
@@ -50,10 +49,10 @@ export function ChatMessageItem({ message }) {
         </Stack>
       );
 
-    } else if (contentType === 'chart') {
+    } else if (messageType === 'chart') {
       const chart = {
-        series: body.series,
-        categories: body.categories,
+        series: answer.series,
+        categories: answer.categories,
       };
 
       const theme = useTheme();
@@ -135,7 +134,7 @@ export function ChatMessageItem({ message }) {
 
                 <Chart
                   type="area"
-                  series={body.series}
+                  series={answer.series}
                   options={chartOptions}
                   sx={{
                     pl: 1,
@@ -178,7 +177,7 @@ export function ChatMessageItem({ message }) {
 
             <Chart
               type="area"
-              series={body.series}
+              series={answer.series}
               options={chartOptions}
               sx={{
                 pl: 1,
@@ -192,11 +191,11 @@ export function ChatMessageItem({ message }) {
       );
 
     } else {
-      console.error('Unsupported content type:', contentType, '\n ');
+      console.error('Unsupported content type:', messageType, '\n ');
     }
   };
 
-  if (!message.body) {
+  if (!message.answer) {
     return null;
   }
 

@@ -6,18 +6,21 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { signOut } from 'src/auth/context/jwt/action';
+import { useChat } from 'src/context/ChatContext';
 
 // ----------------------------------------------------------------------
 
 export function SignOutButton({ onClose, sx, ...other }) {
   const router = useRouter();
+  const { _chatId, setChatId, _chatHistory, setChatHistory } = useChat();
 
   const { checkUserSession } = useAuthContext();
 
   const handleLogout = useCallback(async () => {
     try {
       await signOut();
-      localStorage.removeItem('selectedWallet');
+      setChatId(null);
+      setChatHistory([]);
       await checkUserSession?.();
 
       onClose?.();

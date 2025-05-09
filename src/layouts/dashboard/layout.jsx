@@ -24,8 +24,6 @@ import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
 import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
-// import { LanguagePopover } from '../components/language-popover';
-// import { ContactsPopover } from '../components/contacts-popover';
 import { WalletsPopover } from '../components/wallets-popover';
 import { navData as dashboardNavData } from '../nav-config-dashboard';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
@@ -38,6 +36,7 @@ import { Button } from '@mui/material';
 import { useWallets } from 'src/context/WalletsContext';
 import { useAuthContext } from 'src/auth/hooks';
 import axios from 'src/lib/axios';
+import { useChat } from 'src/context/ChatContext';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +44,8 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const theme = useTheme();
   const { currentWallet, setCurrentWallet } = useWallet();
   const { _wallets, _setWallets } = useWallets();
+
+  const { chatId, setChatId, chatHistory, setChatHistory } = useChat();
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -64,6 +65,19 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
       }).catch(error => {
         console.error(error);
       });
+
+    if (!chatId) {
+      axios.get('/investment-assistant/get-chat')
+        .then(({ data }) => {
+          const { data: chatInfo } = data;
+          if (chatInfo) {
+            setChatHistory(chatInfo.messages);
+            setChatId(chatInfo.chat_id);
+          }
+        }).catch(error => {
+          console.error(error);
+        });
+    }
   }, []);
 
   const settings = useSettingsContext();

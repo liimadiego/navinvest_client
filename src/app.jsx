@@ -16,6 +16,7 @@ import { getTranslation } from 'src/assets/data/languages';
 import { BacktestProvider } from './context/BacktestContext';
 import { WalletProvider } from './context/WalletContext';
 import { WalletsProvider } from './context/WalletsContext';
+import { ChatProvider } from './context/ChatContext';
 
 globalThis.getTranslation = getTranslation;
 
@@ -30,21 +31,23 @@ export default function App({ children }) {
       <SettingsProvider defaultSettings={defaultSettings}>
         <WalletsProvider>
           <WalletProvider>
-            <BacktestProvider>
-              <LanguageProvider>
-                <ThemeProvider
-                  noSsr
-                  defaultMode={themeConfig.defaultMode}
-                  modeStorageKey={themeConfig.modeStorageKey}
-                >
-                  <MotionLazy>
-                    <ProgressBar />
-                    <SettingsDrawer defaultSettings={defaultSettings} />
-                    {children}
-                  </MotionLazy>
-                </ThemeProvider>
-              </LanguageProvider>
-            </BacktestProvider>
+            <ChatProvider>
+              <BacktestProvider>
+                <LanguageProvider>
+                  <ThemeProvider
+                    noSsr
+                    defaultMode={themeConfig.defaultMode}
+                    modeStorageKey={themeConfig.modeStorageKey}
+                  >
+                    <MotionLazy>
+                      <ProgressBar />
+                      <SettingsDrawer defaultSettings={defaultSettings} />
+                      {children}
+                    </MotionLazy>
+                  </ThemeProvider>
+                </LanguageProvider>
+              </BacktestProvider>
+            </ChatProvider>
           </WalletProvider>
         </WalletsProvider>
       </SettingsProvider>

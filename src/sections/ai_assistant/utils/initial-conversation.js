@@ -4,28 +4,24 @@ import { fSub } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
-export function initialConversation({ message = '', me = { id: 1 } }) {
-  const aiParticipant = {
-    id: 'ai-id',
-    name: globalThis.getTranslation('ai_assistant_name'),
-  };
+export function initialConversation({ message = '' }) {
+  try {
+    const aiParticipant = {
+      id: 'ai-id',
+      name: globalThis.getTranslation('ai_assistant_name'),
+    };
 
-  const messageData = {
-    id: uuidv4(),
-    attachments: [],
-    body: message,
-    contentType: 'text',
-    createdAt: fSub({ minutes: 1 }),
-    senderId: me.id,
-  };
+    const messageData = {
+      id: uuidv4(),
+      answer: message,
+      messageType: 'text',
+      createdAt: fSub({ minutes: 1 }),
+      senderId: 1,
+    };
 
-  const conversationData = {
-    id: uuidv4(),
-    messages: [messageData],
-    participants: [me, aiParticipant],
-    type: 'ONE_TO_ONE',
-    unreadCount: 0,
-  };
-
-  return { messageData, conversationData };
+    return { messageData };
+  } catch (error) {
+    console.error('Error in initialConversation:', error);
+    return { messageData: {} };
+  }
 }
