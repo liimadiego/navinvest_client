@@ -27,16 +27,20 @@ import { SignUpTerms } from '../../components/sign-up-terms';
 // ----------------------------------------------------------------------
 
 export const SignUpSchema = zod.object({
-  firstName: zod.string().min(1, { message: 'First name is required!' }),
-  lastName: zod.string().min(1, { message: 'Last name is required!' }),
+  firstName: zod.string().min(1, { message: 'Campo obrigatório' }),
+  lastName: zod.string().min(1, { message: 'Campo obrigatório' }),
   email: zod
     .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
+    .min(1, { message: 'Campo obrigatório' })
+    .email({ message: 'O campo email precisa ser um email válido' }),
   password: zod
     .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
+    .min(1, { message: 'Campo obrigatório' })
+    .min(6, { message: 'A senha precisa ter ao menos 6 caracteres' }),
+  phone: zod
+    .string()
+    .min(1, { message: 'Campo obrigatório' })
+    .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, { message: 'O campo telefone precisa ser um telefone válido' }),
 });
 
 // ----------------------------------------------------------------------
@@ -51,16 +55,38 @@ export function JwtSignUpView() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const defaultValues = {
-    firstName: 'Hello',
-    lastName: 'Friend',
-    email: 'hello@gmail.com',
-    password: '@2Minimal',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
   };
 
   const methods = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues,
   });
+
+  const mostCompletePhoneMaskHandler = (value) => {
+    const digits = value.replace(/\D/g, '');
+
+    if (!digits) return '';
+
+    if (digits.length <= 2) {
+      return `(${digits}`;
+    } else if (digits.length <= 6) {
+      return `(${digits.substring(0, 2)}) ${digits.substring(2)}`;
+    } else if (digits.length <= 10) {
+      const areaCode = digits.substring(0, 2);
+      const firstPart = digits.substring(2, 6);
+      const secondPart = digits.substring(6);
+      return `(${areaCode}) ${firstPart}-${secondPart}`;
+    } else {
+      const areaCode = digits.substring(0, 2);
+      const firstPart = digits.substring(2, 7);
+      const secondPart = digits.substring(7, 11);
+      return `(${areaCode}) ${firstPart}-${secondPart}`;
+    }
+  };
 
   const {
     handleSubmit,
@@ -74,6 +100,7 @@ export function JwtSignUpView() {
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
+        phone: data.phone.replaceAll(/[^0-9]/g, ''),
       });
       await checkUserSession?.();
 
@@ -92,17 +119,40 @@ export function JwtSignUpView() {
       >
         <Field.Text
           name="firstName"
-          label="First name"
+          label="Primeiro nome"
+          placeholder="Nome"
           slotProps={{ inputLabel: { shrink: true } }}
         />
         <Field.Text
           name="lastName"
-          label="Last name"
+          label="Sobrenome"
+          placeholder="Sobrenome"
           slotProps={{ inputLabel: { shrink: true } }}
         />
       </Box>
 
-      <Field.Text name="email" label="Email address" slotProps={{ inputLabel: { shrink: true } }} />
+      <Field.Text
+        name="phone"
+        label="Telefone"
+        placeholder="(00) 00000-0000"
+        slotProps={{ inputLabel: { shrink: true } }}
+        InputProps={{
+          inputComponent: 'input',
+          inputProps: {
+            maxLength: 15,
+            pattern: '\\d{2}\\s\\d{5}-\\d{4}',
+          },
+        }}
+        helperText="Formato: (00) 00000-0000"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        onInput={(e) => {
+          e.target.value = mostCompletePhoneMaskHandler(e.target.value.replace(/[^0-9\s-]/g, ''));
+        }}
+      />
+
+      <Field.Text name="email" label="Email" placeholder="Email" slotProps={{ inputLabel: { shrink: true } }} />
 
       <Field.Text
         name="password"
@@ -130,9 +180,9 @@ export function JwtSignUpView() {
         type="submit"
         variant="contained"
         loading={isSubmitting}
-        loadingIndicator="Create account..."
+        loadingIndicator="Criar conta..."
       >
-        Create account
+        Criar conta
       </LoadingButton>
     </Box>
   );
@@ -140,12 +190,12 @@ export function JwtSignUpView() {
   return (
     <>
       <FormHead
-        title="Get started absolutely free"
+        title="Registre-se de graça"
         description={
           <>
-            {`Already have an account? `}
+            {`Já possui uma conta? Acesse o seu `}
             <Link component={RouterLink} href={paths.auth.jwt.signIn} variant="subtitle2">
-              Get started
+              Login
             </Link>
           </>
         }

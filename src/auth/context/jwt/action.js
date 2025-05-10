@@ -34,12 +34,12 @@ export const signInWithPassword = async ({ email, password }) => {
 
 // ----------------------------------------------------------------------
 
-export const signUp = async ({ email, password, firstName, lastName }) => {
+export const signUp = async ({ email, password, firstName, lastName, phone }) => {
   const params = {
     email,
     password,
-    firstName,
-    lastName,
+    full_name: firstName + ' ' + lastName,
+    phone_number: phone,
   };
 
   try {

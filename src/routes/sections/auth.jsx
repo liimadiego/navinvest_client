@@ -40,7 +40,10 @@ const authJwt = {
       path: 'registrar',
       element: (
         <GuestGuard>
-          <AuthSplitLayout>
+          <AuthSplitLayout
+            slotProps={{
+              section: { title: 'Registre-se' },
+            }}>
             <Jwt.SignUpPage />
           </AuthSplitLayout>
         </GuestGuard>

@@ -22,6 +22,9 @@ import { useAuthContext } from '../../hooks';
 import { getErrorMessage } from '../../utils';
 import { FormHead } from '../../components/form-head';
 import { signInWithPassword } from '../../context/jwt';
+import { FormDivider } from 'src/auth/components/form-divider';
+import { SignUpTerms } from 'src/auth/components/sign-up-terms';
+import { FormSocials } from 'src/auth/components/form-socials';
 
 // ----------------------------------------------------------------------
 
@@ -148,6 +151,16 @@ export function JwtSignInView() {
       <Form methods={methods} onSubmit={onSubmit}>
         {renderForm()}
       </Form>
+
+      {/* <SignUpTerms /> */}
+
+      {/* <FormDivider />
+
+      <FormSocials
+        signInWithGoogle={() => { }}
+        singInWithGithub={() => { }}
+        signInWithTwitter={() => { }}
+      /> */}
     </>
   );
 }
