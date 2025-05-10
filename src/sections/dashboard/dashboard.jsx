@@ -33,18 +33,71 @@ export function Dashboard() {
     const theme = useTheme();
     const { currentWallet } = useContext(WalletContext);
 
+    const convertToBRLMonth = (month) => {
+        const monthNames = [
+            'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+            'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+        ];
+        return monthNames[month - 1];
+    }
+
+    const getLast12Months = () => {
+        const data = new Date();
+        const mes = data.getMonth() + 1;
+        const ano = data.getFullYear();
+        const meses = [];
+        for (let i = 0; i < 12; i++) {
+            const mesAtual = mes - i;
+            if (mesAtual <= 0) {
+                meses.unshift(`${ano - 1}-${12 + mesAtual}`);
+            } else {
+                meses.unshift(`${ano}-${mesAtual}`);
+            }
+        }
+        return meses.map((item) => {
+            const [ano, mes] = item.split("-");
+            return `${convertToBRLMonth(Number(mes))}/${ano}`;
+        });
+    }
+
+    const setDefaultValues = () => {
+        setTotalAssets(0);
+        setTotalInvested(0);
+        setHistoricalTotalAssets({
+            categories: [...getLast12Months()],
+            series: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        });
+        setHistoricalTotalInvested({
+            categories: [...getLast12Months()],
+            series: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        });
+        setTotalAssetEvolutionThisMonth(0);
+        setTotalAssetEvolutionTwelveMonths(0);
+        setPortfolioDivision([]);
+        setWalletEvolution({
+            categories: [...getLast12Months()],
+            series: [{
+                name: "Evolução da carteira",
+                data: [
+                    {
+                        name: 'Valor aplicado',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                    {
+                        name: 'Ganho de capital',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                ],
+            }]
+        });
+    }
+
     useEffect(() => {
+        setDefaultValues();
         if (currentWallet && currentWallet.id) {
-            setTotalAssets(null);
-            setTotalInvested(null);
-            setHistoricalTotalAssets(null);
-            setHistoricalTotalInvested(null);
-            setTotalAssetEvolutionThisMonth(null);
-            setTotalAssetEvolutionTwelveMonths(null);
-            setPortfolioDivision(null);
-            setWalletEvolution(null);
             setError(false);
             setLoading(true);
+
 
             axios.get(`/investment-portfolio/portfolio-data/${currentWallet.id}`)
                 .then(({ data }) => {
@@ -53,23 +106,23 @@ export function Dashboard() {
                         setLoading(false);
                         return;
                     }
-                    setTotalAssets(data.currentTotalAssets);
-                    setTotalInvested(data.currentTotalInvested);
+                    setTotalAssets(data?.currentTotalAssets || 0);
+                    setTotalInvested(data?.currentTotalInvested || 0);
 
-                    const totalAssetsChartCategories = data.historicalData.map((item) => {
+                    const totalAssetsChartCategories = data.historicalData.length > 0 ? data.historicalData.map((item) => {
                         const month = numToMonth(item.month);
                         return month;
-                    });
+                    }) : [...getLast12Months()];
 
                     const monthsReversed = totalAssetsChartCategories.reverse();
 
-                    const totalAssetsChartSeries = data.historicalData.map((item) => {
-                        return item.totalAssets;
-                    });
+                    const totalAssetsChartSeries = data.historicalData.length > 0 ? data.historicalData.map((item) => {
+                        return item?.totalAssets || 0;
+                    }) : [...getLast12Months()];
 
-                    const totalInvestedChartSeries = data.historicalData.map((item) => {
+                    const totalInvestedChartSeries = data.historicalData.length > 0 ? data.historicalData.map((item) => {
                         return item.totalInvested;
-                    });
+                    }) : [...getLast12Months()];
 
                     const totalAssetReversed = totalAssetsChartSeries.reverse();
                     const totalInvestedReversed = totalInvestedChartSeries.reverse();
@@ -88,20 +141,20 @@ export function Dashboard() {
 
                     setTotalAssetEvolutionThisMonth(evolutionTotalAssets);
 
-                    const evolutionTwelveMonths = (data.currentTotalAssets / data.historicalData[data.historicalData.length - 1].totalAssets) * 100 - 100;
+                    const evolutionTwelveMonths = data.historicalData.length > 0 ? (data.currentTotalAssets / data.historicalData[data.historicalData.length - 1].totalAssets) * 100 - 100 : 0;
 
                     setTotalAssetEvolutionTwelveMonths(evolutionTwelveMonths);
 
-                    const portfolioDivisionChartSeries = data.portfolioDivision.map((item) => {
+                    const portfolioDivisionChartSeries = data?.portfolioDivision && data.portfolioDivision.length > 0 ? data.portfolioDivision.map((item) => {
                         return {
                             label: item.category,
                             value: Number(item.total_percentage) || 0
                         }
-                    });
+                    }) : [];
 
                     setPortfolioDivision(portfolioDivisionChartSeries);
 
-                    setWalletEvolution({
+                    setWalletEvolution(data.historicalData.length > 0 ? {
                         categories: monthsReversed,
                         series: [
                             {
@@ -120,6 +173,21 @@ export function Dashboard() {
                                 ],
                             }
                         ]
+                    } : {
+                        categories: [...getLast12Months()],
+                        series: [{
+                            name: "Evolução da carteira",
+                            data: [
+                                {
+                                    name: 'Valor aplicado',
+                                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                },
+                                {
+                                    name: 'Ganho de capital',
+                                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                },
+                            ],
+                        }]
                     })
 
                     setLoading(false);
@@ -163,7 +231,7 @@ export function Dashboard() {
             </Grid>}
 
             <Grid size={{ xs: 12, md: 4 }}>
-                {historicalTotalAssets && totalAssets ? <IndicatorChartMini
+                {historicalTotalAssets != null && totalAssets != null ? <IndicatorChartMini
                     title="Patrimônio total"
                     percent={totalAssetEvolutionThisMonth || 0}
                     total={totalAssets || 0}
@@ -172,7 +240,7 @@ export function Dashboard() {
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
-                {historicalTotalInvested && totalInvested ? <IndicatorChartMini
+                {historicalTotalInvested != null && totalInvested != null ? <IndicatorChartMini
                     title="Valor total investido"
                     total={totalInvested || 0}
                     chart={historicalTotalInvested}
@@ -180,9 +248,9 @@ export function Dashboard() {
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
-                {totalAssetEvolutionTwelveMonths ? <IndicatorChartMini
+                {totalAssetEvolutionTwelveMonths != null ? <IndicatorChartMini
                     title="Desempenho da carteira (12 meses)"
-                    message={totalAssetEvolutionTwelveMonths > 0 ? "Aumento de patrimônio" : "Redução de patrimônio"}
+                    message={(totalAssetEvolutionTwelveMonths === 0) ? "" : (totalAssetEvolutionTwelveMonths > 0 ? "Aumento de patrimônio" : "Redução de patrimônio")}
                     type="percent"
                     total={totalAssetEvolutionTwelveMonths || 0}
                 /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}

@@ -99,7 +99,7 @@ export function AiWalletImporter({ }) {
             if (!walletId) {
                 setNotification({
                     open: true,
-                    message: 'Nenhum wallet selecionada',
+                    message: 'Nenhuma carteira selecionada (clique em `Criar carteira` no topo esquerdo)',
                     severity: 'warning'
                 });
                 return;

@@ -6,11 +6,13 @@ import { usePathname } from 'src/routes/hooks';
 
 import { NavItem } from './nav-item';
 import { navSectionClasses } from '../styles';
+import { useAuthContext } from 'src/auth/hooks';
 import { NavUl, NavLi, NavCollapse } from '../components';
 
 // ----------------------------------------------------------------------
 
 export function NavList({ data, depth, render, slotProps, currentRole, enabledRootRedirect }) {
+  const { user } = useAuthContext();
   const pathname = usePathname();
   const navItemRef = useRef(null);
 
@@ -35,7 +37,7 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
     <NavItem
       ref={navItemRef}
       // slots
-      path={data.path}
+      path={!(data.onlyPaying && !user?.isPayingUser) ? data.path : ""}
       icon={data.icon}
       info={data.info}
       title={data.title}
@@ -43,12 +45,12 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
       // state
       open={open}
       active={isActive}
-      disabled={data.disabled}
+      disabled={data.onlyPaying && !user?.isPayingUser}
       // options
       depth={depth}
       render={render}
       hasChild={!!data.children}
-      externalLink={isExternalLink(data.path)}
+      externalLink={!(data.onlyPaying && !user?.isPayingUser) ? isExternalLink(data.path) : false}
       enabledRootRedirect={enabledRootRedirect}
       // styles
       slotProps={depth === 1 ? slotProps?.rootItem : slotProps?.subItem}

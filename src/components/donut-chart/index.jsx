@@ -6,6 +6,8 @@ import CardHeader from '@mui/material/CardHeader';
 import { fNumber } from 'src/utils/format-number';
 
 import { Chart, useChart, ChartLegends } from 'src/components/chart';
+import { Box } from '@mui/material';
+import SeoIllustration from "src/assets/illustrations/upload-illustration";
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +22,18 @@ export function DonutChart({ title, subheader, chart, sx, ...other }) {
   ];
 
   const chartSeries = chart.series.map((item) => item.value);
+
+  const isEmptyArray = (array) => {
+    if (!Array.isArray(array)) {
+      return false;
+    }
+
+    if (array.length === 0) {
+      return true;
+    }
+
+    return false;
+  }
 
   const chartOptions = useChart({
     chart: { sparkline: { enabled: true } },
@@ -54,25 +68,34 @@ export function DonutChart({ title, subheader, chart, sx, ...other }) {
     <Card sx={sx} {...other}>
       <CardHeader title={title} subheader={subheader} />
 
-      <Chart
-        type="donut"
-        series={chartSeries}
-        options={chartOptions}
-        sx={{
-          my: 6,
-          mx: 'auto',
-          width: { xs: 240, xl: 260 },
-          height: { xs: 240, xl: 260 },
-        }}
-      />
+      {!isEmptyArray(chart.series) ? (
+        <>
+          <Chart
+            type="donut"
+            series={chartSeries}
+            options={chartOptions}
+            sx={{
+              my: 6,
+              mx: 'auto',
+              width: { xs: 240, xl: 260 },
+              height: { xs: 240, xl: 260 },
+            }}
+          />
 
-      <Divider sx={{ borderStyle: 'dashed' }} />
+          <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <ChartLegends
-        labels={chartOptions?.labels}
-        colors={chartOptions?.colors}
-        sx={{ p: 3, justifyContent: 'center' }}
-      />
+          <ChartLegends
+            labels={chartOptions?.labels}
+            colors={chartOptions?.colors}
+            sx={{ p: 3, justifyContent: 'center' }}
+          />
+        </>) :
+        <Box height={370} display="flex" justifyContent="center">
+          {SeoIllustration && <Box sx={{ maxWidth: 260, marginTop: "55px", }}><SeoIllustration hideBackground /></Box>}
+        </Box>
+      }
     </Card>
   );
 }
+
+

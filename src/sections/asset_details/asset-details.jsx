@@ -11,8 +11,6 @@ import { DividendsHistoric } from './dividends-historic';
 
 export function AssetDetails({ ticker, tickerData, chart, proftability }) {
 
-    console.log({ tickerData });
-
     function isEmpty(obj) {
         for (const prop in obj) {
             if (Object.hasOwn(obj, prop)) {

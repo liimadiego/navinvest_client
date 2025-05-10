@@ -8,6 +8,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import { Iconify } from '../../iconify';
 import { createNavItem } from '../utils';
 import { navItemStyles, navSectionClasses } from '../styles';
+import LockIcon from '@mui/icons-material/Lock';
 
 // ----------------------------------------------------------------------
 
@@ -105,6 +106,9 @@ export const NavItem = forwardRef((props, ref) => {
           sx={slotProps?.arrow}
         />
       )}
+
+      {disabled ? <LockIcon sx={{ fontSize: "16px" }} /> : null}
+
     </ItemRoot>
   );
 });

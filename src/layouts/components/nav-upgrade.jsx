@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 import { paths } from 'src/routes/paths';
 
@@ -42,7 +43,7 @@ export function NavUpgrade({ sx, ...other }) {
               borderBottomLeftRadius: 2,
             }}
           >
-            Free
+            Grátis
           </Label>
         </Box>
 
@@ -65,7 +66,7 @@ export function NavUpgrade({ sx, ...other }) {
         </Box>
 
         <Button variant="contained" href={paths.minimalStore} target="_blank" rel="noopener">
-          Upgrade to Pro
+          Acesse todas as ferramentas
         </Button>
       </Box>
     </Box>

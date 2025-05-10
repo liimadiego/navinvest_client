@@ -24,7 +24,7 @@ export function WalletTableRow({ row, isFixedIncome, isTreasury }) {
   };
 
   if (isTreasury) {
-    console.log({ row });
+    // console.log({ row });
   }
 
   return (
