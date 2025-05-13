@@ -66,7 +66,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
         console.error(error);
       });
 
-    if (!chatId) {
+    if (!chatId && user && user.plan !== null) {
       axios.get('/investment-assistant/get-chat')
         .then(({ data }) => {
           const { data: chatInfo } = data;

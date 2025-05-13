@@ -77,7 +77,7 @@ export function CurrencyConverter() {
     const { formatted, number } = formatNumberInput(value);
     setFromAmount(number);
     event.target.value = formatted;
-    console.log(value, formatted, number);
+    // console.log(value, formatted, number);
   };
 
   const handleFromAmountBlur = (event) => {

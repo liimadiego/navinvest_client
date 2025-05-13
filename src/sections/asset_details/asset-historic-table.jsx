@@ -13,9 +13,9 @@ export function AssetHistoricTable({ companyMarketData, historicalDividendYieldD
         if (!!companyMarketData && !!historicalDividendYieldData) {
             const currentYear = new Date().getFullYear();
             const maxYear = Math.max(...companyMarketData.map((item) => item.year));
-            const maxYearDividends = Math.max(...historicalDividendYieldData.dividendYields.map((item) => {
+            const maxYearDividends = historicalDividendYieldData?.dividendYields ? Math.max(...historicalDividendYieldData.dividendYields.map((item) => {
                 return parseInt(item.year.split('-')[0]);
-            }));
+            })) : 0;
 
             const PLs = companyMarketData.map((item) => {
                 return item.market_ratios?.price_earnings ? item.market_ratios.price_earnings.toFixed(2) : '-'
@@ -29,9 +29,9 @@ export function AssetHistoricTable({ companyMarketData, historicalDividendYieldD
                 return item.market_ratios?.price_to_book ? item.market_ratios.price_to_book.toFixed(2) : '-'
             }).slice(0, 10);
 
-            const dividends = historicalDividendYieldData.dividendYields.map((item) => {
+            const dividends = historicalDividendYieldData?.dividendYields ? historicalDividendYieldData.dividendYields.map((item) => {
                 return item.dy ? (item.dy / 100) : '-';
-            }).slice(0, 10);
+            }).slice(0, 10) : Array(10).fill('-');
 
             const payouts = companyMarketData.map((item) => {
                 return item.others.payout ? item.others.payout : '-'
@@ -95,25 +95,25 @@ export function AssetHistoricTable({ companyMarketData, historicalDividendYieldD
                 return item.ratios?.return_on_assets ? item.ratios.return_on_assets : '-'
             }).slice(0, 10);
 
-            if (currentYear > maxYear) {
-                PLs.unshift(companyMarketData[0].market_ratios.price_earnings.toFixed(2));
-                PSRs.unshift(companyMarketData[0].market_ratios.price_to_sales.toFixed(2));
-                PVPs.unshift(companyMarketData[0].market_ratios.price_to_book.toFixed(2));
-                payouts.unshift(companyMarketData[0].others.payout);
-                netMargins.unshift(companyMarketData[0].ratios.net_margin / 100);
-                grossMargins.unshift(companyMarketData[0].ratios.gross_margin / 100);
-                ebitMargins.unshift(companyMarketData[0].ratios.ebit_margin / 100);
-                ebitdaMargins.unshift(companyMarketData[0].ratios.ebitda_margin / 100);
-                evEbitda.unshift(companyMarketData[0].others.EV_EBITDA.toFixed(2));
-                evEbit.unshift(companyMarketData[0].others.EV_EBIT.toFixed(2));
-                pEbitda.unshift(companyMarketData[0].others.P_EBITDA.toFixed(2));
-                pEbit.unshift(companyMarketData[0].market_ratios.price_to_ebit.toFixed(2));
-                pAssets.unshift(companyMarketData[0].market_ratios.price_to_assets.toFixed(2));
-                pWorkingCapital.unshift(companyMarketData[0].others.p_acl.toFixed(2));
-                vpa.unshift(companyMarketData[0].market_ratios.equity_per_share.toFixed(2));
-                lpa.unshift(companyMarketData[0].market_ratios.earnings_per_share.toFixed(2));
-                roe.unshift(companyMarketData[0].ratios.return_on_equity / 100);
-                roa.unshift(companyMarketData[0].ratios.return_on_assets);
+            if (currentYear > maxYear && companyMarketData?.[0]) {
+                PLs.unshift(companyMarketData[0]?.market_ratios?.price_earnings ? companyMarketData[0].market_ratios.price_earnings.toFixed(2) : '-');
+                PSRs.unshift(companyMarketData[0]?.market_ratios?.price_to_sales ? companyMarketData[0].market_ratios.price_to_sales.toFixed(2) : '-');
+                PVPs.unshift(companyMarketData[0]?.market_ratios?.price_to_book ? companyMarketData[0].market_ratios.price_to_book.toFixed(2) : '-');
+                payouts.unshift(companyMarketData[0]?.others?.payout ?? '-');
+                netMargins.unshift(companyMarketData[0]?.ratios?.net_margin ? companyMarketData[0].ratios.net_margin / 100 : '-');
+                grossMargins.unshift(companyMarketData[0]?.ratios?.gross_margin ? companyMarketData[0].ratios.gross_margin / 100 : '-');
+                ebitMargins.unshift(companyMarketData[0]?.ratios?.ebit_margin ? companyMarketData[0].ratios.ebit_margin / 100 : '-');
+                ebitdaMargins.unshift(companyMarketData[0]?.ratios?.ebitda_margin ? companyMarketData[0].ratios.ebitda_margin / 100 : '-');
+                evEbitda.unshift(companyMarketData[0]?.others?.EV_EBITDA ? companyMarketData[0].others.EV_EBITDA.toFixed(2) : '-');
+                evEbit.unshift(companyMarketData[0]?.others?.EV_EBIT ? companyMarketData[0].others.EV_EBIT.toFixed(2) : '-');
+                pEbitda.unshift(companyMarketData[0]?.others?.P_EBITDA ? companyMarketData[0].others.P_EBITDA.toFixed(2) : '-');
+                pEbit.unshift(companyMarketData[0]?.market_ratios?.price_to_ebit ? companyMarketData[0].market_ratios.price_to_ebit.toFixed(2) : '-');
+                pAssets.unshift(companyMarketData[0]?.market_ratios?.price_to_assets ? companyMarketData[0].market_ratios.price_to_assets.toFixed(2) : '-');
+                pWorkingCapital.unshift(companyMarketData[0]?.others?.p_acl ? companyMarketData[0].others.p_acl.toFixed(2) : '-');
+                vpa.unshift(companyMarketData[0]?.market_ratios?.equity_per_share ? companyMarketData[0].market_ratios.equity_per_share.toFixed(2) : '-');
+                lpa.unshift(companyMarketData[0]?.market_ratios?.earnings_per_share ? companyMarketData[0].market_ratios.earnings_per_share.toFixed(2) : '-');
+                roe.unshift(companyMarketData[0]?.ratios?.return_on_equity ? companyMarketData[0].ratios.return_on_equity / 100 : '-');
+                roa.unshift(companyMarketData[0]?.ratios?.return_on_assets ?? '-');
             }
 
             if (currentYear == maxYearDividends) {

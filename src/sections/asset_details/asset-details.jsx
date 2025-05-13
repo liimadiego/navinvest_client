@@ -107,7 +107,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
 
 
             <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }}>HISTÓRICO DE DIVIDENDOS DE {ticker}</Typography>
-            <DividendsHistoric ticker={ticker} />
+            <DividendsHistoric historicalDividendYieldData={historicalDividendYieldData} />
         </>
     );
 }

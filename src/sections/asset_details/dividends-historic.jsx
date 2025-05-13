@@ -1,36 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography, Card, CardHeader } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { useTheme, alpha as hexAlpha } from '@mui/material/styles';
 
 import { Chart, ChartSelect, useChart } from 'src/components/chart';
 
-const data5Years = [
-    { year: '2017', dividend: 2.5, yield: 1.5 },
-    { year: '2018', dividend: 3.0, yield: 1.8 },
-    { year: '2019', dividend: 3.5, yield: 2.0 },
-    { year: '2020', dividend: 4.0, yield: 2.5 },
-    { year: '2021', dividend: 4.5, yield: 2.8 },
-];
 
-const data10Years = [
-    { year: '2012', dividend: 1.0, yield: 0.8 },
-    { year: '2013', dividend: 1.2, yield: 0.9 },
-    { year: '2014', dividend: 1.5, yield: 1.0 },
-    { year: '2015', dividend: 1.8, yield: 1.2 },
-    { year: '2016', dividend: 2.0, yield: 1.3 },
-    ...data5Years,
-];
-
-export function DividendsHistoric({ ticker }) {
+export function DividendsHistoric({ historicalDividendYieldData }) {
+    historicalDividendYieldData = historicalDividendYieldData?.dividendYields ?? [];
     const [dataType, setDataType] = useState('Dividend Yield');
     const [timeRange, setTimeRange] = useState('5 Anos');
+    const [data5Years, setData5Years] = useState([]);
+    const [data10Years, setData10Years] = useState([]);
+
+    useEffect(() => {
+        if (historicalDividendYieldData.length > 0) {
+            let formattedHDY = historicalDividendYieldData.sort((a, b) => {
+                let dateA = new Date(a.year);
+                let dateB = new Date(b.year);
+
+                return dateA - dateB;
+            });
+
+            formattedHDY = formattedHDY.map((item) => ({
+                year: item.year,
+                yield: item.dy.toFixed(2)
+            }));
+
+            const data5Years = formattedHDY.filter((item) => {
+                const year = new Date(item.year).getFullYear();
+                const currentYear = new Date().getFullYear();
+                return year >= currentYear - 5;
+            });
+
+            const data10Years = formattedHDY.filter((item) => {
+                const year = new Date(item.year).getFullYear();
+                const currentYear = new Date().getFullYear();
+                return year >= currentYear - 10;
+            });
+
+            setData5Years(data5Years);
+            setData10Years(data10Years);
+        }
+    }, [historicalDividendYieldData]);
 
     const selectedTimeRange = timeRange === '5 Anos' ? data5Years : data10Years;
 
     const chart = {
         series: [
-            { name: 'Dividendos Pagos', data: selectedTimeRange.map((item) => item.dividend) },
+            // { name: 'Dividendos Pagos', data: selectedTimeRange.map((item) => item.dividend) },
             { name: 'Dividend Yield', data: selectedTimeRange.map((item) => item.yield) },
         ],
         categories: selectedTimeRange.map((item) => item.year),
@@ -83,11 +101,11 @@ export function DividendsHistoric({ ticker }) {
                 <CardHeader
                     action={
                         <Box sx={{ display: 'flex', gap: 2 }}>
-                            <ChartSelect
+                            {/* <ChartSelect
                                 options={['Dividend Yield', 'Dividendos Pagos']}
                                 value={dataType}
                                 onChange={handleDataTypeChange}
-                            />
+                            /> */}
                             <ChartSelect
                                 options={['5 Anos', '10 Anos']}
                                 value={timeRange}

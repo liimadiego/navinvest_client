@@ -31,7 +31,7 @@ export function ChatMessageInput() {
   const { chatId, chatHistory, setChatHistory } = useChat();
   const router = useRouter();
   const [message, setMessage] = useState('');
-
+  const [error, setError] = useState(false);
 
   const handleChangeMessage = useCallback((event) => {
     setMessage(event.target.value);
@@ -51,6 +51,10 @@ export function ChatMessageInput() {
         setChatHistory((prev) => [...prev, formattedMessage]);
         setMessage('');
         const responseMessages = await sendMessage(message, chatId);
+        if (!responseMessages) {
+          setError(true);
+          return;
+        }
         setChatHistory((prev) => [
           ...prev,
           ...responseMessages,
@@ -75,6 +79,10 @@ export function ChatMessageInput() {
       setChatHistory((prev) => [...prev, formattedMessage]);
       setMessage('');
       const responseMessages = await sendMessage(message, chatId);
+      if (!responseMessages) {
+        setError(true);
+        return;
+      }
       setChatHistory((prev) => [
         ...prev,
         ...responseMessages,

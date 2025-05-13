@@ -11,7 +11,7 @@ export function CardAssetDetails({ sx, icon, title, total, type = false, color =
     <Paper elevation={3} sx={[{ py: 3, pl: 3, pr: 2.5, position: "relative", overflow: "hidden", zIndex: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
       <Box sx={{ flexGrow: 1 }}>
         {total !== null && total !== undefined ? (
-          <Box sx={{ typography: 'h3' }}>
+          <Box sx={{ typography: 'h3', color: total < 0 ? 'error.main' : 'text.primary' }}>
             {type === 'currency' ? (
               currency === 'USD' ? `$${total.toLocaleString('en-US')}` : `R$${total.toLocaleString('pt-BR')}`
             ) : type === 'percentage' ? (
