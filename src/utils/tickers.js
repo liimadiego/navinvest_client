@@ -40,7 +40,7 @@ export async function getTickerList(query, limit = 5, type = "") {
                     image_url: imagePath,
                     fallback_image_url: defaultImagePath,
                     currency: ticker.currency,
-                    last_twelve_months: ticker.last_twelve_months || 0.33
+                    last_twelve_months: ticker.price_twelve_months_ago && ticker.current_price ? ((ticker.current_price - ticker.price_twelve_months_ago) / ticker.price_twelve_months_ago) : 0
                 };
             });
         }).catch(error => {

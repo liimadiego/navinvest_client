@@ -5,13 +5,26 @@ import { Edit } from '@mui/icons-material';
 
 export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inComparison = false, side = 'left', sx }) {
 
-    const image_content = (assetInfo) => (
-        assetInfo.image_url &&
-        <img src={assetInfo.image_url}
-            style={{ width: 40, height: 40, borderRadius: 4 }}
-            alt={assetInfo.name}
+    const image_content = (assetInfo, side) => {
+        const imagePath = `/src/assets/tickers/${assetInfo.ticker}.jpg`;
+        const defaultImagePath = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg";
+        return <img
+            src={imagePath}
+            alt={assetInfo.ticker}
+            onError={(e) => {
+                if (defaultImagePath) {
+                    e.target.src = defaultImagePath;
+                }
+            }}
+            style={{
+                width: 40,
+                height: 40,
+                borderRadius: 4,
+                marginRight: side === 'left' && inComparison ? 8 : 0,
+                marginLeft: side === 'right' && inComparison ? 8 : 0
+            }}
         />
-    );
+    };
 
     return (
         <Paper elevation={2} sx={{ padding: 2, marginTop: inComparison ? 0 : 2, ...sx }}>
@@ -30,7 +43,7 @@ export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inC
                     justifyContent={{ xs: 'center', sm: side === 'left' ? 'flex-start' : 'flex-end' }}
                     flexDirection={{ xs: side === 'left' ? 'column' : 'column-reverse', sm: 'row' }}
                 >
-                    {assetInfo.image_url && side === 'left' && image_content(assetInfo)}
+                    {side === 'left' && image_content(assetInfo, side)}
                     <Box
                         sx={{
                             mb: 0,
@@ -59,7 +72,7 @@ export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inC
                             {assetInfo.indexer ? camelize(assetInfo.indexer) : ""}
                         </Typography>}
                     </Box>
-                    {assetInfo.image_url && side === 'right' && image_content(assetInfo)}
+                    {side === 'right' && image_content(assetInfo, side)}
                 </Box>
                 <Box
                     display={'flex'}

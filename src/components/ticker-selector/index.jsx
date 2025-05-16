@@ -236,15 +236,15 @@ export function TickerSelector({
                                                     <Typography
                                                         sx={{
                                                             fontSize: "12px",
-                                                            color: ticker.last_twelve_months > 0 ? 'green' : 'red',
+                                                            color: ticker.last_twelve_months == 0 ? 'gray' : (ticker.last_twelve_months < 0 ? 'red' : 'green'),
                                                             display: "flex",
                                                             alignItems: "center"
                                                         }}
                                                     >
-                                                        {ticker.last_twelve_months > 0 ? '+' : ''}
+                                                        {ticker.last_twelve_months <= 0 ? '' : '+'}
                                                         {(ticker.last_twelve_months * 100).toFixed(2)}%
                                                         <span style={{ marginLeft: "2px" }}>
-                                                            {ticker.last_twelve_months > 0 ? '↑' : '↓'}
+                                                            {ticker.last_twelve_months == 0 ? '' : ticker.last_twelve_months < 0 ? '↓' : '↑'}
                                                         </span>
                                                     </Typography>
                                                     <Typography sx={{ fontSize: "11px", opacity: 0.7, ml: 0.5 }}>

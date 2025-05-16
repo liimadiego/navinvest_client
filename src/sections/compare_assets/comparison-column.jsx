@@ -5,8 +5,9 @@ import { useTheme } from '@mui/material/styles';
 import { Chart, useChart, ChartLegends } from 'src/components/chart';
 import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
+import StarIcon from '@mui/icons-material/Star';
 
-export function ComparisonColumn({ _width = '40%', content = <></>, chart, title, subheader, sx, ...other }) {
+export function ComparisonColumn({ _width = '40%', content = <></>, chart, title, winner = false, subheader, sx, ...other }) {
     if (chart) {
         const theme = useTheme();
 
@@ -77,9 +78,10 @@ export function ComparisonColumn({ _width = '40%', content = <></>, chart, title
     }
 
     return (
-        <Paper elevation={3} sx={{ width: _width, padding: 2 }} >
+        <Paper elevation={3} sx={{ width: _width, padding: 2, position: 'relative' }} >
             <Box width={"100%"} height={"100%"} display={'flex'} justifyContent={'center'} alignItems={'center'}>
                 {content}
+                {winner && <StarIcon sx={{ color: 'gray', width: 15, height: 15, position: 'absolute', top: 10, right: 10 }} />}
             </Box>
         </Paper>
     );

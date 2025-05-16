@@ -5,31 +5,19 @@ import { CardAssetInfo } from '../../components/card-asset-info';
 import { ComparisonColumn } from './comparison-column';
 import { MiddleComparisonColumn } from './middle-comparison-column';
 import { WarningComparison } from './warning-comparison';
+import axios from 'src/lib/axios';
 
 export function CompareAssets() {
-
-  //tirar isso depois, precisa ser pela API
-  const availableTickers = [
-    { name: 'PETR4', current_price: 28.45, type: 'Ação', asset_name: 'Petrobras', ticker: 'PETR4', image_url: 'https://investidor10.com.br/storage/companies/63d2c9ead34db.jpg', 'last_twelve_months': -0.0052 },
-    { name: 'PETR3', current_price: 29.45, type: 'Ação', asset_name: 'Petrobras', ticker: 'PETR3', image_url: 'https://investidor10.com.br/storage/companies/63d2c9ead34db.jpg', 'last_twelve_months': 0.0011 },
-    { name: 'BBAS3', current_price: 32.45, type: 'Ação', asset_name: 'Banco do Brasil', ticker: 'BBAS3', image_url: 'https://investidor10.com.br/storage/companies/66ad149f52cd4.jpg', 'last_twelve_months': -0.002 },
-    { name: 'ITSA4', current_price: 10.23, type: 'Ação', asset_name: 'Itaúsa', ticker: 'ITSA4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
-    { name: 'TAEE3', current_price: 28.67, type: 'Ação', asset_name: 'Taesa', ticker: 'TAEE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.0011 },
-    { name: 'TAEE4', current_price: 29.12, type: 'Ação', asset_name: 'Taesa', ticker: 'TAEE4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': 0.001 },
-    { name: 'TAEE11', current_price: 30.45, type: 'Ação', asset_name: 'Taesa', ticker: 'TAEE11', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': 0.012 },
-    { name: 'AURE3', current_price: 18.34, type: 'Ação', asset_name: 'Auren Energia', ticker: 'AURE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
-    { name: 'CMIG3', current_price: 12.56, type: 'Ação', asset_name: 'Cemig', 'last_twelve_months': -0.05, ticker: 'CMIG3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
-    { name: 'CSMG3', current_price: 14.78, type: 'Ação', asset_name: 'Copasa', ticker: 'CSMG3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
-    { name: 'SAPR3', current_price: 7.89, type: 'Ação', asset_name: 'Sanepar', ticker: 'SAPR3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
-    { name: 'KLBN4', current_price: 22.34, type: 'Ação', asset_name: 'Klabin', ticker: 'KLBN4', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
-    { name: 'WEGE3', current_price: 38.45, type: 'Ação', asset_name: 'WEG', ticker: 'WEGE3', image_url: 'https://investidor10.com.br/storage/companies/677fd88bf3163.png', 'last_twelve_months': -0.05 },
-  ];
 
   const [selectedTickers, setSelectedTickers] = useState([]);
   const [inComparison, setInComparison] = useState(false);
 
   const [leftAsset, setLeftAsset] = useState({});
   const [rightAsset, setRightAsset] = useState({});
+
+  const [leftAssetInfo, setLeftAssetInfo] = useState({});
+  const [rightAssetInfo, setRightAssetInfo] = useState({});
+
   const [warningMessage, setWarningMessage] = useState('');
 
   const deleteRightAsset = () => {
@@ -44,9 +32,29 @@ export function CompareAssets() {
 
   const getCoreAssetInfo = async (ticker) => {
     try {
-      // const tickerInfo = await axios(`/tickers/${ticker}`);
-      //  tickerInfo;
-      return availableTickers.find(t => t.ticker === ticker);
+      const tickerInfo = await axios(`/ticker/${ticker}?&limit=1`)
+        .then((response) => {
+          if (response.status === 200 && Array.isArray(response.data) && response.data.length > 0) {
+            const data = response.data.map(item => ({
+              name: item.ticker,
+              current_price: item.current_price,
+              type: item.asset_type,
+              asset_name: item.asset_name,
+              ticker: item.ticker,
+              image_url: item.asset_image_url,
+              last_twelve_months: item.price_twelve_months_ago && item.current_price ? ((item.current_price - item.price_twelve_months_ago) / item.price_twelve_months_ago) : 0,
+            }));
+
+            return data[0];
+          } else {
+            throw new Error('Error fetching ticker data');
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching ticker data:', error);
+          return null;
+        });
+      return tickerInfo;
     } catch (error) {
       console.error(error);
     }
@@ -66,7 +74,49 @@ export function CompareAssets() {
 
   const handleCompare = () => {
     setInComparison(!inComparison);
-    setWarningMessage('Você está comparando ativos de setores diferentes. A comparação pode não ser precisa.');
+    axios.get(`/companies/compare?tickers[]=${leftAsset.ticker}&tickers[]=${rightAsset.ticker}`)
+      .then((response) => {
+        if (response.status === 200) {
+          const assetsInfo = response.data;
+          const leftAssetInfo = assetsInfo[leftAsset.ticker];
+          const rightAssetInfo = assetsInfo[rightAsset.ticker];
+          setLeftAssetInfo(leftAssetInfo);
+          setRightAssetInfo(rightAssetInfo);
+
+          const leftAssetSector = leftAssetInfo?.generalInfo?.sector?.value || null;
+          const rightAssetSector = rightAssetInfo?.generalInfo?.sector?.value || null;
+
+          if (leftAssetSector && rightAssetSector && leftAssetSector !== rightAssetSector) {
+            setWarningMessage('Você está comparando ativos de setores diferentes. A comparação pode não ser precisa.');
+          } else {
+            setWarningMessage('');
+          }
+
+        } else {
+          console.error('Erro ao realizar comparação:', response);
+        }
+      }
+      )
+      .catch((error) => {
+        console.error('Erro ao realizar comparação:', error);
+      });
+
+
+    // setWarningMessage('Você está comparando ativos de setores diferentes. A comparação pode não ser precisa.');
+  }
+
+  const getTranslation = (key) => {
+    const translations = {
+      generalInfo: 'Informações Gerais',
+      valuation: 'Avaliação',
+      profitability: 'Lucratividade',
+      margins: 'Margens',
+      debt: 'Endividamento',
+      liquidity: 'Liquidez',
+      revenueAndProfit: 'Receita e Lucro',
+      otherIndicators: 'Outros Indicadores',
+    }
+    return translations[key] || key;
   }
 
   const handleNewCompare = () => {
@@ -100,14 +150,14 @@ export function CompareAssets() {
           <Box component="form" noValidate autoComplete="off">
             <Box display={'flex'} gap={2} style={{ width: '100%' }}>
               <Box style={{ width: inComparison ? '40%' : '50%' }}>
-                {!inComparison && <TickerSelector doNotRepeatCompany={true} onAddTicker={onAddTicker1} selectedTickers={selectedTickers} />}
+                {!inComparison && <TickerSelector assetType='stock' doNotRepeatCompany={true} onAddTicker={onAddTicker1} selectedTickers={selectedTickers} />}
                 {leftAsset && leftAsset.name && <CardAssetInfo inComparison={inComparison} assetInfo={leftAsset} onDelete={deleteLeftAsset} />}
               </Box>
               {inComparison && <Paper elevation={4} sx={{ width: '20%', padding: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 VS
               </Paper>}
               <Box style={{ width: inComparison ? '40%' : '50%' }}>
-                {!inComparison && <TickerSelector doNotRepeatCompany={true} onAddTicker={onAddTicker2} selectedTickers={selectedTickers} />}
+                {!inComparison && <TickerSelector assetType='stock' doNotRepeatCompany={true} onAddTicker={onAddTicker2} selectedTickers={selectedTickers} />}
                 {rightAsset && rightAsset.name && <CardAssetInfo side='right' inComparison={inComparison} assetInfo={rightAsset} onDelete={deleteRightAsset} />}
               </Box>
             </Box>
@@ -120,50 +170,39 @@ export function CompareAssets() {
           </Box>
         </Paper>
 
-        {inComparison && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
+        {inComparison && warningMessage != '' && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
           <WarningComparison text={warningMessage} />
         </Box>}
 
-        {inComparison && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"}>
-          <Box display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
-            <ComparisonColumn content={12} />
-            <MiddleComparisonColumn title={"P/L"} description={"O P/L (Preço sobre Lucro) é um indicador financeiro que mede a relação entre o preço da ação de uma empresa e o seu lucro por ação. É utilizado para avaliar se uma ação está cara ou barata em relação ao seu histórico de lucros."} />
-            <ComparisonColumn content={13.4} />
-          </Box>
 
-          <Box display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
-            <ComparisonColumn content={"13,74%"} />
-            <MiddleComparisonColumn title={"P/VP"} description={"Compara o preço da ação com seu valor patrimonial."} />
-            <ComparisonColumn content={"29,45%"} />
-          </Box>
+        {inComparison && leftAssetInfo && rightAssetInfo && (
+          Object.keys(leftAssetInfo).flatMap((key) => {
+            if (Object.keys(leftAssetInfo[key]).length > 0) {
+              return [
+                <Typography
+                  key={`title-${key}`}
+                  variant="h6"
+                  sx={{ mt: 3, mb: 1, fontWeight: 'medium' }}
+                >
+                  {getTranslation(key)}
+                </Typography>,
+                ...Object.keys(leftAssetInfo[key]).map((key2, index) => {
+                  return (
+                    <Box key={`${key}-${key2}-${index}`} display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
+                      <ComparisonColumn content={leftAssetInfo[key][key2].value} winner={leftAssetInfo[key][key2].winner} />
+                      <MiddleComparisonColumn
+                        title={leftAssetInfo[key][key2].translation}
+                        description={leftAssetInfo[key][key2].tooltip} />
+                      <ComparisonColumn content={rightAssetInfo[key][key2].value} winner={rightAssetInfo[key][key2].winner} />
+                    </Box>
+                  )
 
-          <Box display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
-            <ComparisonColumn
-              type="donut_chart"
-              chart={{
-                series: [
-                  { label: 'Brasil', value: 80290000000 },
-                  { label: 'Uruguai', value: 3010000000 },
-                  { label: 'Paraguai', value: 1470000000 },
-                  { label: 'Chile', value: 1420000000 },
-                ],
-              }}
-            />
-            <MiddleComparisonColumn title={"Regiões de receita"} description={"Compara o preço da ação com seu valor patrimonial."} />
-            <ComparisonColumn
-              type="donut_chart"
-              chart={{
-                series: [
-                  { label: 'Brasil', value: 85290000000 },
-                  { label: 'China', value: 1510000000 },
-                  { label: 'Estados Unidos', value: 3470000000 },
-                  { label: 'Singapura', value: 3420000000 },
-                  { label: 'Outros', value: 14010000000 },
-                ],
-              }}
-            />
-          </Box>
-        </Box>}
+                }).filter(Boolean)
+              ];
+            }
+            return [];
+          })
+        )}
       </Box>
 
       {!inComparison && <Box sx={{ flex: 1 }}>
