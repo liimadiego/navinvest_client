@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TickerSelector } from 'src/components/ticker-selector';
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Alert, Box, Button, Paper, Typography } from '@mui/material';
 import { CardAssetInfo } from '../../components/card-asset-info';
 import { ComparisonColumn } from './comparison-column';
 import { MiddleComparisonColumn } from './middle-comparison-column';
@@ -17,6 +17,8 @@ export function CompareAssets() {
 
   const [leftAssetInfo, setLeftAssetInfo] = useState({});
   const [rightAssetInfo, setRightAssetInfo] = useState({});
+
+  const [hasToShrinkThePanel, setHasToShrinkThePanel] = useState(false);
 
   const [warningMessage, setWarningMessage] = useState('');
 
@@ -127,6 +129,19 @@ export function CompareAssets() {
     setWarningMessage('');
   }
 
+  useEffect(() => {
+    const handleWindowScroll = () => {
+      console.log('Window scroll position:', window.scrollY);
+      setHasToShrinkThePanel(window.scrollY > 80);
+    };
+
+    window.addEventListener('scroll', handleWindowScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleWindowScroll);
+    };
+  }, []);
+
   return (
     <Box
       sx={{
@@ -135,10 +150,22 @@ export function CompareAssets() {
         gap: 3,
         alignItems: 'flex-start',
       }}>
-      <Box flex={1.5} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} maxWidth={"100%"} sx={{ width: inComparison ? '100%' : "100%" }}>
-        <Paper elevation={3} sx={{ padding: 2 }} style={{ overflow: 'visible', width: "100%", maxWidth: "100%", zIndex: 2 }}>
-          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"}>
+      <Box flex={1.5} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} sx={{ width: "100%", position: 'relative' }}>
+        <Paper elevation={6} sx={{
+          padding: 2,
+          position: 'sticky',
+          top: '80px',
+          zIndex: 10,
+          width: "100%",
+          maxWidth: "100%",
+          overflow: 'visible'
+        }}>
+          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} style={{
+            height: hasToShrinkThePanel ? '0px' : '50px',
+            overflow: 'hidden',
+            transition: 'height 0.3s ease-in-out',
+          }}>
+            <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"} sx={{ transform: 'translateY(7px)' }}>
               Comparador de Ativos
             </Typography>
 
@@ -173,6 +200,23 @@ export function CompareAssets() {
         {inComparison && warningMessage != '' && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
           <WarningComparison text={warningMessage} />
         </Box>}
+
+        {/* Considerações da IA (apenas um <Alert /> do mui que tem um botaõ para ver mais, esse botao abre um modal para leitura) */}
+        {/* {inComparison && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
+          <Alert
+            severity="info"
+            sx={{ borderRadius: "16px" }}
+          >
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+              <Typography variant="body2" color="text.secondary">
+                Considerações da IA
+              </Typography>
+              <Button variant="outlined" size="small" sx={{ marginLeft: 2 }} onClick={() => { }}>
+                Ver mais
+              </Button>
+            </Box>
+          </Alert>
+        </Box>} */}
 
 
         {inComparison && leftAssetInfo && rightAssetInfo && (

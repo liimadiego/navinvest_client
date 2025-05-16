@@ -3,6 +3,6 @@ import { Alert, Box, Button, Card, Typography } from '@mui/material';
 
 export function WarningComparison({ text }) {
     return (
-        <Alert sx={{ borderRadius: "16px" }} severity="warning">{text}</Alert>
+        <Alert severity="warning">{text}</Alert>
     );
 }
