@@ -60,7 +60,7 @@ export const navData = [
       { title: 'Gerenciar Carteira', path: paths.dashboard.wallet_management, icon: <WalletIcon /> },
       { title: 'Importar Carteira', path: paths.dashboard.ai_wallet_importer, icon: <SimCardDownloadIcon />, onlyPaying: false },
       { title: 'Conversor de Moedas', path: paths.dashboard.currency_converter, icon: <CurrencyConverterIcon /> },
-      //disabled: true,
+      { title: 'Glossário do Investidor', path: paths.dashboard.investor_glossary, icon: ICONS.blog },
     ],
   },
 ];

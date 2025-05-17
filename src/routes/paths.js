@@ -55,5 +55,6 @@ export const paths = {
     wallet_management_individual_transactions: `${ROOTS.DASHBOARD}/gerenciar-carteira/transacoes-individuais`,
     ai_wallet_importer: `${ROOTS.DASHBOARD}/importar-carteira`,
     currency_converter: `${ROOTS.DASHBOARD}/conversor-moedas`,
+    investor_glossary: `${ROOTS.DASHBOARD}/glossario-investidor`,
   },
 };

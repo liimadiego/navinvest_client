@@ -24,6 +24,7 @@ const WalletManagementPage = lazy(() => import('src/pages/dashboard/wallet_manag
 const WalletManagementTransactionsPage = lazy(() => import('src/pages/dashboard/wallet_management_individual_transactions'));
 const AiWalletImporter = lazy(() => import('src/pages/dashboard/ai_wallet_importer'));
 const CurrencyConverter = lazy(() => import('src/pages/dashboard/currency_converter'));
+const InvestorGlossary = lazy(() => import('src/pages/dashboard/investor_glossary'));
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +59,7 @@ export const dashboardRoutes = [
       { path: 'gerenciar-carteira/transacoes-individuais', element: <WalletManagementTransactionsPage /> },
       { path: 'importar-carteira', element: <AiWalletImporter /> },
       { path: 'conversor-moedas', element: <CurrencyConverter /> },
+      { path: 'glossario-investidor', element: <InvestorGlossary /> },
     ],
   },
 ];
