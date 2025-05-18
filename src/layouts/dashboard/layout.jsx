@@ -32,11 +32,12 @@ import { SearchModal } from 'src/components/search-modal';
 import { useEffect, useState } from 'react';
 import AddEditWalletModal from 'src/components/create-edit-wallet-modal';
 import { useWallet } from 'src/context/WalletContext';
-import { Button } from '@mui/material';
+import { Button, styled, Typography } from '@mui/material';
 import { useWallets } from 'src/context/WalletsContext';
 import { useAuthContext } from 'src/auth/hooks';
 import axios from 'src/lib/axios';
 import { useChat } from 'src/context/ChatContext';
+import { TokenProgress } from 'src/components/token-progress';
 
 // ----------------------------------------------------------------------
 
@@ -47,6 +48,8 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
 
   const { chatId, setChatId, chatHistory, setChatHistory } = useChat();
   const { user } = useAuthContext();
+
+
 
   useEffect(() => {
     if (!user) {
@@ -195,7 +198,6 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           {/** @slot Workspace popover */}
           {!!_wallets.length > 0 && <WalletsPopover
             data={_wallets}
-            sx={{ color: 'var(--layout-nav-text-primary-color)' }}
           />}
           {/* icone circle plus mui */}
           {!_wallets.length > 0 ?
@@ -210,7 +212,6 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
             : <IconButton
               onClick={handleOpenWalletModal}
               sx={{
-                color: 'var(--layout-nav-text-primary-color)',
                 [theme.breakpoints.up(layoutQuery)]: { display: 'flex' },
               }}
             >
@@ -228,13 +229,16 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
             ]}
           /> */}
 
+          <TokenProgress />
+
           {/* iconbutton de pesquisar */}
           <IconButton onClick={handleOpenModalSearch}>
             <SearchIcon />
           </IconButton>
 
+
           {/** @slot Notifications popover */}
-          <NotificationsDrawer data={_notifications} />
+          {/* <NotificationsDrawer data={_notifications} /> */}
 
           {/** @slot Settings button */}
           <SettingsButton />
