@@ -32,12 +32,14 @@ import { SearchModal } from 'src/components/search-modal';
 import { useEffect, useState } from 'react';
 import AddEditWalletModal from 'src/components/create-edit-wallet-modal';
 import { useWallet } from 'src/context/WalletContext';
-import { Button, styled, Typography } from '@mui/material';
+import { Button, styled, Typography, useColorScheme } from '@mui/material';
 import { useWallets } from 'src/context/WalletsContext';
 import { useAuthContext } from 'src/auth/hooks';
 import axios from 'src/lib/axios';
 import { useChat } from 'src/context/ChatContext';
 import { TokenProgress } from 'src/components/token-progress';
+import BedtimeIcon from '@mui/icons-material/Bedtime';
+import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +47,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const theme = useTheme();
   const { currentWallet, setCurrentWallet } = useWallet();
   const { _wallets, _setWallets } = useWallets();
+  const { mode, setMode } = useColorScheme();
 
   const { chatId, setChatId, chatHistory, setChatHistory } = useChat();
   const { user } = useAuthContext();
@@ -240,8 +243,17 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           {/** @slot Notifications popover */}
           {/* <NotificationsDrawer data={_notifications} /> */}
 
-          {/** @slot Settings button */}
-          <SettingsButton />
+          <IconButton
+            onClick={() => {
+              setMode(mode === 'light' ? 'dark' : 'light');
+              settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
+            }}
+            sx={{ color: 'inherit', mr: 1 }}
+          >
+            {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
+
+            {/*  */}
+          </IconButton>
 
           {/** @slot Account drawer */}
           <AccountDrawer data={_account} />
