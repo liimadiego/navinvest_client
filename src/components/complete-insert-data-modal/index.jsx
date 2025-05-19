@@ -18,7 +18,6 @@ export function CompleteInsertDataModal({ data = [], onClose, open, onSave }) {
             indexation_type: item.indexation_type || 'CDI',
             transaction_date: item.date || new Date().toISOString().split('T')[0],
             expiration_date: item.expiration_date || new Date().toISOString().split('T')[0],
-            indexer_rate: item.indexer_rate || 'CDI',
             indexer_rate: item.indexer_rate || 0,
             transaction_type: item.transaction_type,
         })) || []
