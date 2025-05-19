@@ -8,10 +8,12 @@ import { usePathname } from 'src/routes/hooks';
 
 import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
-import { NavSectionVertical } from 'src/components/nav-section';
+import { Nav, NavSectionVertical } from 'src/components/nav-section';
 
 import { layoutClasses } from '../core/classes';
 import { NavUpgrade } from '../components/nav-upgrade';
+import { TokenProgress } from 'src/components/token-progress';
+import { NavSearch } from 'src/components/nav-search';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +50,8 @@ export function NavMobile({ data, open, onClose, slots, sx, className, ...other 
       )}
 
       <Scrollbar fillContent>
+        <TokenProgress sx={{ mt: 2, mb: 1, pl: 2 }} />
+        {/* <NavSearch /> */}
         <NavSectionVertical data={data} sx={{ px: 2, flex: '1 1 auto' }} {...other} />
         <NavUpgrade />
       </Scrollbar>

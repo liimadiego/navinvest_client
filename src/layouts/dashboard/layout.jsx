@@ -229,7 +229,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
             ]}
           /> */}
 
-          <TokenProgress />
+          <TokenProgress sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' } }} />
 
           {/* iconbutton de pesquisar */}
           <IconButton onClick={handleOpenModalSearch}>

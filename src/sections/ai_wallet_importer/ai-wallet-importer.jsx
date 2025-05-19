@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,6 +9,7 @@ import { Paper, Typography, Snackbar, Alert } from '@mui/material';
 import { useWallet } from 'src/context/WalletContext';
 import { CompleteInsertDataModal } from 'src/components/complete-insert-data-modal';
 import axios from 'src/lib/axios';
+import { useTokenUsage } from 'src/context/TokenUsage';
 
 export function AiWalletImporter({ }) {
     const { currentWallet } = useWallet();
@@ -21,6 +22,14 @@ export function AiWalletImporter({ }) {
         message: '',
         severity: 'info'
     });
+    const { tokenUsage } = useTokenUsage();
+    const [isFeatureDisabled, setIsFeatureDisabled] = useState(false);
+
+    useEffect(() => {
+        if (tokenUsage >= 100) {
+            setIsFeatureDisabled(true);
+        }
+    }, [tokenUsage]);
 
     const onSaveWallet = (updatedData) => {
         if (updatedData.length === 0 && tempWalletData.variable_income.length === 0) {
@@ -172,10 +181,18 @@ export function AiWalletImporter({ }) {
 
     return (
         <>
+            {isFeatureDisabled && (
+                <Alert
+                    severity="warning"
+                    sx={{ mt: 2 }}
+                >
+                    Limite de uso de IA mensal excedido. Aguarde até o próximo mês ou atualize seu plano para continuar usando o importador inteligente.
+                </Alert>
+            )}
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column-reverse', sm: 'column-reverse', md: 'row' }, gap: 2, mb: 4, mt: 2 }}>
                 <Paper elevation={3} sx={{ p: 3, pb: 4, flex: 1 }}>
                     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                        <Upload multiple value={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
+                        <Upload disabled={isFeatureDisabled} multiple value={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
                         {loading && <Box sx={{ mb: 3 }}>
                             <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '12px', sm: '14px', md: '16px' } }}>
                                 ⚠️ O processo de importação pode levar um ou dois minutos, dependendo do tamanho dos arquivos. Por favor, aguarde até que a importação seja concluída.
@@ -188,7 +205,7 @@ export function AiWalletImporter({ }) {
                                     variant="contained"
                                     color="error"
                                     onClick={handleRemoveAllFiles}
-                                    disabled={loading}
+                                    disabled={isFeatureDisabled || loading}
                                 >
                                     Remover arquivos
                                 </Button>
@@ -197,7 +214,7 @@ export function AiWalletImporter({ }) {
                                 variant="contained"
                                 startIcon={<Iconify icon="eva:cloud-upload-fill" />}
                                 onClick={handleUpload}
-                                disabled={loading}
+                                disabled={isFeatureDisabled || loading}
                                 loading={loading}
                                 loadingPosition="end"
                             >

@@ -6,10 +6,11 @@ import { AssetDetails } from '../asset-details';
 import { LocalizationProvider } from 'src/locales';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import { IconButton, Tooltip } from '@mui/material';
+import { Alert, IconButton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { AssetReportAIModal } from 'src/components/asset-report-ai-modal';
 import axios from 'src/lib/axios';
+import { useTokenUsage } from 'src/context/TokenUsage';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,9 @@ export function AssetDetailsView() {
   const [proftability, setProftability] = useState(null);
 
   const tickerString = String(ticker || '').toUpperCase();
+
+  const { tokenUsage } = useTokenUsage();
+  const [isFeatureDisabled, setIsFeatureDisabled] = useState(false);
 
   useEffect(() => {
     axios.get(`/ticker/get-proftability-by-ticker/${tickerString}`)
@@ -122,6 +126,12 @@ export function AssetDetailsView() {
     setAssetReportModalOpen(true);
   };
 
+  useEffect(() => {
+    if (tokenUsage >= 100) {
+      setIsFeatureDisabled(true);
+    }
+  }, [tokenUsage]);
+
   return (
     <DashboardContent>
       <CustomBreadcrumbs
@@ -134,13 +144,13 @@ export function AssetDetailsView() {
         sx={{ mb: { xs: 3, md: 5 } }}
         action={
           <>
-            <Tooltip title="Momento da empresa: IA gera relatório levando em consideração os dados atuais do ativo">
+            {!isFeatureDisabled && <Tooltip title="Momento da empresa: IA gera relatório levando em consideração os dados atuais do ativo">
               <IconButton
                 onClick={handleAskAIReport}
               >
                 <AutoAwesomeIcon />
               </IconButton>
-            </Tooltip>
+            </Tooltip>}
 
             <AssetReportAIModal reportData={reportData} handleClose={handleCloseModalAssetReport} isOpen={isAssetReportAIModalOpen} />
           </>

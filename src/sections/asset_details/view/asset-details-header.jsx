@@ -7,7 +7,12 @@ import IconButton from '@mui/material/IconButton';
 import { Box, Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
-export function AssetDetailsHeader({ tickerData }) {
+export function AssetDetailsHeader({
+    tickerData,
+    refCompany,
+    refIndicators,
+    refPrice,
+}) {
     if (!tickerData) {
         return (
             <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1 }} flexDirection={{ xs: 'column', md: 'row' }}>
@@ -32,6 +37,17 @@ export function AssetDetailsHeader({ tickerData }) {
     const companyData = tickerData.tickerCompanyInfo.company;
     tickerData = tickerData.tickerCompanyInfo;
 
+    const scrollToSection = (ref) => {
+        if (!ref.current) return;
+
+        const top = ref.current.getBoundingClientRect().top + window.scrollY - 70;
+
+        window.scrollTo({
+            top,
+            behavior: 'smooth',
+        });
+    }
+
     return (
         <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1, position: "relative" }} flexDirection={{ xs: 'column', md: 'row' }}>
             <Box display="flex" alignItems="center" gap={2} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
@@ -49,33 +65,29 @@ export function AssetDetailsHeader({ tickerData }) {
             <Box sx={{ mt: { xs: 4, md: 0 }, justifyContent: { xs: 'center', md: 'flex-end' } }} style={{ color: "#fff" }} flexDirection='row' display="flex" gap={2}>
                 <Box display="flex" gap={2} justifyContent={'center'} flexDirection='row'>
                     <Box display={'flex'} gap={1}>
-                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 } }}>
-                            <ApartmentIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
-                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Empresa</Typography>
-                        </IconButton>
-                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 } }}>
-                            <MonetizationOnIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
-                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Contábil</Typography>
-                        </IconButton>
-                    </Box>
-                    <Box display={'flex'} gap={1}>
-                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 } }}>
-                            <BarChartIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
-                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Indicadores</Typography>
-                        </IconButton>
-                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 } }}>
+                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 }, cursor: 'pointer', borderRadius: 10, width: "80px" }} onClick={() => scrollToSection(refPrice)}>
                             <TimelineIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
                             <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Cotação</Typography>
                         </IconButton >
+                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 }, cursor: 'pointer', borderRadius: 10, width: "80px" }} onClick={() => scrollToSection(refIndicators)}>
+                            <BarChartIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
+                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Indicadores</Typography>
+                        </IconButton>
+                    </Box>
+                    <Box display={'flex'} gap={1}>
+                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 }, cursor: 'pointer', borderRadius: 10, width: "80px" }} onClick={() => scrollToSection(refCompany)}>
+                            <ApartmentIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
+                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Empresa</Typography>
+                        </IconButton>
                     </Box>
                 </Box >
 
-                <IconButton
+                {/* <IconButton
                     variant="outlined"
                     sx={{ height: "30px", marginLeft: "30px", position: { xs: 'absolute', md: 'relative' }, top: { xs: '0', md: 'auto' }, right: { xs: '0', md: 'auto' } }}
                 >
                     <StarBorderIcon />
-                </IconButton>
+                </IconButton> */}
             </Box >
         </Box >
     );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Box, Divider, Paper, Typography } from '@mui/material';
 import { AssetDetailsHeader } from './view/asset-details-header';
 import { CardAssetDetails } from './card-asset-details';
@@ -30,11 +30,14 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
     const priceNow = tickerInfo ? tickerInfo.current_price : 0;
 
     const variation12M = !isEmpty(tickerData?.historicalQuotesData) ? (priceNow / price12MAgo) - 1 : 0;
+    const refCompany = useRef(null);
+    const refIndicators = useRef(null);
+    const refPrice = useRef(null);
 
     return (
         <>
             <Paper elevation={3} style={{ padding: '1rem' }}>
-                <AssetDetailsHeader tickerData={tickerData} />
+                <AssetDetailsHeader tickerData={tickerData} refCompany={refCompany} refIndicators={refIndicators} refPrice={refPrice} />
             </Paper>
 
             <Box sx={{ mt: 2 }} gap={2} display={'flex'} flexWrap={'wrap'}>
@@ -84,7 +87,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
                 />
             </Box>
 
-            <Box>
+            <Box ref={refPrice} >
                 <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${tickerData?.name ?? ""} (${ticker.toUpperCase()})`} />
             </Box>
 
@@ -92,7 +95,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
 
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
-            <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }}>INDICADORES FUNDAMENTALISTAS</Typography>
+            <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refIndicators}>INDICADORES FUNDAMENTALISTAS</Typography>
             <Box display={'flex'} justifyContent={'space-between'} width={"100%"} flexWrap={'wrap'} gap={2}>
                 <FundamentalIndicatorCard tickerData={tickerData} />
             </Box>
@@ -105,9 +108,93 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
 
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
-
             <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }}>HISTÓRICO DE DIVIDENDOS DE {ticker}</Typography>
             <DividendsHistoric historicalDividendYieldData={historicalDividendYieldData} />
+
+            <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
+
+            <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refCompany}>INFORMAÇÕES DA EMPRESA</Typography>
+            <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, mb: 3 }}>
+                    <Box sx={{ flex: '0 0 100px', display: 'flex', justifyContent: 'center' }}>
+                        {tickerData?.tickerCompanyInfo?.ticker ? (
+                            <Box
+                                component="img"
+                                src={`/src/assets/tickers/${tickerData?.tickerCompanyInfo?.ticker}.jpg`}
+                                alt={`Logo ${companyInfo?.name || ticker}`}
+                                sx={{ maxWidth: '100%', maxHeight: '100px', objectFit: 'contain', borderRadius: 1 }}
+                            />
+                        ) : (
+                            <Box
+                                sx={{
+                                    width: '100%',
+                                    height: '100px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    bgcolor: 'background.neutral',
+                                    borderRadius: 1,
+                                }}
+                            >
+                                <Typography variant="body2" color="text.secondary" width={65}>Logo não disponível</Typography>
+                            </Box>
+                        )}
+                    </Box>
+
+                    <Box sx={{ flex: 1 }}>
+                        <Typography variant="h5" gutterBottom>{companyInfo?.name || '-'}</Typography>
+
+                        <Typography variant="body2" paragraph sx={{ mb: 2 }}>
+                            {companyInfo?.about || 'Informações sobre a empresa não disponíveis'}
+                        </Typography>
+
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary">Setor</Typography>
+                                <Typography variant="body2" gutterBottom>{companyInfo?.b3_sector || '-'}</Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary">Subsetor</Typography>
+                                <Typography variant="body2" gutterBottom>{companyInfo?.b3_subsector || '-'}</Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary">Segmento</Typography>
+                                <Typography variant="body2" gutterBottom>{companyInfo?.b3_segment || '-'}</Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary">CNPJ</Typography>
+                                <Typography variant="body2" gutterBottom>{companyInfo?.cnpj || '-'}</Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary">Tipo</Typography>
+                                <Typography variant="body2" gutterBottom>
+                                    {companyInfo?.is_state_owned ? 'Estatal' : 'Privada'}
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary">Fundação</Typography>
+                                <Typography variant="body2" gutterBottom>
+                                    {companyInfo?.founding_date ? new Date(companyInfo.founding_date).toLocaleDateString() : '-'}
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary">Atividade Principal</Typography>
+                                <Typography variant="body2" gutterBottom>{companyInfo?.main_activity || '-'}</Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary">Website</Typography>
+                                {companyInfo?.website ? (
+                                    <Typography variant="body2" component="a" href={companyInfo.website} target="_blank" rel="noopener noreferrer" sx={{ color: 'primary.main', textDecoration: 'none' }}>
+                                        {companyInfo.website}
+                                    </Typography>
+                                ) : (
+                                    <Typography variant="body2">-</Typography>
+                                )}
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+            </Paper>
         </>
     );
 }

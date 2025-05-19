@@ -47,7 +47,7 @@ export function TickerSelector({
             if (searchTickerText.length > 2) {
                 fetchTickers(searchTickerText);
             }
-        }, 1000);
+        }, 100);
 
         return () => clearTimeout(delayDebounceFn);
     }, [searchTickerText, selectedTickers]);

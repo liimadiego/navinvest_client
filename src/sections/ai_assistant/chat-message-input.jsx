@@ -25,7 +25,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
-export function ChatMessageInput() {
+export function ChatMessageInput({ isDisabled = false }) {
   const { user } = useAuthContext();
   const me = user?.id || 1;
   const { chatId, chatHistory, setChatHistory } = useChat();
@@ -110,18 +110,26 @@ export function ChatMessageInput() {
         name="chat-message"
         id="chat-message-input"
         value={message}
-        onKeyUp={handleSendMessageEnter}
-        onChange={handleChangeMessage}
-        placeholder={globalThis.getTranslation('type_message')}
+        onKeyUp={isDisabled ? null : handleSendMessageEnter}
+        onChange={isDisabled ? null : handleChangeMessage}
+        placeholder={isDisabled ? 'Limite de IA deste mês atingido' : globalThis.getTranslation('type_message')}
         autoComplete='off'
+        disabled={isDisabled}
         startAdornment={
-          <IconButton onClick={handleToggleEmojiPicker}>
+          <IconButton
+            onClick={isDisabled ? null : handleToggleEmojiPicker}
+            disabled={isDisabled}
+            sx={{ opacity: isDisabled ? 0.5 : 1 }}
+          >
             <Iconify icon="eva:smiling-face-fill" />
           </IconButton>
         }
-        //sendMessage Icon
         endAdornment={
-          <IconButton onClick={handleSendMessage}>
+          <IconButton
+            onClick={isDisabled ? null : handleSendMessage}
+            disabled={isDisabled}
+            sx={{ opacity: isDisabled ? 0.5 : 1 }}
+          >
             <SendIcon />
           </IconButton>
         }
@@ -131,10 +139,14 @@ export function ChatMessageInput() {
             height: 56,
             flexShrink: 0,
             borderTop: `solid 1px ${theme.vars.palette.divider}`,
+            opacity: isDisabled ? 0.5 : 1,
+            '& .MuiInputBase-input': {
+              cursor: isDisabled ? 'not-allowed' : 'text',
+            },
           }),
         ]}
       />
-      {emojiPickerOpen && (
+      {emojiPickerOpen && !isDisabled && (
         <Box sx={{ position: 'absolute', bottom: 60 }}>
           <EmojiPicker
             onEmojiClick={handleSelectEmoji}

@@ -11,12 +11,22 @@ import { ChatLayout } from '../layout';
 import { ChatMessageList } from '../chat-message-list';
 import { ChatMessageInput } from '../chat-message-input';
 import { useChat } from 'src/context/ChatContext';
+import { useTokenUsage } from 'src/context/TokenUsage';
+import { Alert } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export function AIAssistantView() {
   const [messages, setMessages] = useState([]);
   const { chatHistory } = useChat();
+  const { tokenUsage } = useTokenUsage();
+  const [isFeatureDisabled, setIsFeatureDisabled] = useState(false);
+
+  useEffect(() => {
+    if (tokenUsage >= 100) {
+      setIsFeatureDisabled(true);
+    }
+  }, [tokenUsage]);
 
   useEffect(() => {
     setMessages(chatHistory);
@@ -30,7 +40,14 @@ export function AIAssistantView() {
       <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
         {globalThis.getTranslation('chat_with')} {globalThis.getTranslation('ai_assistant_name')}
       </Typography>
-
+      {isFeatureDisabled && (
+        <Alert
+          severity="warning"
+          sx={{ mb: 2 }}
+        >
+          Limite de uso de IA mensal excedido. Aguarde até o próximo mês ou atualize seu plano para continuar usando o assistente.
+        </Alert>
+      )}
       <ChatLayout
         slots={{
           header: (
@@ -40,6 +57,7 @@ export function AIAssistantView() {
           ),
           main: (
             <>
+
               {messages.length === 0 ? (
                 <EmptyContent
                   title={globalThis.getTranslation('welcome')}
@@ -52,7 +70,7 @@ export function AIAssistantView() {
                 />
               )}
 
-              <ChatMessageInput />
+              <ChatMessageInput isDisabled={isFeatureDisabled} />
             </>
           ),
         }}

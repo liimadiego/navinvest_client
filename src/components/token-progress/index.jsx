@@ -3,8 +3,10 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import InfoIcon from '@mui/icons-material/Info';
 import { useEffect, useState } from "react";
 import axios from 'src/lib/axios';
+import { useTokenUsage } from 'src/context/TokenUsage';
 
-export function TokenProgress() {
+export function TokenProgress({ sx = {} }) {
+    const { _tokenUsage, setTokenUsage } = useTokenUsage();
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
 
@@ -13,8 +15,10 @@ export function TokenProgress() {
             .then((response) => {
                 if ((response.data.tokens_used * 100) > 100) {
                     setProgress(100);
+                    setTokenUsage(100);
                 } else {
                     setProgress(parseInt(response.data.tokens_used * 100));
+                    setTokenUsage(parseInt(response.data.tokens_used * 100));
                 }
 
                 setError(null);
@@ -41,7 +45,7 @@ export function TokenProgress() {
 
     return (
         error === null ?
-            <>
+            <Box sx={{ display: 'flex', alignItems: 'center', ...sx }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Tooltip title="Este indicador mostra quanto do seu limite mensal de uso da inteligência artificial você já utilizou. Cada interação com a IA consome uma quantidade de tokens. Quando atingir 100%, você precisará aguardar a renovação no próximo mês ou mudar de plano para continuar usando.">
                         <IconButton sx={{ mr: 0, transform: 'scale(0.7) translate(5px, -1px)' }}>
@@ -50,7 +54,7 @@ export function TokenProgress() {
                     </Tooltip>
                     <Typography
                         sx={{
-                            display: { xs: 'none', sm: 'block' },
+                            display: { sm: 'block' },
                             color: 'text.secondary',
                             fontWeight: 500,
                             fontSize: '0.725rem',
@@ -62,11 +66,11 @@ export function TokenProgress() {
                 </Box>
                 <Typography
                     sx={{
-                        display: { xs: 'none', sm: 'block' },
+                        display: { sm: 'block' },
                         color: 'text.secondary',
                         fontWeight: 500,
                         fontSize: '0.725rem',
-                        mr: .5
+                        mr: 1.5
                     }}
                 >
                     {progress}%
@@ -74,7 +78,7 @@ export function TokenProgress() {
                 <Box sx={{ width: '90px', height: '10px', borderRadius: '5px' }}>
                     <BorderLinearProgress variant="determinate" value={progress} />
                 </Box>
-            </> :
+            </Box> :
             <></>
     )
 }

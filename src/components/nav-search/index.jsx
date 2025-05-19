@@ -16,7 +16,7 @@ export function NavSearch() {
     return (
         <>
             <SearchModal handleClose={handleCloseModalSearch} isOpen={searchModalOpen}></SearchModal>
-            <Box sx={{ px: 2, mb: 1, pt: 2 }}>
+            <Box sx={{ px: 2, mb: 1 }}>
                 <Button
                     onClick={handleOpenModalSearch}
                     sx={{

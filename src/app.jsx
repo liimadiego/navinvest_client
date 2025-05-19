@@ -17,6 +17,7 @@ import { BacktestProvider } from './context/BacktestContext';
 import { WalletProvider } from './context/WalletContext';
 import { WalletsProvider } from './context/WalletsContext';
 import { ChatProvider } from './context/ChatContext';
+import { TokenUsageProvider } from './context/TokenUsage';
 
 globalThis.getTranslation = getTranslation;
 
@@ -29,27 +30,29 @@ export default function App({ children }) {
   return (
     <AuthProvider>
       <SettingsProvider defaultSettings={defaultSettings}>
-        <WalletsProvider>
-          <WalletProvider>
-            <ChatProvider>
-              <BacktestProvider>
-                <LanguageProvider>
-                  <ThemeProvider
-                    noSsr
-                    defaultMode={themeConfig.defaultMode}
-                    modeStorageKey={themeConfig.modeStorageKey}
-                  >
-                    <MotionLazy>
-                      <ProgressBar />
-                      <SettingsDrawer defaultSettings={defaultSettings} />
-                      {children}
-                    </MotionLazy>
-                  </ThemeProvider>
-                </LanguageProvider>
-              </BacktestProvider>
-            </ChatProvider>
-          </WalletProvider>
-        </WalletsProvider>
+        <TokenUsageProvider>
+          <WalletsProvider>
+            <WalletProvider>
+              <ChatProvider>
+                <BacktestProvider>
+                  <LanguageProvider>
+                    <ThemeProvider
+                      noSsr
+                      defaultMode={themeConfig.defaultMode}
+                      modeStorageKey={themeConfig.modeStorageKey}
+                    >
+                      <MotionLazy>
+                        <ProgressBar />
+                        <SettingsDrawer defaultSettings={defaultSettings} />
+                        {children}
+                      </MotionLazy>
+                    </ThemeProvider>
+                  </LanguageProvider>
+                </BacktestProvider>
+              </ChatProvider>
+            </WalletProvider>
+          </WalletsProvider>
+        </TokenUsageProvider>
       </SettingsProvider>
     </AuthProvider>
   );
