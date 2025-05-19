@@ -88,7 +88,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
             </Box>
 
             <Box ref={refPrice} >
-                <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${tickerData?.name ?? ""} (${ticker.toUpperCase()})`} />
+                <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${companyInfo?.trade_name ? companyInfo?.trade_name : ""} (${ticker.toUpperCase()})`} />
             </Box>
 
             <VerticalTable proftability={proftability} />
@@ -121,7 +121,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
                             <Box
                                 component="img"
                                 src={`/src/assets/tickers/${tickerData?.tickerCompanyInfo?.ticker}.jpg`}
-                                alt={`Logo ${companyInfo?.name || ticker}`}
+                                alt={`Logo ${companyInfo?.trade_name || ticker}`}
                                 sx={{ maxWidth: '100%', maxHeight: '100px', objectFit: 'contain', borderRadius: 1 }}
                             />
                         ) : (
@@ -142,7 +142,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
                     </Box>
 
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h5" gutterBottom>{companyInfo?.name || '-'}</Typography>
+                        <Typography variant="h5" gutterBottom>{companyInfo?.trade_name || '-'}</Typography>
 
                         <Typography variant="body2" paragraph sx={{ mb: 2 }}>
                             {companyInfo?.about || 'Informações sobre a empresa não disponíveis'}

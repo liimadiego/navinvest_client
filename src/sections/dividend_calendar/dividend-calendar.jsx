@@ -35,7 +35,6 @@ import { fCurrency, fPercent } from 'src/utils/format-number';
 import axios from 'src/lib/axios';
 
 export function DividendCalendar() {
-    //ref para dividendos futuros
     const dividendsRef = useRef(null);
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -96,7 +95,7 @@ export function DividendCalendar() {
                 const dividends = response.data.map(dividend => ({
                     id: dividend.id,
                     symbol: dividend.ticker,
-                    companyName: dividend.company.name,
+                    companyName: dividend.company.trade_name,
                     amount: parseFloat(dividend.adj_amount),
                     exDate: new Date(new Date(`${dividend.ex_date} 12:00:00`)),
                     paymentDate: new Date(new Date(`${dividend.payable_date} 12:00:00`)),
@@ -128,7 +127,7 @@ export function DividendCalendar() {
     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
     return (
-        <Container maxWidth="lg">
+        <Box>
             {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Box sx={{ opacity: 0 }}>.</Box>
                 <Box>
@@ -244,12 +243,15 @@ export function DividendCalendar() {
                                 // Day cell
                                 const currentDay = day;
                                 const dividendsToday = dividendData.filter(dividend =>
-                                    dividend.exDate.getDate() === currentDay);
+                                    dividend.paymentDate.getDate() === currentDay);
+
+                                const uniqueDividendSymbols = [...new Set(dividendsToday.map(div => div.symbol))];
+                                const dividendCount = uniqueDividendSymbols.length;
 
                                 daysInWeek.push(
                                     <Grid item xs={1.714} sm={1.714} md={1.714} key={`day-${day}`} onClick={() => handleScrollToDividends()}>
                                         <Paper
-                                            elevation={dividendsToday.length > 0 ? 3 : 2}
+                                            elevation={dividendCount > 0 ? 3 : 2}
                                             sx={{
                                                 height: { xs: 40, sm: 80 },
                                                 display: 'flex',
@@ -257,8 +259,8 @@ export function DividendCalendar() {
                                                 justifyContent: { xs: 'center', sm: 'flex-start' },
                                                 alignItems: { xs: 'center', sm: 'flex-start' },
                                                 p: 1,
-                                                bgcolor: dividendsToday.length > 0 ? 'background.default' : 'background.neutral',
-                                                cursor: dividendsToday.length > 0 ? 'pointer' : 'default',
+                                                bgcolor: dividendCount > 0 ? 'background.default' : 'background.neutral',
+                                                cursor: dividendCount > 0 ? 'pointer' : 'default',
                                                 '&:hover': {
                                                     bgcolor: theme.palette.mode === 'light' ? 'background.darker' : 'action.hover',
                                                 }
@@ -267,25 +269,23 @@ export function DividendCalendar() {
                                             <Typography variant="body2" fontWeight={day === new Date().getDate() && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear() ? 'bold' : 'normal'}>
                                                 {day}
                                             </Typography>
-                                            {dividendsToday.length > 0 && (
+                                            {dividendCount > 0 && (
                                                 <Box sx={{ mt: 'auto', overflow: 'hidden', display: 'flex', alignItems: 'flex-start' }}>
-                                                    {dividendsToday.slice(0, 1).map(dividend => (
-                                                        <>
+                                                    {uniqueDividendSymbols.slice(0, 1).map(symbol => (
+                                                        <React.Fragment key={symbol}>
                                                             <Chip
-                                                                key={dividend.id}
-                                                                label={dividend.symbol}
+                                                                label={symbol}
                                                                 size="small"
                                                                 color="primary"
                                                                 sx={{ mb: 0.5, maxWidth: '100%', display: { xs: 'none', sm: 'block' } }}
                                                             />
                                                             <Box sx={{ display: { xs: 'block', sm: 'none' }, width: '20px', height: '10px', backgroundColor: 'primary.main', borderRadius: 1 }}>
-
                                                             </Box>
-                                                        </>
+                                                        </React.Fragment>
                                                     ))}
-                                                    {dividendsToday.length > 1 && (
+                                                    {dividendCount > 1 && (
                                                         <Typography variant="caption" sx={{ ml: 1, display: { xs: 'none', sm: 'block' } }} color="text.secondary">
-                                                            +{dividendsToday.length - 1}
+                                                            +{dividendCount - 1}
                                                         </Typography>
                                                     )}
                                                 </Box>
@@ -355,6 +355,6 @@ export function DividendCalendar() {
                     </Table>
                 </TableContainer>
             </Paper>
-        </Container>
+        </Box>
     );
 }

@@ -59,7 +59,7 @@ export function AssetDetailsHeader({
                 />
                 <Box style={{ height: 70 }}>
                     <Typography variant="h5">{tickerData.ticker}</Typography>
-                    <Typography variant="subtitle2">{companyData?.name}</Typography>
+                    <Typography variant="subtitle2">{companyData?.trade_name}</Typography>
                 </Box>
             </Box>
             <Box sx={{ mt: { xs: 4, md: 0 }, justifyContent: { xs: 'center', md: 'flex-end' } }} style={{ color: "#fff" }} flexDirection='row' display="flex" gap={2}>
