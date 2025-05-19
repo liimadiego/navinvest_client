@@ -249,7 +249,7 @@ export function DividendCalendar() {
                                 const dividendCount = uniqueDividendSymbols.length;
 
                                 daysInWeek.push(
-                                    <Grid item xs={1.714} sm={1.714} md={1.714} key={`day-${day}`} onClick={() => handleScrollToDividends()}>
+                                    <Grid item xs={1.714} sm={1.714} md={1.714} key={`day-${day}`} onClick={() => dividendCount > 0 && handleScrollToDividends()}>
                                         <Paper
                                             elevation={dividendCount > 0 ? 3 : 2}
                                             sx={{
