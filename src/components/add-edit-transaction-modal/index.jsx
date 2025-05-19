@@ -49,7 +49,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         setExpirationDate('');
         setIssuer('');
         setInvestmentType('CDB');
-        setIndexationType('PRE_FIXED');
+        setIndexationType('POST_FIXED');
         setIndexer('CDI');
         setIndexerRate('');
         setCurrency('BRL');
@@ -194,6 +194,8 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
             return 'Informe a taxa pré-fixada do componente CDI+. Por exemplo: CDI + 4,00%.';
         } else if (indexer === 'IPCA+') {
             return 'Informe aqui a taxa anual a ser aplicada, além do IPCA. Exemplo: /,00%.';
+        } else if (indexer === '+') {
+            return 'Informe aqui a taxa pré-fixada do seu investimento. Exemplo: 4,00%.';
         }
         return 'Informe aqui quantos % do CDI esse investimento está pagando. Por exemplo: 116,00%';
     }
@@ -213,6 +215,13 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         }
 
         setIndexerRate(value);
+    };
+
+    const handleIndexationChange = (e) => {
+        const indexationType = e.target.value;
+        setIndexationType(indexationType);
+        if (indexationType === "PRE_FIXED")
+            setIndexer('+');
     };
 
     return (
@@ -307,7 +316,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     select
                     label="Tipo de indexação"
                     value={indexationType}
-                    onChange={(e) => setIndexationType(e.target.value)}
+                    onChange={handleIndexationChange}
                     fullWidth
                     sx={{ mb: 2 }}
                     slotProps={{
@@ -363,16 +372,18 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     value={indexer}
                     onChange={(e) => setIndexer(e.target.value)}
                     fullWidth
-                    sx={{ mb: 2 }}
+                    sx={{ mb: 2, display: indexationType === "PRE_FIXED" ? "none" : "block" }}
+                    disabled={(indexationType === "PRE_FIXED")}
                     slotProps={{
                         select: {
                             native: true,
                         }
                     }}
                 >
-                    <option value="CDI">CDI</option>
-                    <option value="CDI+">CDI+</option>
-                    <option value="IPCA+">IPCA+</option>
+                    {indexationType === "PRE_FIXED" && <option value="+">-</option>}
+                    {indexationType !== "PRE_FIXED" && <option value="CDI">CDI</option>}
+                    {indexationType !== "PRE_FIXED" && <option value="CDI+">CDI+</option>}
+                    {indexationType !== "PRE_FIXED" && <option value="IPCA+">IPCA+</option>}
                 </TextField>}
 
                 {assetType !== "FIXED_INCOME" && assetType !== "TREASURY" && <TextField
@@ -398,7 +409,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                 /> :
                     <TextField
                         fullWidth
-                        label="Taxa do indexador"
+                        label={indexationType === "PRE_FIXED" ? "Taxa anual pré fixada" : "Taxa do indexador"}
                         type="number"
                         value={indexerRate}
                         onChange={handleIndexerRateChange}

@@ -20,6 +20,7 @@ coverage
 .swc
 _static
 out
+dist/
 
 build
 
