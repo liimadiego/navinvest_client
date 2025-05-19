@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { AssetReportAIModal } from 'src/components/asset-report-ai-modal';
 import axios from 'src/lib/axios';
 import { useTokenUsage } from 'src/context/TokenUsage';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ export function AssetDetailsView() {
   const [chart, setChart] = useState({ series: [] });
   const [reportData, setReportData] = useState(null);
   const [proftability, setProftability] = useState(null);
+  const { user } = useAuthContext();
 
   const tickerString = String(ticker || '').toUpperCase();
 
@@ -127,10 +129,10 @@ export function AssetDetailsView() {
   };
 
   useEffect(() => {
-    if (tokenUsage >= 100) {
+    if (tokenUsage >= 100 || user?.plan === null) {
       setIsFeatureDisabled(true);
     }
-  }, [tokenUsage]);
+  }, [tokenUsage, user]);
 
   return (
     <DashboardContent>

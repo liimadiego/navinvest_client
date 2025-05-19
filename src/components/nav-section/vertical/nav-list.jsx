@@ -13,6 +13,7 @@ import { NavUl, NavLi, NavCollapse } from '../components';
 
 export function NavList({ data, depth, render, slotProps, currentRole, enabledRootRedirect }) {
   const { user } = useAuthContext();
+  const useHasAccess = data.onlyPaying ? user?.plan !== null : true;
   const pathname = usePathname();
   const navItemRef = useRef(null);
 
@@ -37,7 +38,7 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
     <NavItem
       ref={navItemRef}
       // slots
-      path={!(data.onlyPaying && !user?.isPayingUser) ? data.path : ""}
+      path={useHasAccess ? data.path : ""}
       icon={data.icon}
       info={data.info}
       title={data.title}
@@ -45,12 +46,12 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
       // state
       open={open}
       active={isActive}
-      disabled={data.onlyPaying && !user?.isPayingUser}
+      disabled={!useHasAccess}
       // options
       depth={depth}
       render={render}
       hasChild={!!data.children}
-      externalLink={!(data.onlyPaying && !user?.isPayingUser) ? isExternalLink(data.path) : false}
+      externalLink={useHasAccess ? isExternalLink(data.path) : false}
       enabledRootRedirect={enabledRootRedirect}
       // styles
       slotProps={depth === 1 ? slotProps?.rootItem : slotProps?.subItem}

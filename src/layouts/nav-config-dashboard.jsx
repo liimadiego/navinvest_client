@@ -8,7 +8,6 @@ import WalletIcon from '@mui/icons-material/Wallet';
 import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 import AssistantIcon from '@mui/icons-material/Assistant';
 import { default as CurrencyConverterIcon } from '@mui/icons-material/CurrencyExchangeOutlined';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -54,11 +53,11 @@ export const navData = [
         path: paths.dashboard.root,
         icon: ICONS.dashboard
       },
-      { title: 'Assistente IA', path: paths.dashboard.ai_assistant, icon: <AssistantIcon />, onlyPaying: false },
-      { title: 'Backtest', path: paths.dashboard.backtest, icon: ICONS.analytics, onlyPaying: false },
+      { title: 'Assistente IA', path: paths.dashboard.ai_assistant, icon: <AssistantIcon />, onlyPaying: true },
+      { title: 'Backtest', path: paths.dashboard.backtest, icon: ICONS.analytics, onlyPaying: true },
       { title: 'Comparar Ativos', path: paths.dashboard.compare_assets, icon: ICONS.file },
       { title: 'Gerenciar Carteira', path: paths.dashboard.wallet_management, icon: <WalletIcon /> },
-      { title: 'Importar Carteira', path: paths.dashboard.ai_wallet_importer, icon: <SimCardDownloadIcon />, onlyPaying: false },
+      { title: 'Importar Carteira', path: paths.dashboard.ai_wallet_importer, icon: <SimCardDownloadIcon />, onlyPaying: true },
       { title: 'Conversor de Moedas', path: paths.dashboard.currency_converter, icon: <CurrencyConverterIcon /> },
       { title: 'Glossário do Investidor', path: paths.dashboard.investor_glossary, icon: ICONS.blog },
       { title: 'Agenda de Dividendos', path: paths.dashboard.dividend_calendar, icon: ICONS.calendar },

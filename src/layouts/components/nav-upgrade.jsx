@@ -20,6 +20,8 @@ import { useAuthContext } from 'src/auth/hooks';
 export function NavUpgrade({ sx, ...other }) {
   const { user } = useAuthContext()
 
+  const isFreeUser = !user?.plan || user.plan === 'free';
+
   return (
     <Box
       sx={[{ px: 2, py: 5, textAlign: 'center' }, ...(Array.isArray(sx) ? sx : [sx])]}
@@ -32,7 +34,7 @@ export function NavUpgrade({ sx, ...other }) {
           </Avatar>
 
           <Label
-            color="success"
+            color={isFreeUser ? "success" : "primary"}
             variant="filled"
             sx={{
               top: -6,
@@ -43,7 +45,7 @@ export function NavUpgrade({ sx, ...other }) {
               borderBottomLeftRadius: 2,
             }}
           >
-            Grátis
+            {isFreeUser ? 'Grátis' : user?.plan?.name?.charAt(0).toUpperCase() + user?.plan?.name?.slice(1)}
           </Label>
         </Box>
 
@@ -65,9 +67,19 @@ export function NavUpgrade({ sx, ...other }) {
           </Typography>
         </Box>
 
-        <Button variant="contained" href={paths.minimalStore} target="_blank" rel="noopener">
-          Acesse todas as ferramentas
-        </Button>
+        {isFreeUser ? (
+          <Button variant="contained" href={paths.minimalStore} target="_blank" rel="noopener">
+            Acesse todas as ferramentas
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            startIcon={<AutoAwesomeIcon />}
+            sx={{ color: 'var(--layout-nav-text-primary-color)' }}
+          >
+            Plano {user?.plan?.name.charAt(0).toUpperCase() + user?.plan?.name?.slice(1)}
+          </Button>
+        )}
       </Box>
     </Box>
   );
