@@ -1,0 +1,1 @@
+import{j as r}from"./index-CK_orulJ.js";import{d as a,b as o,c as n}from"./TableHead-acWD3YpY.js";function b({sx:i,headCells:t}){return r.jsx(a,{sx:i,children:r.jsx(o,{children:t.map(s=>r.jsx(n,{align:s.align||"left",sortDirection:!1,sx:[{width:s.width},...Array.isArray(s.sx)?s.sx:[s.sx]],children:s.label},s.id))})})}export{b as T};
