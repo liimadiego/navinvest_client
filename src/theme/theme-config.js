@@ -78,6 +78,8 @@ export const themeConfig = {
       700: '#454F5B',
       800: '#1C252E',
       900: '#141A21',
+      1000: '#10121A',
+      1100: '#0B0D14',
     },
     common: { black: '#000000', white: '#FFFFFF' },
   },

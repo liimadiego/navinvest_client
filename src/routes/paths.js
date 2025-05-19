@@ -56,5 +56,6 @@ export const paths = {
     ai_wallet_importer: `${ROOTS.DASHBOARD}/importar-carteira`,
     currency_converter: `${ROOTS.DASHBOARD}/conversor-moedas`,
     investor_glossary: `${ROOTS.DASHBOARD}/glossario-investidor`,
+    dividend_calendar: `${ROOTS.DASHBOARD}/agenda-dividendos`,
   },
 };

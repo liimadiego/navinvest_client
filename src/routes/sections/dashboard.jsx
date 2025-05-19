@@ -25,6 +25,7 @@ const WalletManagementTransactionsPage = lazy(() => import('src/pages/dashboard/
 const AiWalletImporter = lazy(() => import('src/pages/dashboard/ai_wallet_importer'));
 const CurrencyConverter = lazy(() => import('src/pages/dashboard/currency_converter'));
 const InvestorGlossary = lazy(() => import('src/pages/dashboard/investor_glossary'));
+const DividendCalendar = lazy(() => import('src/pages/dashboard/dividend_calendar'));
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +61,7 @@ export const dashboardRoutes = [
       { path: 'importar-carteira', element: <AiWalletImporter /> },
       { path: 'conversor-moedas', element: <CurrencyConverter /> },
       { path: 'glossario-investidor', element: <InvestorGlossary /> },
+      { path: 'agenda-dividendos', element: <DividendCalendar /> },
     ],
   },
 ];

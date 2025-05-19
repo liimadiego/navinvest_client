@@ -52,8 +52,8 @@ export function fPercent(inputValue, options) {
 
   const fm = new Intl.NumberFormat(locale.code, {
     style: 'percent',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 1,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
     ...options,
   }).format(number / 100);
 
