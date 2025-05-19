@@ -321,7 +321,7 @@ export function DividendCalendar() {
                                 <TableCell>Nome</TableCell>
                                 <TableCell align='center'>Valor</TableCell>
                                 <TableCell align='center'>Data com</TableCell>
-                                <TableCell>Data de Pagamento</TableCell>
+                                <TableCell align='center'>Data de Pagamento</TableCell>
                                 {/* <TableCell align="right">Dividend Yield</TableCell> */}
                                 {/* <TableCell align="center">Favorito</TableCell> */}
                             </TableRow>
