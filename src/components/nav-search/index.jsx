@@ -26,7 +26,6 @@ export function NavSearch() {
                         pl: 1.5,
                         pb: 1,
                         pt: 1,
-                        display: 'flex',
                         alignItems: 'center',
                         borderRadius: 1,
                         '&:hover': {
