@@ -135,7 +135,7 @@ export function UpgradeBlock({ sx, ...other }) {
         }}
       >
         <Box component="span" sx={{ typography: 'h5', color: 'common.white' }}>
-          35% OFF
+          20% OFF
         </Box>
 
         <Box
@@ -147,11 +147,11 @@ export function UpgradeBlock({ sx, ...other }) {
             typography: 'subtitle2',
           }}
         >
-          Power up Productivity!
+          Invista com inteligência
         </Box>
 
         <Button variant="contained" size="small" color="warning">
-          Upgrade to Pro
+          Faça upgrade
         </Button>
       </Box>
     </Box>

@@ -121,83 +121,51 @@ export function AccountDrawer({ data = [], sx, ...other }) {
         slotProps={{ backdrop: { invisible: true } }}
         PaperProps={{ sx: { width: 320 } }}
       >
-        <IconButton
-          onClick={onClose}
-          sx={{
-            top: 12,
-            left: 12,
-            zIndex: 9,
-            position: 'absolute',
-          }}
-        >
-          <Iconify icon="mingcute:close-line" />
-        </IconButton>
+        <Box
+          sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
 
-        <Scrollbar>
-          <Box
+          <IconButton
+            onClick={onClose}
             sx={{
-              pt: 8,
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
+              top: 12,
+              left: 12,
+              zIndex: 9,
+              position: 'absolute',
             }}
           >
-            {renderAvatar()}
+            <Iconify icon="mingcute:close-line" />
+          </IconButton>
 
-            <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
-              {user?.displayName}
-            </Typography>
+          <Box>
+            <Box
+              sx={{
+                pt: 8,
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              {renderAvatar()}
 
-            <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }} noWrap>
-              {user?.email}
-            </Typography>
+              <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
+                {user?.displayName}
+              </Typography>
+
+              <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }} noWrap>
+                {user?.email}
+              </Typography>
+            </Box>
+
+            {/* {renderList()} */}
+
           </Box>
 
-          <Box
-            sx={{
-              p: 3,
-              gap: 1,
-              flexWrap: 'wrap',
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            {Array.from({ length: 3 }, (_, index) => (
-              <Tooltip
-                key={_mock.fullName(index + 1)}
-                title={`Switch to: ${_mock.fullName(index + 1)}`}
-              >
-                <Avatar
-                  alt={_mock.fullName(index + 1)}
-                  src={_mock.image.avatar(index + 1)}
-                  onClick={() => { }}
-                />
-              </Tooltip>
-            ))}
-
-            <Tooltip title="Add account">
-              <IconButton
-                sx={[
-                  (theme) => ({
-                    bgcolor: varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
-                    border: `dashed 1px ${varAlpha(theme.vars.palette.grey['500Channel'], 0.32)}`,
-                  }),
-                ]}
-              >
-                <Iconify icon="mingcute:add-line" />
-              </IconButton>
-            </Tooltip>
+          <Box sx={{ p: 2.5 }}>
+            <Box sx={{ py: 3 }}>
+              <UpgradeBlock />
+            </Box>
+            <SignOutButton onClose={onClose} />
           </Box>
-
-          {renderList()}
-
-          <Box sx={{ px: 2.5, py: 3 }}>
-            <UpgradeBlock />
-          </Box>
-        </Scrollbar>
-
-        <Box sx={{ p: 2.5 }}>
-          <SignOutButton onClose={onClose} />
         </Box>
       </Drawer>
     </>
