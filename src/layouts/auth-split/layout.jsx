@@ -6,6 +6,7 @@ import Alert from '@mui/material/Alert';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
+import IconButton from '@mui/material/IconButton';
 
 import { CONFIG } from 'src/global-config';
 
@@ -18,9 +19,17 @@ import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { SettingsButton } from '../components/settings-button';
 
+import BedtimeIcon from '@mui/icons-material/Bedtime';
+import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
+import { useTheme } from '@emotion/react';
+import { useColorScheme } from '@mui/material';
+
 // ----------------------------------------------------------------------
 
 export function AuthSplitLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md' }) {
+  const theme = useTheme();
+  const { mode, setMode } = useColorScheme();
+
   const renderHeader = () => {
     const headerSlotProps = {
       container: { maxWidth: false },
@@ -50,8 +59,19 @@ export function AuthSplitLayout({ sx, cssVars, children, slotProps, layoutQuery 
             Precisa de ajuda?
           </Link>
 
+
+          <IconButton
+            onClick={() => {
+              setMode(mode === 'light' ? 'dark' : 'light');
+              settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
+            }}
+            sx={{ color: 'inherit', mr: 1 }}
+          >
+            {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
+
+            {/*  */}
+          </IconButton>
           {/** @slot Settings button */}
-          <SettingsButton />
         </Box>
       ),
     };
