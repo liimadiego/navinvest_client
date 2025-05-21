@@ -1,5 +1,7 @@
 import { Box, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router';
 import ForbiddenIllustration from 'src/assets/illustrations/forbidden-illustration';
 import { useAuthContext } from 'src/auth/hooks';
 import { CONFIG } from 'src/global-config';
@@ -8,6 +10,14 @@ import { AiWalletImporterView } from 'src/sections/ai_wallet_importer/view/ai-wa
 export default function Page() {
   const metadata = { title: `Importar carteira | ${CONFIG.appName.toUpperCase()}` };
   const { user } = useAuthContext();
+  const userHasPlan = user?.plan !== null;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && user.plan === null) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user]);
 
   return (
     user && user.plan !== null ? <>

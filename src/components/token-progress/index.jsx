@@ -4,29 +4,33 @@ import InfoIcon from '@mui/icons-material/Info';
 import { useEffect, useState } from "react";
 import axios from 'src/lib/axios';
 import { useTokenUsage } from 'src/context/TokenUsage';
+import { useAuthContext } from "src/auth/hooks";
 
 export function TokenProgress({ sx = {} }) {
+    const { user } = useAuthContext();
+    const userHasPlan = user?.plan !== null;
     const { _tokenUsage, setTokenUsage } = useTokenUsage();
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('/users/token-usage')
-            .then((response) => {
-                if ((response.data.tokens_used * 100) > 100) {
-                    setProgress(100);
-                    setTokenUsage(100);
-                } else {
-                    setProgress(parseInt(response.data.tokens_used * 100));
-                    setTokenUsage(parseInt(response.data.tokens_used * 100));
-                }
+        if (userHasPlan) {
+            axios.get('/users/token-usage')
+                .then((response) => {
+                    if ((response.data.tokens_used * 100) > 100) {
+                        setProgress(100);
+                        setTokenUsage(100);
+                    } else {
+                        setProgress(parseInt(response.data.tokens_used * 100));
+                        setTokenUsage(parseInt(response.data.tokens_used * 100));
+                    }
 
-                setError(null);
-            })
-            .catch((error) => {
-                setError(error.response.data.message);
-            });
-
+                    setError(null);
+                })
+                .catch((error) => {
+                    setError(error.response.data.message);
+                });
+        }
     })
 
     const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -44,7 +48,7 @@ export function TokenProgress({ sx = {} }) {
     }));
 
     return (
-        error === null ?
+        error === null && userHasPlan ?
             <Box sx={{ display: 'flex', alignItems: 'center', ...sx }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Tooltip title="Este indicador mostra quanto do seu limite mensal de uso da inteligência artificial você já utilizou. Cada interação com a IA consome uma quantidade de tokens. Quando atingir 100%, você precisará aguardar a renovação no próximo mês ou mudar de plano para continuar usando.">

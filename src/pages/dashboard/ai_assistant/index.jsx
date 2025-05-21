@@ -8,6 +8,8 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import ForbiddenIllustration from "src/assets/illustrations/forbidden-illustration";
 import { Box, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -15,6 +17,16 @@ const metadata = { title: `Assistente IA | ${CONFIG.appName}` };
 
 export default function Page() {
   const { user } = useAuthContext();
+  const userHasPlan = user?.plan !== null;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && user.plan === null) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user]);
+
+
   return (
     user && user.plan !== null ? <>
       <Helmet>
