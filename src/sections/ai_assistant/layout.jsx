@@ -32,12 +32,14 @@ const LayoutRoot = styled('div')(({ theme }) => ({
 }));
 
 const LayoutHeader = styled('div')(({ theme }) => ({
-  height: 72,
+  height: 60,
   flexShrink: 0,
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(1, 1, 1, 2.5),
   borderBottom: `solid 1px ${theme.vars.palette.divider}`,
+  borderTopLeftRadius: theme.shape.borderRadius * 2,
+  borderTopRightRadius: theme.shape.borderRadius * 2,
 }));
 
 const LayoutNav = styled('div')(() => ({

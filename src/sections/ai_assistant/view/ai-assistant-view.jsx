@@ -13,6 +13,7 @@ import { ChatMessageInput } from '../chat-message-input';
 import { useChat } from 'src/context/ChatContext';
 import { useTokenUsage } from 'src/context/TokenUsage';
 import { Alert } from '@mui/material';
+import { background } from 'src/theme';
 
 // ----------------------------------------------------------------------
 
@@ -35,9 +36,9 @@ export function AIAssistantView() {
   return (
     <DashboardContent
       maxWidth={false}
-      sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column' }}
+      sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pb: 2 }}
     >
-      <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
+      <Typography variant={"h5"} sx={{ mb: { xs: 0, md: 3 }, display: { xs: 'none', md: 'block' } }}>
         {globalThis.getTranslation('chat_with')} {globalThis.getTranslation('ai_assistant_name')}
       </Typography>
       {isFeatureDisabled && (
@@ -57,7 +58,6 @@ export function AIAssistantView() {
           ),
           main: (
             <>
-
               {messages.length === 0 ? (
                 <EmptyContent
                   title={globalThis.getTranslation('welcome')}

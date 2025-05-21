@@ -34,7 +34,7 @@ export function ChatMessageItem({ message }) {
         <Stack
           sx={{
             p: 1.5,
-            maxWidth: '80%',
+            maxWidth: { xs: '95%', sm: '90%', md: '80%' },
             borderRadius: 1,
             typography: 'body2',
             bgcolor: message.warning ? '#7A4100' : 'background.neutral',
@@ -108,7 +108,7 @@ export function ChatMessageItem({ message }) {
               <Stack
                 sx={{
                   p: 1.5,
-                  width: '80%',
+                  width: { xs: '95%', sm: '90%', md: '80%' },
                   borderRadius: 1,
                   typography: 'body2',
                   bgcolor: message.warning ? '#7A4100' : 'background.neutral',
@@ -147,11 +147,11 @@ export function ChatMessageItem({ message }) {
             </Box>
           </Modal>
 
-
           <Stack
             sx={{
               p: 1.5,
-              width: '80%',
+              pl: 0.5,
+              width: { xs: '95%', sm: '90%', md: '80%' },
               borderRadius: 1,
               typography: 'body2',
               bgcolor: message.warning ? '#7A4100' : 'background.neutral',
@@ -201,7 +201,7 @@ export function ChatMessageItem({ message }) {
 
   return (
     <Box sx={{ mb: 1, display: 'flex', width: '100%' }}>
-      {!me && <Avatar alt={firstName} src={avatarUrl} sx={{ width: 32, height: 32, mr: 2 }} />}
+      {!me && <Avatar alt={firstName} src={avatarUrl} sx={{ width: 32, height: 32, mr: 2, display: { xs: 'none', sm: 'inlune-block' } }} />}
 
       <Stack alignItems={me ? 'flex-end' : 'flex-start'} sx={{ width: '100%' }}>
         {renderInfo()}
