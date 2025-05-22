@@ -59,6 +59,17 @@ export function AuthSplitLayout({ sx, cssVars, children, slotProps, layoutQuery 
             Precisa de ajuda?
           </Link>
 
+          <IconButton
+            onClick={() => {
+              setMode(mode === 'light' ? 'dark' : 'light');
+              settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
+            }}
+            sx={{ color: 'inherit', mr: 1 }}
+          >
+            {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
+
+            {/*  */}
+          </IconButton>
 
           <IconButton
             onClick={() => {

@@ -5,6 +5,7 @@ import { CONFIG } from 'src/global-config';
 
 import { authRoutes } from './auth';
 import { dashboardRoutes } from './dashboard';
+import { mainRoutes } from './main';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,9 @@ export const routesSection = [
 
   // Dashboard
   ...dashboardRoutes,
+
+  // Main
+  ...mainRoutes,
 
   // No match
   { path: '*', element: <Page404 /> },

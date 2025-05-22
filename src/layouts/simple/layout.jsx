@@ -13,11 +13,18 @@ import { SimpleCompactContent } from './content';
 import { MainSection } from '../core/main-section';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
-import { SettingsButton } from '../components/settings-button';
+import IconButton from '@mui/material/IconButton';
+
+import BedtimeIcon from '@mui/icons-material/Bedtime';
+import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
+import { useTheme } from '@emotion/react';
+import { useColorScheme } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export function SimpleLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md' }) {
+  const theme = useTheme();
+  const { mode, setMode } = useColorScheme();
   const renderHeader = () => {
     const headerSlotProps = { container: { maxWidth: false } };
 
@@ -40,8 +47,17 @@ export function SimpleLayout({ sx, cssVars, children, slotProps, layoutQuery = '
             Precisa de ajuda?
           </Link>
 
-          {/** @slot Settings button */}
-          <SettingsButton />
+          <IconButton
+            onClick={() => {
+              setMode(mode === 'light' ? 'dark' : 'light');
+              settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
+            }}
+            sx={{ color: 'inherit', mr: 1 }}
+          >
+            {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
+
+            {/*  */}
+          </IconButton>
         </Box>
       ),
     };

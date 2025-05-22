@@ -97,42 +97,49 @@ export const _socials = [
 
 // ----------------------------------------------------------------------
 
-export const _pricingPlans = [
+export const pricingPlans = [
   {
     subscription: 'basic',
     price: 0,
-    caption: 'Forever',
-    lists: ['3 prototypes', '3 boards', 'Up to 5 team members'],
-    labelAction: 'Current plan',
-  },
-  {
-    subscription: 'starter',
-    price: 4.99,
-    caption: 'Saving $24 a year',
-    lists: [
-      '3 prototypes',
-      '3 boards',
-      'Up to 5 team members',
-      'Advanced security',
-      'Issue escalation',
-    ],
-    labelAction: 'Choose starter',
+    priceYear: 0,
+    caption: 'Você não paga nada',
+    lists: ['Dashboard completo', 'Notícias', 'Backtest', 'Gerenciador de carteira (1 carteira)', 'Conversor de moedas', 'Detalhe dos ativos', 'Glossário de investimentos', 'Agenda de dividendos', 'Comparação de ativos (simples)'],
+    labelAction: 'Plano atual',
   },
   {
     subscription: 'premium',
-    price: 9.99,
-    caption: 'Saving $124 a year',
+    price: (59.99).toString().replace('.', ','),
+    priceYear: (((59.99 * 12) * 0.80) / 12).toFixed(2).toString().replace('.', ','),
+    caption: 'Economize R$ 144 por ano no plano anual',
     lists: [
-      '3 prototypes',
-      '3 boards',
-      'Up to 5 team members',
-      'Advanced security',
-      'Issue escalation',
-      'Issue development license',
-      'Permissions & workflows',
+      'Todos os recursos do plano básico',
+      'Gerenciador de carteira (até 3 carteiras)',
+      'Comparação de ativos (com relatório da IA)',
+      'Assistente de investimentos com IA (24h)',
+      'Importador inteligente de carteira',
+      'Momento da empresa com IA',
+      'Navi Diário (Jornal de investimentos gerado por IA)',
+      'Importação automática de portfólio da B3'
+
     ],
-    labelAction: 'Choose premium',
+    labelAction: 'Testar 7 dias grátis',
+    iaLimitExplained: 'Para garantir a qualidade e estabilidade do serviço para todos, este plano inclui um limite generoso de uso da nossa Inteligência Artificial. Mas não se preocupe: o limite é bem alto e cobre centenas de interações mensais, e você sempre poderá acompanhar seu uso dentro da plataforma. Caso você se aproxime do limite, será possível identificar com antecedência.'
   },
+  // {
+  //   subscription: 'premium',
+  //   price: 9.99,
+  //   caption: 'Saving $124 a year',
+  //   lists: [
+  //     '3 prototypes',
+  //     '3 boards',
+  //     'Up to 5 team members',
+  //     'Advanced security',
+  //     'Issue escalation',
+  //     'Issue development license',
+  //     'Permissions & workflows',
+  //   ],
+  //   labelAction: 'Choose premium',
+  // },575,88
 ];
 
 // ----------------------------------------------------------------------

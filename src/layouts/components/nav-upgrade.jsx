@@ -68,7 +68,7 @@ export function NavUpgrade({ sx, ...other }) {
         </Box>
 
         {isFreeUser ? (
-          <Button variant="contained" href={paths.minimalStore} target="_blank" rel="noopener">
+          <Button variant="contained" href={paths.pricing} target="_blank" rel="noopener">
             Acesse todas as ferramentas
           </Button>
         ) : (
