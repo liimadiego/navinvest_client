@@ -23,8 +23,8 @@ const PricingPage = lazy(() => import('src/pages/pricing'));
 // const PostListPage = lazy(() => import('src/pages/post/list'));
 // const PostDetailsPage = lazy(() => import('src/pages/post/details'));
 // // Error
-const Page500 = lazy(() => import('src/pages/error/500'));
-const Page403 = lazy(() => import('src/pages/error/403'));
+// const Page500 = lazy(() => import('src/pages/error/500'));
+// const Page403 = lazy(() => import('src/pages/error/403'));
 const Page404 = lazy(() => import('src/pages/error/404'));
 // // Blank
 // const BlankPage = lazy(() => import('src/pages/blank'));
@@ -104,9 +104,9 @@ export const mainRoutes = [
       {
         path: 'error',
         children: [
-          { path: '500', element: <Page500 /> },
+          // { path: '500', element: <Page500 /> },
           { path: '404', element: <Page404 /> },
-          { path: '403', element: <Page403 /> },
+          // { path: '403', element: <Page403 /> },
         ],
       },
     ],
