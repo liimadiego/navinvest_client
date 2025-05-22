@@ -57,8 +57,8 @@ export function PricingView() {
           <Box sx={{ position: 'relative' }}>
             <Box
               sx={{
-                left: 12,
-                bottom: 12,
+                left: 6,
+                bottom: 15,
                 display: 'flex',
                 position: 'absolute',
               }}
@@ -66,7 +66,7 @@ export function PricingView() {
               {arrowIcon}
               <Box
                 component="span"
-                sx={{ whiteSpace: 'nowrap', color: 'success.main', typography: 'overline' }}
+                sx={{ whiteSpace: 'nowrap', color: 'success.main', typography: 'overline', fontSize: { xs: 10, sm: 11, md: 12 } }}
               >
                 economize 20%
               </Box>
