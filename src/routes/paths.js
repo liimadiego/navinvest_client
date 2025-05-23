@@ -9,7 +9,9 @@ const ROOTS = {
 
 export const paths = {
   faqs: '/faqs',
-  pricing: '/pricing',
+  pricing: '/planos',
+  privacy_policy: '/politica-privacidade',
+  terms_service: '/termos-servicos',
   // AUTH
   auth: {
     amplify: {

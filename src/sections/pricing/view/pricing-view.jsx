@@ -28,7 +28,7 @@ const arrowIcon = (
 // ----------------------------------------------------------------------
 
 export function PricingView() {
-  const [isYearly, setIsYearly] = useState(false);
+  const [isYearly, setIsYearly] = useState(true);
 
   return (
     <Container sx={{ pt: { xs: 3, md: 5 }, pb: 10 }}>
@@ -51,6 +51,7 @@ export function PricingView() {
               id: 'yearly-pricing-switch',
               'aria-label': 'Alternador de preços anuais',
             }}
+            checked={isYearly}
             onChange={(event) => setIsYearly(event.target.checked)}
           />
 

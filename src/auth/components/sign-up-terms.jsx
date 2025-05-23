@@ -20,11 +20,11 @@ export function SignUpTerms({ sx, ...other }) {
       {...other}
     >
       {'Ao se registrar, você concorda com nossos '}
-      <Link underline="always" color="text.primary">
+      <Link underline="always" color="text.primary" href="/termos-servicos" target="_blank">
         Termos e serviços
       </Link>
       {' e '}
-      <Link underline="always" color="text.primary">
+      <Link underline="always" color="text.primary" href="/politica-privacidade" target="_blank">
         Política de privacidade
       </Link>
       .

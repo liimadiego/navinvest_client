@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <>
       <Helmet>
-        <title>{`${globalThis.getTranslation('page-one-title')} | Dashboard - ${CONFIG.appName}`}</title>
+        <title>{`Dashboard - ${CONFIG.appName}`}</title>
       </Helmet>
 
       <DashboardView />
