@@ -15,10 +15,18 @@ import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import InfoIcon from '@mui/icons-material/Info';
 
+import { useNavigate } from 'react-router-dom';
+
 // ----------------------------------------------------------------------
 
 export function PricingCard({ card, sx, isYearly, ...other }) {
   const { subscription, price, caption, lists, labelAction, priceYear, iaLimitExplained } = card;
+
+  const navigate = useNavigate();
+
+  const handleGoToCheckoutPage = () => {
+    navigate('/checkout-pagamento', { state: { subscription } });
+  };
 
   const isBasic = subscription === 'basic';
   const isStarter = subscription === 'starter';
@@ -144,6 +152,7 @@ export function PricingCard({ card, sx, isYearly, ...other }) {
         variant="contained"
         disabled={isBasic}
         color={isStarter ? 'primary' : 'inherit'}
+        onClick={isPremium ? handleGoToCheckoutPage : undefined}
       >
         {labelAction}
       </Button>

@@ -14,7 +14,7 @@ import { SplashScreen } from 'src/components/loading-screen';
 const PricingPage = lazy(() => import('src/pages/pricing'));
 const PrivacyPolicy = lazy(() => import('src/pages/privacy_policy'));
 const TermsService = lazy(() => import('src/pages/terms_service'));
-// const PaymentPage = lazy(() => import('src/pages/payment'));
+const PaymentPage = lazy(() => import('src/pages/payment'));
 const Page404 = lazy(() => import('src/pages/error/404'));
 
 // ----------------------------------------------------------------------
@@ -63,14 +63,14 @@ export const mainRoutes = [
           </SimpleLayout>
         ),
       },
-      // {
-      //   path: 'payment',
-      //   element: (
-      //     <SimpleLayout>
-      //       <PaymentPage />
-      //     </SimpleLayout>
-      //   ),
-      // },
+      {
+        path: 'checkout-pagamento',
+        element: (
+          <SimpleLayout>
+            <PaymentPage />
+          </SimpleLayout>
+        ),
+      },
       {
         path: 'error',
         children: [

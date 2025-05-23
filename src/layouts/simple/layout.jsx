@@ -19,11 +19,13 @@ import BedtimeIcon from '@mui/icons-material/Bedtime';
 import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
 import { useTheme } from '@emotion/react';
 import { useColorScheme } from '@mui/material';
+import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
 export function SimpleLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md' }) {
   const theme = useTheme();
+  const settings = useSettingsContext();
   const { mode, setMode } = useColorScheme();
   const renderHeader = () => {
     const headerSlotProps = { container: { maxWidth: false } };

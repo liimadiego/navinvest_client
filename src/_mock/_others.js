@@ -113,14 +113,13 @@ export const pricingPlans = [
     caption: 'Economize R$ 144 por ano no plano anual',
     lists: [
       'Todos os recursos do plano básico',
+      'Assistente de investimentos com IA (24h)',
       'Gerenciador de carteira (até 3 carteiras)',
       'Comparação de ativos (com relatório da IA)',
-      'Assistente de investimentos com IA (24h)',
       'Importador inteligente de carteira',
       'Momento da empresa com IA',
       'Navi Diário (Jornal de investimentos gerado por IA)',
       'Importação automática de portfólio da B3'
-
     ],
     labelAction: 'Testar 7 dias grátis',
     iaLimitExplained: 'Para garantir a qualidade e estabilidade do serviço para todos, este plano inclui um limite generoso de uso da nossa Inteligência Artificial. Mas não se preocupe: o limite é bem alto e cobre centenas de interações mensais, e você sempre poderá acompanhar seu uso dentro da plataforma. Caso você se aproxime do limite, será possível identificar com antecedência.'

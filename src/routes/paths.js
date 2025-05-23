@@ -12,6 +12,7 @@ export const paths = {
   pricing: '/planos',
   privacy_policy: '/politica-privacidade',
   terms_service: '/termos-servicos',
+  payment: '/checkout-pagamento',
   // AUTH
   auth: {
     amplify: {

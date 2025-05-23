@@ -6,7 +6,7 @@ import { PricingView } from 'src/sections/pricing/view';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `Pricing - ${CONFIG.appName}` };
+const metadata = { title: `Planos - ${CONFIG.appName}` };
 
 export default function Page() {
   return (
