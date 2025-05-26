@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'src/lib/axios'
 import {
     Box,
     Container,
@@ -30,12 +31,15 @@ import {
 } from '@mui/icons-material';
 
 export function Payment() {
-    const [billingPreference, setBillingPreference] = useState('annual');
-    const [paymentMethod, setPaymentMethod] = useState('creditCard');
+    const [billingPreference, setBillingPreference] = useState('yearly');
+    const [paymentMethod, setPaymentMethod] = useState('credit_card');
 
     const ANNUAL_PRICE = 575.88;
     const MONTHLY_PRICE = 59.99;
     const endOfTrialDate = new Date();
+    const [isAddressLoading, setIsAddressLoading] = useState(false);
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
+
     endOfTrialDate.setDate(endOfTrialDate.getDate() + 7);
     //xx de maio de 2025
     const formattedTrialEndDate = `${endOfTrialDate.getDate()} de ${endOfTrialDate.toLocaleString('default', { month: 'long' })} de ${endOfTrialDate.getFullYear()}`;
@@ -46,12 +50,15 @@ export function Payment() {
         expiryMonth: '',
         expiryYear: '',
         cvv: '',
-        firstName: '',
-        lastName: '',
+        fullName: '',
+        cpf: '',
         streetAddress: '',
         zipCode: '',
-        country: 'Brasil',
-        agreeToTerms: false
+        complement: '',
+        addressNumber: '',
+        neighborhood: '',
+        agreeToTerms: false,
+        nextDueDate: endOfTrialDate.toISOString().split('T')[0]
     });
 
     const handleInputChange = (field) => (event) => {
@@ -79,6 +86,14 @@ export function Payment() {
             return;
         }
 
+        if (field === 'cpf') {
+            setFormData({
+                ...formData,
+                [field]: formatCpf(event.target.value)
+            });
+            return;
+        }
+
         setFormData({
             ...formData,
             [field]: event.target.value
@@ -101,7 +116,134 @@ export function Payment() {
     };
 
     const formatZipCode = (zip) => {
+        // viacep.com.br/ws/01001000/json/
+        if (zip.length === 9) {
+            setIsAddressLoading(true);
+            fetch(`https://viacep.com.br/ws/${zip.replace(/-/g, '')}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        setIsAddressLoading(false);
+                        alert('CEP inválido. Por favor, verifique e tente novamente.');
+                    } else {
+                        setFormData({
+                            ...formData,
+                            streetAddress: data.logradouro,
+                            neighborhood: data.bairro,
+                            zipCode: zip.replace(/\D/g, '').replace(/(\d{5})(\d)/, '$1-$2').slice(0, 9),
+                            addressNumber: '',
+                            complement: ''
+                        });
+                        setIsAddressLoading(false);
+                    }
+                })
+                .catch(error => {
+                    setIsAddressLoading(false);
+                    console.error('Erro ao buscar CEP:', error);
+                    alert('Erro ao buscar CEP. Por favor, tente novamente mais tarde.');
+                });
+        }
+
         return zip.replace(/\D/g, '').replace(/(\d{5})(\d)/, '$1-$2').slice(0, 9);
+    }
+
+    const validateCpf = (cpf) => {
+        cpf = cpf.replace(/\D/g, '');
+        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+            return false; // Invalid CPF
+        }
+        let sum = 0;
+        let remainder;
+        for (let i = 1; i <= 9; i++) {
+            sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+        }
+        remainder = (sum * 10) % 11;
+        if (remainder === 10 || remainder === 11) {
+            remainder = 0;
+        }
+        if (remainder !== parseInt(cpf.substring(9, 10))) {
+            return false; // Invalid CPF
+        }
+        sum = 0;
+        for (let i = 1; i <= 10; i++) {
+            sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+        }
+        remainder = (sum * 10) % 11;
+        if (remainder === 10 || remainder === 11) {
+            remainder = 0;
+        }
+        if (remainder !== parseInt(cpf.substring(10, 11))) {
+            return false; // Invalid CPF
+        }
+        return true; // Valid CPF
+    }
+
+    const formatCpf = (cpf) => {
+        return cpf.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4').slice(0, 14);
+    }
+
+    const handleSubmitCheckoutForm = () => {
+        if (!formData.email) {
+            alert('Por favor, preencha seu email.');
+            return;
+        }
+
+        if (paymentMethod === 'credit_card' && (!formData.cardNumber || !formData.expiryMonth || !formData.expiryYear || !formData.cvv)) {
+            alert('Por favor, preencha todos os campos do cartão de crédito.');
+            return;
+        }
+
+        if (!formData.cpf || !formData.streetAddress || !formData.zipCode || !formData.fullName) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        if (!validateCpf(formData.cpf)) {
+            alert('CPF inválido. Por favor, verifique e tente novamente.');
+            return;
+        }
+
+        if (!formData.agreeToTerms) {
+            alert('Você deve concordar com os termos e condições para continuar.');
+            return;
+        }
+
+        axios.post('/checkout/subscribe', {
+            general: {
+                email: formData.email,
+                fullName: formData.fullName,
+                cpf: formData.cpf.replace(/\D/g, ''),
+                billingPreference: billingPreference,
+                paymentMethod: paymentMethod,
+                nextDueDate: formData.nextDueDate,
+            },
+            creditCard: {
+                cardNumber: formData.cardNumber.replace(/\s/g, ''),
+                expiryMonth: formData.expiryMonth,
+                expiryYear: `20${formData.expiryYear}`,
+                cvv: formData.cvv,
+            },
+            billingAddress: {
+                streetAddress: formData.streetAddress,
+                zipCode: formData.zipCode.replace(/-/g, ''),
+                addressNumber: formData.addressNumber,
+                complement: formData.complement,
+                neighborhood: formData.neighborhood,
+            }
+        })
+            .then(response => {
+                if (response.data.success) {
+                    alert('Checkout realizado com sucesso! Você receberá um email de confirmação em breve.');
+                    // Redirect to success page or dashboard
+                }
+                else {
+                    alert('Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar o checkout:', error);
+                alert('Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
+            });
     }
 
     return (
@@ -158,7 +300,7 @@ export function Payment() {
                                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                                                     <Box>
                                                         <FormControlLabel
-                                                            value="annual"
+                                                            value="yearly"
                                                             control={<Radio />}
                                                             label={
                                                                 <Box>
@@ -230,7 +372,7 @@ export function Payment() {
                             >
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                                     <FormControlLabel
-                                        value="creditCard"
+                                        value="credit_card"
                                         control={<Radio />}
                                         label={
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -255,8 +397,24 @@ export function Payment() {
                             </RadioGroup>
                         </FormControl>
 
-                        {paymentMethod !== 'pix' && (
+                        {paymentMethod !== 'pix' ? (
                             <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Nome*"
+                                        value={formData.fullName}
+                                        onChange={handleInputChange('fullName')}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="CPF*"
+                                        value={formData.cpf}
+                                        onChange={handleInputChange('cpf')}
+                                    />
+                                </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -308,6 +466,25 @@ export function Payment() {
                                     />
                                 </Grid>
                             </Grid>
+                        ) : (
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Nome*"
+                                        value={formData.fullName}
+                                        onChange={handleInputChange('fullName')}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="CPF*"
+                                        value={formData.cpf}
+                                        onChange={handleInputChange('cpf')}
+                                    />
+                                </Grid>
+                            </Grid>
                         )}
 
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
@@ -324,20 +501,13 @@ export function Payment() {
                             Endereço de cobrança
                         </Typography>
                         <Grid container spacing={2} sx={{ mt: 1 }}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
-                                    label="Nome*"
-                                    value={formData.firstName}
-                                    onChange={handleInputChange('firstName')}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Sobrenome*"
-                                    value={formData.lastName}
-                                    onChange={handleInputChange('lastName')}
+                                    label="CEP*"
+                                    value={formData.zipCode}
+                                    onChange={handleInputChange('zipCode')}
+                                    disabled={isAddressLoading}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -346,27 +516,26 @@ export function Payment() {
                                     label="Endereço*"
                                     value={formData.streetAddress}
                                     onChange={handleInputChange('streetAddress')}
+                                    disabled={isAddressLoading}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="CEP*"
-                                    value={formData.zipCode}
-                                    onChange={handleInputChange('zipCode')}
+                                    label="Número*"
+                                    value={formData.addressNumber}
+                                    onChange={handleInputChange('addressNumber')}
+                                    disabled={isAddressLoading}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth>
-                                    <InputLabel>País</InputLabel>
-                                    <Select
-                                        value={formData.country}
-                                        onChange={handleInputChange('country')}
-                                        label="País"
-                                    >
-                                        <MenuItem value="Brasil">Brasil</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <TextField
+                                    fullWidth
+                                    label="Complemento"
+                                    value={formData.complement}
+                                    onChange={handleInputChange('complement')}
+                                    disabled={isAddressLoading}
+                                />
                             </Grid>
                         </Grid>
                     </Box>
@@ -402,6 +571,7 @@ export function Payment() {
                         fullWidth
                         disabled={!formData.agreeToTerms}
                         sx={{ py: 1.5, fontSize: '1rem' }}
+                        onClick={handleSubmitCheckoutForm}
                     >
                         COMEÇAR AGORA
                     </Button>
@@ -422,10 +592,10 @@ export function Payment() {
                             <Box sx={{ mb: 3 }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                                     <Typography variant="body1" fontWeight="medium">
-                                        Assinatura {billingPreference === 'annual' ? 'Anual' : 'Mensal'} Navinvest
+                                        Assinatura {billingPreference === 'yearly' ? 'Anual' : 'Mensal'} Navinvest
                                     </Typography>
                                     <Typography variant="body1" fontWeight="medium">
-                                        R${(billingPreference === 'annual' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}
+                                        R${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}
                                     </Typography>
                                 </Box>
 
@@ -460,7 +630,7 @@ export function Payment() {
                                         Subtotal
                                     </Typography>
                                     <Typography variant="body2">
-                                        R${(billingPreference === 'annual' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}
+                                        R${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}
                                     </Typography>
                                 </Box>
 
@@ -469,7 +639,7 @@ export function Payment() {
                                         Período de teste gratuito de 7 dias
                                     </Typography>
                                     <Typography variant="body2">
-                                        - R${(billingPreference === 'annual' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}
+                                        - R${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}
                                     </Typography>
                                 </Box>
 
@@ -485,7 +655,7 @@ export function Payment() {
                                 </Box>
 
                                 <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem', lineHeight: 1.4 }}>
-                                    Você será cobrado em R${(billingPreference === 'annual' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')} automaticamente ao final do seu período de teste gratuito de 7 dias em {formattedTrialEndDate}, a menos que cancele antes dessa data. Esta é uma cobrança recorrente e continuará no valor e frequência estabelecidos, a menos que você cancele. Para cancelar sua assinatura, acesse Gerenciar Assinaturas no seu perfil.
+                                    Você será cobrado em R${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')} automaticamente ao final do seu período de teste gratuito de 7 dias em {formattedTrialEndDate}, a menos que cancele antes dessa data. Esta é uma cobrança recorrente e continuará no valor e frequência estabelecidos, a menos que você cancele. Para cancelar sua assinatura, acesse Gerenciar Assinaturas no seu perfil.
                                 </Typography>
 
                                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2, gap: 1 }}>
