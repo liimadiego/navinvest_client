@@ -13,6 +13,7 @@ export const paths = {
   privacy_policy: '/politica-privacidade',
   terms_service: '/termos-servicos',
   payment: '/checkout-pagamento',
+  pix: '/checkout-pagamento/pix',
   // AUTH
   auth: {
     amplify: {

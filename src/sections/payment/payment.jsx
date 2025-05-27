@@ -32,14 +32,16 @@ import {
     Pix as PixIcon,
 } from '@mui/icons-material';
 import { useAuthContext } from 'src/auth/hooks';
+import { useNavigate } from 'react-router-dom';
 
 export function Payment() {
+    const navigate = useNavigate();
     const { user } = useAuthContext();
     const [billingPreference, setBillingPreference] = useState('yearly');
     const [paymentMethod, setPaymentMethod] = useState('credit_card');
 
-    const ANNUAL_PRICE = 575.88;
-    const MONTHLY_PRICE = 59.99;
+    const ANNUAL_PRICE = import.meta.env.VITE_YEARLY_PLAN_PRICE;
+    const MONTHLY_PRICE = import.meta.env.VITE_MONTHLY_PLAN_PRICE;
     const endOfTrialDate = new Date();
     const [isAddressLoading, setIsAddressLoading] = useState(false);
     const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -273,7 +275,17 @@ export function Payment() {
         })
             .then(response => {
                 if (response.data.success) {
-                    alert('Checkout realizado com sucesso! Você receberá um email de confirmação em breve.');
+                    if (response.data.billingType === 'PIX' && response.data.copyPaste && response.data.qrCodeBase64) {
+                        navigate('/checkout-pagamento/pix', {
+                            state: {
+                                copyPaste: response.data.copyPaste,
+                                qrCodeBase64: response.data.qrCodeBase64,
+                                amount: billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE,
+                                plan: billingPreference === 'yearly' ? 'Anual' : 'Mensal',
+                            }
+                        });
+                        return;
+                    }
                 }
                 else {
                     alert('Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
@@ -695,10 +707,6 @@ export function Payment() {
                                         </Box>
                                     ))}
                                 </Box>
-
-                                {/* <Link href="#" variant="body2" sx={{ display: 'block', textAlign: 'right', mb: 2 }}>
-                                    Adicionar código de desconto
-                                </Link> */}
 
                                 <Divider sx={{ my: 2 }} />
 
