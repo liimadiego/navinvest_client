@@ -242,7 +242,7 @@ export function Pix() {
                                         Beneficiário:
                                     </Typography>
                                     <Typography variant="body1" fontWeight="medium">
-                                        Navinvest Tecnologia LTDA
+                                        Asaas Gestão Financeira S/A
                                     </Typography>
                                 </Box>
                                 <Box>
