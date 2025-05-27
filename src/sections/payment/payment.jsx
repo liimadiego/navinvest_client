@@ -21,7 +21,9 @@ import {
     Select,
     MenuItem,
     InputLabel,
-    Link
+    Link,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import {
     CreditCard as CreditCardIcon,
@@ -29,8 +31,10 @@ import {
     CheckCircle as CheckCircleIcon,
     Pix as PixIcon,
 } from '@mui/icons-material';
+import { useAuthContext } from 'src/auth/hooks';
 
 export function Payment() {
+    const { user } = useAuthContext();
     const [billingPreference, setBillingPreference] = useState('yearly');
     const [paymentMethod, setPaymentMethod] = useState('credit_card');
 
@@ -39,13 +43,29 @@ export function Payment() {
     const endOfTrialDate = new Date();
     const [isAddressLoading, setIsAddressLoading] = useState(false);
     const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [snackOpen, setSnackOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackOpen(false);
+    };
+
+    const handleSnackOpen = (message) => {
+        setErrorMessage(message);
+        setSnackOpen(true);
+    };
 
     endOfTrialDate.setDate(endOfTrialDate.getDate() + 7);
-    //xx de maio de 2025
+
     const formattedTrialEndDate = `${endOfTrialDate.getDate()} de ${endOfTrialDate.toLocaleString('default', { month: 'long' })} de ${endOfTrialDate.getFullYear()}`;
 
     const [formData, setFormData] = useState({
         email: '',
+        phone: '',
+        password: '',
         cardNumber: '',
         expiryMonth: '',
         expiryYear: '',
@@ -90,6 +110,14 @@ export function Payment() {
             setFormData({
                 ...formData,
                 [field]: formatCpf(event.target.value)
+            });
+            return;
+        }
+
+        if (field === 'phone') {
+            setFormData({
+                ...formData,
+                [field]: formatPhone(event.target.value)
             });
             return;
         }
@@ -183,7 +211,7 @@ export function Payment() {
     }
 
     const handleSubmitCheckoutForm = () => {
-        if (!formData.email) {
+        if (!formData.email && !user) {
             alert('Por favor, preencha seu email.');
             return;
         }
@@ -208,10 +236,22 @@ export function Payment() {
             return;
         }
 
+        if (!user && !formData.phone) {
+            alert('Por favor, preencha seu telefone.');
+            return;
+        }
+
+        if (!user && !formData.password) {
+            alert('Por favor, crie uma senha para sua conta.');
+            return;
+        }
+
         axios.post('/checkout/subscribe', {
             general: {
-                email: formData.email,
+                email: formData.email === "" ? user.email : formData.email,
                 fullName: formData.fullName,
+                phone: formData.phone.replace(/\D/g, ''),
+                password: formData.password,
                 cpf: formData.cpf.replace(/\D/g, ''),
                 billingPreference: billingPreference,
                 paymentMethod: paymentMethod,
@@ -234,16 +274,32 @@ export function Payment() {
             .then(response => {
                 if (response.data.success) {
                     alert('Checkout realizado com sucesso! Você receberá um email de confirmação em breve.');
-                    // Redirect to success page or dashboard
                 }
                 else {
                     alert('Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
                 }
             })
             .catch(error => {
+                handleSnackOpen(error.message || 'Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
                 console.error('Erro ao processar o checkout:', error);
-                alert('Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
+                // alert('Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
             });
+    }
+
+    const formatPhone = (phone) => {
+        const digitsOnly = phone.replace(/\D/g, '');
+        if (digitsOnly.length === 0) {
+            return '';
+        }
+        if (digitsOnly.length > 0 && digitsOnly.length <= 2) {
+            return `(${digitsOnly}`;
+        } else if (digitsOnly.length <= 6) {
+            return `(${digitsOnly.slice(0, 2)}) ${digitsOnly.slice(2)}`;
+        } else if (digitsOnly.length <= 10) {
+            return `(${digitsOnly.slice(0, 2)}) ${digitsOnly.slice(2, 6)}-${digitsOnly.slice(6, 10)}`;
+        } else {
+            return `(${digitsOnly.slice(0, 2)}) ${digitsOnly.slice(2, 7)}-${digitsOnly.slice(7, 11)}`;
+        }
     }
 
     return (
@@ -260,22 +316,43 @@ export function Payment() {
                         </Typography>
                     </Box>
 
-                    {/* Primary Contact Info */}
-                    <Box sx={{ mb: 4 }}>
+                    {!user && <Box sx={{ mb: 4 }}>
                         <Typography variant="h6" component="h2" gutterBottom fontWeight="medium">
-                            Informações de contato principal
+                            Informações da conta
                         </Typography>
-                        <TextField
-                            fullWidth
-                            label="Seu Email*"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange('email')}
-                            helperText="Este será o seu login da conta Navinvest."
-                            sx={{ mt: 2 }}
-                        />
+                        <Box display={'flex'} flexDirection={{ xs: 'column', sm: 'row' }} gap={2}>
+                            <TextField
+                                sx={{ flex: 1 }}
+                                label="Seu Email*"
+                                type="email"
+                                value={formData.email}
+                                onChange={handleInputChange('email')}
+                                helperText="Este será o seu login da conta Navinvest."
+                            />
+                        </Box>
+                        <Box display={'flex'} flexDirection={{ xs: 'column', sm: 'row' }} gap={2} mt={2}>
+                            <TextField
+                                label="Telefone*"
+                                type="tel"
+                                value={formData.phone}
+                                onChange={handleInputChange('phone')}
+                                sx={{ flex: 1 }}
+                                autoComplete="off"
+                                inputProps={{ autoComplete: 'new-phone', form: { autoComplete: 'off' } }}
+                            />
+                            <TextField
+                                sx={{ flex: 1 }}
+                                label="Senha*"
+                                type="password"
+                                value={formData.password}
+                                onChange={handleInputChange('password')}
+                                helperText="Sua senha deve ter pelo menos 8 caracteres."
+                                autoComplete="new-password"
+                                inputProps={{ autoComplete: 'new-password', form: { autoComplete: 'off' } }}
+                            />
+                        </Box>
                     </Box>
-
+                    }
                     {/* Billing Preference */}
                     <Box sx={{ mb: 4 }}>
                         <Typography variant="h6" component="h2" gutterBottom fontWeight="medium">
@@ -310,9 +387,9 @@ export function Payment() {
                                                                     <Typography variant="h6" fontWeight="bold">
                                                                         R${ANNUAL_PRICE.toString().replace('.', ',')}/ano
                                                                     </Typography>
-                                                                    <Typography variant="body2" color="text.secondary">
+                                                                    {paymentMethod === 'credit_card' && <Typography variant="body2" color="text.secondary">
                                                                         Com período de teste gratuito de 7 dias
-                                                                    </Typography>
+                                                                    </Typography>}
                                                                 </Box>
                                                             }
                                                         />
@@ -347,9 +424,9 @@ export function Payment() {
                                                             <Typography variant="h6" fontWeight="bold">
                                                                 R${MONTHLY_PRICE.toString().replace('.', ',')}/mês
                                                             </Typography>
-                                                            <Typography variant="body2" color="text.secondary">
+                                                            {paymentMethod === 'credit_card' && <Typography variant="body2" color="text.secondary">
                                                                 Com período de teste gratuito de 7 dias
-                                                            </Typography>
+                                                            </Typography>}
                                                         </Box>
                                                     }
                                                 />
@@ -636,10 +713,10 @@ export function Payment() {
 
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                                     <Typography variant="body2">
-                                        Período de teste gratuito de 7 dias
+                                        {paymentMethod === 'credit_card' ? "Período de teste gratuito de 7 dias" : "Pagamento via PIX"}
                                     </Typography>
                                     <Typography variant="body2">
-                                        - R${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}
+                                        {paymentMethod === 'credit_card' && "-"}  R${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}
                                     </Typography>
                                 </Box>
 
@@ -647,15 +724,15 @@ export function Payment() {
 
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
                                     <Typography variant="h6" fontWeight="bold">
-                                        Devido hoje
+                                        {paymentMethod === 'credit_card' ? "Devido hoje" : "Total"}
                                     </Typography>
                                     <Typography variant="h6" fontWeight="bold">
-                                        R$0,00
+                                        {paymentMethod === 'credit_card' ? "R$0,00" : `R$${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')}`}
                                     </Typography>
                                 </Box>
 
                                 <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem', lineHeight: 1.4 }}>
-                                    Você será cobrado em R${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')} automaticamente ao final do seu período de teste gratuito de 7 dias em {formattedTrialEndDate}, a menos que cancele antes dessa data. Esta é uma cobrança recorrente e continuará no valor e frequência estabelecidos, a menos que você cancele. Para cancelar sua assinatura, acesse Gerenciar Assinaturas no seu perfil.
+                                    {paymentMethod === 'credit_card' ? `Você será cobrado em R$${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')} automaticamente ao final do seu período de teste gratuito de 7 dias em ${formattedTrialEndDate}, a menos que cancele antes dessa data. Esta é uma cobrança recorrente e continuará no valor e frequência estabelecidos, a menos que você cancele. Para cancelar sua assinatura, acesse Gerenciar Assinaturas no seu perfil.` : `Você será cobrado em R$${(billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE).toString().replace('.', ',')} imediatamente após a confirmação do pagamento via PIX. Esta é uma cobrança única e não recorrente. Você receberá no seu e-mail ${billingPreference === 'yearly' ? 'anualmente' : 'mensalmente'} o QRCode Pix para pagamento.`}
                                 </Typography>
 
                                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2, gap: 1 }}>
@@ -671,6 +748,11 @@ export function Payment() {
                     </Box>
                 </Grid>
             </Grid>
+            <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage || 'Ocorreu um erro. Por favor, tente novamente.'}
+                </Alert>
+            </Snackbar>
         </Container>
     );
 }
