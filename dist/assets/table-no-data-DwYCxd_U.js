@@ -1,0 +1,1 @@
+import{j as r}from"./index-D0-OtO-f.js";import{E as e}from"./empty-content-B21Tml9U.js";import{b as s,c as o}from"./TableHead-q0QLLJ3W.js";function p({notFound:t,sx:a}){return r.jsx(s,{children:t?r.jsx(o,{colSpan:12,children:r.jsx(e,{title:"Sem dados",filled:!0,sx:[{py:10},...Array.isArray(a)?a:[a]]})}):r.jsx(o,{colSpan:12,sx:{p:0}})})}export{p as T};
