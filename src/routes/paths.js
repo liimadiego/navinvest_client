@@ -14,6 +14,7 @@ export const paths = {
   terms_service: '/termos-servicos',
   payment: '/checkout-pagamento',
   pix: '/checkout-pagamento/pix',
+  success_checkout: '/checkout-pagamento/sucesso',
   // AUTH
   auth: {
     amplify: {

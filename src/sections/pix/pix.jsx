@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import PaymentIcon from '@mui/icons-material/Payment';
-import { QRCodeSVG } from 'qrcode.react';
 import {
     Box,
     Typography,

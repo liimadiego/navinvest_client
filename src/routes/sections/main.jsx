@@ -16,6 +16,7 @@ const PrivacyPolicy = lazy(() => import('src/pages/privacy_policy'));
 const TermsService = lazy(() => import('src/pages/terms_service'));
 const PaymentPage = lazy(() => import('src/pages/payment'));
 const PixPage = lazy(() => import('src/pages/pix'));
+const SuccessCheckoutPage = lazy(() => import('src/pages/success-checkout'));
 const Page404 = lazy(() => import('src/pages/error/404'));
 
 // ----------------------------------------------------------------------
@@ -77,6 +78,14 @@ export const mainRoutes = [
         element: (
           <SimpleLayout>
             <PixPage />
+          </SimpleLayout>
+        ),
+      },
+      {
+        path: 'checkout-pagamento/sucesso',
+        element: (
+          <SimpleLayout>
+            <SuccessCheckoutPage />
           </SimpleLayout>
         ),
       },

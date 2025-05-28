@@ -25,7 +25,7 @@ export function PricingCard({ card, sx, isYearly, ...other }) {
   const navigate = useNavigate();
 
   const handleGoToCheckoutPage = () => {
-    navigate('/checkout-pagamento', { state: { subscription } });
+    navigate('/checkout-pagamento', { state: { isYearly } });
   };
 
   const isBasic = subscription === 'basic';
