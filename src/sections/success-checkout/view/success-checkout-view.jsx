@@ -8,7 +8,7 @@ export function SuccessCheckoutView() {
   const { state } = location;
 
   useEffect(() => {
-    if (!state || !state.success || !state.plan || !state.amount || !state.mail) {
+    if (!state || !state.success || !state.plan || !state.billingPreference || !state.mail) {
       navigate('/checkout-pagamento');
     }
   }, [state, navigate]);
@@ -18,6 +18,7 @@ export function SuccessCheckoutView() {
       <SuccessCheckout
         plan={state?.plan}
         amount={state?.amount}
+        billingPreference={state?.billingPreference}
         mail={state?.mail}
       />
     </>

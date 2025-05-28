@@ -3,15 +3,8 @@ import { Box, Button, Container, Typography, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 
-export function SuccessCheckout({ plan = 'monthly', amount = 575.88, mail = 'diegolima@gmail.com' }) {
+export function SuccessCheckout({ plan, mail, billingPreference }) {
   const theme = useTheme();
-
-  const formatAmount = (value) => {
-    if (typeof value !== 'number') {
-      return 'R$ 0,00';
-    }
-    return `R$ ${value.toFixed(2).replace('.', ',')}`;
-  }
 
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
@@ -54,7 +47,7 @@ export function SuccessCheckout({ plan = 'monthly', amount = 575.88, mail = 'die
             color: theme.palette.primary.main
           }}
         >
-          Pagamento Realizado com Sucesso!
+          {billingPreference === 'pix' ? 'Pagamento Confirmado!' : 'Teste Ativado!'}
         </Typography>
 
         <Typography
@@ -65,8 +58,12 @@ export function SuccessCheckout({ plan = 'monthly', amount = 575.88, mail = 'die
             fontSize: { xs: '1rem', md: '1.1rem' }
           }}
         >
-          Parabéns! Seu pagamento para o plano {plan === 'monthly' ? 'mensal' : 'anual'} foi processado e confirmado. Estamos muito felizes em recebê-lo na Navinvest,
-          onde você terá acesso às melhores ferramentas e recursos para alavancar seus investimentos.
+          {billingPreference === 'pix' ?
+            `Parabéns! Seu pagamento para o plano ${plan === 'monthly' ? 'mensal' : 'anual'} foi processado e confirmado. Estamos muito felizes em recebê-lo na Navinvest,
+          onde você terá acesso às melhores ferramentas e recursos para alavancar seus investimentos.` :
+            `Parabéns! Seu período de teste gratuito para o plano ${plan === 'monthly' ? 'mensal' : 'anual'} foi ativado. Estamos muito felizes em recebê-lo na Navinvest,
+          onde você terá acesso às melhores ferramentas e recursos para alavancar seus investimentos.`
+          }
         </Typography>
 
         <Typography

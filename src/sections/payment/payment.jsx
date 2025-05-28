@@ -35,8 +35,10 @@ import {
 } from '@mui/icons-material';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { setSession } from 'src/auth/context/jwt';
 
 export function Payment() {
+    const testMode = true;
     const { mode } = useColorScheme();
     const location = useLocation();
     const { isYearly } = location.state || {};
@@ -70,20 +72,20 @@ export function Payment() {
     const formattedTrialEndDate = `${endOfTrialDate.getDate()} de ${endOfTrialDate.toLocaleString('default', { month: 'long' })} de ${endOfTrialDate.getFullYear()}`;
 
     const [formData, setFormData] = useState({
-        email: '',
-        phone: '',
-        password: '',
-        cardNumber: '',
-        expiryMonth: '',
-        expiryYear: '',
-        cvv: '',
-        fullName: '',
-        cpf: '',
-        streetAddress: '',
-        zipCode: '',
-        complement: '',
-        addressNumber: '',
-        neighborhood: '',
+        email: testMode ? 'userteste@navinvest.ai' : '',
+        phone: testMode ? '11951595132' : '',
+        password: testMode ? '123456' : '',
+        cardNumber: testMode ? '4444444444444444' : '',
+        expiryMonth: testMode ? '01' : '',
+        expiryYear: testMode ? '31' : '',
+        cvv: testMode ? '123' : '',
+        fullName: testMode ? 'Usuário Teste' : '',
+        cpf: testMode ? '075.969.330-76' : '',
+        streetAddress: testMode ? 'Rua Pindoba' : '',
+        zipCode: testMode ? '07242210' : '',
+        complement: testMode ? '' : '',
+        addressNumber: testMode ? '300' : '',
+        neighborhood: testMode ? 'Cid. Parque Alvorada' : '',
         agreeToTerms: false,
         nextDueDate: endOfTrialDate.toISOString().split('T')[0]
     });
@@ -280,16 +282,20 @@ export function Payment() {
             }
         })
             .then(response => {
-                if (response.data.success) {
+                if (response.data.subscription.success) {
                     setCheckoutLoading(false);
-                    if (response.data.billingType === 'PIX' && response.data.copyPaste && response.data.qrCodeBase64) {
+                    if (response.data.accessToken) {
+                        setSession(response.data.accessToken);
+                    }
+
+                    if (response.data.subscription.billingType === 'PIX' && response.data.subscription.copyPaste && response.data.subscription.qrCodeBase64) {
                         navigate('/checkout-pagamento/pix', {
                             state: {
-                                copyPaste: response.data.copyPaste,
-                                qrCodeBase64: response.data.qrCodeBase64,
+                                copyPaste: response.data.subscription.copyPaste,
+                                qrCodeBase64: response.data.subscription.qrCodeBase64,
                                 amount: billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE,
                                 plan: billingPreference === 'yearly' ? 'Anual' : 'Mensal',
-                                mail: formData.email === "" ? user.email : formData.email,
+                                mail: formData.email === "" ? user.email : formData.email
                             }
                         });
                         return;
@@ -301,12 +307,13 @@ export function Payment() {
                             plan: billingPreference === 'yearly' ? 'Anual' : 'Mensal',
                             amount: billingPreference === 'yearly' ? ANNUAL_PRICE : MONTHLY_PRICE,
                             mail: formData.email === "" ? user.email : formData.email,
+                            billingPreference: 'credit_card',
                         }
                     });
                     return;
                 }
                 else {
-                    handleSnackOpen(response.data.message || 'Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
+                    handleSnackOpen(response.data.subscription.message || 'Erro ao processar o checkout. Por favor, tente novamente mais tarde.');
                     setCheckoutLoading(false);
                 }
             })

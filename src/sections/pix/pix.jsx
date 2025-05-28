@@ -26,10 +26,12 @@ import LooksOneIcon from '@mui/icons-material/LooksOne';
 import LooksTwoIcon from '@mui/icons-material/LooksTwo';
 import Looks3Icon from '@mui/icons-material/Looks3';
 import Looks4Icon from '@mui/icons-material/Looks4';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'src/lib/axios'
 
 export function Pix() {
     const location = useLocation();
+    const navigate = useNavigate();
     const { copyPaste, qrCodeBase64, amount, plan } = location.state || {};
     const [formattedAmount, setFormattedAmount] = useState('');
 
@@ -44,6 +46,30 @@ export function Pix() {
             setFormattedAmount(formatted);
         }
     }, [amount]);
+
+    //busca de 3 em 3 segundos na rota GET com axios (/checkout/confirm-subscription) (retorna {subscriptionStatus: 'active' | 'inactive'})
+    useEffect(() => {
+        const fetchSubscriptionStatus = async () => {
+            try {
+                const response = await axios.get('/checkout/confirm-subscription');
+                const { subscriptionStatus } = response.data;
+                if (subscriptionStatus === 'active') {
+                    navigate('/checkout-success', {
+                        state: {
+                            plan,
+                            billingPreference: 'pix',
+                            mail: location.state?.mail,
+                            success: true
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao buscar status da assinatura:', error);
+            }
+        };
+        const interval = setInterval(fetchSubscriptionStatus, 3000);
+        return () => clearInterval(interval);
+    }, []);
 
     if (!copyPaste) {
         return <div>Erro: Dados do PIX não encontrados.</div>;
