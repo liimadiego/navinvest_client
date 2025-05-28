@@ -54,7 +54,7 @@ export function Pix() {
                 const response = await axios.get('/checkout/confirm-subscription');
                 const { subscriptionStatus } = response.data;
                 if (subscriptionStatus === 'active') {
-                    navigate('/checkout-success', {
+                    navigate('/checkout-pagamento/sucesso', {
                         state: {
                             plan,
                             billingPreference: 'pix',

@@ -1,10 +1,16 @@
 import { CheckCircleOutlined } from '@mui/icons-material';
 import { Box, Button, Container, Typography, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export function SuccessCheckout({ plan, mail, billingPreference }) {
   const theme = useTheme();
+
+  const navigate = useNavigate();
+
+  const goToDashboard = () => {
+    navigate('/dashboard');
+  }
 
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
@@ -77,9 +83,8 @@ export function SuccessCheckout({ plan, mail, billingPreference }) {
         </Typography>
 
         <Button
-          component={RouterLink}
-          to="/auth/login"
           variant="contained"
+          onClick={goToDashboard}
           size="large"
           sx={{
             px: 4,
@@ -94,7 +99,7 @@ export function SuccessCheckout({ plan, mail, billingPreference }) {
             transition: 'all 0.3s ease-in-out'
           }}
         >
-          Ir para o Login
+          Ir para o Dashboard
         </Button>
       </Paper>
     </Container>

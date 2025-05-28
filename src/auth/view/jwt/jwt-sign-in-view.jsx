@@ -1,5 +1,5 @@
 import { z as zod } from 'zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useBoolean } from 'minimal-shared/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,9 +22,6 @@ import { useAuthContext } from '../../hooks';
 import { getErrorMessage } from '../../utils';
 import { FormHead } from '../../components/form-head';
 import { signInWithPassword } from '../../context/jwt';
-import { FormDivider } from 'src/auth/components/form-divider';
-import { SignUpTerms } from 'src/auth/components/sign-up-terms';
-import { FormSocials } from 'src/auth/components/form-socials';
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +59,12 @@ export function JwtSignInView() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    if (checkUserSession) {
+      checkUserSession();
+    }
+  }, [checkUserSession]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
