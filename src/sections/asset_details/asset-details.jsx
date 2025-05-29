@@ -120,7 +120,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability }) {
                         {tickerData?.tickerCompanyInfo?.ticker ? (
                             <Box
                                 component="img"
-                                src={`/src/assets/tickers/${tickerData?.tickerCompanyInfo?.ticker}.jpg`}
+                                src={`/assets/tickers/${tickerData?.tickerCompanyInfo?.ticker}.jpg`}
                                 alt={`Logo ${companyInfo?.trade_name || ticker}`}
                                 sx={{ maxWidth: '100%', maxHeight: '100px', objectFit: 'contain', borderRadius: 1 }}
                             />

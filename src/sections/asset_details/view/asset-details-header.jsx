@@ -52,7 +52,7 @@ export function AssetDetailsHeader({
         <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1, position: "relative" }} flexDirection={{ xs: 'column', md: 'row' }}>
             <Box display="flex" alignItems="center" gap={2} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <img
-                    src={`/src/assets/tickers/${tickerData.ticker}.jpg`}
+                    src={`/assets/tickers/${tickerData.ticker}.jpg`}
                     onError={(e) => e.target.src = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg"}
                     alt=""
                     style={{ width: 70, height: 70, borderRadius: 8 }}

@@ -33,7 +33,7 @@ export function WalletTableRow({ row, isFixedIncome, isTreasury }) {
         <TableCell width={250}>
           <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
             <img
-              src={`/src/assets/tickers/${row.asset}.jpg`}
+              src={`/assets/tickers/${row.asset}.jpg`}
               alt={row.name}
               onError={(e) => e.target.src = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg"}
               style={{ borderRadius: 8, width: 40, height: 40 }}

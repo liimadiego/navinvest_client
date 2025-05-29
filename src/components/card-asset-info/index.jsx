@@ -6,7 +6,7 @@ import { Edit } from '@mui/icons-material';
 export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inComparison = false, side = 'left', sx }) {
 
     const image_content = (assetInfo, side) => {
-        const imagePath = `/src/assets/tickers/${assetInfo.ticker}.jpg`;
+        const imagePath = `/assets/tickers/${assetInfo.ticker}.jpg`;
         const defaultImagePath = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg";
         return <img
             src={imagePath}
