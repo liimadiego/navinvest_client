@@ -212,7 +212,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
             >
               Criar carteira
             </Button>
-            : <IconButton
+            : _wallets.length < 3 && <IconButton
               onClick={handleOpenWalletModal}
               sx={{
                 [theme.breakpoints.up(layoutQuery)]: { display: 'flex' },
