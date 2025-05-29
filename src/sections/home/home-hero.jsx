@@ -188,7 +188,7 @@ export function HomeHero({ sx, ...other }) {
           variant="outlined"
           target="_blank"
           rel="noopener"
-          href={paths.auth.login}
+          href={paths.auth.jwt.signUp}
           startIcon={<Iconify width={24} icon="eva:log-in-fill" />}
           sx={{ borderColor: 'text.primary' }}
         >

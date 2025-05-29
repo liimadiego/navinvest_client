@@ -19,11 +19,18 @@ import { HeaderSection } from '../core/header-section';
 import { navData as mainNavData } from '../nav-config-main';
 import { SignInButton } from '../components/sign-in-button';
 import { SettingsButton } from '../components/settings-button';
+import { IconButton } from '@mui/material';
+import { useColorScheme } from '@mui/material';
+import BedtimeIcon from '@mui/icons-material/Bedtime';
+import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
+import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
 export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md' }) {
   const pathname = usePathname();
+  const settings = useSettingsContext();
+  const { mode, setMode } = useColorScheme();
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
 
@@ -69,6 +76,18 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
           <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
             {/** @slot Settings button */}
             {/* <SettingsButton /> */}
+
+            <IconButton
+              onClick={() => {
+                setMode(mode === 'light' ? 'dark' : 'light');
+                settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
+              }}
+              sx={{ color: 'inherit', mr: 1 }}
+            >
+              {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
+
+              {/*  */}
+            </IconButton>
 
             {/** @slot Sign in button */}
             <SignInButton />
