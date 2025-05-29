@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'src/lib/axios'
 import {
     Box,
@@ -38,7 +38,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { setSession } from 'src/auth/context/jwt';
 
 export function Payment() {
-    const testMode = false;
+    const testMode = true;
     const { mode } = useColorScheme();
     const location = useLocation();
     const { isYearly } = location.state || {};
@@ -54,6 +54,12 @@ export function Payment() {
     const [checkoutLoading, setCheckoutLoading] = useState(false);
     const [snackOpen, setSnackOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
+    useEffect(() => {
+        if (user && user.plan !== null) {
+            navigate('/dashboard');
+        }
+    }, [user, navigate]);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {

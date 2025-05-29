@@ -14,13 +14,19 @@ import { CONFIG } from 'src/global-config';
 import { Label } from 'src/components/label';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
 export function NavUpgrade({ sx, ...other }) {
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
+  const [isFreeUser, setIsFreeUser] = useState(true);
 
-  const isFreeUser = !user?.plan || user.plan === 'free';
+  useEffect(() => {
+    if (user) {
+      setIsFreeUser(!user?.plan || user.plan === 'free');
+    }
+  }, [user]);
 
   return (
     <Box
@@ -88,8 +94,16 @@ export function NavUpgrade({ sx, ...other }) {
 // ----------------------------------------------------------------------
 
 export function UpgradeBlock({ sx, ...other }) {
+  const { user } = useAuthContext();
+  const [isFreeUser, setIsFreeUser] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      setIsFreeUser(!user?.plan || user.plan === 'free');
+    }
+  }, [user]);
   return (
-    <Box
+    isFreeUser ? <Box
       sx={[
         (theme) => ({
           ...theme.mixins.bgGradient({
@@ -147,7 +161,7 @@ export function UpgradeBlock({ sx, ...other }) {
         }}
       >
         <Box component="span" sx={{ typography: 'h5', color: 'common.white' }}>
-          20% OFF
+          20% OFF no plano anual
         </Box>
 
         <Box
@@ -162,10 +176,10 @@ export function UpgradeBlock({ sx, ...other }) {
           Invista com inteligência
         </Box>
 
-        <Button variant="contained" size="small" color="warning">
+        <Button variant="contained" size="small" color="warning" href={paths.pricing} target="_blank" rel="noopener">
           Faça upgrade
         </Button>
       </Box>
-    </Box>
+    </Box> : null
   );
 }
