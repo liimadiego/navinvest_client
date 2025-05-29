@@ -1,0 +1,1 @@
+import{j as r}from"./index-AunisbNj.js";import{E as e}from"./empty-content-By6-CEJL.js";import{b as s,c as o}from"./TableHead-B2bf1_Gf.js";function p({notFound:t,sx:a}){return r.jsx(s,{children:t?r.jsx(o,{colSpan:12,children:r.jsx(e,{title:"Sem dados",filled:!0,sx:[{py:10},...Array.isArray(a)?a:[a]]})}):r.jsx(o,{colSpan:12,sx:{p:0}})})}export{p as T};
