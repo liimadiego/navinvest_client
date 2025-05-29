@@ -38,13 +38,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { setSession } from 'src/auth/context/jwt';
 
 export function Payment() {
-    const testMode = true;
+    const testMode = false;
     const { mode } = useColorScheme();
     const location = useLocation();
     const { isYearly } = location.state || {};
     const navigate = useNavigate();
     const { user } = useAuthContext();
-    const [billingPreference, setBillingPreference] = useState(isYearly ? 'yearly' : 'monthly');
+    const [billingPreference, setBillingPreference] = useState('yearly');
     const [paymentMethod, setPaymentMethod] = useState('credit_card');
 
     const ANNUAL_PRICE = import.meta.env.VITE_YEARLY_PLAN_PRICE;
