@@ -36,7 +36,11 @@ export const SignUpSchema = zod.object({
   password: zod
     .string()
     .min(1, { message: 'Campo obrigatório' })
-    .min(6, { message: 'A senha precisa ter ao menos 6 caracteres' }),
+    .min(8, { message: 'A senha precisa ter ao menos 8 caracteres' })
+    .regex(/[a-z]/, { message: 'A senha precisa conter pelo menos uma letra minúscula' })
+    .regex(/[A-Z]/, { message: 'A senha precisa conter pelo menos uma letra maiúscula' })
+    .regex(/[0-9]/, { message: 'A senha precisa conter pelo menos um número' })
+    .regex(/[^a-zA-Z0-9]/, { message: 'A senha precisa conter pelo menos um caractere especial' }),
   phone: zod
     .string()
     .min(1, { message: 'Campo obrigatório' })

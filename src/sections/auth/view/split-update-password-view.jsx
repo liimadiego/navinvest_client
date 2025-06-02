@@ -30,13 +30,17 @@ export const UpdatePasswordSchema = zod
   .object({
     code: zod
       .string()
-      .min(1, { message: 'Code is required!' })
-      .min(6, { message: 'Code must be at least 6 characters!' }),
+      .min(1, { message: 'Código é obrigatório!' })
+      .min(6, { message: 'Código deve ter pelo menos 8 caracteres!' }),
     password: zod
       .string()
-      .min(1, { message: 'Password is required!' })
-      .min(6, { message: 'Password must be at least 6 characters!' }),
-    confirmPassword: zod.string().min(1, { message: 'Confirm password is required!' }),
+      .min(1, { message: 'Senha é obrigatória!' })
+      .min(8, { message: 'Senha deve ter pelo menos 8 caracteres!' })
+      .regex(/[a-z]/, { message: 'A senha precisa conter pelo menos uma letra minúscula' })
+      .regex(/[A-Z]/, { message: 'A senha precisa conter pelo menos uma letra maiúscula' })
+      .regex(/[0-9]/, { message: 'A senha precisa conter pelo menos um número' })
+      .regex(/[^a-zA-Z0-9]/, { message: 'A senha precisa conter pelo menos um caractere especial' }),
+    confirmPassword: zod.string().min(1, { message: 'Confirmação de senha é obrigatória!' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas não coincidem!',
