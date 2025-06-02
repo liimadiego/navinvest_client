@@ -38,7 +38,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { setSession } from 'src/auth/context/jwt';
 
 export function Payment() {
-    const testMode = false;
+    const testMode = true;
     const { mode } = useColorScheme();
     const location = useLocation();
     const { isYearly } = location.state || {};

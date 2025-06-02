@@ -27,12 +27,11 @@ import { useAuthContext } from 'src/auth/hooks';
 import { UpgradeBlock } from './nav-upgrade';
 import { AccountButton } from './account-button';
 import { SignOutButton } from './sign-out-button';
+import MyProfile from 'src/components/my-profile';
 
 // ----------------------------------------------------------------------
 
 export function AccountDrawer({ data = [], sx, ...other }) {
-  const pathname = usePathname();
-
   const { user } = useAuthContext();
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
@@ -48,60 +47,6 @@ export function AccountDrawer({ data = [], sx, ...other }) {
         {user?.displayName?.charAt(0).toUpperCase()}
       </Avatar>
     </AnimateBorder>
-  );
-
-  const renderList = () => (
-    <MenuList
-      disablePadding
-      sx={[
-        (theme) => ({
-          py: 3,
-          px: 2.5,
-          borderTop: `dashed 1px ${theme.vars.palette.divider}`,
-          borderBottom: `dashed 1px ${theme.vars.palette.divider}`,
-          '& li': { p: 0 },
-        }),
-      ]}
-    >
-      {data.map((option) => {
-        const rootLabel = pathname.includes('/dashboard') ? 'Home' : 'Dashboard';
-        const rootHref = pathname.includes('/dashboard') ? '/' : paths.dashboard.root;
-
-        return (
-          <MenuItem key={option.label}>
-            <Link
-              component={RouterLink}
-              href={option.label === 'Home' ? rootHref : option.href}
-              color="inherit"
-              underline="none"
-              onClick={onClose}
-              sx={{
-                p: 1,
-                width: 1,
-                display: 'flex',
-                typography: 'body2',
-                alignItems: 'center',
-                color: 'text.secondary',
-                '& svg': { width: 24, height: 24 },
-                '&:hover': { color: 'text.primary' },
-              }}
-            >
-              {option.icon}
-
-              <Box component="span" sx={{ ml: 2 }}>
-                {option.label === 'Home' ? rootLabel : option.label}
-              </Box>
-
-              {option.info && (
-                <Label color="error" sx={{ ml: 1 }}>
-                  {option.info}
-                </Label>
-              )}
-            </Link>
-          </MenuItem>
-        );
-      })}
-    </MenuList>
   );
 
   return (
@@ -156,14 +101,13 @@ export function AccountDrawer({ data = [], sx, ...other }) {
               </Typography>
             </Box>
 
-            {/* {renderList()} */}
-
           </Box>
 
           <Box sx={{ p: 2.5 }}>
             <Box sx={{ py: 3 }}>
               <UpgradeBlock />
             </Box>
+            <MyProfile onClose={onClose} />
             <SignOutButton onClose={onClose} />
           </Box>
         </Box>

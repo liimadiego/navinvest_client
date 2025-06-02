@@ -17,35 +17,12 @@ export const paths = {
   success_checkout: '/checkout-pagamento/sucesso',
   // AUTH
   auth: {
-    amplify: {
-      signIn: `${ROOTS.AUTH}/amplify/sign-in`,
-      verify: `${ROOTS.AUTH}/amplify/verify`,
-      signUp: `${ROOTS.AUTH}/amplify/sign-up`,
-      updatePassword: `${ROOTS.AUTH}/amplify/update-password`,
-      resetPassword: `${ROOTS.AUTH}/amplify/reset-password`,
-    },
     jwt: {
       signIn: `${ROOTS.AUTH}/login`,
       signUp: `${ROOTS.AUTH}/registrar`,
       resetPassword: `${ROOTS.AUTH}/redefinir-senha`,
       updatePassword: `${ROOTS.AUTH}/atualizar-senha`,
-    },
-    firebase: {
-      signIn: `${ROOTS.AUTH}/firebase/sign-in`,
-      verify: `${ROOTS.AUTH}/firebase/verify`,
-      signUp: `${ROOTS.AUTH}/firebase/sign-up`,
-      resetPassword: `${ROOTS.AUTH}/firebase/reset-password`,
-    },
-    auth0: {
-      signIn: `${ROOTS.AUTH}/auth0/sign-in`,
-    },
-    supabase: {
-      signIn: `${ROOTS.AUTH}/supabase/sign-in`,
-      verify: `${ROOTS.AUTH}/supabase/verify`,
-      signUp: `${ROOTS.AUTH}/supabase/sign-up`,
-      updatePassword: `${ROOTS.AUTH}/supabase/update-password`,
-      resetPassword: `${ROOTS.AUTH}/supabase/reset-password`,
-    },
+    }
   },
   // DASHBOARD
   dashboard: {
@@ -62,5 +39,6 @@ export const paths = {
     currency_converter: `${ROOTS.DASHBOARD}/conversor-moedas`,
     investor_glossary: `${ROOTS.DASHBOARD}/glossario-investidor`,
     dividend_calendar: `${ROOTS.DASHBOARD}/agenda-dividendos`,
+    my_profile: `${ROOTS.DASHBOARD}/meu-perfil`,
   },
 };
