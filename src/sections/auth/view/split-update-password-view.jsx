@@ -39,7 +39,7 @@ export const UpdatePasswordSchema = zod
     confirmPassword: zod.string().min(1, { message: 'Confirm password is required!' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match!',
+    message: 'As senhas não coincidem!',
     path: ['confirmPassword'],
   });
 
@@ -108,7 +108,7 @@ export function SplitUpdatePasswordView() {
         }).catch((error) => {
           setNotification({
             open: true,
-            message: `Erro ao atualizar a senha: Confira se o código está correto`,
+            message: `Erro ao atualizar a senha: ${error.response?.data?.message || error.message}`,
             severity: 'error'
           });
           console.error('Error:', error);
@@ -130,8 +130,9 @@ export function SplitUpdatePasswordView() {
       <Field.Text
         name="password"
         label="Password"
-        placeholder="6+ caracteres"
+        placeholder="8+ caracteres"
         type={showPassword.value ? 'text' : 'password'}
+        helperText="Deve conter letras maiúsculas, minúsculas, números e caracteres especiais (8+ caracteres)"
         slotProps={{
           inputLabel: { shrink: true },
           input: {
@@ -149,7 +150,7 @@ export function SplitUpdatePasswordView() {
       <Field.Text
         name="confirmPassword"
         label="Confirmar senha"
-        placeholder="6+ caracteres"
+        placeholder="8+ caracteres"
         helperText="As senhas devem ser iguais"
         type={showPassword.value ? 'text' : 'password'}
         slotProps={{

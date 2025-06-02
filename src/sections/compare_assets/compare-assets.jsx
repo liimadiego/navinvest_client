@@ -131,7 +131,6 @@ export function CompareAssets() {
 
   useEffect(() => {
     const handleWindowScroll = () => {
-      console.log('Window scroll position:', window.scrollY);
       setHasToShrinkThePanel(window.scrollY > 80);
     };
 

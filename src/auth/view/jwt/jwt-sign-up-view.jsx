@@ -156,8 +156,8 @@ export function JwtSignUpView() {
 
       <Field.Text
         name="password"
-        label="Password"
-        placeholder="6+ caracteres"
+        label="Senha"
+        placeholder="8+ caracteres"
         type={showPassword.value ? 'text' : 'password'}
         slotProps={{
           inputLabel: { shrink: true },
@@ -171,6 +171,7 @@ export function JwtSignUpView() {
             ),
           },
         }}
+        helperText="Deve conter letras maiúsculas, minúsculas, números e caracteres especiais (8+ caracteres)"
       />
 
       <LoadingButton

@@ -69,7 +69,7 @@ export function TickerSelector({
     const fetchTickers = async (query) => {
         try {
             setIsLoading(true);
-            const response = await getTickerList(query, 4, assetType !== 'all' ? assetType.toLowerCase() : '');
+            const response = await getTickerList(query, 60, assetType !== 'all' ? assetType.toLowerCase() : '');
             const tickers = response.filter(ticker => {
                 if (doNotRepeatCompany) {
                     const tickerCompany = ticker.ticker.substring(0, 4);

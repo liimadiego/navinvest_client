@@ -28,7 +28,6 @@ export async function getTickerList(query, limit = 5, type = "") {
                 }
 
                 const imagePath = `/assets/tickers/${ticker.ticker}.jpg`;
-                console.log(`Image path for ticker ${ticker.ticker}: ${imagePath}`);
                 const defaultImagePath = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg";
 
                 return {
