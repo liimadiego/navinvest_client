@@ -3,14 +3,13 @@ import { CardHeader, Paper, Skeleton, Table, TableBody, TableCell, TableContaine
 import { useEffect, useState } from 'react';
 import { set } from 'nprogress';
 
-export function AssetHistoricTable({ companyMarketData, historicalDividendYieldData }) {
+export function AssetHistoricTable({ companyMarketData, historicalDividendYieldData, assetType }) {
     const [currentYearData, setCurrentYearData] = useState(null);
     const [historicalFundDataRange, setHistoricalFundDataRange] = useState('5 Anos');
     const [historicalFundamentalistIndicators, setHistoricalFundamentalistIndicators] = useState(null);
 
     useEffect(() => {
-
-        if (!!companyMarketData && !!historicalDividendYieldData) {
+        if (!!companyMarketData && !!historicalDividendYieldData && assetType === 'br_stock') {
             const currentYear = new Date().getFullYear();
             const maxYear = Math.max(...companyMarketData.map((item) => item.year));
             const maxYearDividends = historicalDividendYieldData?.dividendYields ? Math.max(...historicalDividendYieldData.dividendYields.map((item) => {
@@ -207,6 +206,101 @@ export function AssetHistoricTable({ companyMarketData, historicalDividendYieldD
                     data: roa,
                     type: 'percentage'
                 }
+            });
+        }
+
+        if (!!companyMarketData && assetType === 'us_stock') {
+            const years = companyMarketData.map(item => item.year);
+            const pl = companyMarketData.map(item => item.stockData.pl ? item.stockData.pl : '-');
+            const psr = companyMarketData.map(item => item.stockData.psr ? item.stockData.psr : '-');
+            const pvp = companyMarketData.map(item => item.stockData.pvp ? item.stockData.pvp : '-');
+            const dividendYield = companyMarketData.map(item => item.stockData.dividend_yield ? item.stockData.dividend_yield / 100 : '-');
+            const roa = companyMarketData.map(item => item.stockData.roa ? (item.stockData.roa / 100) : '-');
+            const roe = companyMarketData.map(item => item.stockData.roe ? (item.stockData.roe / 100) : '-');
+            const roic = companyMarketData.map(item => item.stockData.roic ? (item.stockData.roic / 100) : '-');
+            const margemLiquida = companyMarketData.map(item => item.stockData.margem_liquida ? (item.stockData.margem_liquida / 100) : '-');
+            const margemBruta = companyMarketData.map(item => item.stockData.margem_bruta ? (item.stockData.margem_bruta / 100) : '-');
+            const margemOperacional = companyMarketData.map(item => item.stockData.margem_operacional ? (item.stockData.margem_operacional / 100) : '-');
+            const pebitda = companyMarketData.map(item => item.stockData.pebitda ? item.stockData.pebitda : '-');
+            const pebit = companyMarketData.map(item => item.stockData.pebit ? item.stockData.pebit : '-');
+            const pativo = companyMarketData.map(item => item.stockData.pativo ? item.stockData.pativo : '-');
+            const vpa = companyMarketData.map(item => item.stockData.vpa ? item.stockData.vpa : '-');
+            const lpa = companyMarketData.map(item => item.stockData.lpa ? item.stockData.lpa : '-');
+            const patrimonioAtivos = companyMarketData.map(item => item.stockData.patrimonio_ativos ? (item.stockData.patrimonio_ativos) : '-');
+
+            setHistoricalFundamentalistIndicators({
+                ano: years,
+                p_l: {
+                    title: "P/L",
+                    data: pl
+                },
+                p_receita: {
+                    title: "P/RECEITA (PSR)",
+                    data: psr
+                },
+                p_vp: {
+                    title: "P/VP",
+                    data: pvp
+                },
+                dividend_yield: {
+                    title: "DIVIDEND YIELD (DY)",
+                    data: dividendYield,
+                    type: 'percentage'
+                },
+                roa: {
+                    title: "ROA",
+                    data: roa,
+                    type: 'percentage'
+                },
+                roe: {
+                    title: "ROE",
+                    data: roe,
+                    type: 'percentage'
+                },
+                roic: {
+                    title: "ROIC",
+                    data: roic,
+                    type: 'percentage'
+                },
+                margem_liquida: {
+                    title: "MARGEM LÍQUIDA",
+                    data: margemLiquida,
+                    type: 'percentage'
+                },
+                margem_bruta: {
+                    title: "MARGEM BRUTA",
+                    data: margemBruta,
+                    type: 'percentage'
+                },
+                margem_operacional: {
+                    title: "MARGEM OPERACIONAL",
+                    data: margemOperacional,
+                    type: 'percentage'
+                },
+                pebitda: {
+                    title: "P/EBITDA",
+                    data: pebitda
+                },
+                pebit: {
+                    title: "P/EBIT",
+                    data: pebit
+                },
+                p_ativo: {
+                    title: "P/ATIVO",
+                    data: pativo
+                },
+                vpa: {
+                    title: "VPA",
+                    data: vpa
+                },
+                lpa: {
+                    title: "LPA",
+                    data: lpa
+                },
+                patrimonio_ativos: {
+                    title: "PATRIMÔNIO/ATIVOS",
+                    data: patrimonioAtivos
+                },
             });
         }
     }, [companyMarketData, historicalDividendYieldData]);

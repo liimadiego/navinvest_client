@@ -29,8 +29,6 @@ export async function getTickerList(query, limit = 5, type = "") {
                     }
                 }
 
-                console.log("Ticker:", ticker);
-
                 if (ticker.asset_type === "cripto") {
                     return {
                         ...ticker,

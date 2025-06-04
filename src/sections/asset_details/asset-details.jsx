@@ -19,57 +19,83 @@ export function AssetDetails({ ticker, tickerData, chart, proftability, assetTyp
         return true;
     }
 
-    let assetInfo = null;
     const tickerInfo = tickerData?.tickerCompanyInfo;
     const companyMarketData = tickerData?.companyMarketData[0];
     const currency = tickerInfo ? tickerInfo.currency : 'BRL';
-    let p_l = 0;
-    let p_vp = 0;
-    let dividendYield = 0;
+    const [p_l, setPl] = useState(0);
+    const [p_vp, setPvp] = useState(0);
+    const [dividendYield, setDividendYield] = useState(0);
+    const [assetInfo, setAssetInfo] = useState(null);
+    const [historicalDividendYieldData, setHistoricalDividendYieldData] = useState({
+        dividendYields: []
+    });
+    const [isDividendsAllZero, setDividendsIsAllZero] = useState(false);
 
-    if (tickerData && tickerData.tickerCompanyInfo && assetType === 'br_stock') {
-        assetInfo = tickerData.tickerCompanyInfo.company;
-        assetInfo = {
-            ...assetInfo,
-            sector: assetInfo?.b3_sector,
-            subsector: assetInfo?.b3_subsector,
-            segment: assetInfo?.b3_segment,
-            trade_name: assetInfo?.trade_name,
-            founding_date: assetInfo?.founding_date,
-            main_activity: assetInfo?.main_activity,
-            is_state_owned: assetInfo?.is_state_owned,
-            cnpj: assetInfo?.cnpj,
-            website: assetInfo?.website,
-        };
+    useEffect(() => {
+        if (tickerData && tickerData.tickerCompanyInfo && assetType === 'br_stock') {
+            const companyInfo = tickerData.tickerCompanyInfo.company;
+            setAssetInfo({
+                ...companyInfo,
+                sector: companyInfo?.b3_sector,
+                subsector: companyInfo?.b3_subsector,
+                segment: companyInfo?.b3_segment,
+                trade_name: companyInfo?.trade_name,
+                founding_date: companyInfo?.founding_date,
+                main_activity: companyInfo?.main_activity,
+                is_state_owned: companyInfo?.is_state_owned,
+                cnpj: companyInfo?.cnpj,
+                website: companyInfo?.website,
+            });
 
-        p_l = companyMarketData?.market_ratios?.price_earnings ? companyMarketData?.market_ratios?.price_earnings.toFixed(2) : 0;
-        p_vp = companyMarketData?.market_ratios?.price_to_book ? companyMarketData?.market_ratios?.price_to_book.toFixed(2) : 0;
-        dividendYield = companyMarketData?.dividendYieldLast12Months ? companyMarketData?.dividendYieldLast12Months.toFixed(2) : 0;
-    }
+            setPl(companyMarketData?.market_ratios?.price_earnings ? companyMarketData?.market_ratios?.price_earnings.toFixed(2) : 0);
+            setPvp(companyMarketData?.market_ratios?.price_to_book ? companyMarketData?.market_ratios?.price_to_book.toFixed(2) : 0);
+            setDividendYield(companyMarketData?.dividendYieldLast12Months ? companyMarketData?.dividendYieldLast12Months.toFixed(2) : 0);
+            setHistoricalDividendYieldData(tickerData?.historicalDividendYieldData || []);
+        }
+    }, [tickerData, assetType]);
 
-    if (tickerData && tickerData.tickerCompanyInfo && assetType === 'us_stock') {
-        assetInfo = tickerData.tickerCompanyInfo.stock;
-        assetInfo = {
-            ...assetInfo,
-            sector: tickerData.sector,
-            subsector: tickerData.sector,
-            segment: assetInfo?.industry,
-            trade_name: assetInfo?.name,
-            founding_date: null,
-            main_activity: null,
-            is_state_owned: null,
-            cnpj: assetInfo?.cik,
-            website: assetInfo?.official_site,
-        };
+    useEffect(() => {
+        if (tickerData && tickerData.tickerCompanyInfo && assetType === 'us_stock') {
+            const stockInfo = tickerData.tickerCompanyInfo.stock;
+            setAssetInfo({
+                ...stockInfo,
+                sector: tickerData.sector,
+                subsector: tickerData.sector,
+                segment: stockInfo?.industry,
+                trade_name: stockInfo?.name,
+                founding_date: null,
+                main_activity: null,
+                is_state_owned: null,
+                cnpj: stockInfo?.cik,
+                website: stockInfo?.official_site,
+            });
 
-        p_l = companyMarketData.stockData.pl;
-        p_vp = companyMarketData.stockData.pvp;
-        dividendYield = companyMarketData.stockData.dividend_yield ? companyMarketData.stockData.dividend_yield / 100 : 0;
+            setPl(companyMarketData.stockData.pl);
+            setPvp(companyMarketData.stockData.pvp);
+            setDividendYield(companyMarketData.stockData.dividend_yield ? companyMarketData.stockData.dividend_yield / 100 : 0);
+            setHistoricalDividendYieldData({
+                dividendYields: tickerData.companyMarketData?.map(item => ({
+                    year: `${item.year}-01-01`,
+                    dy: item?.stockData && item.stockData?.dividend_yield ? item.stockData.dividend_yield : 0
+                })) || []
+            });
 
+            const currentYear = new Date().getFullYear();
+            if (companyMarketData.stockData?.year < currentYear) {
+                historicalDividendYieldData.dividendYields.push({
+                    year: `${currentYear}-01-01`,
+                    dy: companyMarketData.stockData?.dividend_yield ? companyMarketData.stockData.dividend_yield : 0
+                });
+            }
+        }
+    }, [tickerData, assetType]);
 
-    }
-
-    const historicalDividendYieldData = tickerData?.historicalDividendYieldData;
+    useEffect(() => {
+        if (historicalDividendYieldData?.dividendYields) {
+            const allZero = historicalDividendYieldData.dividendYields.every(item => item.dy === 0);
+            setDividendsIsAllZero(allZero);
+        }
+    }, [historicalDividendYieldData]);
 
     const price12MAgo = tickerInfo ? tickerInfo.price_twelve_months_ago : 0;
     const priceNow = tickerInfo ? tickerInfo.current_price : 0;
@@ -144,21 +170,25 @@ export function AssetDetails({ ticker, tickerData, chart, proftability, assetTyp
 
             <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refIndicators}>INDICADORES FUNDAMENTALISTAS</Typography>
             <Box display={'flex'} justifyContent={'space-between'} width={"100%"} flexWrap={'wrap'} gap={2}>
-                <FundamentalIndicatorCard tickerData={tickerData} />
+                <FundamentalIndicatorCard tickerData={tickerData} assetType={assetType} />
             </Box>
 
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
             <Box sx={{ mt: 3 }}>
-                <AssetHistoricTable companyMarketData={tickerData?.companyMarketData} historicalDividendYieldData={historicalDividendYieldData} />
+                <AssetHistoricTable companyMarketData={tickerData?.companyMarketData} historicalDividendYieldData={historicalDividendYieldData} assetType={assetType} />
             </Box>
 
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
-            <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }}>HISTÓRICO DE DIVIDENDOS DE {ticker}</Typography>
-            <DividendsHistoric historicalDividendYieldData={historicalDividendYieldData} />
+            {!isDividendsAllZero &&
+                <>
+                    <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }}>HISTÓRICO DE DIVIDENDOS DE {ticker}</Typography>
+                    <DividendsHistoric historicalDividendYieldData={historicalDividendYieldData} />
+                    <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
+                </>
+            }
 
-            <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
             <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refCompany}>INFORMAÇÕES DA EMPRESA</Typography>
             <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
