@@ -57,7 +57,7 @@ export function AssetDetailsCripto({ ticker, tickerData, chart, assetType }) {
 
             <Box sx={{ mt: 2 }} gap={2} display={'flex'} flexWrap={'wrap'}>
                 <CardAssetDetails
-                    sx={{ flex: '1', minWidth: '300px' }}
+                    sx={{ flex: '1', minWidth: { xs: '200px', sm: '300px' } }}
                     title="Cotação"
                     total={currentPrice}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
@@ -75,14 +75,6 @@ export function AssetDetailsCripto({ ticker, tickerData, chart, assetType }) {
                     type='percentage'
                     description='Variação dos últimos 12 meses'
                 />
-                {/* <CardAssetDetails
-                    sx={{ flex: '1', minWidth: '200px' }}
-                    title="P/L"
-                    total={p_l}
-                    icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
-                    color='info'
-                    description='Preço da ação dividido pelo lucro por ação'
-                /> */}
                 <CardAssetDetails
                     sx={{ flex: '1', minWidth: '200px' }}
                     title="Rank de Mercado"
@@ -92,7 +84,7 @@ export function AssetDetailsCripto({ ticker, tickerData, chart, assetType }) {
                     description='Posição do ativo no ranking de mercado'
                 />
                 <CardAssetDetails
-                    sx={{ flex: '1', minWidth: '450px' }}
+                    sx={{ flex: '1', minWidth: { xs: '200px', sm: '450px' } }}
                     title="Capitalização de Mercado"
                     total={market_cap}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
@@ -106,7 +98,7 @@ export function AssetDetailsCripto({ ticker, tickerData, chart, assetType }) {
                 <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${assetInfo?.trade_name ? assetInfo?.trade_name : ""} (${ticker.toUpperCase()})`} currency={currency} />
             </Box>
 
-            <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refIndicators}>INDICADORES FUNDAMENTALISTAS</Typography>
+            <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refIndicators}>INDICADORES</Typography>
             <Box display={'flex'} justifyContent={'space-between'} width={"100%"} flexWrap={'wrap'} gap={2}>
                 <FundamentalIndicatorCard tickerData={tickerData} assetType={'cripto'} />
             </Box>

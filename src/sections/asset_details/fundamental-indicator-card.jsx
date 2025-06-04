@@ -390,7 +390,7 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
 
     const FundamentalIndicator = ({ title, total, type, description, currency }) => {
         return (
-            total !== null ? <Paper elevation={3} sx={{ p: 2, minWidth: { xs: '136px', md: '250px' }, flex: '1', position: 'relative' }}>
+            total !== null ? <Paper elevation={3} sx={{ p: 2, minWidth: { xs: assetType === 'cripto' ? '250px' : '136px', md: '250px' }, flex: '1', position: 'relative' }}>
                 <Typography sx={{ p: 1, opacity: .75 }} variant='subtitle2'>{title}
                     <Tooltip title={description} arrow>
                         <IconButton sx={{ ml: "5px", p: 0, position: 'absolute', right: "15px", top: "15px" }}>
