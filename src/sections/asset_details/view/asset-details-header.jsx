@@ -6,6 +6,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import IconButton from '@mui/material/IconButton';
 import { Box, Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
+import { gridColumnVisibilityModelSelector } from '@mui/x-data-grid';
 
 export function AssetDetailsHeader({
     tickerData,
@@ -36,13 +37,17 @@ export function AssetDetailsHeader({
     }
 
     let assetInfo = null;
+    let assetImage = null;
+    let tickerName = null;
 
     if (tickerData && tickerData.tickerCompanyInfo && assetType === 'br_stock') {
         assetInfo = tickerData.tickerCompanyInfo.company;
         assetInfo = {
             ...assetInfo,
-            trade_name: tickerData.tickerCompanyInfo.trade_name || assetInfo.name
+            trade_name: tickerData.tickerCompanyInfo.trade_name || assetInfo.name,
         };
+        assetImage = `/assets/tickers/${tickerData.tickerCompanyInfo.ticker}.jpg`;
+        tickerName = tickerData.tickerCompanyInfo.ticker;
     }
 
     if (tickerData && tickerData.tickerCompanyInfo && assetType === 'us_stock') {
@@ -51,9 +56,19 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: assetInfo?.name,
         };
+        assetImage = `/assets/tickers/${tickerData.tickerCompanyInfo.ticker}.jpg`;
+        tickerName = tickerData.tickerCompanyInfo.ticker;
     }
 
-    tickerData = tickerData.tickerCompanyInfo;
+    if (tickerData && tickerData.tickerData && assetType === 'cripto') {
+        assetInfo = tickerData.tickerData;
+        assetInfo = {
+            ...assetInfo,
+            trade_name: tickerData.tickerData.asset_name
+        };
+        assetImage = tickerData.tickerData.asset_image_url;
+        tickerName = tickerData.tickerData.ticker;
+    }
 
     const scrollToSection = (ref) => {
         if (!ref.current) return;
@@ -70,13 +85,13 @@ export function AssetDetailsHeader({
         <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1, position: "relative" }} flexDirection={{ xs: 'column', md: 'row' }}>
             <Box display="flex" alignItems="center" gap={2} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <img
-                    src={`/assets/tickers/${tickerData.ticker}.jpg`}
+                    src={assetImage}
                     onError={(e) => e.target.src = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg"}
                     alt=""
                     style={{ width: 70, height: 70, borderRadius: 8 }}
                 />
                 <Box style={{ height: 70 }}>
-                    <Typography variant="h5">{tickerData.ticker}</Typography>
+                    <Typography variant="h5">{tickerName}</Typography>
                     <Typography variant="subtitle2">{assetInfo?.trade_name}</Typography>
                 </Box>
             </Box>

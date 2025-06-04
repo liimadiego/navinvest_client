@@ -3,6 +3,7 @@ import { paths } from 'src/routes/paths';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { AssetDetails } from '../asset-details';
+import { AssetDetailsCripto } from '../asset-details-cripto';
 import { LocalizationProvider } from 'src/locales';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -36,7 +37,7 @@ export function AssetDetailsView() {
         const _assetType = data.assetType || null;
         setAssetType(_assetType);
 
-        setChart({ series: handleHistoricalQuotes(data.historicalQuotesData) });
+        setChart({ series: handleHistoricalQuotes(data.historicalQuotesData, _assetType) });
         setTickerData(data);
 
         if (data.proftability) {
@@ -48,7 +49,7 @@ export function AssetDetailsView() {
       });
   }, []);
 
-  function handleHistoricalQuotes(historicalQuotesData) {
+  function handleHistoricalQuotes(historicalQuotesData, assetType) {
     const monthlyMap = {};
 
     historicalQuotesData.forEach(item => {
@@ -56,8 +57,13 @@ export function AssetDetailsView() {
       const year = date.getFullYear();
       const month = date.toLocaleString('pt-BR', { month: 'short' }).replace('.', '');
       const label = `${month.charAt(0).toUpperCase()}${month.slice(1)}/${year}`;
+      let adjClose = 0;
 
-      const adjClose = parseFloat(item.adj_close);
+      if (assetType === 'cripto') {
+        adjClose = parseFloat(item.close_brl);
+      } else {
+        adjClose = parseFloat(item.adj_close);
+      }
 
       if (!monthlyMap[label]) monthlyMap[label] = [];
       monthlyMap[label].push(adjClose);
@@ -71,29 +77,39 @@ export function AssetDetailsView() {
       return dA - dB;
     });
 
+    function getFilteredWithLastItem(months, divider) {
+      const filtered = months.filter((_, index) => index % divider === 0);
+      const lastMonth = months[months.length - 1];
+
+      if (filtered[filtered.length - 1] !== lastMonth) {
+        filtered.push(lastMonth);
+      }
+
+      return filtered;
+    }
+
+    const fiveYearsMonths = orderedMonths.slice(-60);
+    const fiveYearsFiltered = getFilteredWithLastItem(fiveYearsMonths, 2);
+
     const fiveYears = {
       name: '5 anos',
-      categories: orderedMonths.slice(-60).filter((_, index) => index % 2 === 0),
+      categories: fiveYearsFiltered,
       data: [{
         name: 'Cotação',
-        data: orderedMonths
-          .slice(-60)
-          .filter((_, index) => index % 2 === 0)
-          .map(label => monthlyMap[label].map(v => v.toFixed(2)).join(', ')),
+        data: fiveYearsFiltered.map(label => monthlyMap[label].map(v => v.toFixed(2)).join(', ')),
       }]
     };
 
+    const tenYearsMonths = orderedMonths.slice(-120);
     const dividerTenYears = orderedMonths.length > 60 ? 4 : 2;
+    const tenYearsFiltered = getFilteredWithLastItem(tenYearsMonths, dividerTenYears);
 
     const tenYears = {
       name: '10 anos',
-      categories: orderedMonths.slice(-120).filter((_, index) => index % dividerTenYears === 0),
+      categories: tenYearsFiltered,
       data: [{
         name: 'Cotação',
-        data: orderedMonths
-          .slice(-120)
-          .filter((_, index) => index % dividerTenYears === 0)
-          .map(label => monthlyMap[label].map(v => v.toFixed(2)).join(', ')),
+        data: tenYearsFiltered.map(label => monthlyMap[label].map(v => v.toFixed(2)).join(', ')),
       }]
     };
 
@@ -162,7 +178,11 @@ export function AssetDetailsView() {
         }
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <AssetDetails proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} assetType={assetType} />
+        {(assetType === 'br_stock' || assetType === 'us_stock') &&
+          <AssetDetails proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} assetType={assetType} />}
+
+        {assetType === 'cripto' &&
+          <AssetDetailsCripto ticker={tickerString} chart={chart} tickerData={tickerData} />}
       </LocalizationProvider>
     </DashboardContent>
   );

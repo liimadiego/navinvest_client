@@ -29,15 +29,7 @@ export async function getTickerList(query, limit = 5, type = "") {
                     }
                 }
 
-                if (ticker.asset_type === "cripto") {
-                    return {
-                        ...ticker,
-                        image_url: ticker.asset_image_url,
-                        fallback_image_url: defaultImagePath
-                    }
-                }
-
-                const imagePath = `/assets/tickers/${ticker.ticker}.jpg`;
+                const imagePath = ticker.asset_type === "cripto" ? ticker.asset_image_url : `/assets/tickers/${ticker.ticker}.jpg`;
 
                 return {
                     id: ticker.id,

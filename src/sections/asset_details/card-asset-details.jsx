@@ -6,6 +6,29 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 // ----------------------------------------------------------------------
 
 export function CardAssetDetails({ sx, icon, title, total, type = false, color = 'warning', currency = false, description = false, assetType, ...other }) {
+  const handleCurrency = (value, currencyCode = currency || 'BRL') => {
+    if (typeof value !== 'number') {
+      value = parseFloat(value);
+      if (isNaN(value)) {
+        return 'N/A';
+      }
+    }
+
+    if (currencyCode === 'USD') {
+      const formattedValue = value.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      return `$${formattedValue}`;
+    } else {
+      const formattedValue = value.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+      return `R$${formattedValue}`;
+    }
+  };
 
   return (
     <Paper elevation={3} sx={[{ py: 3, pl: 3, pr: 2.5, position: "relative", overflow: "hidden", zIndex: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
@@ -13,7 +36,7 @@ export function CardAssetDetails({ sx, icon, title, total, type = false, color =
         {total !== null && total !== undefined ? (
           <Box sx={{ typography: 'h3', color: total < 0 ? 'error.main' : 'text.primary' }}>
             {type === 'currency' ? (
-              currency === 'USD' ? `$${total.toLocaleString('en-US')}` : `R$${total.toLocaleString('pt-BR')}`
+              handleCurrency(total, currency)
             ) : type === 'percentage' ? (
               `${total ? (total * 100).toFixed(2) : 0}%`
             ) : (

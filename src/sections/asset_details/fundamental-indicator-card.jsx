@@ -3,10 +3,10 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Box, Paper, Skeleton, Tooltip, Typography } from '@mui/material';
 
 export function FundamentalIndicatorCard({ tickerData, assetType }) {
-    const companyMarketData = tickerData?.companyMarketData[0];
     let fundamentalIndicatorsData = [];
 
     if (tickerData && tickerData.tickerCompanyInfo && assetType === 'br_stock') {
+        const companyMarketData = tickerData?.companyMarketData[0];
         const {
             EV,
             EBIT,
@@ -201,6 +201,7 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
     }
 
     if (tickerData && tickerData.tickerCompanyInfo && assetType === 'us_stock') {
+        const companyMarketData = tickerData?.companyMarketData[0];
         const {
             pl,
             psr,
@@ -331,10 +332,61 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
                 'description': 'Taxa de crescimento anual composta dos lucros nos últimos 5 anos'
             }
         ];
-
     }
 
-
+    if (tickerData && tickerData.tickerData && assetType === 'cripto') {
+        const assetData = tickerData.tickerData;
+        fundamentalIndicatorsData = [
+            {
+                "title": "Preço 12 meses atrás",
+                "total": assetData?.price_twelve_months_ago ? parseFloat(assetData.price_twelve_months_ago) : null,
+                "type": "currency",
+                "description": "Preço do ativo há 12 meses"
+            },
+            {
+                "title": "Capitalização de Mercado",
+                "total": assetData?.cripto?.market_cap ? parseFloat(assetData.cripto.market_cap) : null,
+                "type": "currency",
+                "description": "Capitalização de mercado do ativo"
+            },
+            {
+                "title": "Rank em Capitalização de Mercado",
+                "total": assetData?.cripto?.market_cap_rank ? parseInt(assetData.cripto.market_cap_rank) : null,
+                "type": "number",
+                "description": "Posição do ativo em relação aos outros ativos (criptomoedas) por capitalização de mercado"
+            },
+            {
+                "title": "Volume 24h",
+                "total": assetData?.cripto?.total_volume ? parseFloat(assetData.cripto.total_volume) : null,
+                "type": "currency",
+                "description": "Volume negociado nas últimas 24 horas"
+            },
+            {
+                "title": "Alta 24h",
+                "total": assetData?.cripto?.max_supply ? parseFloat(assetData.cripto.max_supply) : null,
+                "type": "number",
+                "description": "Quantidade máxima de unidades que podem existir"
+            },
+            {
+                "title": "Quantidade atualmente em Circulação",
+                "total": assetData?.cripto?.circulating_supply ? parseFloat(assetData.cripto.circulating_supply) : null,
+                "type": "number",
+                "description": "Quantidade de unidades atualmente em circulação"
+            },
+            {
+                "title": "Volume Total",
+                "total": assetData?.cripto?.total_volume ? parseFloat(assetData.cripto.total_volume) : null,
+                "type": "currency",
+                "description": "Volume total negociado nas últimas 24 horas"
+            },
+            {
+                "title": "ROI (%)",
+                "total": assetData?.cripto?.roi_percentage ? parseFloat(assetData.cripto.roi_percentage) / 100 : null,
+                "type": "percentage",
+                "description": "Retorno sobre o investimento (ROI) em relação ao Bitcoin"
+            }
+        ];
+    }
 
     const FundamentalIndicator = ({ title, total, type, description, currency }) => {
         return (
@@ -353,7 +405,7 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
                         ) : type === 'percentage' ? (
                             `${(total * 100).toFixed(2)}%`
                         ) : (
-                            total.toFixed(2).toLocaleString().replace('.', ',')
+                            Number.isInteger(total) ? total.toLocaleString().replace('.', ',') : total.toFixed(2).toLocaleString().replace('.', ',')
                         )}
                     </Box>
                 </Typography>
