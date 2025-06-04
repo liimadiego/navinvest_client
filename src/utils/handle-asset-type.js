@@ -14,6 +14,7 @@ export function translateAssetType(assetType, currency = 'BRL') {
     bdr: 'BDRs',
     reit: 'REITs',
     crypto: 'Criptomoedas',
+    cripto: 'Criptomoedas',
     stablecoin: 'Criptomoedas',
   };
 

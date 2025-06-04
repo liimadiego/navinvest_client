@@ -12,6 +12,7 @@ export function AssetDetailsHeader({
     refCompany,
     refIndicators,
     refPrice,
+    assetType
 }) {
     if (!tickerData) {
         return (
@@ -34,7 +35,24 @@ export function AssetDetailsHeader({
         );
     }
 
-    const companyData = tickerData.tickerCompanyInfo.company;
+    let assetInfo = null;
+
+    if (tickerData && tickerData.tickerCompanyInfo && assetType === 'br_stock') {
+        assetInfo = tickerData.tickerCompanyInfo.company;
+        assetInfo = {
+            ...assetInfo,
+            trade_name: tickerData.tickerCompanyInfo.trade_name || assetInfo.name
+        };
+    }
+
+    if (tickerData && tickerData.tickerCompanyInfo && assetType === 'us_stock') {
+        assetInfo = tickerData.tickerCompanyInfo.stock;
+        assetInfo = {
+            ...assetInfo,
+            trade_name: assetInfo?.name,
+        };
+    }
+
     tickerData = tickerData.tickerCompanyInfo;
 
     const scrollToSection = (ref) => {
@@ -59,7 +77,7 @@ export function AssetDetailsHeader({
                 />
                 <Box style={{ height: 70 }}>
                     <Typography variant="h5">{tickerData.ticker}</Typography>
-                    <Typography variant="subtitle2">{companyData?.trade_name}</Typography>
+                    <Typography variant="subtitle2">{assetInfo?.trade_name}</Typography>
                 </Box>
             </Box>
             <Box sx={{ mt: { xs: 4, md: 0 }, justifyContent: { xs: 'center', md: 'flex-end' } }} style={{ color: "#fff" }} flexDirection='row' display="flex" gap={2}>

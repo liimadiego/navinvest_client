@@ -17,31 +17,31 @@ import { useAuthContext } from 'src/auth/hooks';
 
 export function AssetDetailsView() {
   const { ticker = '' } = useParams();
+  const [assetType, setAssetType] = useState(null);
+  const tickerString = String(ticker || '').toUpperCase();
+
   const [tickerData, setTickerData] = useState(null);
   const [chart, setChart] = useState({ series: [] });
   const [reportData, setReportData] = useState(null);
   const [proftability, setProftability] = useState(null);
-  const { user } = useAuthContext();
 
-  const tickerString = String(ticker || '').toUpperCase();
+  const { user } = useAuthContext();
 
   const { tokenUsage } = useTokenUsage();
   const [isFeatureDisabled, setIsFeatureDisabled] = useState(false);
 
   useEffect(() => {
-    axios.get(`/ticker/get-proftability-by-ticker/${tickerString}`)
+    axios.get(`/ticker/get-ticker-data/${tickerString}`)
       .then(({ data }) => {
-        setProftability(data);
-      })
-      .catch(error => {
-        console.error('Error fetching ticker data:', error);
-      });
+        const _assetType = data.assetType || null;
+        setAssetType(_assetType);
 
-
-    axios.get(`/companies/${tickerString}`)
-      .then(({ data }) => {
         setChart({ series: handleHistoricalQuotes(data.historicalQuotesData) });
         setTickerData(data);
+
+        if (data.proftability) {
+          setProftability(data.proftability);
+        }
       })
       .catch(error => {
         console.error('Error fetching ticker data:', error);
@@ -146,20 +146,23 @@ export function AssetDetailsView() {
         sx={{ mb: { xs: 3, md: 5 } }}
         action={
           <>
-            {!isFeatureDisabled && <Tooltip title="Momento da empresa: IA gera relatório levando em consideração os dados atuais do ativo">
-              <IconButton
-                onClick={handleAskAIReport}
-              >
-                <AutoAwesomeIcon />
-              </IconButton>
-            </Tooltip>}
+            {!isFeatureDisabled && assetType == 'br_stock' && <>
+              <Tooltip title="Momento da empresa: IA gera relatório levando em consideração os dados atuais do ativo">
+                <IconButton
+                  onClick={handleAskAIReport}
+                >
+                  <AutoAwesomeIcon />
+                </IconButton>
+              </Tooltip>
 
-            <AssetReportAIModal reportData={reportData} handleClose={handleCloseModalAssetReport} isOpen={isAssetReportAIModalOpen} />
+              <AssetReportAIModal reportData={reportData} handleClose={handleCloseModalAssetReport} isOpen={isAssetReportAIModalOpen} />
+            </>
+            }
           </>
         }
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <AssetDetails proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} />
+        <AssetDetails proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} assetType={assetType} />
       </LocalizationProvider>
     </DashboardContent>
   );

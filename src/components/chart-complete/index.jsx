@@ -3,7 +3,7 @@ import { useTheme } from '@emotion/react';
 import { useCallback, useEffect, useState } from 'react';
 import { Box, CardHeader, Paper, Skeleton } from '@mui/material';
 
-export function ChartComplete({ chart, title, subheader, isCurrency = false }) {
+export function ChartComplete({ chart, title, subheader, isCurrency = false, currency = 'BRL' }) {
     const [selectedSeries, setSelectedSeries] = useState(chart.series.length > 0 ? chart.series[0].name : '');
 
     const theme = useTheme();
@@ -23,7 +23,7 @@ export function ChartComplete({ chart, title, subheader, isCurrency = false }) {
             },
             fillSeriesColor: false,
             y: {
-                formatter: (value) => isCurrency ? `R$${value}` : `${value}%`,
+                formatter: (value) => isCurrency ? currency == 'BRL' ? `R$${value}` : `$${value}` : `${value}%`,
             }
         },
         ...chart.options,
