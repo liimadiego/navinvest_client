@@ -1,6 +1,7 @@
 import { IconButton } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Box, Paper, Skeleton, Tooltip, Typography } from '@mui/material';
+import { fShortenNumberToString } from 'src/utils/format-number';
 
 export function FundamentalIndicatorCard({ tickerData, assetType }) {
     let fundamentalIndicatorsData = [];
@@ -346,11 +347,11 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
             {
                 "title": "Capitalização de Mercado",
                 "total": assetData?.cripto?.market_cap ? parseFloat(assetData.cripto.market_cap) : null,
-                "type": "currency",
+                "type": "currency_string",
                 "description": "Capitalização de mercado do ativo"
             },
             {
-                "title": "Rank em Capitalização de Mercado",
+                "title": "Rank Capitalização de Mercado",
                 "total": assetData?.cripto?.market_cap_rank ? parseInt(assetData.cripto.market_cap_rank) : null,
                 "type": "number",
                 "description": "Posição do ativo em relação aos outros ativos (criptomoedas) por capitalização de mercado"
@@ -358,7 +359,7 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
             {
                 "title": "Volume 24h",
                 "total": assetData?.cripto?.total_volume ? parseFloat(assetData.cripto.total_volume) : null,
-                "type": "currency",
+                "type": "currency_string",
                 "description": "Volume negociado nas últimas 24 horas"
             },
             {
@@ -370,14 +371,8 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
             {
                 "title": "Quantidade atualmente em Circulação",
                 "total": assetData?.cripto?.circulating_supply ? parseFloat(assetData.cripto.circulating_supply) : null,
-                "type": "number",
+                "type": "currency_string",
                 "description": "Quantidade de unidades atualmente em circulação"
-            },
-            {
-                "title": "Volume Total",
-                "total": assetData?.cripto?.total_volume ? parseFloat(assetData.cripto.total_volume) : null,
-                "type": "currency",
-                "description": "Volume total negociado nas últimas 24 horas"
             },
             {
                 "title": "ROI (%)",
@@ -402,6 +397,8 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
                     <Box>
                         {type === 'currency' ? (
                             currency === 'USD' ? `$${total.toLocaleString('en-US')}` : `R$${total.toLocaleString('pt-BR')}`
+                        ) : type === 'currency_string' ? (
+                            currency === 'USD' ? `$${fShortenNumberToString(total)}` : `R$${fShortenNumberToString(total)}`
                         ) : type === 'percentage' ? (
                             `${(total * 100).toFixed(2)}%`
                         ) : (

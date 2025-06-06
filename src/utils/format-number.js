@@ -92,3 +92,20 @@ export function fData(inputValue) {
 
   return fm;
 }
+
+// ----------------------------------------------------------------------
+
+export function fShortenNumberToString(inputValue) {
+  const number = processInput(inputValue);
+  if (number === null) return '';
+
+  const units = ['K', 'M', 'B', 'T'];
+  const baseValue = 1000;
+
+  if (number < baseValue) return number.toString();
+
+  const index = Math.floor(Math.log(number) / Math.log(baseValue));
+  const fm = `${(number / baseValue ** index).toFixed(1)}${units[index - 1]}`;
+
+  return fm;
+}

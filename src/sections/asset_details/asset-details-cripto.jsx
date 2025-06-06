@@ -89,7 +89,7 @@ export function AssetDetailsCripto({ ticker, tickerData, chart, assetType }) {
                     total={market_cap}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
                     color='error'
-                    type='currency'
+                    type='currency_string'
                     currency={currency}
                     description='Valor total de mercado do ativo'
                 />

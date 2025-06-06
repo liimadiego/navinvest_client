@@ -6,7 +6,6 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import IconButton from '@mui/material/IconButton';
 import { Box, Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
-import { gridColumnVisibilityModelSelector } from '@mui/x-data-grid';
 
 export function AssetDetailsHeader({
     tickerData,

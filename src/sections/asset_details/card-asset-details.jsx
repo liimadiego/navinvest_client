@@ -2,6 +2,7 @@ import { Skeleton, Typography, Box, Paper } from '@mui/material';
 import { SvgColor } from 'src/components/svg-color';
 import { Tooltip, IconButton } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { fShortenNumberToString } from 'src/utils/format-number';
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +38,8 @@ export function CardAssetDetails({ sx, icon, title, total, type = false, color =
           <Box sx={{ typography: 'h3', color: total < 0 ? 'error.main' : 'text.primary' }}>
             {type === 'currency' ? (
               handleCurrency(total, currency)
+            ) : type === 'currency_string' ? (
+              `${currency === 'USD' ? '$' : 'R$'}${fShortenNumberToString(total)}`
             ) : type === 'percentage' ? (
               `${total ? (total * 100).toFixed(2) : 0}%`
             ) : (
