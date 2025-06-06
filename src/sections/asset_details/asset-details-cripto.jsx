@@ -52,7 +52,7 @@ export function AssetDetailsCripto({ ticker, tickerData, chart, assetType }) {
     return (
         <>
             <Paper elevation={3} style={{ padding: '1rem' }}>
-                <AssetDetailsHeader tickerData={tickerData} refCompany={refCompany} refIndicators={refIndicators} refPrice={refPrice} assetType={'cripto'} />
+                <AssetDetailsHeader tickerData={tickerData} refIndicators={refIndicators} refPrice={refPrice} assetType={'cripto'} />
             </Paper>
 
             <Box sx={{ mt: 2 }} gap={2} display={'flex'} flexWrap={'wrap'}>

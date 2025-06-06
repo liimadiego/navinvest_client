@@ -107,12 +107,12 @@ export function AssetDetailsHeader({
                             <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Indicadores</Typography>
                         </IconButton>
                     </Box>
-                    <Box display={'flex'} gap={1}>
+                    {(assetType === 'us_stock' || assetType === 'br_stock') && <Box display={'flex'} gap={1}>
                         <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 }, cursor: 'pointer', borderRadius: 10, width: "80px" }} onClick={() => scrollToSection(refCompany)}>
                             <ApartmentIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
                             <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Empresa</Typography>
                         </IconButton>
-                    </Box>
+                    </Box>}
                 </Box >
 
                 {/* <IconButton
