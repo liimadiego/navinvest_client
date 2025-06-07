@@ -11,7 +11,7 @@ import { logoClasses } from './classes';
 // ----------------------------------------------------------------------
 
 export const Logo = forwardRef((props, ref) => {
-  const { className, href = '/', isSingle = true, disabled, sx, ...other } = props;
+  const { className, href = '/dashboard', isSingle = true, disabled, sx, ...other } = props;
 
   const theme = useTheme();
 
