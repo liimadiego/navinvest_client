@@ -270,7 +270,7 @@ export function Dashboard() {
                 {walletEvolution ? <WealthEvolution
                     sx={{ height: 1 }}
                     title="Evolução da carteira (12 meses)"
-                    subheader="(+43%) no último ano"
+                    subheader="(+100000%) no último ano"
                     chart={{
                         colors: [
                             theme.palette.info.dark,

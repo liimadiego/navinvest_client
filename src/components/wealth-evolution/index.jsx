@@ -27,8 +27,32 @@ export function WealthEvolution({ title, subheader, chart, sx, ...other }) {
     stroke: { width: 0 },
     xaxis: { categories: chart.categories },
     tooltip: {
+      shared: true,
+      intersect: false,
       y: {
         formatter: (value) => fCurrency(value)
+      },
+      custom: ({ series, seriesIndex, dataPointIndex }) => {
+        if (!series || !series.length || seriesIndex < 0 || dataPointIndex < 0) {
+          return '';
+        }
+
+        const total = series.reduce((sum, s) => sum + (s[dataPointIndex] || 0), 0);
+        let content = '';
+
+        series.forEach((s, i) => {
+          content += `<div style="display: flex; justify-content: space-between; margin: 2px 0; gap: 8px;">
+            <span>${chart.series[0].data[i].name}:</span>
+            <span>${fCurrency(s[dataPointIndex] || 0)}</span>
+          </div>`;
+        });
+
+        content += `<div style="display: flex; justify-content: space-between; margin-top: 8px; border-top: 1px solid #ccc; padding-top: 4px; gap: 8px;">
+          <span>Total:</span>
+          <span>${fCurrency(total)}</span>
+        </div>`;
+
+        return `<div style="padding: 10px;font-size:9pt">${content}</div>`;
       }
     },
     plotOptions: { bar: { columnWidth: '40%' } },
