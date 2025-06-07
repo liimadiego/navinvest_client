@@ -79,7 +79,7 @@ export function AssetDetailsHeader({
         tickerName = tickerData.tickerData.ticker;
     }
 
-    console.log("tickerData", tickerData, "assetType", assetType);
+    // console.log("tickerData", tickerData, "assetType", assetType);
     if (tickerData && tickerData.fii && assetType === 'fii') {
         assetInfo = tickerData.tickerData;
         // assetInfo = {

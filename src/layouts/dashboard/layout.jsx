@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import IconButton, { iconButtonClasses } from '@mui/material/IconButton';
-import { Search as SearchIcon, AddCircle } from '@mui/icons-material';
+import { Search as SearchIcon, AddCircle, Edit } from '@mui/icons-material';
 
 import { _notifications } from 'src/_mock';
 
@@ -32,7 +32,7 @@ import { SearchModal } from 'src/components/search-modal';
 import { useEffect, useState } from 'react';
 import AddEditWalletModal from 'src/components/create-edit-wallet-modal';
 import { useWallet } from 'src/context/WalletContext';
-import { Button, styled, Typography, useColorScheme } from '@mui/material';
+import { Button, Modal, Paper, styled, Typography, useColorScheme } from '@mui/material';
 import { useWallets } from 'src/context/WalletsContext';
 import { useAuthContext } from 'src/auth/hooks';
 import axios from 'src/lib/axios';
@@ -95,6 +95,13 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [walletModalLoading, setWalletModalLoading] = useState(false);
   const [_, setWalletModalError] = useState(false);
+  const [editWalletData, setEditWalletData] = useState(null);
+
+  const [modalSureDeleteOpened, setModalSureDeleteOpen] = useState(false);
+
+  const modalSureDelete = () => {
+    setModalSureDeleteOpen(true);
+  }
 
   const handleCloseModalSearch = () => {
     setSearchModalOpen(false);
@@ -104,11 +111,13 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
     setSearchModalOpen(true);
   };
 
-  const handleOpenWalletModal = () => {
+  const handleOpenWalletModal = (editData = {}) => {
+    setEditWalletData(editData);
     setWalletModalOpen(true);
   }
 
   const handleCloseWalletModal = () => {
+    setEditWalletData(null);
     setWalletModalOpen(false);
   }
 
@@ -120,6 +129,30 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
     if (!wallet || !wallet.name || !wallet.objective) {
       setWalletModalLoading(false);
       setWalletModalError(true);
+      return;
+    }
+
+    if (editWalletData && (!!editWalletData?.id || false)) {
+      const updateWalletData = {
+        name: wallet.name,
+        objective: wallet.objective
+      };
+      await axios.put(`/investment-portfolio/${editWalletData.id}`, updateWalletData)
+        .then(({ data }) => {
+          _setWallets(data);
+          setCurrentWallet(data.find(w => w.id === editWalletData.id));
+
+          setWalletModalLoading(false);
+          setWalletModalError(false);
+          setWalletModalOpen(false);
+        })
+        .catch(error => {
+          console.error(error);
+          setWalletModalLoading(false);
+          setWalletModalError(true);
+          return;
+        });
+
       return;
     }
 
@@ -143,6 +176,35 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
 
 
   };
+
+  const handleDeleteWallet = async (walletId) => {
+    setWalletModalLoading(true);
+    setWalletModalError(false);
+    if (!walletId) {
+      setWalletModalLoading(false);
+      setWalletModalError(true);
+      return;
+    }
+
+    setModalSureDeleteOpen(false);
+
+    await axios.delete(`/investment-portfolio/${walletId}`)
+      .then(({ data }) => {
+        _setWallets(data);
+        setCurrentWallet(data[0]);
+        setWalletModalLoading(false);
+        setWalletModalError(false);
+        setWalletModalOpen(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setWalletModalLoading(false);
+        setWalletModalError(true);
+        return;
+      });
+  };
+
+
 
   const navData = slotProps?.nav?.data ?? dashboardNavData;
 
@@ -202,6 +264,18 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           {!!_wallets.length > 0 && <WalletsPopover
             data={_wallets}
           />}
+          {/* icone circle edit mui */}
+          {currentWallet && (
+            <IconButton
+              onClick={() => handleOpenWalletModal(currentWallet)}
+              sx={{
+                [theme.breakpoints.up(layoutQuery)]: { display: 'flex' },
+              }}
+            >
+              <Edit />
+            </IconButton>
+          )}
+
           {/* icone circle plus mui */}
           {!_wallets.length > 0 ?
             //botao de adicionar só que com Criar Carteira + icone
@@ -294,7 +368,27 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
 
   return (
     <>
-      <AddEditWalletModal open={walletModalOpen} onClose={handleCloseWalletModal} onSave={handleSaveWallet} isLoading={walletModalLoading} />
+      <AddEditWalletModal open={walletModalOpen} onClose={handleCloseWalletModal} onSave={handleSaveWallet} onDelete={modalSureDelete} isLoading={walletModalLoading} editData={editWalletData} />
+      <Modal
+        open={modalSureDeleteOpened}
+        onClose={() => { setModalSureDeleteOpen(false); }}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+        sx={{ backdrop: { backdropFilter: 'blur(4px)' } }}
+      >
+        <Paper sx={{ p: 4, bgcolor: 'background.paper', borderRadius: 2, maxWidth: 400, margin: 'auto', mt: '25vh' }} elevation={3}>
+          <Typography id="modal-title" variant="h6" component="h2">
+            Atenção
+          </Typography>
+          <Typography id="modal-description" sx={{ mt: 2 }}>
+            Tem certeza que deseja excluir esta carteira? Esta ação não pode ser desfeita.
+          </Typography>
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button onClick={() => { setModalSureDeleteOpen(false) }} color="primary" variant="contained" sx={{ mr: 2 }}>Cancelar</Button>
+            <Button onClick={() => handleDeleteWallet(editWalletData.id || null)} variant="outlined">Confirmar</Button>
+          </Box>
+        </Paper>
+      </Modal>
       <SearchModal handleClose={handleCloseModalSearch} isOpen={searchModalOpen}></SearchModal>
       <LayoutSection
         /** **************************************

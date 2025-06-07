@@ -12,7 +12,21 @@ import {
     Typography,
 } from '@mui/material';
 
-export default function AddEditWalletModal({ open, onClose, onSave, editData, isLoading }) {
+export default function AddEditWalletModal({ open, onClose, onSave, editData = null, isLoading, onDelete }) {
+    const [isEditMode, setIsEditMode] = useState(false);
+
+    useEffect(() => {
+        setIsEditMode(!!editData?.id || false);
+    }, [editData]);
+
+    useEffect(() => {
+        if (editData && editData.id) {
+            setIsEditMode(true);
+        } else {
+            setIsEditMode(false);
+        }
+    }, [editData]);
+
     const objectiveOptions = [
         { value: 'Dividendos', label: 'Dividendos' },
         { value: 'Longo Prazo', label: 'Longo Prazo' },
@@ -36,12 +50,13 @@ export default function AddEditWalletModal({ open, onClose, onSave, editData, is
             return;
         }
 
-        if (editData) {
+        if (isEditMode && editData.objective) {
+            setName(editData.name);
             setObjective(editData.objective);
         } else {
             setObjective(objectiveOptions[0].value);
         }
-    }, [open, editData]);
+    }, [open, isEditMode]);
 
     const handleSave = async () => {
         setErrors({});
@@ -62,7 +77,7 @@ export default function AddEditWalletModal({ open, onClose, onSave, editData, is
 
         await onSave({
             errors: newErrors, data: {
-                id: editData ? editData.id : null,
+                id: isEditMode ? (editData.id ? editData.id : null) : null,
                 name,
                 objective,
             }
@@ -102,7 +117,7 @@ export default function AddEditWalletModal({ open, onClose, onSave, editData, is
                         Selecione um objetivo
                     </option>
                     {objectiveOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
+                        <option key={option.value} value={option.value} selected={option.value ? option.value === objective : false}>
                             {option.label}
                         </option>
                     ))}
@@ -110,6 +125,17 @@ export default function AddEditWalletModal({ open, onClose, onSave, editData, is
             </DialogContent>
 
             <DialogActions>
+                {isEditMode && (
+                    <Button
+                        type='button'
+                        onClick={() => {
+                            onDelete(editData.id);
+                        }}
+                        color="error"
+                    >
+                        Excluir
+                    </Button>
+                )}
                 <Button onClick={onClose} color="inherit">
                     Cancelar
                 </Button>
