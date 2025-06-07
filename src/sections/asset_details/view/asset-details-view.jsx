@@ -4,6 +4,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { AssetDetails } from '../asset-details';
 import { AssetDetailsCripto } from '../asset-details-cripto';
+import { AssetDetailsBdr } from '../asset-details-bdr';
 import { LocalizationProvider } from 'src/locales';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -13,6 +14,7 @@ import { AssetReportAIModal } from 'src/components/asset-report-ai-modal';
 import axios from 'src/lib/axios';
 import { useTokenUsage } from 'src/context/TokenUsage';
 import { useAuthContext } from 'src/auth/hooks';
+import { AssetDetailsFiis } from '../asset-details-fiis';
 
 // ----------------------------------------------------------------------
 
@@ -183,6 +185,13 @@ export function AssetDetailsView() {
 
         {assetType === 'cripto' &&
           <AssetDetailsCripto ticker={tickerString} chart={chart} tickerData={tickerData} />}
+
+        {assetType === 'bdr' &&
+          <AssetDetailsBdr ticker={tickerString} chart={chart} tickerData={tickerData} />}
+
+        {assetType === 'fii' &&
+          <AssetDetailsFiis ticker={tickerString} chart={chart} tickerData={tickerData} assetType={assetType} />}
+
       </LocalizationProvider>
     </DashboardContent>
   );

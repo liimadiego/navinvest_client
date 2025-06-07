@@ -69,6 +69,27 @@ export function AssetDetailsHeader({
         tickerName = tickerData.tickerData.ticker;
     }
 
+    if (tickerData && tickerData.tickerData && assetType === 'bdr') {
+        assetInfo = tickerData.tickerData;
+        assetInfo = {
+            ...assetInfo,
+            trade_name: tickerData.tickerData.asset_name
+        };
+        assetImage = tickerData.tickerData?.bdr ? tickerData.tickerData.bdr.logo_url : `/assets/tickers/${tickerData.tickerData.ticker}.jpg`;
+        tickerName = tickerData.tickerData.ticker;
+    }
+
+    console.log("tickerData", tickerData, "assetType", assetType);
+    if (tickerData && tickerData.fii && assetType === 'fii') {
+        assetInfo = tickerData.tickerData;
+        // assetInfo = {
+        //     ...assetInfo,
+        //     trade_name: tickerData.tickerCompanyInfo.trade_name || assetInfo.name,
+        // };
+        assetImage = `https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg`;
+        tickerName = tickerData.tickerData.asset_name;
+    }
+
     const scrollToSection = (ref) => {
         if (!ref.current) return;
 
@@ -101,18 +122,18 @@ export function AssetDetailsHeader({
                             <TimelineIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
                             <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Cotação</Typography>
                         </IconButton >
-                        <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 }, cursor: 'pointer', borderRadius: 10, width: "80px" }} onClick={() => scrollToSection(refIndicators)}>
+                        {(assetType != 'bdr') && <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 }, cursor: 'pointer', borderRadius: 10, width: "80px" }} onClick={() => scrollToSection(refIndicators)}>
                             <BarChartIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
                             <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Indicadores</Typography>
-                        </IconButton>
+                        </IconButton>}
                     </Box>
-                    {(assetType === 'us_stock' || assetType === 'br_stock') && <Box display={'flex'} gap={1}>
+                    {(assetType === 'us_stock' || assetType === 'br_stock' || assetType === 'bdr') && <Box display={'flex'} gap={1}>
                         <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 }, cursor: 'pointer', borderRadius: 10, width: "80px" }} onClick={() => scrollToSection(refCompany)}>
                             <ApartmentIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
                             <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Empresa</Typography>
                         </IconButton>
                     </Box>}
-                </Box >
+                </Box>
 
                 {/* <IconButton
                     variant="outlined"
