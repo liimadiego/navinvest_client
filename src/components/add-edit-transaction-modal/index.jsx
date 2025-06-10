@@ -167,7 +167,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
             data.currency = currency;
         } else {
             data.tickerInfo = tickerInfo;
-            data.quantity = parseInt(quantity);
+            data.quantity = assetType === "TREASURY" ? parseFloat(quantity) : parseInt(quantity);
             data.costs = parseFloat(costs);
         }
 
@@ -178,6 +178,10 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
 
     const handleAddTicker = (_, tickerInfo_) => {
         setTickerInfo(tickerInfo_);
+        if (tickerInfo_?.type === "treasury" || assetType === "TREASURY") {
+            setPrice(tickerInfo_.unit_price);
+            setQuantity(1);
+        }
     };
 
     const handleEditTicker = () => {
@@ -185,7 +189,17 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
     };
 
     const handleSetQty = (value) => {
-        value = value.replace(/^0+/, '');
+        if (assetType === "TREASURY") {
+            value = value.replace(',', '.');
+            value = value.replace(/[^0-9.]/g, '');
+            if (value.includes('.')) {
+                const parts = value.split('.');
+                parts[1] = parts[1].slice(0, 2);
+                value = parts[0] + '.' + parts[1];
+            }
+        } else {
+            value = value.replace(/[^0-9]/g, '');
+        }
         setQuantity(value);
     }
 
@@ -386,7 +400,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     {indexationType !== "PRE_FIXED" && <option value="IPCA+">IPCA+</option>}
                 </TextField>}
 
-                {assetType !== "FIXED_INCOME" && assetType !== "TREASURY" && <TextField
+                {assetType !== "FIXED_INCOME" && <TextField
                     fullWidth
                     label="Quantidade"
                     type="number"
@@ -395,6 +409,10 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     sx={{ mb: 2 }}
                     error={!!errors.quantity}
                     helperText={errors.quantity}
+                    inputProps={{
+                        step: assetType === "TREASURY" ? 0.01 : 1,
+                        min: assetType === "TREASURY" ? 0.01 : 1,
+                    }}
                 />}
 
                 {assetType !== "FIXED_INCOME" ? <TextField
