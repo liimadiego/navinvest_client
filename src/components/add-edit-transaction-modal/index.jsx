@@ -181,6 +181,10 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         if (tickerInfo_?.type === "treasury" || assetType === "TREASURY") {
             setPrice(tickerInfo_.unit_price);
             setQuantity(1);
+        } else if (tickerInfo_?.currency) {
+            const priceWith2Decimals = parseFloat(tickerInfo_.current_price).toFixed(2);
+            setPrice(priceWith2Decimals);
+            setQuantity(1);
         }
     };
 
