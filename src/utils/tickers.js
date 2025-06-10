@@ -13,7 +13,7 @@ export async function getTickerList(query, limit = 5, type = "") {
             const defaultImagePath = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg";
 
             return data.map((ticker) => {
-                if (ticker.asset_type === "treasury") {
+                if (type === "treasury") {
                     return {
                         id: ticker.id,
                         name: ticker.name,
@@ -25,7 +25,8 @@ export async function getTickerList(query, limit = 5, type = "") {
                         currency: "BRL",
                         last_twelve_months: 0,
                         indexer: ticker.indexer,
-                        min_investment: ticker.min_investment
+                        min_investment: ticker.min_investment,
+                        unit_price: ticker.unit_price,
                     }
                 }
 
