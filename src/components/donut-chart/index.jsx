@@ -87,7 +87,7 @@ export function DonutChart({ title, subheader, chart, sx, ...other }) {
           <ChartLegends
             labels={chartOptions?.labels}
             colors={chartOptions?.colors}
-            sx={{ p: 3, justifyContent: 'center' }}
+            sx={{ p: 3, justifyContent: 'center', alignItems: 'center' }}
           />
         </>) :
         <Box height={370} display="flex" justifyContent="center">

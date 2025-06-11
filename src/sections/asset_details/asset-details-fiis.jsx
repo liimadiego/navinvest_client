@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Divider, Paper, Typography } from '@mui/material';
+import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
 import { AssetDetailsHeader } from './view/asset-details-header';
 import { CardAssetDetails } from './card-asset-details';
 import { CONFIG } from 'src/global-config';
@@ -8,8 +8,11 @@ import { VerticalTable } from './vertical-table';
 import { FundamentalIndicatorCard } from './fundamental-indicator-card';
 import { AssetHistoricTable } from './asset-historic-table';
 import { DividendsHistoric } from './dividends-historic';
+import { DonutChart } from 'src/components/donut-chart';
 
 export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, assetType }) {
+    const [aboutFormated, setAboutFormated] = useState(<></>);
+
     function isEmpty(obj) {
         for (const prop in obj) {
             if (Object.hasOwn(obj, prop)) {
@@ -20,12 +23,51 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
     }
 
     const tickerInfo = tickerData?.tickerData || {};
+    
     const assetInfo = tickerInfo?.reit || {};
+    console.log('assetInfo:', assetInfo, '\n ');
+
+    function camelCaseParaTexto(texto) {
+        return texto
+            .replace(/([A-Z])/g, ' $1')
+            .trim()
+            .replace(/\b\w/g, letra => letra.toUpperCase());
+    }
+
+    useEffect(() => {
+    if (assetInfo?.about) {
+        try {
+            assetInfo.about = JSON.parse(assetInfo.about);
+        } catch (error) {
+            // If parsing fails, keep it as is
+        }
+
+        const contentElements = [];
+        for (const titulo of Object.keys(assetInfo.about)) {
+            const content = assetInfo.about[titulo];
+            if (content) {
+                contentElements.push(
+                    <Box>
+                        <Typography variant="subtitle2" color="text.secondary">{camelCaseParaTexto(titulo)}</Typography>
+                        <Typography variant="body2" gutterBottom>{content}</Typography>
+                    </Box>
+                );
+            }
+        }
+
+        setAboutFormated(<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2 }}>{contentElements}</Box>);
+    }
+    
+}, [assetInfo]);
+
+
     const currency = tickerInfo ? tickerInfo.currency : 'BRL';
     const fiiHistory = tickerData?.fii.history;
     const [historicalDividendYieldData, setHistoricalDividendYieldData] = useState({
         dividendYields: []
     });
+    const [leaseContractsByIndexer, setLeaseContractsByIndexer] = useState([]);
+    const [leaseContractsByExpiration, setLeaseContractsByExpiration] = useState([]);
     const lastDividendYield = tickerData?.dividendYieldPast12m;
     const [isDividendsAllZero, setDividendsIsAllZero] = useState(false);
 
@@ -35,8 +77,49 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
             reference_year: item.reference_year || 0
         })) || [];
 
-        console.log('Dividend Yield History:', dividendYieldHistory);
         setHistoricalDividendYieldData(dividendYieldHistory || []);
+
+        if (fiiHistory.length > 0) {
+            // Set lease contracts by indexer
+            let _totalIndexersPctg = 0;
+            const _leaseContractsByIndexer = [];
+            
+            for (const [ indexador, value ] of Object.entries(fiiHistory[0]?.lease_contracts_by_indexer || {})) {
+                if (!value) continue;
+                _totalIndexersPctg += value * 100;
+                _leaseContractsByIndexer.push({ label: indexador, value: value * 100 });
+            }
+            
+            if (_totalIndexersPctg)
+                _leaseContractsByIndexer.push({ label: 'Outros indexadores', value: 100 - _totalIndexersPctg });
+            
+            setLeaseContractsByIndexer(_leaseContractsByIndexer);
+            
+            // Set lease contracts by expiration
+            let _totalExpirationsPctg = 0;
+            const _leaseContractsByExpiration = [];
+            
+            const periodDict = {
+                'up_to_3_months': 'Até 3 meses',
+                'from_3_to_6_months': 'De 3 a 6 meses',
+                'from_6_to_12_months': 'De 6 a 12 meses',
+                'from_12_to_24_months': 'De 12 a 24 meses',
+                'from_24_to_36_months': 'De 24 a 36 meses',
+                'over_36_months': 'Acima de 36 meses',
+                'undetermined_expiration': 'Sem prazo determinado'
+            };
+
+            for (const [ period, value ] of Object.entries(fiiHistory[0]?.lease_contracts_by_expiration || {})) {
+                if (period === 'undetermined_expiration' && !value) continue;
+                _totalIndexersPctg += value * 100;
+                _leaseContractsByExpiration.push({ label: periodDict[period], value: value * 100 });
+            }
+            
+            if (_totalExpirationsPctg)
+                _leaseContractsByExpiration.push({ label: 'Outros tipos de validade', value: 100 - _totalExpirationsPctg });
+            
+            setLeaseContractsByExpiration(_leaseContractsByExpiration);
+        }
 
     }, [fiiHistory]);
 
@@ -114,7 +197,7 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
                 <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${assetInfo?.trade_name ? assetInfo?.trade_name : ""} (${ticker.toUpperCase()})`} currency={currency} />
             </Box>
 
-            {assetType == 'br_stock' && <VerticalTable proftability={proftability} />}
+            <VerticalTable proftability={proftability} />
 
             {assetType == 'br_stock' && <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />}
 
@@ -126,7 +209,7 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
             <Box sx={{ mt: 3 }}>
-                <AssetHistoricTable assetInfo={tickerData?.assetInfo} historicalDividendYieldData={historicalDividendYieldData} assetType={assetType} />
+                <AssetHistoricTable assetData={[ { ...fiiHistory[0], reference_year: 'Atual', dividend_yield: tickerData?.dividendYieldPast12m || 0 }, ...fiiHistory ]} assetInfo={tickerData?.assetInfo} historicalDividendYieldData={historicalDividendYieldData} assetType={assetType} />
             </Box>
 
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
@@ -139,8 +222,33 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
                 </>
             }
 
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2, my: 3 }}>
+                <Box flex={1}>
+                    {leaseContractsByIndexer ? <DonutChart
+                        title="Contratos de locação por indexador"
+                        subheader="Contratos por indexador"
+                        chart={{
+                            series: leaseContractsByIndexer
+                        }}
+                        sx={{ height: '100%' }}
+                    /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
+                </Box>
 
-            <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refCompany}>INFORMAÇÕES DA EMPRESA</Typography>
+                <Box flex={1}>
+                    {leaseContractsByExpiration ? <DonutChart
+                        title="Contratos de locação por prazo de vencimento"
+                        subheader="Contratos por prazo de vencimento"
+                        chart={{
+                            series: leaseContractsByExpiration
+                        }}
+                        sx={{ height: '100%' }}
+                    /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
+                </Box>
+            </Box>
+
+            <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
+
+            <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refCompany}>INFORMAÇÕES DO FUNDO</Typography>
             <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, mb: 3 }}>
                     <Box sx={{ flex: '0 0 100px', display: 'flex', justifyContent: 'center' }}>
@@ -169,41 +277,29 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
                     </Box>
 
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h5" gutterBottom>{assetInfo?.trade_name || '-'}</Typography>
+                        <Typography variant="h5" gutterBottom>{ assetInfo?.tradeName + ' - '  + (assetInfo?.name || '-')}</Typography>
 
-                        <Typography variant="body2" paragraph sx={{ mb: 2 }}>
+                        {/* <Typography variant="body2" paragraph sx={{ mb: 2 }}>
                             {assetInfo?.about || 'Informações sobre a empresa não disponíveis'}
-                        </Typography>
+                        </Typography> */}
+
+                        {aboutFormated}
 
                         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary">Setor</Typography>
-                                <Typography variant="body2" gutterBottom>{assetInfo?.sector || '-'}</Typography>
-                            </Box>
-                            <Box>
-                                <Typography variant="subtitle2" color="text.secondary">Subsetor</Typography>
-                                <Typography variant="body2" gutterBottom>{assetInfo?.subsector || '-'}</Typography>
-                            </Box>
-                            <Box>
-                                <Typography variant="subtitle2" color="text.secondary">Segmento</Typography>
-                                <Typography variant="body2" gutterBottom>{assetInfo?.segment || '-'}</Typography>
+                                <Typography variant="body2" gutterBottom>{assetInfo?.b3Sector || '-'}</Typography>
                             </Box>
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary">CNPJ</Typography>
                                 <Typography variant="body2" gutterBottom>{assetInfo?.cnpj || '-'}</Typography>
                             </Box>
-                            {assetType == 'br_stock' && <Box>
-                                <Typography variant="subtitle2" color="text.secondary">Tipo</Typography>
-                                <Typography variant="body2" gutterBottom>
-                                    {assetInfo?.is_state_owned ? 'Estatal' : 'Privada'}
-                                </Typography>
-                            </Box>}
-                            {assetType == 'br_stock' && <Box>
+                            <Box>
                                 <Typography variant="subtitle2" color="text.secondary">Fundação</Typography>
                                 <Typography variant="body2" gutterBottom>
-                                    {assetInfo?.founding_date ? new Date(assetInfo.founding_date).toLocaleDateString() : '-'}
+                                    {assetInfo?.foundingDate ? new Date(assetInfo.foundingDate).toLocaleDateString() : '-'}
                                 </Typography>
-                            </Box>}
+                            </Box>
                             {assetType == 'br_stock' && <Box>
                                 <Typography variant="subtitle2" color="text.secondary">Atividade Principal</Typography>
                                 <Typography variant="body2" gutterBottom>{assetInfo?.main_activity || '-'}</Typography>

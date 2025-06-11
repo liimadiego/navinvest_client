@@ -105,7 +105,7 @@ export function fShortenNumberToString(inputValue) {
   if (number < baseValue) return number.toString();
 
   const index = Math.floor(Math.log(number) / Math.log(baseValue));
-  const fm = `${(number / baseValue ** index).toFixed(1)}${units[index - 1]}`;
+  const fm = `${(number / baseValue ** index).toFixed(1).replace('.', ',')}${units[index - 1]}`;
 
   return fm;
 }

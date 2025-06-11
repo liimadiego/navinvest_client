@@ -1,10 +1,117 @@
 import { IconButton } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Box, Paper, Skeleton, Tooltip, Typography } from '@mui/material';
-import { fShortenNumberToString } from 'src/utils/format-number';
+import { fNumber, fPercent, fShortenNumberToString } from 'src/utils/format-number';
 
 export function FundamentalIndicatorCard({ tickerData, assetType }) {
     let fundamentalIndicatorsData = [];
+
+    if (tickerData && assetType === 'fii') {
+        const fiiMarketData = tickerData?.fii?.history?.[0];
+        
+        const DY = tickerData.dividendYieldPast12m;
+        
+        let AREA_TOTAL = 0; 
+        let AREA_VAGA = 0;
+        let AREA_INADIMPLENTE = 0;
+        for (const property of fiiMarketData?.properties || []) {
+            AREA_TOTAL += property.Area * 1 || 0;
+            AREA_VAGA += property.Area * property.PercentVacancia || 0;
+            AREA_INADIMPLENTE += property.Area * property.PercentInadimplencia || 0;
+        }
+        const VACANCIA_FISICA = (AREA_VAGA / (AREA_TOTAL || 1)) || 0;
+
+        fiiMarketData.patrimonial_value_per_share = parseFloat(fiiMarketData.patrimonial_value_per_share.toFixed(2));
+        const {
+            market_capitalization: VALOR_DE_MERCADO,
+            number_of_shareholders: NUMERO_DE_COTISTAS,
+            patrimonial_value: VALOR_PATRIMONIAL,
+            patrimonial_value_per_share: VALOR_PATRIMONIAL_POR_COTA,
+            pvp: PVP,
+            shares_issued: COTAS_EMITIDAS,
+            vacancy: VACANCIA_FINANCEIRA
+        } = fiiMarketData || {};
+
+        fundamentalIndicatorsData = [
+            {
+                "title": "DY",
+                "total": DY || null,
+                "type": "percentage",
+                "description": "Dividend Yield (DY) é o indicador que mostra quanto o fii paga de dividendos em relação ao preço da cota",
+            },
+            {
+                "title": "P/VP",
+                "total": PVP || null,
+                "description": "P/VP = Preço da cota / Valor patrimonial por cota",
+            },
+            {
+                "title": "AREA TOTAL",
+                "total": fNumber(Math.round(AREA_TOTAL)) + "m²",
+                "type": "string",
+                "description": "Área total dos imóveis do FII",
+            },
+            {
+                "title": "AREA VAGA",
+                "total": fNumber(Math.round(AREA_VAGA)) + "m²",
+                "type": "string",
+                "description": "Área total vaga nos imóveis do FII",
+            },
+            {
+                "title": "VACANCIA FÍSICA",
+                "total": VACANCIA_FISICA || null,
+                "type": "percentage",
+                "description": "Vanacia física é o percentual de área total que está vaga nos imóveis do FII",
+            },
+            {
+                "title": "VACANCIA FINANCEIRA",
+                "total": VACANCIA_FINANCEIRA || null,
+                "type": "percentage",
+                "description": "Vanacia financeira é o percentual de receita que o FII deixa de receber por conta de imóveis vagos",
+            },
+            {
+                "title": "AREA INADIMPLENTE",
+                "total": fNumber(Math.round(AREA_INADIMPLENTE)) + "m²",
+                "type": "string",
+                "description": "Área total inadimplente nos imóveis do FII",
+            },
+            {
+                "title": "INADIMPLENCIA (FÍSICA)",
+                "total": (AREA_INADIMPLENTE / (AREA_TOTAL || 1)) || 0,
+                "type": "percentage",
+                "description": "Inadimplência física é o percentual de área total que está inadimplente nos imóveis do FII",
+            },
+            {
+                "title": "VALOR DE MERCADO",
+                "total": VALOR_DE_MERCADO || null,
+                "type": "currency_string",
+                "description": "Valor de mercado do FII",
+            },
+            {
+                "title": "VALOR PATRIMONIAL",
+                "total": VALOR_PATRIMONIAL || null,
+                "type": "currency_string",
+                "description": "Valor patrimonial do FII",
+            },
+            {
+                "title": "VAL. PATRIMONIAL P/ COTA",
+                "total": VALOR_PATRIMONIAL_POR_COTA || null,
+                "type": "currency",
+                "description": "Valor patrimonial por cota do FII",
+            },
+            {
+                "title": "COTAS EMITIDAS",
+                "total": COTAS_EMITIDAS || null,
+                "type": "basic_number_format",
+                "description": "Quantidade de cotas emitidas pelo FII"
+            },
+            {
+                "title": "NÚMERO DE COTISTAS",
+                "total": NUMERO_DE_COTISTAS || null,
+                "type": "basic_number_format",
+                "description": "Número de cotistas do FII"
+            }
+        ];
+    }
 
     if (tickerData && tickerData.tickerCompanyInfo && assetType === 'br_stock') {
         const companyMarketData = tickerData?.companyMarketData[0];
@@ -400,9 +507,14 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
                         ) : type === 'currency_string' ? (
                             currency === 'USD' ? `$${fShortenNumberToString(total)}` : `R$${fShortenNumberToString(total)}`
                         ) : type === 'percentage' ? (
-                            `${(total * 100).toFixed(2)}%`
+                            `${(total * 100).toFixed(2).replace('.', ',')}%`
+                        ) : type === 'basic_number_format' ? (
+                            currency === 'USD' ? `${fNumber(total)}` : `${fNumber(total)}`
+                        ) : type === 'string' ? (
+                            total
                         ) : (
                             Number.isInteger(total) ? total.toLocaleString().replace('.', ',') : total.toFixed(2).toLocaleString().replace('.', ',')
+                            
                         )}
                     </Box>
                 </Typography>

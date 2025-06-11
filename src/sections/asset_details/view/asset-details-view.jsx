@@ -36,6 +36,8 @@ export function AssetDetailsView() {
   useEffect(() => {
     axios.get(`/ticker/get-ticker-data/${tickerString}`)
       .then(({ data }) => {
+        console.log('Ticker data:', data, '\n ');
+
         const _assetType = data.assetType || null;
         setAssetType(_assetType);
 
@@ -190,7 +192,7 @@ export function AssetDetailsView() {
           <AssetDetailsBdr ticker={tickerString} chart={chart} tickerData={tickerData} />}
 
         {assetType === 'fii' &&
-          <AssetDetailsFiis ticker={tickerString} chart={chart} tickerData={tickerData} assetType={assetType} />}
+          <AssetDetailsFiis proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} assetType={assetType} />}
 
       </LocalizationProvider>
     </DashboardContent>

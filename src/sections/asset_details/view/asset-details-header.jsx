@@ -82,10 +82,10 @@ export function AssetDetailsHeader({
     // console.log("tickerData", tickerData, "assetType", assetType);
     if (tickerData && tickerData.fii && assetType === 'fii') {
         assetInfo = tickerData.tickerData;
-        // assetInfo = {
-        //     ...assetInfo,
-        //     trade_name: tickerData.tickerCompanyInfo.trade_name || assetInfo.name,
-        // };
+        assetInfo = {
+            ...assetInfo,
+            trade_name: assetInfo?.reit?.name || "",
+        };
         assetImage = `https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg`;
         tickerName = tickerData.tickerData.asset_name;
     }
@@ -112,7 +112,7 @@ export function AssetDetailsHeader({
                 />
                 <Box style={{ height: 70 }}>
                     <Typography variant="h5">{tickerName}</Typography>
-                    <Typography variant="subtitle2">{assetInfo?.trade_name}</Typography>
+                    <Typography variant="subtitle2">{assetInfo?.trade_name}</Typography> {/* Fixing the fiis data on database to include this type of information... */}
                 </Box>
             </Box>
             <Box sx={{ mt: { xs: 4, md: 0 }, justifyContent: { xs: 'center', md: 'flex-end' } }} style={{ color: "#fff" }} flexDirection='row' display="flex" gap={2}>

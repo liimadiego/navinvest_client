@@ -176,7 +176,7 @@ export function AssetDetails({ ticker, tickerData, chart, proftability, assetTyp
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
             <Box sx={{ mt: 3 }}>
-                <AssetHistoricTable companyMarketData={tickerData?.companyMarketData} historicalDividendYieldData={historicalDividendYieldData} assetType={assetType} />
+                <AssetHistoricTable assetData={tickerData?.companyMarketData} historicalDividendYieldData={historicalDividendYieldData} assetType={assetType} />
             </Box>
 
             <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
