@@ -57,7 +57,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
         "asset_type": transaction.asset_type,
         "transaction_type": transaction.type,
         "amount": transaction.quantity * transaction.price,
-        "quantity": 1,
+        "quantity": transaction.quantity,
         "transaction_date": transaction.date
       }
     }
