@@ -137,11 +137,38 @@ export function Dashboard() {
                         series: totalInvestedReversed,
                     });
 
-                    const evolutionTotalAssets = (data.currentTotalAssets / totalAssetsChartSeries[totalAssetsChartSeries.length - 1]) * 100 - 100;
+                    const firstMonthData = data.historicalData.reverse().find((item, index) => item.totalAssets > 0 && item.totalInvested > 0);
+
+                    if (!firstMonthData) {
+                        setTotalAssetEvolutionThisMonth(0);
+                        setTotalAssetEvolutionTwelveMonths(0);
+                        setLoading(false);
+                        return;
+                    }
+
+                    const firstMonthIndex = data.historicalData.indexOf(firstMonthData);
+
+                    let evolutionTotalAssets = 0;
+
+                    if (firstMonthIndex === 11) {
+                        evolutionTotalAssets = ((firstMonthData.totalAssets - firstMonthData.totalInvested) / firstMonthData.totalInvested) * 100;
+                    } else {
+                        evolutionTotalAssets = calculatePatrimonyEvolution(data.historicalData.slice(-2))
+                    }
 
                     setTotalAssetEvolutionThisMonth(evolutionTotalAssets);
 
-                    const evolutionTwelveMonths = data.historicalData.length > 0 ? (data.currentTotalAssets / data.historicalData[data.historicalData.length - 1].totalAssets) * 100 - 100 : 0;
+                    let evolutionTwelveMonths = 0;
+
+                    if (data.historicalData.length > 0) {
+                        if (firstMonthIndex === 11) {
+                            evolutionTwelveMonths = evolutionTotalAssets
+                        } else {
+                            const lastMonthData = data.historicalData.at(-1);
+                            const firstMonthData = data.historicalData[firstMonthIndex];
+                            evolutionTwelveMonths = calculatePatrimonyEvolution([firstMonthData, lastMonthData]);
+                        }
+                    }
 
                     setTotalAssetEvolutionTwelveMonths(evolutionTwelveMonths);
 
@@ -200,6 +227,23 @@ export function Dashboard() {
         }
     }, [currentWallet]);
 
+    const calculatePatrimonyEvolution = (historicalData) => {
+        if (!historicalData || historicalData.length === 0) {
+            return 0;
+        }
+
+        let baseValue = 1;
+        const lastMonthIncome = historicalData[0].totalAssets - historicalData[0].totalInvested;
+        const currentMonthIncome = historicalData[1].totalAssets - historicalData[1].totalInvested;
+
+        const monthlyReturn = (currentMonthIncome - lastMonthIncome) / historicalData[1].totalInvested;
+        baseValue = (1 + monthlyReturn);
+
+
+
+        return (baseValue - 1) * 100;
+    }
+
     useEffect(() => {
         axios.get(`/news/latest_news`)
             .then(({ data }) => {
@@ -256,7 +300,7 @@ export function Dashboard() {
                 /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+            <Grid size={{ xs: 12, md: 4, lg: 4 }}>
                 {portfolioDivision ? <DonutChart
                     title="Ativos na carteira"
                     subheader="Classificados por tipo"
@@ -266,7 +310,7 @@ export function Dashboard() {
                 /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+            <Grid size={{ xs: 12, md: 8, lg: 8 }}>
                 {walletEvolution ? <WealthEvolution
                     sx={{ height: 1 }}
                     title="Evolução da carteira (12 meses)"

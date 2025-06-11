@@ -183,7 +183,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
             (isTreasury ? "BRL" : row.ticker?.currency),
           isFixedIncome ?
             row.amount :
-            (isTreasury ? (row.treasury?.unit_price ? row.treasury?.unit_price : row.amount / row.quantity) : row.price_per_unit)
+            (isTreasury ? (row.amount / row.quantity) : row.price_per_unit)
         )}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(
@@ -206,7 +206,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
                   tickerInfo: row.asset_type == "TREASURY" ? row.treasury : row.ticker,
                   date: row.transaction_date,
                   quantity: row.quantity,
-                  price: row.fixed_income_details || row.treasury ? (row.treasury?.unit_price ? row.treasury?.unit_price : row.amount / row.quantity) : row.price_per_unit,
+                  price: row.fixed_income_details || row.treasury ? (row.amount / row.quantity) : row.price_per_unit,
                   costs: row.costs,
                   asset_type: row.asset_type,
                   fixed_income_details: row.fixed_income_details,
