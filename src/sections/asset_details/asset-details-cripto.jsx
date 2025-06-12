@@ -9,7 +9,7 @@ import { FundamentalIndicatorCard } from './fundamental-indicator-card';
 import { AssetHistoricTable } from './asset-historic-table';
 import { DividendsHistoric } from './dividends-historic';
 
-export function AssetDetailsCripto({ ticker, tickerData, chart, assetType }) {
+export function AssetDetailsCripto({ ticker, tickerData, chart, assetType, proftability }) {
     function isEmpty(obj) {
         for (const prop in obj) {
             if (Object.hasOwn(obj, prop)) {
@@ -97,6 +97,9 @@ export function AssetDetailsCripto({ ticker, tickerData, chart, assetType }) {
             <Box ref={refPrice} >
                 <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${assetInfo?.trade_name ? assetInfo?.trade_name : ""} (${ticker.toUpperCase()})`} currency={currency} />
             </Box>
+            <VerticalTable proftability={proftability} />
+
+            <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
             <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refIndicators}>INDICADORES</Typography>
             <Box display={'flex'} justifyContent={'space-between'} width={"100%"} flexWrap={'wrap'} gap={2}>

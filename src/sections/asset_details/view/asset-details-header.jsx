@@ -79,6 +79,16 @@ export function AssetDetailsHeader({
         tickerName = tickerData.tickerData.ticker;
     }
 
+    if (tickerData && tickerData.tickerData && assetType === 'etf') {
+        assetInfo = tickerData.tickerData;
+        assetInfo = {
+            ...assetInfo,
+            trade_name: tickerData.tickerData.asset_name
+        };
+        assetImage = tickerData.tickerData?.etf ? tickerData.tickerData.etf.logo_url : `/assets/tickers/${tickerData.tickerData.ticker}.jpg`;
+        tickerName = tickerData.tickerData.ticker;
+    }
+
     // console.log("tickerData", tickerData, "assetType", assetType);
     if (tickerData && tickerData.fii && assetType === 'fii') {
         assetInfo = tickerData.tickerData;

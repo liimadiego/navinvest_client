@@ -164,9 +164,9 @@ export function AssetDetails({ ticker, tickerData, chart, proftability, assetTyp
                 <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${assetInfo?.trade_name ? assetInfo?.trade_name : ""} (${ticker.toUpperCase()})`} currency={currency} />
             </Box>
 
-            {assetType == 'br_stock' && <VerticalTable proftability={proftability} />}
+            <VerticalTable proftability={proftability} />
 
-            {assetType == 'br_stock' && <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />}
+            <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
             <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refIndicators}>INDICADORES FUNDAMENTALISTAS</Typography>
             <Box display={'flex'} justifyContent={'space-between'} width={"100%"} flexWrap={'wrap'} gap={2}>

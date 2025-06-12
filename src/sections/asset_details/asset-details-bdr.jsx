@@ -9,7 +9,7 @@ import { FundamentalIndicatorCard } from './fundamental-indicator-card';
 import { AssetHistoricTable } from './asset-historic-table';
 import { DividendsHistoric } from './dividends-historic';
 
-export function AssetDetailsBdr({ ticker, tickerData, chart, assetType }) {
+export function AssetDetailsBdr({ ticker, tickerData, chart, proftability }) {
     function isEmpty(obj) {
         for (const prop in obj) {
             if (Object.hasOwn(obj, prop)) {
@@ -80,6 +80,9 @@ export function AssetDetailsBdr({ ticker, tickerData, chart, assetType }) {
             <Box ref={refPrice} >
                 <ChartComplete isCurrency={true} chart={chart} title={`Cotação ${ticker.toUpperCase()}`} subheader={`Evolução e desempenho das ações ${assetInfo?.long_name ? assetInfo?.long_name : ""} (${ticker.toUpperCase()})`} currency={currency} />
             </Box>
+            <VerticalTable proftability={proftability} />
+
+            <Divider sx={{ borderStyle: 'dashed', mt: 3 }} />
 
             <Typography variant='h6' sx={{ ml: "3px", mt: 3, mb: 2 }} ref={refCompany}>INFORMAÇÕES DA EMPRESA</Typography>
             <Paper elevation={3} sx={{ p: 3, mb: 3 }}>

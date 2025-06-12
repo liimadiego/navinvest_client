@@ -5,6 +5,7 @@ import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { AssetDetails } from '../asset-details';
 import { AssetDetailsCripto } from '../asset-details-cripto';
 import { AssetDetailsBdr } from '../asset-details-bdr';
+import { AssetDetailsEtf } from '../asset-details-etf';
 import { LocalizationProvider } from 'src/locales';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -36,8 +37,6 @@ export function AssetDetailsView() {
   useEffect(() => {
     axios.get(`/ticker/get-ticker-data/${tickerString}`)
       .then(({ data }) => {
-        console.log('Ticker data:', data, '\n ');
-
         const _assetType = data.assetType || null;
         setAssetType(_assetType);
 
@@ -186,10 +185,13 @@ export function AssetDetailsView() {
           <AssetDetails proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} assetType={assetType} />}
 
         {assetType === 'cripto' &&
-          <AssetDetailsCripto ticker={tickerString} chart={chart} tickerData={tickerData} />}
+          <AssetDetailsCripto proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} />}
 
         {assetType === 'bdr' &&
-          <AssetDetailsBdr ticker={tickerString} chart={chart} tickerData={tickerData} />}
+          <AssetDetailsBdr proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} />}
+
+        {assetType === 'etf' &&
+          <AssetDetailsEtf proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} />}
 
         {assetType === 'fii' &&
           <AssetDetailsFiis proftability={proftability} ticker={tickerString} chart={chart} tickerData={tickerData} assetType={assetType} />}
