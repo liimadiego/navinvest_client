@@ -166,18 +166,10 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
                     type='percentage'
                     description='Variação dos últimos 12 meses'
                 />
-                {/* <CardAssetDetails
-                    sx={{ flex: '1', minWidth: '200px' }}
-                    title="P/L"
-                    total={0}
-                    icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
-                    color='info'
-                    description='Preço da ação dividido pelo lucro por ação'
-                /> */}
                 <CardAssetDetails
                     sx={{ flex: '1', minWidth: '200px' }}
                     title="P/VP"
-                    total={0}
+                    total={fiiHistory?.[0]?.pvp || 0}
                     icon={`${CONFIG.assetsDir}/assets/icons/courses/ic-courses-progress.svg`}
                     color='error'
                     description='Preço da ação dividido pelo valor patrimonial por ação'
