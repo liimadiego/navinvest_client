@@ -4,6 +4,7 @@ import { Scrollbar } from 'src/components/scrollbar';
 
 import { ChatMessageItem } from './chat-message-item';
 import { useMessagesScroll } from './hooks/use-messages-scroll';
+import { background } from 'src/theme';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ export function ChatMessageList({ messages = [], isLoading = false }) {
           pb: 3,
           flex: '1 1 auto',
           width: '100%',
+          overflowX: 'hidden'
         }}
       >
         {displayedMessages.map((message) => {
