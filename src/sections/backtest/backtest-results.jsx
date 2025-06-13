@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Box, Typography, Card, Grid, Button } from '@mui/material';
 import { format } from 'date-fns';
 import { BacktestContext } from 'src/context/BacktestContext';
@@ -12,6 +12,25 @@ import * as XLSX from 'xlsx';
 
 export function BacktestResults() {
     const { results } = useContext(BacktestContext);
+    const [oldestDate, setOldestDate] = useState(null);
+    const [newestDate, setNewestDate] = useState(null);
+    const [testPeriod, setTestPeriod] = useState(null);
+
+    useEffect(() => {
+        if (results && results.assetsDates) {
+            const dates = Object.values(results.assetsDates).flatMap(asset => [new Date(asset.start), new Date(asset.end)]);
+            setOldestDate(new Date(Math.min(...dates)));
+            setNewestDate(new Date(Math.max(...dates)));
+
+            if (oldestDate && newestDate) {
+                const diffTime = Math.abs(newestDate - oldestDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                setTestPeriod(diffDays);
+            }
+        }
+    }, [results]);
+
+
 
     const [currentDividendMode, setCurrentDividendMode] = useState('Com Dividendos');
     const dividendsKeyValue = {
@@ -145,7 +164,7 @@ export function BacktestResults() {
                         Período de Teste
                     </Typography>
                     <Typography variant="h4" color={'primary.main'} sx={{ textAlign: 'center' }}>
-                        {daysToExtendedDate(results.computedDays)}
+                        {daysToExtendedDate(testPeriod)}
                     </Typography>
                 </Card>
                 <Card sx={{ p: 3, flex: 1 }}>
