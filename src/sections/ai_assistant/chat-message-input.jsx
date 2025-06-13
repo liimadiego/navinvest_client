@@ -28,7 +28,7 @@ import { useAuthContext } from 'src/auth/hooks';
 export function ChatMessageInput({ isDisabled = false }) {
   const { user } = useAuthContext();
   const me = user?.id || 1;
-  const { chatId, chatHistory, setChatHistory } = useChat();
+  const { chatId, chatHistory, setChatHistory, setIsLoading } = useChat();
   const router = useRouter();
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
@@ -50,7 +50,9 @@ export function ChatMessageInput({ isDisabled = false }) {
         }
         setChatHistory((prev) => [...prev, formattedMessage]);
         setMessage('');
+        setIsLoading(true);
         const responseMessages = await sendMessage(message, chatId);
+        setIsLoading(false);
         if (!responseMessages) {
           setError(true);
           return;
@@ -62,6 +64,7 @@ export function ChatMessageInput({ isDisabled = false }) {
 
       } catch (error) {
         console.error(error);
+        setIsLoading(false);
       }
     },
     [message, router]
@@ -78,7 +81,9 @@ export function ChatMessageInput({ isDisabled = false }) {
       }
       setChatHistory((prev) => [...prev, formattedMessage]);
       setMessage('');
+      setIsLoading(true);
       const responseMessages = await sendMessage(message, chatId);
+      setIsLoading(false);
       if (!responseMessages) {
         setError(true);
         return;
@@ -90,6 +95,7 @@ export function ChatMessageInput({ isDisabled = false }) {
 
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   }
 

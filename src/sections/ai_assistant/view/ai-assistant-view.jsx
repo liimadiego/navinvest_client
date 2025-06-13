@@ -19,7 +19,7 @@ import { background } from 'src/theme';
 
 export function AIAssistantView() {
   const [messages, setMessages] = useState([]);
-  const { chatHistory } = useChat();
+  const { chatHistory, isLoading } = useChat();
   const { tokenUsage } = useTokenUsage();
   const [isFeatureDisabled, setIsFeatureDisabled] = useState(false);
 
@@ -67,6 +67,7 @@ export function AIAssistantView() {
               ) : (
                 <ChatMessageList
                   messages={messages}
+                  isLoading={isLoading}
                 />
               )}
 

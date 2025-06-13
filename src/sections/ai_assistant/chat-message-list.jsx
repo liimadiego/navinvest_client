@@ -1,5 +1,4 @@
 import Stack from '@mui/material/Stack';
-import LinearProgress from '@mui/material/LinearProgress';
 
 import { Scrollbar } from 'src/components/scrollbar';
 
@@ -8,8 +7,9 @@ import { useMessagesScroll } from './hooks/use-messages-scroll';
 
 // ----------------------------------------------------------------------
 
-export function ChatMessageList({ messages = [] }) {
-  const { messagesEndRef } = useMessagesScroll(messages);
+export function ChatMessageList({ messages = [], isLoading = false }) {
+  const displayedMessages = isLoading ? [...messages, { id: 'loading', senderId: 'ai-id', loading: true }] : messages;
+  const { messagesEndRef } = useMessagesScroll(displayedMessages);
 
   return (
     <>
@@ -23,7 +23,7 @@ export function ChatMessageList({ messages = [] }) {
           width: '100%',
         }}
       >
-        {messages.map((message) => {
+        {displayedMessages.map((message) => {
           return (
             <ChatMessageItem
               key={message.id}

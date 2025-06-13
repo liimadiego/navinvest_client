@@ -45,7 +45,6 @@ export function HomeIntegrations({ sx, ...other }) {
     <SectionTitle
       caption="Jornal Inteligente"
       title="Informação de verdade, todo dia"
-      // txtGradient="framework"
       description={
         <>
           <Box component="span" sx={{ mb: 1, display: 'block' }}>
