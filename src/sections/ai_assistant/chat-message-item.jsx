@@ -11,20 +11,25 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { CloseFullscreen } from '@mui/icons-material';
 import { useAuthContext } from 'src/auth/hooks';
 
-function Typewriter({ text }) {
+function Typewriter({ text, totalRenderTimeMs = 1500 }) {
   const [displayed, setDisplayed] = useState('');
 
   useEffect(() => {
+    if (!text) return;
+
     let index = 0;
+    const interval = Math.max(5, totalRenderTimeMs / text.length);
+
     const timer = setInterval(() => {
       setDisplayed(text.slice(0, index + 1));
       index += 1;
       if (index >= text.length) {
         clearInterval(timer);
       }
-    }, 20);
+    }, interval);
+
     return () => clearInterval(timer);
-  }, [text]);
+  }, [text, totalRenderTimeMs]);
 
   return (
     <>
