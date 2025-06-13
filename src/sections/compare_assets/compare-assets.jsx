@@ -143,12 +143,11 @@ export function CompareAssets() {
 
   return (
     <>
-      {/* /alert para avisar (warning) que o comparador de ativos só esta comparando empresas brasileiras (mas só por enqnt) e que futuramente vai atender a todos os tipos de ativo */}
-      <Alert severity="warning" sx={{ marginBottom: 2, borderRadius: "16px" }}>
+      {!inComparison && <Alert severity="warning" sx={{ marginBottom: 2, borderRadius: "16px" }}>
         <Typography variant="body2" color="text.secondary">
           O comparador de ativos atualmente só está disponível para ações brasileiras. Em breve, iremos expandir para outros tipos de ativos!
         </Typography>
-      </Alert>
+      </Alert>}
       <Box
         sx={{
           display: 'flex',
