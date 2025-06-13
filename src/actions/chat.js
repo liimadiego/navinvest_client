@@ -28,6 +28,7 @@ export async function sendMessage(messageData, chatId) {
               messageType: messageType,
               createdAt: new Date().toISOString(),
               senderId: 'ai-id',
+              animate: true,
             });
           }
         } else {
@@ -37,7 +38,8 @@ export async function sendMessage(messageData, chatId) {
             messageType: 'text',
             createdAt: new Date().toISOString(),
             senderId: 'ai-id',
-            warning: true
+            warning: true,
+            animate: true,
           });
         }
       }
