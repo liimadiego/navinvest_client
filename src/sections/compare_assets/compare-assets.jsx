@@ -142,66 +142,73 @@ export function CompareAssets() {
   }, []);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' },
-        gap: 3,
-        alignItems: 'flex-start',
-      }}>
-      <Box flex={1.5} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} sx={{ width: "100%", position: 'relative' }}>
-        <Paper elevation={6} sx={{
-          padding: 2,
-          position: 'sticky',
-          top: '80px',
-          zIndex: 10,
-          width: "100%",
-          maxWidth: "100%",
-          overflow: 'visible'
+    <>
+      {/* /alert para avisar (warning) que o comparador de ativos só esta comparando empresas brasileiras (mas só por enqnt) e que futuramente vai atender a todos os tipos de ativo */}
+      <Alert severity="warning" sx={{ marginBottom: 2, borderRadius: "16px" }}>
+        <Typography variant="body2" color="text.secondary">
+          O comparador de ativos atualmente só está disponível para ações brasileiras. Em breve, iremos expandir para outros tipos de ativos!
+        </Typography>
+      </Alert>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 3,
+          alignItems: 'flex-start',
         }}>
-          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} style={{
-            height: hasToShrinkThePanel ? '0px' : '50px',
-            overflow: 'hidden',
-            transition: 'height 0.3s ease-in-out',
+        <Box flex={1.5} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} sx={{ width: "100%", position: 'relative' }}>
+          <Paper elevation={6} sx={{
+            padding: 2,
+            position: 'sticky',
+            top: '80px',
+            zIndex: 10,
+            width: "100%",
+            maxWidth: "100%",
+            overflow: 'visible'
           }}>
-            <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"} sx={{ transform: 'translateY(7px)' }}>
-              Comparador de Ativos
-            </Typography>
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} style={{
+              height: hasToShrinkThePanel ? '0px' : '50px',
+              overflow: 'hidden',
+              transition: 'height 0.3s ease-in-out',
+            }}>
+              <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"} sx={{ transform: 'translateY(7px)' }}>
+                Comparador de Ativos
+              </Typography>
 
-            {inComparison && <Button onClick={handleNewCompare} variant="outlined" type="button" color="primary">
-              Nova Comparação
-            </Button>}
-          </Box>
-
-          <Box component="form" noValidate autoComplete="off">
-            <Box display={'flex'} gap={2} style={{ width: '100%' }}>
-              <Box style={{ width: inComparison ? '40%' : '50%' }}>
-                {!inComparison && <TickerSelector assetType='stock' doNotRepeatCompany={true} onAddTicker={onAddTicker1} selectedTickers={selectedTickers} />}
-                {leftAsset && leftAsset.name && <CardAssetInfo inComparison={inComparison} assetInfo={leftAsset} onDelete={deleteLeftAsset} />}
-              </Box>
-              {inComparison && <Paper elevation={4} sx={{ width: '20%', padding: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                VS
-              </Paper>}
-              <Box style={{ width: inComparison ? '40%' : '50%' }}>
-                {!inComparison && <TickerSelector assetType='stock' doNotRepeatCompany={true} onAddTicker={onAddTicker2} selectedTickers={selectedTickers} />}
-                {rightAsset && rightAsset.name && <CardAssetInfo side='right' inComparison={inComparison} assetInfo={rightAsset} onDelete={deleteRightAsset} />}
-              </Box>
+              {inComparison && <Button onClick={handleNewCompare} variant="outlined" type="button" color="primary">
+                Nova Comparação
+              </Button>}
             </Box>
 
-            {!inComparison && <Box paddingTop={2} width={"100%"} display={'flex'} justifyContent={'end'}>
-              <Button onClick={handleCompare} variant="contained" color="primary" type="submit">
-                Comparar
-              </Button>
-            </Box>}
-          </Box>
-        </Paper>
+            <Box component="form" noValidate autoComplete="off">
+              <Box display={'flex'} gap={2} style={{ width: '100%' }}>
+                <Box style={{ width: inComparison ? '40%' : '50%' }}>
+                  {!inComparison && <TickerSelector assetType='br_stock' doNotRepeatCompany={true} onAddTicker={onAddTicker1} selectedTickers={selectedTickers} />}
+                  {leftAsset && leftAsset.name && <CardAssetInfo inComparison={inComparison} assetInfo={leftAsset} onDelete={deleteLeftAsset} />}
+                </Box>
+                {inComparison && <Paper elevation={4} sx={{ width: '20%', padding: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  VS
+                </Paper>}
+                <Box style={{ width: inComparison ? '40%' : '50%' }}>
+                  {!inComparison && <TickerSelector assetType='br_stock' doNotRepeatCompany={true} onAddTicker={onAddTicker2} selectedTickers={selectedTickers} />}
+                  {rightAsset && rightAsset.name && <CardAssetInfo side='right' inComparison={inComparison} assetInfo={rightAsset} onDelete={deleteRightAsset} />}
+                </Box>
+              </Box>
 
-        {inComparison && warningMessage != '' && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
-          <WarningComparison text={warningMessage} />
-        </Box>}
+              {!inComparison && <Box paddingTop={2} width={"100%"} display={'flex'} justifyContent={'end'}>
+                <Button onClick={handleCompare} variant="contained" color="primary" type="submit">
+                  Comparar
+                </Button>
+              </Box>}
+            </Box>
+          </Paper>
 
-        {/* Considerações da IA (apenas um <Alert /> do mui que tem um botaõ para ver mais, esse botao abre um modal para leitura) */}
-        {/* {inComparison && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
+          {inComparison && warningMessage != '' && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
+            <WarningComparison text={warningMessage} />
+          </Box>}
+
+          {/* Considerações da IA (apenas um <Alert /> do mui que tem um botaõ para ver mais, esse botao abre um modal para leitura) */}
+          {/* {inComparison && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
           <Alert
             severity="info"
             sx={{ borderRadius: "16px" }}
@@ -218,51 +225,52 @@ export function CompareAssets() {
         </Box>} */}
 
 
-        {inComparison && leftAssetInfo && rightAssetInfo && (
-          Object.keys(leftAssetInfo).flatMap((key) => {
-            if (Object.keys(leftAssetInfo[key]).length > 0) {
-              return [
-                <Typography
-                  key={`title-${key}`}
-                  variant="h6"
-                  sx={{ mt: 3, mb: 1, fontWeight: 'medium' }}
-                >
-                  {getTranslation(key)}
-                </Typography>,
-                ...Object.keys(leftAssetInfo[key]).map((key2, index) => {
-                  return (
-                    <Box key={`${key}-${key2}-${index}`} display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
-                      <ComparisonColumn content={leftAssetInfo[key][key2].value} winner={leftAssetInfo[key][key2].winner} />
-                      <MiddleComparisonColumn
-                        title={leftAssetInfo[key][key2].translation}
-                        description={leftAssetInfo[key][key2].tooltip} />
-                      <ComparisonColumn content={rightAssetInfo[key][key2].value} winner={rightAssetInfo[key][key2].winner} />
-                    </Box>
-                  )
+          {inComparison && leftAssetInfo && rightAssetInfo && (
+            Object.keys(leftAssetInfo).flatMap((key) => {
+              if (Object.keys(leftAssetInfo[key]).length > 0) {
+                return [
+                  <Typography
+                    key={`title-${key}`}
+                    variant="h6"
+                    sx={{ mt: 3, mb: 1, fontWeight: 'medium' }}
+                  >
+                    {getTranslation(key)}
+                  </Typography>,
+                  ...Object.keys(leftAssetInfo[key]).map((key2, index) => {
+                    return (
+                      <Box key={`${key}-${key2}-${index}`} display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
+                        <ComparisonColumn content={leftAssetInfo[key][key2].value} winner={leftAssetInfo[key][key2].winner} />
+                        <MiddleComparisonColumn
+                          title={leftAssetInfo[key][key2].translation}
+                          description={leftAssetInfo[key][key2].tooltip} />
+                        <ComparisonColumn content={rightAssetInfo[key][key2].value} winner={rightAssetInfo[key][key2].winner} />
+                      </Box>
+                    )
 
-                }).filter(Boolean)
-              ];
-            }
-            return [];
-          })
-        )}
+                  }).filter(Boolean)
+                ];
+              }
+              return [];
+            })
+          )}
+        </Box>
+
+        {!inComparison && <Box sx={{ flex: 1 }}>
+          <Paper elevation={3} sx={{ p: 3, pb: 4 }}>
+            <Box>
+              <h2 style={{ marginTop: 0 }}>📊 Compare Empresas e Tome Decisões Mais Inteligentes</h2>
+              <p>Escolha duas empresas e compare seus principais indicadores fundamentalistas! Descubra qual delas apresenta os melhores números em lucratividade, endividamento, crescimento e outros fatores essenciais para um investimento bem-sucedido.</p>
+
+              <p>✅ Adicione empresas e veja uma análise lado a lado
+                <br />📈 Compare indicadores financeiros e operacionais
+                <br />📊 Identifique oportunidades com base em dados reais
+              </p>
+
+              Selecione os ativos e clique em Comparar para uma visão clara e objetiva do desempenho das empresas! 🚀
+            </Box>
+          </Paper>
+        </Box>}
       </Box>
-
-      {!inComparison && <Box sx={{ flex: 1 }}>
-        <Paper elevation={3} sx={{ p: 3, pb: 4 }}>
-          <Box>
-            <h2 style={{ marginTop: 0 }}>📊 Compare Empresas e Tome Decisões Mais Inteligentes</h2>
-            <p>Escolha duas empresas e compare seus principais indicadores fundamentalistas! Descubra qual delas apresenta os melhores números em lucratividade, endividamento, crescimento e outros fatores essenciais para um investimento bem-sucedido.</p>
-
-            <p>✅ Adicione empresas e veja uma análise lado a lado
-              <br />📈 Compare indicadores financeiros e operacionais
-              <br />📊 Identifique oportunidades com base em dados reais
-            </p>
-
-            Selecione os ativos e clique em Comparar para uma visão clara e objetiva do desempenho das empresas! 🚀
-          </Box>
-        </Paper>
-      </Box>}
-    </Box>
+    </>
   );
 }
