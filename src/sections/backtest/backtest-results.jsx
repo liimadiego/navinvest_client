@@ -12,21 +12,16 @@ import * as XLSX from 'xlsx';
 
 export function BacktestResults() {
     const { results } = useContext(BacktestContext);
-    const [oldestDate, setOldestDate] = useState(null);
-    const [newestDate, setNewestDate] = useState(null);
     const [testPeriod, setTestPeriod] = useState(null);
 
     useEffect(() => {
         if (results && results.assetsDates) {
             const dates = Object.values(results.assetsDates).flatMap(asset => [new Date(asset.start), new Date(asset.end)]);
-            setOldestDate(new Date(Math.min(...dates)));
-            setNewestDate(new Date(Math.max(...dates)));
 
-            if (oldestDate && newestDate) {
-                const diffTime = Math.abs(newestDate - oldestDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                setTestPeriod(diffDays);
-            }
+            const diffTime = Math.abs(new Date(Math.max(...dates)) - new Date(Math.min(...dates)));
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            setTestPeriod(diffDays);
+
         }
     }, [results]);
 
