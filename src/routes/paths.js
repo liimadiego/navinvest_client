@@ -40,5 +40,6 @@ export const paths = {
     investor_glossary: `${ROOTS.DASHBOARD}/glossario-investidor`,
     dividend_calendar: `${ROOTS.DASHBOARD}/agenda-dividendos`,
     my_profile: `${ROOTS.DASHBOARD}/meu-perfil`,
+    investor_profile: `${ROOTS.DASHBOARD}/perfil-investidor`,
   },
 };

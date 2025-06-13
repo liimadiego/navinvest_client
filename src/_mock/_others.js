@@ -124,21 +124,6 @@ export const pricingPlans = [
     labelAction: 'Testar 7 dias grátis',
     iaLimitExplained: 'Para garantir a qualidade e estabilidade do serviço para todos, este plano inclui um limite generoso de uso da nossa Inteligência Artificial. Mas não se preocupe: o limite é bem alto e cobre centenas de interações mensais, e você sempre poderá acompanhar seu uso dentro da plataforma. Caso você se aproxime do limite, será possível identificar com antecedência.'
   },
-  // {
-  //   subscription: 'premium',
-  //   price: 9.99,
-  //   caption: 'Saving $124 a year',
-  //   lists: [
-  //     '3 prototypes',
-  //     '3 boards',
-  //     'Up to 5 team members',
-  //     'Advanced security',
-  //     'Issue escalation',
-  //     'Issue development license',
-  //     'Permissions & workflows',
-  //   ],
-  //   labelAction: 'Choose premium',
-  // },575,88
 ];
 
 // ----------------------------------------------------------------------

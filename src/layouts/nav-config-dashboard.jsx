@@ -61,6 +61,7 @@ export const navData = [
       { title: 'Conversor de Moedas', path: paths.dashboard.currency_converter, icon: <CurrencyConverterIcon /> },
       { title: 'Glossário do Investidor', path: paths.dashboard.investor_glossary, icon: ICONS.blog },
       { title: 'Agenda de Dividendos', path: paths.dashboard.dividend_calendar, icon: ICONS.calendar },
+      { title: 'Perfil de Investidor', path: paths.dashboard.investor_profile, icon: ICONS.file },
     ],
   },
 ];

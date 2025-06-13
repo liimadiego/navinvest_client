@@ -27,6 +27,7 @@ const CurrencyConverter = lazy(() => import('src/pages/dashboard/currency_conver
 const InvestorGlossary = lazy(() => import('src/pages/dashboard/investor_glossary'));
 const DividendCalendar = lazy(() => import('src/pages/dashboard/dividend_calendar'));
 const MyProfile = lazy(() => import('src/pages/dashboard/my_profile'));
+const InvestorProfile = lazy(() => import('src/pages/dashboard/investor_profile'));
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +65,7 @@ export const dashboardRoutes = [
       { path: 'glossario-investidor', element: <InvestorGlossary /> },
       { path: 'agenda-dividendos', element: <DividendCalendar /> },
       { path: 'meu-perfil', element: <MyProfile /> },
+      { path: 'perfil-investidor', element: <InvestorProfile /> },
     ],
   },
 ];
