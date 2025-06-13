@@ -6,6 +6,7 @@ export const ChatContext = createContext();
 export const ChatProvider = ({ children }) => {
     const [chatId, setChatId] = useState(null);
     const [chatHistory, setChatHistory] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
 
     useEffect(() => {
@@ -16,7 +17,7 @@ export const ChatProvider = ({ children }) => {
     }, [user]);
 
     return (
-        <ChatContext.Provider value={{ chatId, setChatId, chatHistory, setChatHistory }}>
+        <ChatContext.Provider value={{ chatId, setChatId, chatHistory, setChatHistory, isLoading, setIsLoading }}>
             {children}
         </ChatContext.Provider>
     );

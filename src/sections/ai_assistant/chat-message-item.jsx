@@ -5,11 +5,37 @@ import Typography from '@mui/material/Typography';
 import { fToNow } from 'src/utils/format-time';
 import { Chart, ChartLegends, useChart } from 'src/components/chart';
 import { useTheme } from '@emotion/react';
-import { useState } from 'react';
-import { IconButton, Modal } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { IconButton, Modal, CircularProgress } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { CloseFullscreen } from '@mui/icons-material';
 import { useAuthContext } from 'src/auth/hooks';
+
+function Typewriter({ text }) {
+  const [displayed, setDisplayed] = useState('');
+
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      setDisplayed(text.slice(0, index + 1));
+      index += 1;
+      if (index >= text.length) {
+        clearInterval(timer);
+      }
+    }, 20);
+    return () => clearInterval(timer);
+  }, [text]);
+
+  return (
+    <>
+      {displayed.split('\n').map((line, idx) => (
+        <Typography key={idx} variant="body2" sx={{ mb: 0.5 }}>
+          {line}
+        </Typography>
+      ))}
+    </>
+  );
+}
 
 export function ChatMessageItem({ message }) {
   const { user } = useAuthContext();
@@ -29,6 +55,21 @@ export function ChatMessageItem({ message }) {
   );
 
   const renderBody = () => {
+    if (message.loading) {
+      return (
+        <Stack
+          sx={{
+            p: 1.5,
+            maxWidth: { xs: '95%', sm: '90%', md: '80%' },
+            borderRadius: 1,
+            bgcolor: 'background.neutral',
+          }}
+        >
+          <CircularProgress size={16} />
+        </Stack>
+      );
+    }
+
     if (messageType === 'text') {
       return (
         <Stack
@@ -41,11 +82,15 @@ export function ChatMessageItem({ message }) {
             ...(me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
           }}
         >
-          {answer.split('\n').map((line, index) => (
-            <Typography key={index} variant="body2" sx={{ mb: 0.5 }}>
-              {line}
-            </Typography>
-          ))}
+          {me ? (
+            answer.split('\n').map((line, index) => (
+              <Typography key={index} variant="body2" sx={{ mb: 0.5 }}>
+                {line}
+              </Typography>
+            ))
+          ) : (
+            <Typewriter text={answer} />
+          )}
         </Stack>
       );
 
@@ -195,7 +240,7 @@ export function ChatMessageItem({ message }) {
     }
   };
 
-  if (!message.answer) {
+  if (!message.answer && !message.loading) {
     return null;
   }
 
@@ -204,7 +249,7 @@ export function ChatMessageItem({ message }) {
       {!me && <Avatar alt={firstName} src={avatarUrl} sx={{ width: 32, height: 32, mr: 2, display: { xs: 'none', sm: 'inlune-block' } }} />}
 
       <Stack alignItems={me ? 'flex-end' : 'flex-start'} sx={{ width: '100%' }}>
-        {renderInfo()}
+        {!message.loading && renderInfo()}
 
         <Box
           sx={{
