@@ -144,7 +144,7 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false, titl
                             >
                                 <Typography sx={{ opacity: 0.75, mr: 1, fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>% NA CARTEIRA:</Typography>
                                 <Typography sx={{ opacity: 0.75, mr: 1, fontWeight: 'bold', fontSize: { xs: '10pt', sm: '10pt', md: '12pt' } }}>{category_summary.portfolioPercentage}%</Typography>
-                                <Typography sx={{ fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>(Meta: 40%)</Typography>
+                                {/* <Typography sx={{ fontSize: { xs: '10pt', sm: '10pt', md: '12pt' }, display: { xs: 'none', sm: 'inline-block' } }}>(Meta: 40%)</Typography> */}
                             </Box>
                         </Box>
                     </AccordionSummary>

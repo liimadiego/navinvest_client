@@ -14,6 +14,13 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 import { SectionTitle } from './components/section-title';
 import { CircleSvg, FloatLine, FloatPlusIcon } from './components/svg-elements';
+import AssistantIcon from '@mui/icons-material/Assistant';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
+import BalanceIcon from '@mui/icons-material/Balance';
+import InsightsIcon from '@mui/icons-material/Insights';
+import { WealthEvolution } from 'src/components/wealth-evolution';
+import { useTheme } from '@emotion/react';
+import { background } from 'src/theme';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +35,7 @@ const renderLines = () => (
 );
 
 export function HomeMinimal({ sx, ...other }) {
+  const theme = useTheme();
   const renderDescription = () => (
     <>
       <SectionTitle
@@ -45,7 +53,9 @@ export function HomeMinimal({ sx, ...other }) {
             key={item.title}
             sx={[{ gap: 3, display: 'flex' }]}
           >
-            <SvgColor src={item.icon} sx={{ width: 40, height: 40 }} />
+            <Box sx={{ transform: 'translateY(3px)' }}>
+              {item.icon}
+            </Box>
             <Stack spacing={1}>
               <Typography variant="h5" component="h6">
                 {item.title}
@@ -84,11 +94,33 @@ export function HomeMinimal({ sx, ...other }) {
           }),
         ]}
       >
-        <Box
-          component="img"
-          alt="Home chart"
-          src={`${CONFIG.assetsDir}/assets/images/home/home-chart.webp`}
-          sx={{ width: 720 }}
+        <WealthEvolution
+          sx={{ height: "100%", width: "100%", background: 'transparent' }}
+          title="Evolução da carteira (12 meses)"
+          subheader={`(+10.4%) no último ano`}
+          chart={{
+            colors: [
+              theme.palette.info.dark,
+              theme.palette.info.light,
+            ],
+            categories: [
+              'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+              'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+            ],
+            series: [{
+              name: "Evolução da carteira",
+              data: [
+                {
+                  name: 'Valor aplicado',
+                  data: [10234, 11356, 12487, 13864, 16982, 17345, 19128, 20276, 22158, 24083, 24378, 29867]
+                },
+                {
+                  name: 'Ganho de capital',
+                  data: [187, 263, 342, 417, 321, 493, 978, 1467, 1523, 2112, 2486, 3043]
+                },
+              ],
+            }],
+          }}
         />
       </Box>
     </Stack>
@@ -130,23 +162,23 @@ export function HomeMinimal({ sx, ...other }) {
 
 const ITEMS = [
   {
-    icon: `${CONFIG.assetsDir}/assets/icons/home/ic-make-brand.svg`,
+    icon: <AssistantIcon />,
     title: 'Acompanhamento 24/7',
     description: 'Um assistente virtual que te ajuda a investir melhor.',
   },
   {
-    icon: `${CONFIG.assetsDir}/assets/icons/home/ic-design.svg`,
+    icon: <NewspaperIcon />,
     title: 'Jornal Inteligente',
     description: 'A IA analisa notícias mundiais e te atualiza.',
   },
   {
-    icon: `${CONFIG.assetsDir}/assets/icons/home/ic-design.svg`,
+    icon: <BalanceIcon />,
     title: 'Sem conflito de interesses',
     description: 'A IA não tem interesses próprios, ela trabalha para você.',
   },
   {
-    icon: `${CONFIG.assetsDir}/assets/icons/home/ic-development.svg`,
+    icon: <InsightsIcon />,
     title: 'Análise Inteligente',
-    description: 'A IA analisa o mercado e te dá as melhores recomendações.',
+    description: 'A IA analisa o mercado e te dá insights valiosos.',
   },
 ];

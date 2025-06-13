@@ -314,7 +314,7 @@ export function Dashboard() {
                 {walletEvolution ? <WealthEvolution
                     sx={{ height: 1 }}
                     title="Evolução da carteira (12 meses)"
-                    subheader="(+100000%) no último ano"
+                    subheader={`(${totalAssetEvolutionTwelveMonths < 0 ? "-" : "+"}${totalAssetEvolutionTwelveMonths ? totalAssetEvolutionTwelveMonths.toFixed(2) : 0}%) no último ano`}
                     chart={{
                         colors: [
                             theme.palette.info.dark,
