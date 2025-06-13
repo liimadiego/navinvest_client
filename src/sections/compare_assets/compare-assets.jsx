@@ -76,7 +76,7 @@ export function CompareAssets() {
 
   const handleCompare = () => {
     setInComparison(!inComparison);
-    axios.get(`/companies/compare?tickers[]=${leftAsset.ticker}&tickers[]=${rightAsset.ticker}`)
+    axios.get(`/companies/compare?tickers=${leftAsset.ticker},${rightAsset.ticker}`)
       .then((response) => {
         if (response.status === 200) {
           const assetsInfo = response.data;
