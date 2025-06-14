@@ -67,9 +67,29 @@ export function HomeIntegrations({ sx, ...other }) {
     <Box
       component={m.img}
       variants={{ ...varScale('in'), initial: { scale: 0.8, opacity: 0 } }}
+      animate={{
+        rotate: 360,
+        transition: {
+          duration: 50,
+          ease: "linear",
+          repeat: Infinity,
+          repeatType: "loop"
+        }
+      }}
       alt="Jornal Inteligente"
-      src={`${CONFIG.assetsDir}/assets/illustrations/illustration-integration.webp`}
-      sx={{ width: 720, objectFit: 'cover', aspectRatio: '1/1' }}
+      src={`${CONFIG.assetsDir}/assets/illustrations/geometric-circle.png`}
+      sx={{
+        opacity: 0.48,
+        width: { xs: '100%', md: '80%' },
+        maxWidth: 480,
+        height: 'auto',
+        mx: 'auto',
+        //filtro de cor saturação
+        // filter: 'hue-rotate(240deg)',
+        userSelect: 'none',
+        pointerEvents: 'none',
+
+      }}
     />
   );
 
