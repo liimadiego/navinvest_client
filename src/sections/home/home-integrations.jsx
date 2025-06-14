@@ -11,6 +11,7 @@ import { varScale, MotionViewport } from 'src/components/animate';
 
 import { SectionTitle } from './components/section-title';
 import { FloatLine, FloatDotIcon } from './components/svg-elements';
+import Polyhedron from 'src/components/polyhedron';
 
 // ----------------------------------------------------------------------
 
@@ -65,32 +66,35 @@ export function HomeIntegrations({ sx, ...other }) {
 
   const renderImage = () => (
     <Box
-      component={m.img}
-      variants={{ ...varScale('in'), initial: { scale: 0.8, opacity: 0 } }}
-      animate={{
-        rotate: 360,
-        transition: {
-          duration: 50,
-          ease: "linear",
-          repeat: Infinity,
-          repeatType: "loop"
-        }
-      }}
-      alt="Jornal Inteligente"
-      src={`${CONFIG.assetsDir}/assets/illustrations/geometric-circle.png`}
+      component={m.div}
+      variants={varScale('in', { durationIn: 3, delayIn: 0.5 })}
+      initial="initial"
+      whileInView="animate"
+      viewport={{ once: true, amount: 0.3 }}
       sx={{
-        opacity: 0.48,
         width: { xs: '100%', md: '80%' },
         maxWidth: 480,
+        width: '480px',
         height: 'auto',
         mx: 'auto',
-        //filtro de cor saturação
-        // filter: 'hue-rotate(240deg)',
         userSelect: 'none',
         pointerEvents: 'none',
-
       }}
-    />
+    >
+      <m.div
+        animate={{
+          rotate: 360,
+          transition: {
+            duration: 50,
+            ease: "linear",
+            repeat: Infinity,
+            repeatType: "loop"
+          }
+        }}
+      >
+        <Polyhedron />
+      </m.div>
+    </Box>
   );
 
   return (
