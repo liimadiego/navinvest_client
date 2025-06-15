@@ -131,7 +131,6 @@ export function HomeIntegrations({ sx, ...other }) {
       sx={{
         width: { xs: '100%', md: '80%' },
         maxWidth: '100%',
-        width: '480px',
         height: 'auto',
         mx: 'auto',
         userSelect: 'none',
