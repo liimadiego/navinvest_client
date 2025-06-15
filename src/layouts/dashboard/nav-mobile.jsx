@@ -14,6 +14,7 @@ import { layoutClasses } from '../core/classes';
 import { NavUpgrade } from '../components/nav-upgrade';
 import { TokenProgress } from 'src/components/token-progress';
 import { NavSearch } from 'src/components/nav-search';
+import { NavIdea } from 'src/components/nav-idea';
 
 // ----------------------------------------------------------------------
 
@@ -53,6 +54,7 @@ export function NavMobile({ data, open, onClose, slots, sx, className, ...other 
         <TokenProgress sx={{ mt: 2, mb: 1, pl: 2 }} />
         {/* <NavSearch /> */}
         <NavSectionVertical data={data} sx={{ px: 2, flex: '1 1 auto' }} {...other} />
+        <NavIdea />
         <NavUpgrade />
       </Scrollbar>
 
