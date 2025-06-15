@@ -16,6 +16,7 @@ import { HomeTestimonials } from '../home-testimonials';
 import { HomeAdvertisement } from '../home-advertisement';
 import Polyhedron from 'src/components/polyhedron';
 import { HomeAssistant } from '../home-assistant';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ export function HomeView() {
   const { onBackToTop, isVisible } = useBackToTop('90%');
 
   return (
-    <>
+    <Box>
       <ScrollProgress
         variant="linear"
         progress={pageProgress.scrollYProgress}
@@ -53,7 +54,7 @@ export function HomeView() {
 
         <HomeAdvertisement />
       </Stack>
-    </>
+    </Box>
   );
 }
 

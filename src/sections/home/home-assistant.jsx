@@ -149,6 +149,7 @@ export function HomeAssistant({ sx, ...other }) {
           overflow: 'hidden',
           position: 'relative',
           py: { xs: 10, md: 20 },
+          pt: { xs: 5, md: 20 },
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

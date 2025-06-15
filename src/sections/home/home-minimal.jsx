@@ -134,6 +134,7 @@ export function HomeMinimal({ sx, ...other }) {
           overflow: 'hidden',
           position: 'relative',
           py: { xs: 10, md: 20 },
+          pb: { xs: 0, md: 20 },
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

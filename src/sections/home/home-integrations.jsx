@@ -53,7 +53,7 @@ const renderLines = () => (
 const renderButtons = () => (
   <Box
     sx={{
-      mt: 5,
+      mt: { xs: 0, md: 5 },
     }}
   >
     <m.div {...motionProps}>
@@ -66,7 +66,7 @@ const renderButtons = () => (
           rel="noopener"
           href={paths.pricing}
           // startIcon={<Iconify width={24} icon="eva:log-in-fill" />}
-          sx={{ borderColor: 'text.primary', width: '200px' }}
+          sx={{ borderColor: 'text.primary', width: '200px', alignSelf: { xs: 'center', md: 'flex-start' } }}
 
         >
           <span>
@@ -115,7 +115,9 @@ export function HomeIntegrations({ sx, ...other }) {
         }
         sx={{ textAlign: { xs: 'center', md: 'left' } }}
       />
-      {renderButtons()}
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+        {renderButtons()}
+      </Box>
     </>
   );
 
@@ -128,7 +130,7 @@ export function HomeIntegrations({ sx, ...other }) {
       viewport={{ once: true, amount: 0.3 }}
       sx={{
         width: { xs: '100%', md: '80%' },
-        maxWidth: 480,
+        maxWidth: '100%',
         width: '480px',
         height: 'auto',
         mx: 'auto',
@@ -167,6 +169,9 @@ export function HomeIntegrations({ sx, ...other }) {
 
             <Grid sx={{ textAlign: { xs: 'center', md: 'right' } }} size={{ xs: 12, md: 6, lg: 7 }}>
               {renderImage()}
+            </Grid>
+            <Grid sx={{ display: { xs: 'block', md: 'none' }, textAlign: 'center' }} size={12}>
+              {renderButtons()}
             </Grid>
           </Grid>
         </Container>

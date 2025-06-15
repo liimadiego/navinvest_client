@@ -90,7 +90,7 @@ export function HomePricing({ sx, ...other }) {
   return (
     <Box
       component="section"
-      sx={[{ py: 10, position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}
+      sx={[{ py: 10, pt: 5, position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}
       {...other}
     >
       <MotionViewport>
