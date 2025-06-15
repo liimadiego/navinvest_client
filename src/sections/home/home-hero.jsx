@@ -164,18 +164,6 @@ export function HomeHero({ sx, ...other }) {
           >
             <span>
               Teste Grátis por 7 dias
-              {/* <Box
-                component="small"
-                sx={{
-                  mt: '-3px',
-                  opacity: 0.64,
-                  display: 'flex',
-                  fontSize: theme.typography.pxToRem(10),
-                  fontWeight: theme.typography.fontWeightMedium,
-                }}
-              >
-                cancele a qualquer momento
-              </Box> */}
             </span>
           </Button>
         </Stack>
@@ -283,7 +271,7 @@ export function HomeHero({ sx, ...other }) {
             <m.div style={{ y: y2 }}>{renderText()}</m.div>
           </Stack>
 
-          <m.div style={{ y: y3 }}>{renderRatings()}</m.div>
+          {/* <m.div style={{ y: y3 }}>{renderRatings()}</m.div> */}
           <m.div style={{ y: y4 }}>{renderButtons()}</m.div>
           {/* <m.div style={{ y: y5 }}>{renderIcons()}</m.div> */}
         </Container>

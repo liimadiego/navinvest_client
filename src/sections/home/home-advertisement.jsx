@@ -134,7 +134,7 @@ const renderDescription = () => (
             '&:hover': { borderColor: 'currentColor' },
           }}
         >
-          Continuar com a versão gratuita
+          Criar conta grátis
         </Button>
       </m.div>
     </Box>

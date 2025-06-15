@@ -15,6 +15,7 @@ import { HomeIntegrations } from '../home-integrations';
 import { HomeTestimonials } from '../home-testimonials';
 import { HomeAdvertisement } from '../home-advertisement';
 import Polyhedron from 'src/components/polyhedron';
+import { HomeAssistant } from '../home-assistant';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,8 @@ export function HomeView() {
         <HomeMinimal />
 
         <HomeIntegrations />
+
+        <HomeAssistant />
 
         <HomePricing />
 
