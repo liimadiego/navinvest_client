@@ -9,10 +9,15 @@ import {
   Typography,
   Snackbar,
   Alert,
+  Card,
+  CardContent,
+  Divider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
-// import axios from 'src/lib/axios';
+import ForumIcon from '@mui/icons-material/Forum';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
+import axios from 'src/lib/axios';
 
 export function FeatureRequestModal({ open, onClose }) {
   const [title, setTitle] = useState('');
@@ -23,7 +28,7 @@ export function FeatureRequestModal({ open, onClose }) {
     e.preventDefault();
     const payload = { title, description };
     try {
-      // await axios.post('/feature-request', payload);
+      await axios.post('/user-ideas/create', payload);
       setAlert({
         open: true,
         severity: 'success',
@@ -33,7 +38,18 @@ export function FeatureRequestModal({ open, onClose }) {
       setDescription('');
       onClose();
     } catch (err) {
-      console.error(err);
+      setTitle('');
+      setDescription('');
+      onClose();
+      if (err.statusCode && err.statusCode === 429) {
+        setAlert({
+          open: true,
+          severity: 'error',
+          message: 'Infelizmente você atingiu o limite de ideias diárias. Criamos esse limite para evitar spam e garantir que todas as sugestões sejam analisadas com atenção.',
+        });
+        return;
+      }
+
       setAlert({
         open: true,
         severity: 'error',
@@ -43,7 +59,7 @@ export function FeatureRequestModal({ open, onClose }) {
   };
 
   return (
-    <>
+    <Box>
       <Modal
         open={open}
         onClose={onClose}
@@ -55,13 +71,15 @@ export function FeatureRequestModal({ open, onClose }) {
           onSubmit={handleSubmit}
           elevation={3}
           sx={{
-            width: 400,
+            width: 800,
             maxWidth: '90%',
             p: 3,
             m: 'auto',
-            mt: '20vh',
+            mt: '5vh',
+            height: '90vh',
             position: 'relative',
             borderRadius: 1,
+            overflowY: 'auto'
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -74,6 +92,34 @@ export function FeatureRequestModal({ open, onClose }) {
               Envie sua ideia
             </Typography>
           </Box>
+
+          <Card sx={{ mb: 3 }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <EmojiPeopleIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Sua voz é importante para nós!
+                </Typography>
+              </Box>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                Como membro valioso da comunidade Navinvest, suas ideias ajudam a moldar o futuro da plataforma.
+              </Typography>
+              <Divider sx={{ my: 1.5 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <ForumIcon fontSize="small" color="primary" sx={{ mr: 1 }} />
+                <Typography variant="body2" fontWeight="medium">
+                  Como funciona:
+                </Typography>
+              </Box>
+              <Typography variant="body2" sx={{ pl: 3, fontSize: '0.85rem' }}>
+                • Você pode enviar até 2 ideias por dia<br />
+                • Nossa equipe analisa todas as sugestões<br />
+                {/* • As mais votadas pela comunidade são implementadas<br /> */}
+                • Você recebe notificações caso sua ideia seja selecionada para implementação<br />
+              </Typography>
+            </CardContent>
+          </Card>
+
           <TextField
             fullWidth
             label="Título"
@@ -97,19 +143,20 @@ export function FeatureRequestModal({ open, onClose }) {
       </Modal>
       <Snackbar
         open={alert.open}
-        autoHideDuration={3000}
+        autoHideDuration={6000}
         onClose={() => setAlert({ ...alert, open: false })}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        sx={{ width: '100%', position: 'fixed', left: 0, right: 0, top: 10 }}
       >
         <Alert
           onClose={() => setAlert({ ...alert, open: false })}
           severity={alert.severity}
-          sx={{ width: '100%' }}
+          sx={{ width: '800px', zIndex: 9999, maxWidth: '90%' }}
           variant="filled"
         >
           {alert.message}
         </Alert>
       </Snackbar>
-    </>
+    </Box>
   );
 }
