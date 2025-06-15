@@ -11,6 +11,7 @@ import { NavUpgrade } from '../components/nav-upgrade';
 import { NavToggleButton } from '../components/nav-toggle-button';
 import { Divider, Box } from '@mui/material';
 import { NavSearch } from 'src/components/nav-search';
+import { NavIdea } from 'src/components/nav-idea';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,8 @@ export function NavVertical({
         </Box>
 
         <NavSectionVertical data={data} cssVars={cssVars} sx={{ px: 2, flex: '1 1 auto' }} />
+
+        <NavIdea />
 
         {slots?.bottomArea ?? <NavUpgrade />}
       </Scrollbar>
