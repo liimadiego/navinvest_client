@@ -40,7 +40,7 @@ const renderDescription = () => (
   <m.div variants={varFade('inUp', { distance: 24 })}>
     <SectionTitle
       caption="Tire suas dúvidas"
-      title="Converse com o assistente"
+      title="Converse com o Navi"
       description={
         <>
           <Box component="span" sx={{ mb: 1, display: 'block' }}>
@@ -98,7 +98,7 @@ export function HomeAIAssistant({ sx, ...other }) {
         {
           position: 'relative',
           overflow: 'hidden',
-          pb: { xs: 15, md: 20 },
+          pb: { xs: 15, md: 15 },
           pt: 15
         },
         ...(Array.isArray(sx) ? sx : [sx])

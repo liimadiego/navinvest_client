@@ -32,7 +32,7 @@ export function HomePricing({ sx, ...other }) {
       title="Preços"
       txtGradient="transparentes"
       description="Temos um plano ideal para você. Teste por 7 dias grátis e cancele quando quiser. Sem complicações."
-      sx={{ mb: 8, textAlign: 'center' }}
+      sx={{ mb: 0, textAlign: 'center' }}
     />
   );
 
@@ -90,7 +90,7 @@ export function HomePricing({ sx, ...other }) {
   return (
     <Box
       component="section"
-      sx={[{ py: 10, pt: 5, position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}
+      sx={[{ py: 10, pt: 10, position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}
       {...other}
     >
       <MotionViewport>
@@ -125,8 +125,8 @@ export function HomePricing({ sx, ...other }) {
 
 const renderLines = () => (
   <>
-    <FloatLine vertical sx={{ top: -64, left: 0, height: 'calc(100% + (64px * 2))' }} />
-    <FloatLine vertical sx={{ top: -64, right: 0, height: 'calc(100% + (64px * 2))' }} />
+    <FloatLine vertical sx={{ top: -32, left: 0, height: 'calc(100% + (64px * 2))' }} />
+    <FloatLine vertical sx={{ top: -32, right: 0, height: 'calc(100% + (64px * 2))' }} />
     <FloatXIcon sx={{ top: -8, left: -8 }} />
     <FloatXIcon sx={{ top: -8, right: -8 }} />
     <FloatXIcon sx={{ bottom: -8, left: -8 }} />

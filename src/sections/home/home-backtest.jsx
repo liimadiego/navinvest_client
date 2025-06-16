@@ -148,8 +148,8 @@ export function HomeBacktest({ sx, ...other }) {
         {
           overflow: 'hidden',
           position: 'relative',
-          py: { xs: 10, md: 20 },
-          pt: { xs: 5, md: 20 },
+          py: { xs: 10, md: 25 },
+          pt: { xs: 5, md: 15 },
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

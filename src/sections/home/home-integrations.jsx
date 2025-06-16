@@ -158,7 +158,7 @@ export function HomeIntegrations({ sx, ...other }) {
   return (
     <Box
       component="section"
-      sx={[{ pt: 0, position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}
+      sx={[{ py: 5, position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}
       {...other}
     >
       <MotionViewport>

@@ -98,6 +98,7 @@ export function HomeFAQs({ sx, ...other }) {
           mx: 'auto',
           maxWidth: 720,
           mb: { xs: 5, md: 8 },
+          pb: 10
         }),
       ]}
     >
@@ -157,7 +158,7 @@ export function HomeFAQs({ sx, ...other }) {
       sx={[
         (theme) => ({
           px: 3,
-          py: 8,
+          py: 10,
           textAlign: 'center',
           background: `linear-gradient(to left, ${varAlpha(theme.vars.palette.grey['500Channel'], 0.08)}, transparent)`,
         }),
@@ -188,7 +189,7 @@ export function HomeFAQs({ sx, ...other }) {
 
   return (
     <Box component="section" sx={sx} {...other}>
-      <MotionViewport sx={{ py: 10, pt: { xs: 0, md: 10 }, position: 'relative' }}>
+      <MotionViewport sx={{ pb: 10, pt: 0, position: 'relative' }}>
         {topLines()}
 
         <Container>
