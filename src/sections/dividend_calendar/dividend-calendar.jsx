@@ -94,12 +94,12 @@ export function DividendCalendar() {
                 const dividends = response.data.map(dividend => ({
                     id: dividend.id,
                     symbol: dividend.ticker,
-                    companyName: dividend.company.trade_name,
+                    companyName: dividend?.company ? dividend.company.trade_name : dividend.ticker,
                     amount: parseFloat(dividend.adj_amount),
                     exDate: new Date(new Date(`${dividend.ex_date} 12:00:00`)),
                     paymentDate: new Date(new Date(`${dividend.payable_date} 12:00:00`)),
-                    sector: dividend.company.b3_sector,
-                    currency: dividend.tickerInfo.currency || 'BRL',
+                    sector: dividend?.company ? dividend.company.b3_sector : '',
+                    currency: dividend?.tickerInfo?.currency || 'BRL',
                 }));
                 setDividendData(dividends);
             })
