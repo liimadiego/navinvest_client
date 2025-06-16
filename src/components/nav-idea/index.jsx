@@ -9,13 +9,14 @@ export function NavIdea() {
   return (
     <>
       <FeatureRequestModal open={open} onClose={() => setOpen(false)} />
-      <Box sx={{ px: 2, mb: 1 }}>
+      <Box sx={{ mb: 1 }}>
         <Button
           onClick={() => setOpen(true)}
           sx={{
             width: '100%',
             display: 'flex',
             justifyContent: 'flex-start',
+            mt: .5,
             pl: 1.5,
             pb: 1,
             pt: 1,

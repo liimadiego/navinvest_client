@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import { NavList } from './nav-list';
 import { Nav, NavUl, NavLi, NavSubheader } from '../components';
 import { navSectionClasses, navSectionCssVars } from '../styles';
+import { NavIdea } from 'src/components/nav-idea';
 
 // ----------------------------------------------------------------------
 
@@ -87,6 +88,7 @@ function Group({ items, render, subheader, slotProps, currentRole, enabledRootRe
       ) : (
         renderContent()
       )}
+      <NavIdea />
     </NavLi>
   );
 }

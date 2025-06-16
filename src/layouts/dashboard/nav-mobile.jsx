@@ -54,7 +54,6 @@ export function NavMobile({ data, open, onClose, slots, sx, className, ...other 
         <TokenProgress sx={{ mt: 2, mb: 1, pl: 2 }} />
         {/* <NavSearch /> */}
         <NavSectionVertical data={data} sx={{ px: 2, flex: '1 1 auto' }} {...other} />
-        <NavIdea />
         <NavUpgrade />
       </Scrollbar>
 
