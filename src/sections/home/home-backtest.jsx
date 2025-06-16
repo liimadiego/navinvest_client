@@ -39,13 +39,13 @@ const renderLines = () => (
   <>
     <FloatPlusIcon sx={{ top: 72, left: 72 }} />
     <FloatPlusIcon sx={{ bottom: 72, left: 72 }} />
-    <FloatLine sx={{ top: 80, left: 0 }} />
+    <FloatLine sx={{ top: 0, left: 0 }} />
     <FloatLine sx={{ bottom: 80, left: 0 }} />
     <FloatLine vertical sx={{ top: 0, left: 80 }} />
   </>
 );
 
-export function HomeAssistant({ sx, ...other }) {
+export function HomeBacktest({ sx, ...other }) {
   const { mode } = useColorScheme();
   const renderDescription = () => (
     <>

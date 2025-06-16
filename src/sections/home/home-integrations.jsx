@@ -43,9 +43,11 @@ const renderLines = () => (
       <Box sx={{ flexGrow: 1 }} />
       <FloatDotIcon sx={{ opacity: 0.24, width: 14, height: 14 }} />
       <FloatDotIcon />
+      <FloatLine sx={{ bottom: 80, left: 0 }} />
     </Stack>
 
     <FloatLine vertical sx={{ top: 0, left: 80 }} />
+    <FloatLine sx={{ bottom: 0, left: 0, zIndex: 9999 }} />
   </>
 );
 
@@ -156,7 +158,7 @@ export function HomeIntegrations({ sx, ...other }) {
   return (
     <Box
       component="section"
-      sx={[{ pt: 10, position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}
+      sx={[{ pt: 0, position: 'relative' }, ...(Array.isArray(sx) ? sx : [sx])]}
       {...other}
     >
       <MotionViewport>

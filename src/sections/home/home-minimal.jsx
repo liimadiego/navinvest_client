@@ -29,7 +29,7 @@ const renderLines = () => (
     <FloatPlusIcon sx={{ top: 72, left: 72 }} />
     <FloatPlusIcon sx={{ bottom: 72, left: 72 }} />
     <FloatLine sx={{ top: 80, left: 0 }} />
-    <FloatLine sx={{ bottom: 80, left: 0 }} />
+    <FloatLine sx={{ bottom: 0, left: 0 }} />
     <FloatLine vertical sx={{ top: 0, left: 80 }} />
   </>
 );
@@ -134,7 +134,7 @@ export function HomeMinimal({ sx, ...other }) {
           overflow: 'hidden',
           position: 'relative',
           py: { xs: 10, md: 20 },
-          pb: { xs: 0, md: 20 },
+          pb: { xs: 0, md: 10 },
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

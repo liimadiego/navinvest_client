@@ -12,10 +12,9 @@ import { HomeZoneUI } from '../home-zone-ui';
 import { HomeMinimal } from '../home-minimal';
 import { HomePricing } from '../home-pricing';
 import { HomeIntegrations } from '../home-integrations';
-import { HomeTestimonials } from '../home-testimonials';
+import { HomeAIAssistant } from '../home-ai-assistant';
 import { HomeAdvertisement } from '../home-advertisement';
-import Polyhedron from 'src/components/polyhedron';
-import { HomeAssistant } from '../home-assistant';
+import { HomeBacktest } from '../home-backtest';
 import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
@@ -31,6 +30,7 @@ export function HomeView() {
         variant="linear"
         progress={pageProgress.scrollYProgress}
         sx={[(theme) => ({ position: 'fixed', zIndex: theme.zIndex.appBar + 1 })]}
+        overflowX="hidden"
       />
 
       <BackToTopButton isVisible={isVisible} onClick={onBackToTop} />
@@ -40,13 +40,13 @@ export function HomeView() {
       <Stack sx={{ position: 'relative', bgcolor: 'background.default' }}>
         <HomeMinimal />
 
+        <HomeAIAssistant />
+
+        <HomeBacktest />
+
         <HomeIntegrations />
 
-        <HomeAssistant />
-
         <HomePricing />
-
-        {/* <HomeTestimonials /> */}
 
         <HomeFAQs />
 
