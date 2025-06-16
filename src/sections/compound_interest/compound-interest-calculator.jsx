@@ -275,7 +275,7 @@ export function CompoundInterestCalculator() {
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
             Calculadora de Juros Compostos
           </Typography>
-          <Typography variant="subtitle1">
+          <Typography variant="subtitle1" sx={{ mb: 2 }}>
             Simule seus investimentos e veja o poder dos juros compostos
           </Typography>
         </Box>
