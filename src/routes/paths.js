@@ -22,7 +22,7 @@ export const paths = {
       signUp: `${ROOTS.AUTH}/registrar`,
       resetPassword: `${ROOTS.AUTH}/redefinir-senha`,
       updatePassword: `${ROOTS.AUTH}/atualizar-senha`,
-    }
+    },
   },
   // DASHBOARD
   dashboard: {
@@ -37,6 +37,7 @@ export const paths = {
     wallet_management_individual_transactions: `${ROOTS.DASHBOARD}/gerenciar-carteira/transacoes-individuais`,
     ai_wallet_importer: `${ROOTS.DASHBOARD}/importar-carteira`,
     currency_converter: `${ROOTS.DASHBOARD}/conversor-moedas`,
+    compound_interest: `${ROOTS.DASHBOARD}/calculadora-juros-compostos`,
     investor_glossary: `${ROOTS.DASHBOARD}/glossario-investidor`,
     dividend_calendar: `${ROOTS.DASHBOARD}/agenda-dividendos`,
     my_profile: `${ROOTS.DASHBOARD}/meu-perfil`,
