@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
     Box,
-    Container,
     Typography,
     Paper,
     Grid,
-    Button,
     Chip,
     Table,
     TableBody,
@@ -13,29 +11,29 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
     TextField,
     IconButton,
     alpha,
 } from '@mui/material';
 import {
-    CalendarMonth,
     ArrowBackIos,
     ArrowForwardIos,
-    Favorite,
-    FavoriteBorder,
-    FilterList,
-    Notifications
 } from '@mui/icons-material';
 import { useTheme } from '@emotion/react';
 import { fCurrency, fPercent } from 'src/utils/format-number';
 import axios from 'src/lib/axios';
+import {
+    useTable,
+    rowInPage,
+    emptyRows,
+    TablePaginationCustom,
+    TableEmptyRows,
+    TableNoData,
+} from 'src/components/table';
 
 export function DividendCalendar() {
     const dividendsRef = useRef(null);
+    const table = useTable();
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [dividendData, setDividendData] = useState([]);
@@ -43,6 +41,7 @@ export function DividendCalendar() {
     const [favorites, setFavorites] = useState([]);
     const [showFilters, setShowFilters] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
     const theme = useTheme();
 
     useEffect(() => {
@@ -118,13 +117,29 @@ export function DividendCalendar() {
     // };
 
     const filteredData = () => {
+        let data = dividendData;
+
         if (filter === 'favorites') {
-            return dividendData.filter(dividend => favorites.includes(dividend.id));
+            data = data.filter(dividend => favorites.includes(dividend.id));
         }
-        return dividendData;
+
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            data = data.filter(
+                (dividend) =>
+                    dividend.symbol.toLowerCase().includes(query) ||
+                    dividend.companyName.toLowerCase().includes(query)
+            );
+        }
+
+        return data;
     };
 
     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+    const dataFiltered = filteredData();
+    const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
+    const notFound = !dataFiltered.length;
 
     return (
         <Box>
@@ -313,6 +328,19 @@ export function DividendCalendar() {
                     Dividendos futuros
                 </Typography>
 
+                <Box sx={{ maxWidth: 300, mb: 2 }}>
+                    <TextField
+                        fullWidth
+                        value={searchQuery}
+                        onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            table.onResetPage();
+                        }}
+                        placeholder="Buscar por ticker ou nome"
+                        size="small"
+                    />
+                </Box>
+
                 <TableContainer>
                     <Table>
                         <TableHead>
@@ -327,7 +355,7 @@ export function DividendCalendar() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredData().map((dividend) => (
+                            {dataInPage.map((dividend) => (
                                 <TableRow key={dividend.id} hover>
                                     <TableCell>
                                         <Chip
@@ -351,9 +379,23 @@ export function DividendCalendar() {
                                     </TableCell> */}
                                 </TableRow>
                             ))}
+
+                            <TableEmptyRows
+                                height={56}
+                                emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered.length)}
+                            />
+
+                            <TableNoData notFound={notFound} />
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <TablePaginationCustom
+                    page={table.page}
+                    count={dataFiltered.length}
+                    rowsPerPage={table.rowsPerPage}
+                    onPageChange={table.onChangePage}
+                    onRowsPerPageChange={table.onChangeRowsPerPage}
+                />
             </Paper>
         </Box>
     );
