@@ -188,7 +188,7 @@ export function HomeFAQs({ sx, ...other }) {
 
   return (
     <Box component="section" sx={sx} {...other}>
-      <MotionViewport sx={{ py: 10, position: 'relative' }}>
+      <MotionViewport sx={{ py: 10, pt: { xs: 0, md: 10 }, position: 'relative' }}>
         {topLines()}
 
         <Container>
