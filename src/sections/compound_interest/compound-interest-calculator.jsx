@@ -99,8 +99,13 @@ export function CompoundInterestCalculator() {
   const handleCalculate = () => {
     const initialValue = parseCurrencyToNumber(initial) || 0;
     const monthlyValue = parseCurrencyToNumber(monthly) || 0;
-    let rateValue = parseFloat(String(rate).replace(',', '.')) || 0;
+    let rateValue = parseFloat(String(rate).replace(',', '.')) || null;
     let months = parseInt(period, 10) || 0;
+
+    if (isNaN(months) || months <= 0) {
+      alert('Por favor, insira um período válido em meses ou anos.');
+      return;
+    }
 
     if (periodType === 'anos') months *= 12;
 
@@ -143,7 +148,6 @@ export function CompoundInterestCalculator() {
       balance += monthlyValue;
       invested += monthlyValue;
     }
-
 
     const sampleData = (data, max = 25) => {
       if (data.length <= max) return data;
@@ -262,6 +266,7 @@ export function CompoundInterestCalculator() {
           borderRadius: 2,
           overflow: 'hidden',
           bgcolor: 'background.paper',
+          pb: results ? 4 : 0
         }}
       >
         <Box
@@ -496,7 +501,7 @@ export function CompoundInterestCalculator() {
                   <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
                     Detalhamento Mensal
                   </Typography>
-                  <Box sx={{ height: 'auto', maxHeight: '400px' }}>
+                  <Box sx={{ height: 'auto' }}>
                     <DataGrid
                       rows={results.rows}
                       columns={columns}
