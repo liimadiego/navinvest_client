@@ -21,13 +21,16 @@ const CompareAssets = lazy(() => import('src/pages/dashboard/compare_assets'));
 const AssetDetails = lazy(() => import('src/pages/dashboard/asset_details'));
 const NewsPage = lazy(() => import('src/pages/dashboard/news'));
 const WalletManagementPage = lazy(() => import('src/pages/dashboard/wallet_management'));
-const WalletManagementTransactionsPage = lazy(() => import('src/pages/dashboard/wallet_management_individual_transactions'));
+const WalletManagementTransactionsPage = lazy(
+  () => import('src/pages/dashboard/wallet_management_individual_transactions')
+);
 const AiWalletImporter = lazy(() => import('src/pages/dashboard/ai_wallet_importer'));
 const CurrencyConverter = lazy(() => import('src/pages/dashboard/currency_converter'));
 const InvestorGlossary = lazy(() => import('src/pages/dashboard/investor_glossary'));
 const DividendCalendar = lazy(() => import('src/pages/dashboard/dividend_calendar'));
 const MyProfile = lazy(() => import('src/pages/dashboard/my_profile'));
 const InvestorProfile = lazy(() => import('src/pages/dashboard/investor_profile'));
+const CompoundInterest = lazy(() => import('src/pages/dashboard/compound_interest'));
 
 // ----------------------------------------------------------------------
 
@@ -59,9 +62,13 @@ export const dashboardRoutes = [
       { path: 'detalhes-ativo/:ticker', element: <AssetDetails /> },
       { path: 'noticias/:news_id', element: <NewsPage /> },
       { path: 'gerenciar-carteira', element: <WalletManagementPage /> },
-      { path: 'gerenciar-carteira/transacoes-individuais', element: <WalletManagementTransactionsPage /> },
+      {
+        path: 'gerenciar-carteira/transacoes-individuais',
+        element: <WalletManagementTransactionsPage />,
+      },
       { path: 'importar-carteira', element: <AiWalletImporter /> },
       { path: 'conversor-moedas', element: <CurrencyConverter /> },
+      { path: 'calculadora-juros-compostos', element: <CompoundInterest /> },
       { path: 'glossario-investidor', element: <InvestorGlossary /> },
       { path: 'agenda-dividendos', element: <DividendCalendar /> },
       { path: 'meu-perfil', element: <MyProfile /> },
