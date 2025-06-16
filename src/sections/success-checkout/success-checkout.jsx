@@ -2,14 +2,17 @@ import { CheckCircleOutlined } from '@mui/icons-material';
 import { Box, Button, Container, Typography, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { signOut } from 'src/auth/context/jwt';
 
 export function SuccessCheckout({ plan, mail, billingPreference }) {
   const theme = useTheme();
 
   const navigate = useNavigate();
 
-  const goToDashboard = () => {
-    navigate('/dashboard');
+  const goToDashboard = async () => {
+    await signOut();
+
+    navigate('/auth/login');
   }
 
   return (
@@ -99,7 +102,7 @@ export function SuccessCheckout({ plan, mail, billingPreference }) {
             transition: 'all 0.3s ease-in-out'
           }}
         >
-          Ir para o Dashboard
+          Ir para Login
         </Button>
       </Paper>
     </Container>

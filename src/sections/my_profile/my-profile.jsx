@@ -240,7 +240,7 @@ export function MyProfile() {
                                         Invista com inteligência
                                     </Box>
 
-                                    <Button variant="contained" size="small" color="warning" href={paths.pricing} target="_blank" rel="noopener">
+                                    <Button variant="contained" size="small" color="warning" href={paths.pricing} rel="noopener">
                                         Faça upgrade
                                     </Button>
                                 </Box>

@@ -35,7 +35,7 @@ export function NavIdea() {
             sx={{
               fontSize: '0.875rem',
               fontWeight: 500,
-              ml: 1,
+              ml: 1.5,
               color: 'text.secondary',
             }}
           >

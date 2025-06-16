@@ -169,13 +169,13 @@ export function InvestorProfile() {
     }, []);
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Box>
             <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
                     <Box display="flex" alignItems="center">
                         <AccountBalanceIcon fontSize="large" sx={{ mr: 2, color: 'primary.main' }} />
                         <Typography variant="h4" component="h1" fontWeight="bold">
-                            Perfil do Investidor {userInvestorProfile ? ` - ${userInvestorProfile}` : ''}
+                            {userInvestorProfile ? `Perfil: ${userInvestorProfile}` : 'Perfil: A definir'}
                         </Typography>
                     </Box>
                     <Button
@@ -392,6 +392,6 @@ export function InvestorProfile() {
                     Perfil de investidor salvo com sucesso!
                 </Alert>
             </Snackbar>
-        </Container>
+        </Box>
     );
 };
