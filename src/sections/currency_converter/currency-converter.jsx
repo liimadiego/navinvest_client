@@ -166,7 +166,7 @@ export function CurrencyConverter() {
                 />
               </Box>
 
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row', alignItems: 'center', mb: 3, justifyContent: 'center' } }}>
                 <Autocomplete
                   options={currencyOptions}
                   getOptionLabel={(option) => typeof option === 'string' ? option : option.label}
@@ -183,7 +183,7 @@ export function CurrencyConverter() {
                       variant="outlined"
                     />
                   )}
-                  sx={{ flex: 1 }}
+                  sx={{ flex: 1, width: { xs: '100%', md: 'auto' }, mb: { xs: 2, md: 0 } }}
                 />
 
                 <IconButton
@@ -217,11 +217,11 @@ export function CurrencyConverter() {
                       variant="outlined"
                     />
                   )}
-                  sx={{ flex: 1 }}
+                  sx={{ flex: 1, width: { xs: '100%', md: 'auto' }, mt: { xs: 2, md: 0 } }}
                 />
               </Box>
 
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ my: 2 }}>
                 <Typography variant="subtitle2" gutterBottom>
                   Resultado da conversão
                 </Typography>
