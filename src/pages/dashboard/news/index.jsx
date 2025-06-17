@@ -29,13 +29,15 @@ export default function Page() {
 
     axios.get(`/news/other_news/${news_id}`)
       .then(({ data }) => {
+        console.log(data);
         const formattedData = data.map((item) => {
           return {
             id: item.uuid,
             title: item.title,
             coverUrl: item.image_url,
             summary: item.content,
-            newsUrl: `/dashboard/noticias/${item.uuid}`
+            newsUrl: `/dashboard/noticias/${item.uuid}`,
+            publishedAt: item.published_at
           };
         });
         setOtherNews(formattedData);
