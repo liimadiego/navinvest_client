@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 
 import { varFade, MotionViewport, AnimateCountUp } from 'src/components/animate';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { FloatLine } from './components/svg-elements';
 import { Button, Grid2 as Grid, Stack } from '@mui/material';
 import { SectionTitle } from './components/section-title';
@@ -62,9 +62,29 @@ const renderDescription = () => (
 
 export function HomeAIAssistant({ sx, ...other }) {
   const [text, setText] = useState('');
+  const [displayText, setDisplayText] = useState('');
+  const [textPosition, setTextPosition] = useState(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [speed, setSpeed] = useState(75);
+  const inputRef = useRef(null);
+  const [visibleChars, setVisibleChars] = useState(40); // Default value
+
+  // Calculate visible characters based on input width
+  useEffect(() => {
+    const calculateVisibleChars = () => {
+      if (inputRef.current) {
+        const inputWidth = inputRef.current.clientWidth;
+        const estimatedChars = Math.floor(inputWidth / 7.5);
+        setVisibleChars(Math.max(20, estimatedChars));
+      }
+    };
+
+    calculateVisibleChars();
+    window.addEventListener('resize', calculateVisibleChars);
+
+    return () => window.removeEventListener('resize', calculateVisibleChars);
+  }, []);
 
   useEffect(() => {
     const currentPhrase = phrases[phraseIndex % phrases.length];
@@ -85,11 +105,24 @@ export function HomeAIAssistant({ sx, ...other }) {
         setIsDeleting(false);
         setPhraseIndex((prev) => (prev + 1) % phrases.length);
         setSpeed(500);
+        setTextPosition(0);
       }
     }, speed);
 
     return () => clearTimeout(timer);
   }, [text, isDeleting, phraseIndex, speed]);
+
+  useEffect(() => {
+    if (text.length > visibleChars && !isDeleting) {
+      setTextPosition(text.length - visibleChars);
+    } else if (isDeleting) {
+      setTextPosition(Math.max(0, text.length - visibleChars));
+    } else {
+      setTextPosition(0);
+    }
+
+    setDisplayText(text.slice(textPosition));
+  }, [text, textPosition, isDeleting]);
 
   return (
     <Box
@@ -135,31 +168,42 @@ export function HomeAIAssistant({ sx, ...other }) {
                   mx: 'auto',
                   width: '95%',
                 }}>
-                  <m.div variants={varFade('inUp', { distance: 24 })} style={{ width: '90%' }}>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: 'background.paper',
-                        borderRadius: 1,
-                        padding: '0 2%',
-                        pr: "1%",
-                        width: { xs: '100%', sm: '100%', md: '100%' }
-                      }}
-                    >
-                      <TextField
-                        variant="standard"
-                        value={text}
-                        placeholder="Faça uma pergunta..."
-                        InputProps={{
-                          disableUnderline: true,
-                          sx: { color: 'white', flex: 1, userSelect: 'none', pointerEvents: 'none' },
+                  <m.div variants={varFade('inUp', { distance: 24 })} style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                    <Box sx={{ width: { xs: '100%', md: '90%' }, mb: { xs: 2, md: 0 } }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          backgroundColor: 'background.paper',
+                          borderRadius: 1,
+                          padding: '0 2%',
+                          pr: "1%",
+                          width: { xs: '100%', sm: '100%', md: '100%' }
                         }}
-                        fullWidth
-                      />
-                      <IconButton sx={{ userSelect: 'none', pointerEvents: 'none', color: 'warning.main' }}>
-                        <SendIcon />
-                      </IconButton>
+                      >
+                        <TextField
+                          ref={inputRef}
+                          variant="standard"
+                          value={displayText}
+                          placeholder="Faça uma pergunta..."
+                          InputProps={{
+                            disableUnderline: true,
+                            sx: {
+                              color: 'white',
+                              flex: 1,
+                              userSelect: 'none',
+                              pointerEvents: 'none',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              pl: 0.5
+                            },
+                          }}
+                          fullWidth
+                        />
+                        <IconButton sx={{ userSelect: 'none', pointerEvents: 'none', color: 'warning.main' }}>
+                          <SendIcon />
+                        </IconButton>
+                      </Box>
                     </Box>
                   </m.div>
 
