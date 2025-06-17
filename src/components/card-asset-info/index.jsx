@@ -4,7 +4,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Edit } from '@mui/icons-material';
 
 export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inComparison = false, side = 'left', sx }) {
-
     const image_content = (assetInfo, side) => {
         const imagePath = `/assets/tickers/${assetInfo.ticker}.jpg`;
         const defaultImagePath = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg";
@@ -55,6 +54,8 @@ export function CardAssetInfo({ assetInfo, onDelete = false, onEdit = false, inC
                         <Box sx={{ fontSize: '14px' }} display={'flex'}>
                             {!inComparison && assetInfo.name}
                             {assetInfo.asset_name && assetInfo.type !== "treasury" && <Typography sx={{ display: { xs: 'none', sm: 'block' }, fontSize: "14px" }}>{!inComparison ? " - " : ""} {assetInfo.asset_name}</Typography>}
+                            {assetInfo.name && assetInfo.type !== "treasury" && <Typography sx={{ display: { xs: 'block', sm: 'none' }, fontSize: "14px" }}>{!inComparison ? " - " : ""} {assetInfo.name}</Typography>}
+
                         </Box>
                         {!inComparison && assetInfo.last_twelve_months && assetInfo.type !== "treasury" ? (
                             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>

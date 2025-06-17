@@ -175,7 +175,7 @@ export function CompareAssets() {
               </Typography>
 
               {inComparison && <Button onClick={handleNewCompare} variant="outlined" type="button" color="primary">
-                Nova Comparação
+                Limpar
               </Button>}
             </Box>
 
@@ -206,24 +206,6 @@ export function CompareAssets() {
             <WarningComparison text={warningMessage} />
           </Box>}
 
-          {/* Considerações da IA (apenas um <Alert /> do mui que tem um botaõ para ver mais, esse botao abre um modal para leitura) */}
-          {/* {inComparison && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
-          <Alert
-            severity="info"
-            sx={{ borderRadius: "16px" }}
-          >
-            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-              <Typography variant="body2" color="text.secondary">
-                Considerações da IA
-              </Typography>
-              <Button variant="outlined" size="small" sx={{ marginLeft: 2 }} onClick={() => { }}>
-                Ver mais
-              </Button>
-            </Box>
-          </Alert>
-        </Box>} */}
-
-
           {inComparison && leftAssetInfo && rightAssetInfo && (
             Object.keys(leftAssetInfo).flatMap((key) => {
               if (Object.keys(leftAssetInfo[key]).length > 0) {
@@ -237,7 +219,7 @@ export function CompareAssets() {
                   </Typography>,
                   ...Object.keys(leftAssetInfo[key]).map((key2, index) => {
                     return (
-                      <Box key={`${key}-${key2}-${index}`} display={'flex'} gap={2} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1 }}>
+                      <Box key={`${key}-${key2}-${index}`} display={'flex'} style={{ width: '100%', maxWidth: '100%', marginTop: "15px", zIndex: 1, overflow: 'hidden', gap: 4 }}>
                         <ComparisonColumn content={leftAssetInfo[key][key2].value} winner={leftAssetInfo[key][key2].winner} />
                         <MiddleComparisonColumn
                           title={leftAssetInfo[key][key2].translation}

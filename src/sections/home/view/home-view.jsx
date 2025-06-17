@@ -25,7 +25,7 @@ export function HomeView() {
   const { onBackToTop, isVisible } = useBackToTop('90%');
 
   return (
-    <Box>
+    <Box sx={{ position: 'relative', overflowX: 'hidden' }}>
       <ScrollProgress
         variant="linear"
         progress={pageProgress.scrollYProgress}
