@@ -189,7 +189,6 @@ export function HomeAIAssistant({ sx, ...other }) {
                           InputProps={{
                             disableUnderline: true,
                             sx: {
-                              color: 'white',
                               flex: 1,
                               userSelect: 'none',
                               pointerEvents: 'none',
