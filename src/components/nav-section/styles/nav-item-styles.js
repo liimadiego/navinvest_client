@@ -41,5 +41,5 @@ export const navItemStyles = {
     ...theme.mixins.maxLine({ line: 1 }),
     ...theme.typography.caption,
   }),
-  disabled: { opacity: 0.48, pointerEvents: 'none' },
+  disabled: { opacity: 0.48, pointerEvents: 'auto' },
 };

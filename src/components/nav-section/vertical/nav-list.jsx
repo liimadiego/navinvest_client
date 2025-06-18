@@ -8,6 +8,7 @@ import { NavItem } from './nav-item';
 import { navSectionClasses } from '../styles';
 import { useAuthContext } from 'src/auth/hooks';
 import { NavUl, NavLi, NavCollapse } from '../components';
+import { PlanOfferModal } from 'src/components/plan-offer-modal';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
   const isActive = isActiveLink(pathname, data.path, !!data.children);
 
   const { value: open, onFalse: onClose, onToggle } = useBoolean(isActive);
+  const { value: planOpen, onTrue: openPlan, onFalse: closePlan } = useBoolean();
 
   useEffect(() => {
     if (!isActive) {
@@ -29,16 +31,20 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
   }, [pathname]);
 
   const handleToggleMenu = useCallback(() => {
+    if (!useHasAccess) {
+      openPlan();
+      return;
+    }
     if (data.children) {
       onToggle();
     }
-  }, [data.children, onToggle]);
+  }, [data.children, onToggle, openPlan, useHasAccess]);
 
   const renderNavItem = () => (
     <NavItem
       ref={navItemRef}
       // slots
-      path={useHasAccess ? data.path : ""}
+      path={useHasAccess ? data.path : ''}
       icon={data.icon}
       info={data.info}
       title={data.title}
@@ -90,6 +96,7 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
     >
       {renderNavItem()}
       {renderCollapse()}
+      <PlanOfferModal open={planOpen} onClose={closePlan} />
     </NavLi>
   );
 }
