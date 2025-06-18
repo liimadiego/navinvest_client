@@ -269,6 +269,6 @@ const PLANS = Array.from({ length: 2 }, (_, index) => ({
     'Importador inteligente de carteira',
     'Momento da empresa com IA',
     'Navi Diário (Jornal de investimentos gerado por IA)',
-    'Importação automática de portfólio da B3'
+    // 'Importação automática de portfólio da B3'
   ],
 }));

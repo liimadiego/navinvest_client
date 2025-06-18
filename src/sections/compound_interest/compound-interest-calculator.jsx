@@ -273,7 +273,6 @@ export function CompoundInterestCalculator() {
           bgcolor='background.'
           sx={{
             p: 3,
-            color: 'white',
             textAlign: 'center'
           }}
         >

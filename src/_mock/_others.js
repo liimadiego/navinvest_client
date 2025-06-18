@@ -119,7 +119,7 @@ export const pricingPlans = [
       'Importador inteligente de carteira',
       'Momento da empresa com IA',
       'Navi Diário (Jornal de investimentos gerado por IA)',
-      'Importação automática de portfólio da B3'
+      // 'Importação automática de portfólio da B3'
     ],
     labelAction: 'Testar 7 dias grátis',
     iaLimitExplained: 'Para garantir a qualidade e estabilidade do serviço para todos, este plano inclui um limite generoso de uso da nossa Inteligência Artificial. Mas não se preocupe: o limite é bem alto e cobre centenas de interações mensais, e você sempre poderá acompanhar seu uso dentro da plataforma. Caso você se aproxime do limite, será possível identificar com antecedência.'

@@ -233,7 +233,7 @@ export function TickerSelector({
                                                 alignItems={{ xs: "flex-start", sm: "center" }}
                                                 sx={{ fontWeight: 400, width: { xs: "100%", sm: "auto" }, textAlign: { xs: "center", sm: "left" } }}
                                             >
-                                                <Typography sx={{ fontSize: "13px", opacity: 0.7, mr: ticker.type != "treasury" ? 1 : 0, fontSize: { xs: "12px", sm: "14px" }, width: { xs: "100%", sm: "auto" } }}>
+                                                <Typography sx={{ opacity: 0.7, mr: ticker.type != "treasury" ? 1 : 0, fontSize: { xs: "12px", sm: "14px" }, width: { xs: "100%", sm: "auto" } }}>
                                                     {ticker.type !== "treasury" ? fCurrency(ticker.current_price, ticker.currency) : ""}
                                                 </Typography>
 
