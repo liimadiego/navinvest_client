@@ -93,14 +93,14 @@ export const basePalette = {
 export const palette = {
   light: {
     ...basePalette,
-    divider: varAlpha('#0236fc', 0.2),
+    divider: varAlpha('2 54 252', 0.2),
     text: text.light,
     background: background.light,
     action: action.light,
   },
   dark: {
     ...basePalette,
-    divider: varAlpha('#f1e4ed', 0.2),
+    divider: varAlpha('241 228 237', 0.2),
     text: text.dark,
     background: background.dark,
     action: action.dark,
