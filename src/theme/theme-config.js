@@ -12,8 +12,8 @@ export const themeConfig = {
    * Typography
    *************************************** */
   fontFamily: {
-    primary: 'Public Sans Variable',
-    secondary: 'Barlow',
+    primary: 'Poppins',
+    secondary: 'Poppins',
   },
   /** **************************************
    * Palette
