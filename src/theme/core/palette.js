@@ -34,6 +34,8 @@ export const text = {
     primary: '#1a1a1a',
     secondary: '#02043f',
     disabled: grey[500],
+    light: '#ffffff',
+    link: '#0236fc'
   }),
   dark: createPaletteChannel({
     primary: '#FFFFFF',
@@ -54,7 +56,6 @@ export const background = {
     paper: '#1a1a1a',
     default: '#1a1a1a',
     neutral: '#28323D',
-    darker: grey[1000],
   }),
 };
 

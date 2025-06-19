@@ -25,12 +25,7 @@ export function AuthSplitSection({
     <Box
       sx={[
         (theme) => ({
-          ...theme.mixins.bgGradient({
-            images: [
-              `linear-gradient(0deg, ${varAlpha(theme.vars.palette.background.defaultChannel, 0.92)}, ${varAlpha(theme.vars.palette.background.defaultChannel, 0.92)})`,
-              `url(${CONFIG.assetsDir}/assets/background/background-3-blur.webp)`,
-            ],
-          }),
+          backgroundColor: 'background.neutral',
           px: 3,
           pb: 3,
           width: 1,
@@ -38,6 +33,7 @@ export function AuthSplitSection({
           display: 'none',
           position: 'relative',
           pt: 'var(--layout-header-desktop-height)',
+          color: 'text.primary',
           [theme.breakpoints.up(layoutQuery)]: {
             gap: 8,
             display: 'flex',
@@ -51,7 +47,7 @@ export function AuthSplitSection({
       {...other}
     >
       <div>
-        <Typography variant="h3" sx={{ textAlign: 'center' }}>
+        <Typography variant="h3" sx={{ textAlign: 'center' }} color='text.light'>
           {title}
         </Typography>
 

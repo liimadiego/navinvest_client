@@ -46,7 +46,7 @@ export function AuthSplitLayout({ sx, cssVars, children, slotProps, layoutQuery 
       leftArea: (
         <>
           {/** @slot Logo */}
-          <Logo />
+          <Logo forceType={'light'} />
         </>
       ),
       rightArea: (
@@ -109,7 +109,7 @@ export function AuthSplitLayout({ sx, cssVars, children, slotProps, layoutQuery 
     <MainSection
       {...slotProps?.main}
       sx={[
-        (theme) => ({ [theme.breakpoints.up(layoutQuery)]: { flexDirection: 'row' } }),
+        (theme) => ({ [theme.breakpoints.up(layoutQuery)]: { flexDirection: 'row' }, background: 'background.neutral' }),
         ...(Array.isArray(slotProps?.main?.sx)
           ? (slotProps?.main?.sx ?? [])
           : [slotProps?.main?.sx]),

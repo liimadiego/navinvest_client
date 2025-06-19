@@ -28,12 +28,11 @@ import { signInWithPassword } from '../../context/jwt';
 const SignInSchema = zod.object({
   email: zod
     .string()
-    .min(1, { message: 'Email is required!' })
+    .min(1, { message: 'O campo email é obrigatório!' })
     .email({ message: 'Email must be a valid email address!' }),
   password: zod
     .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
+    .min(1, { message: 'O campo senha é obrigatório!' })
 });
 
 // ----------------------------------------------------------------------
