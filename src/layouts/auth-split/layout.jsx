@@ -46,7 +46,7 @@ export function AuthSplitLayout({ sx, cssVars, children, slotProps, layoutQuery 
       leftArea: (
         <>
           {/** @slot Logo */}
-          <Logo forceType={'light'} />
+          <Logo />
         </>
       ),
       rightArea: (

@@ -327,7 +327,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
               color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
               borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
               // display: 'none',
-              [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+              // [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
             })}
           >
             {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}

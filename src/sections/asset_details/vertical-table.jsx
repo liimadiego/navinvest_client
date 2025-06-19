@@ -14,7 +14,7 @@ const TableCellProftability = ({ data, label }) => {
                 >
                     {data !== null ? (data * 100).toFixed(2).toString().replace('.', ',') + '%' : '-'}
                 </Typography>
-                <Typography variant="subtitle2">{label}</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 'regular' }}>{label}</Typography>
             </Box>
         </TableCell>
     );

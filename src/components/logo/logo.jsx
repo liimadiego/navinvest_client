@@ -22,8 +22,8 @@ export const Logo = forwardRef((props, ref) => {
     <img
       alt="Single logo"
       src={forceType != 'theme' ?
-        forceType === 'light' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`
-        : mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`}
+        forceType === 'light' ? `${CONFIG.assetsDir}/logo/logo-branco-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`
+        : mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-branco-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`}
       width="100%"
       height="100%"
     />
@@ -33,8 +33,8 @@ export const Logo = forwardRef((props, ref) => {
     <img
       alt="Full logo"
       src={forceType != 'theme' ?
-        forceType === 'light' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`
-        : mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`}
+        forceType === 'light' ? `${CONFIG.assetsDir}/logo/logo-branco-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`
+        : mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-branco-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`}
       width="100%"
       height="100%"
     />

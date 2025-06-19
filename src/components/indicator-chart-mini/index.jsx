@@ -92,7 +92,7 @@ export function IndicatorChartMini({ title, percent, total, chart, sx, type = "m
           zIndex: 'unset',
           overflow: 'unset',
           alignItems: 'center',
-          backgroundColor: 'background.default',
+          backgroundColor: 'background.paper',
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
