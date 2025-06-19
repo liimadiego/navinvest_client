@@ -31,9 +31,11 @@ export const grey = createPaletteChannel(themeConfig.palette.grey);
 // Text color
 export const text = {
   light: createPaletteChannel({
-    primary: grey[800],
+    primary: '#02043f',
     secondary: grey[600],
     disabled: grey[500],
+    light: '#ffffff',
+    link: '#0236fc'
   }),
   dark: createPaletteChannel({
     primary: '#FFFFFF',
@@ -45,16 +47,14 @@ export const text = {
 // Background color
 export const background = {
   light: createPaletteChannel({
-    paper: grey[100],
-    default: grey[200],
-    neutral: '#F4F6F8',
-    darker: grey[400],
+    paper: '#f1e4ed',
+    default: '#ffffff',
+    neutral: '#02043f',
   }),
   dark: createPaletteChannel({
     paper: grey[800],
     default: grey[900],
     neutral: '#28323D',
-    darker: grey[1000],
   }),
 };
 

@@ -69,7 +69,7 @@ export function HomeHero({ sx, ...other }) {
             justifyContent: 'center',
             fontFamily: theme.typography.fontSecondaryFamily,
             [theme.breakpoints.up(lgKey)]: {
-              fontSize: theme.typography.pxToRem(64),
+              fontSize: theme.typography.pxToRem(58),
               lineHeight: '90px',
             },
           },
@@ -157,7 +157,7 @@ export function HomeHero({ sx, ...other }) {
           <Button
             component={RouterLink}
             href={paths.pricing}
-            color="inherit"
+            // color="inherit"
             size="large"
             variant="contained"
             startIcon={<Iconify width={24} icon="iconoir:flash" />}

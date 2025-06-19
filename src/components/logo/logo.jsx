@@ -16,12 +16,14 @@ import { CONFIG } from 'src/global-config';
 export const Logo = forwardRef((props, ref) => {
   const { mode } = useColorScheme();
 
-  const { className, href = '/dashboard', isSingle = false, disabled, sx, ...other } = props;
+  const { className, href = '/dashboard', isSingle = false, disabled, sx, forceType = 'theme', ...other } = props;
 
   const singleLogo = (
     <img
       alt="Single logo"
-      src={mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`}
+      src={forceType != 'theme' ?
+        forceType === 'light' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`
+        : mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`}
       width="100%"
       height="100%"
     />
@@ -30,7 +32,9 @@ export const Logo = forwardRef((props, ref) => {
   const fullLogo = (
     <img
       alt="Full logo"
-      src={mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`}
+      src={forceType != 'theme' ?
+        forceType === 'light' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`
+        : mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`}
       width="100%"
       height="100%"
     />
