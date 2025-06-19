@@ -63,7 +63,15 @@ export function HomeBacktest({ sx, ...other }) {
             key={item.title}
             sx={[{ gap: 3, display: 'flex' }]}
           >
-            <Box sx={{ transform: 'translateY(3px)' }}>
+            <Box sx={(theme) => ({
+              transform: 'translateY(3px)',
+              ...(theme.palette.mode === 'light' && {
+                color: 'primary.main',
+              }),
+              ...(theme.palette.mode === 'dark' && {
+                color: 'primary.lighter',
+              }),
+            })}>
               {item.icon}
             </Box>
             <Stack spacing={1}>
@@ -109,12 +117,17 @@ export function HomeBacktest({ sx, ...other }) {
         <Button
           color="inherit"
           size="large"
-          variant="contained"
+          // variant="contained"
           target="_blank"
           rel="noopener"
           href={paths.auth.jwt.signUp}
           // startIcon={<Iconify width={24} icon="eva:log-in-fill" />}
-          sx={{ borderColor: 'text.primary' }}
+          sx={{
+            backgroundColor: "primary.main", color: "#fff", px: 2,
+            '&:hover': {
+              backgroundColor: "primary.dark",
+            }
+          }}
         >
           Crie sua conta grátis e acesse o Backtest
         </Button>

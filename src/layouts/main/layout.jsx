@@ -40,18 +40,13 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
 
   const renderHeader = () => {
     const headerSlots = {
-      topArea: (
-        <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
-          This is an info Alert.
-        </Alert>
-      ),
       leftArea: (
         <>
           {/** @slot Nav mobile */}
           <MenuButton
             onClick={onOpen}
             sx={(theme) => ({
-              mr: 1,
+              mr: 0,
               ml: -1,
               [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
             })}
@@ -59,7 +54,8 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
           <NavMobile data={navData} open={open} onClose={onClose} />
 
           {/** @slot Logo */}
-          <Logo />
+          <Logo isSingle={true} sx={{ display: { xs: 'inline-block', md: 'none' } }} />
+          <Logo sx={{ display: { xs: 'none', md: 'inline-block' } }} />
         </>
       ),
       rightArea: (
@@ -82,24 +78,35 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
                 setMode(mode === 'light' ? 'dark' : 'light');
                 settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
               }}
-              sx={{ color: 'inherit', mr: 1 }}
+              sx={(theme) => ({
+                color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+                borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+                // display: 'none',
+                [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+              })
+              }
             >
               {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
-
-              {/*  */}
             </IconButton>
 
             {/** @slot Sign in button */}
-            <SignInButton />
+            <SignInButton sx={{ border: 'none', opacity: 0.7, display: { xs: 'none', md: 'inline-block' } }} />
 
             {/** @slot Purchase button */}
             <Button
-              variant="contained"
+              // variant="contained"
               rel="noopener"
               href={paths.pricing}
               sx={(theme) => ({
-                display: 'none',
-                [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+                backgroundColor: "#0236fc",
+                color: theme.palette.common.white,
+                px: 2,
+                '&:hover': {
+                  ...(theme.palette.mode === 'light' && {
+                    background: theme.palette.primary.dark,
+                  }),
+
+                },
               })}
             >
               Teste Grátis

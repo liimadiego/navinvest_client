@@ -53,14 +53,22 @@ export function HomeMinimal({ sx, ...other }) {
             key={item.title}
             sx={[{ gap: 3, display: 'flex' }]}
           >
-            <Box sx={{ transform: 'translateY(3px)' }}>
+            <Box sx={(theme) => ({
+              transform: 'translateY(3px)',
+              ...(theme.palette.mode === 'light' && {
+                color: 'primary.main',
+              }),
+              ...(theme.palette.mode === 'dark' && {
+                color: 'primary.lighter',
+              }),
+            })}>
               {item.icon}
             </Box>
             <Stack spacing={1}>
               <Typography variant="h5" component="h6">
                 {item.title}
               </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>{item.description}</Typography>
+              <Typography sx={{ color: 'text.main' }}>{item.description}</Typography>
             </Stack>
           </Box>
         ))}
@@ -100,8 +108,8 @@ export function HomeMinimal({ sx, ...other }) {
           subheader={`(+10.4%) no último ano`}
           chart={{
             colors: [
-              theme.palette.info.dark,
-              theme.palette.info.light,
+              theme.palette.primary.main,
+              theme.palette.primary.lighter,
             ],
             categories: [
               'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',

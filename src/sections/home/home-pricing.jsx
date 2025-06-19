@@ -170,11 +170,11 @@ function PlanCard({ plan, sx, ...other }) {
                 sx={{
                   width: 32,
                   height: 6,
-                  opacity: 0.24,
+                  opacity: 0.5,
                   borderRadius: 1,
                   bgcolor: 'error.main',
                   ...(freeLicense && { bgcolor: 'primary.main' }),
-                  ...(premiumLicense && { bgcolor: 'secondary.main' }),
+                  ...(premiumLicense && { bgcolor: 'primary.main' }),
                 }}
               />
             </m.div>
@@ -242,11 +242,23 @@ function PlanCard({ plan, sx, ...other }) {
         <m.div variants={varFade('inUp', { distance: 24 })}>
           <Button
             fullWidth
-            variant={premiumLicense ? 'contained' : 'outlined'}
-            color="inherit"
+            // variant={premiumLicense ? 'contained' : 'outlined'}
+            // color="inherit"
             size="large"
             rel="noopener"
             href={premiumLicense ? paths.payment : paths.auth.jwt.signUp}
+            sx={(theme) => ({
+              color: premiumLicense ? '#fff' : theme.vars.palette.text.primary,
+              backgroundColor: premiumLicense ? '#0236fc' : 'transparent',
+              borderColor: premiumLicense ? 'transparent' : theme.vars.palette.text.primary,
+              borderWidth: 1,
+              borderStyle: 'solid',
+              '&:hover': {
+                ...(premiumLicense) && {
+                  backgroundColor: theme.vars.palette.primary.dark,
+                }
+              }
+            })}
           >
             Começar a investir
           </Button>

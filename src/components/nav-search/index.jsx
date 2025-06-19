@@ -41,7 +41,7 @@ export function NavSearch() {
                             fontSize: '0.875rem',
                             fontWeight: 500,
                             ml: 1,
-                            color: 'text.secondary',
+                            color: '#fff',
                         }}
                     >
                         Pesquisar Ativo

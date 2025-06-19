@@ -20,11 +20,11 @@ export const themeConfig = {
    *************************************** */
   palette: {
     primary: {
-      lighter: '#C8FAD6',
-      light: '#5BE49B',
-      main: '#00A76F',
-      dark: '#007867',
-      darker: '#004B50',
+      lighter: '#6786fd',
+      light: '#345efc',
+      main: '#0236fc',
+      dark: '#012bc9',
+      darker: '#012097',
       contrastText: '#FFFFFF',
     },
     secondary: {

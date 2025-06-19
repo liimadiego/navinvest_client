@@ -30,10 +30,9 @@ const Polyhedron = () => {
 
         // Aplicar cor em cada face
         const colors = [
-            // new THREE.Color('#CDE9FD'),
-            new THREE.Color('#6BB1F8'),
-            new THREE.Color('#0C68E9'),
-            new THREE.Color('#063BA7')
+            new THREE.Color('#0236fc'),
+            new THREE.Color('#4d72fc'),
+            new THREE.Color('#345efc')
         ];
         const colorAttr = geometry.getAttribute('position');
         const colorArray = [];

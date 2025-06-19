@@ -32,7 +32,7 @@ export const grey = createPaletteChannel(themeConfig.palette.grey);
 export const text = {
   light: createPaletteChannel({
     primary: '#1a1a1a',
-    secondary: '#0236fc',
+    secondary: '#02043f',
     disabled: grey[500],
   }),
   dark: createPaletteChannel({

@@ -118,16 +118,23 @@ export function JwtSignInView() {
 
       <LoadingButton
         fullWidth
-        color="inherit"
+        // color="inherit"
         size="large"
         type="submit"
-        variant="contained"
+        // variant="contained"
         loading={isSubmitting}
         loadingIndicator="Entrando..."
+        sx={(theme) => ({
+          backgroundColor: theme.palette.primary.main,
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+          },
+        })}
       >
         Entrar
       </LoadingButton>
-    </Box>
+    </Box >
   );
 
   return (
@@ -137,7 +144,12 @@ export function JwtSignInView() {
         description={
           <>
             {`Ainda não tem uma conta? `}
-            <Link component={RouterLink} href={paths.auth.jwt.signUp} variant="subtitle2">
+            <Link component={RouterLink} href={paths.auth.jwt.signUp} variant="subtitle2"
+              sx={(theme) => ({
+                mr: 1,
+                color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+                borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+              })}>
               Registrar
             </Link>
           </>

@@ -21,7 +21,7 @@ export const Logo = forwardRef((props, ref) => {
   const singleLogo = (
     <img
       alt="Single logo"
-      src={mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`}
+      src={mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-branco-single.png` : `${CONFIG.assetsDir}/logo/logo-azul-single.png`}
       width="100%"
       height="100%"
     />
@@ -30,7 +30,7 @@ export const Logo = forwardRef((props, ref) => {
   const fullLogo = (
     <img
       alt="Full logo"
-      src={mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-roxo-claro-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`}
+      src={mode === 'dark' ? `${CONFIG.assetsDir}/logo/logo-branco-full.png` : `${CONFIG.assetsDir}/logo/logo-azul-full.png`}
       width="100%"
       height="100%"
     />
