@@ -73,24 +73,8 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
             {/** @slot Settings button */}
             {/* <SettingsButton /> */}
 
-            <IconButton
-              onClick={() => {
-                setMode(mode === 'light' ? 'dark' : 'light');
-                settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
-              }}
-              sx={(theme) => ({
-                color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
-                borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
-                // display: 'none',
-                [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
-              })
-              }
-            >
-              {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
-            </IconButton>
-
             {/** @slot Sign in button */}
-            <SignInButton sx={{ border: 'none', opacity: 0.7, display: { xs: 'none', md: 'inline-block' } }} />
+            <SignInButton sx={{ border: 'none', opacity: 0.7 }} />
 
             {/** @slot Purchase button */}
             <Button
@@ -111,6 +95,22 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
             >
               Teste Grátis
             </Button>
+
+            <IconButton
+              onClick={() => {
+                setMode(mode === 'light' ? 'dark' : 'light');
+                settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
+              }}
+              sx={(theme) => ({
+                color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+                borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+                // display: 'none',
+                [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+              })
+              }
+            >
+              {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
+            </IconButton>
           </Box>
         </>
       ),
