@@ -47,7 +47,7 @@ export function AuthSplitSection({
       {...other}
     >
       <div>
-        <Typography variant="h3" sx={{ textAlign: 'center' }} color='text.light'>
+        <Typography variant="h3" sx={{ textAlign: 'center' }} color='text.primary'>
           {title}
         </Typography>
 

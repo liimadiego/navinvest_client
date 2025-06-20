@@ -693,11 +693,21 @@ export function Payment() {
 
                         {/* Start Button */}
                         <Button
-                            variant="contained"
+                            // variant="contained"
                             size="large"
                             fullWidth
                             disabled={!formData.agreeToTerms}
-                            sx={{ py: 1.5, fontSize: '1rem' }}
+                            sx={(theme) => ({
+                                backgroundColor: theme.palette.primary.main,
+                                color: '#fff',
+                                px: 2,
+                                py: 1.5,
+                                fontSize: '1rem',
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.dark,
+                                },
+                            })}
+                            // sx={{ }}
                             onClick={handleSubmitCheckoutForm}
                         >
                             COMEÇAR AGORA

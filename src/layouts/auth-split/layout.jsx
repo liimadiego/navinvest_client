@@ -46,27 +46,36 @@ export function AuthSplitLayout({ sx, cssVars, children, slotProps, layoutQuery 
       leftArea: (
         <>
           {/** @slot Logo */}
-          <Logo forceType={'light'} />
+          <Logo />
         </>
       ),
       rightArea: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
           {/** @slot Help link */}
-          <Link
+          {/* <Link
             href={paths.faqs}
             component={RouterLink}
-            color="inherit"
-            sx={{ typography: 'subtitle2' }}
+            // color="inherit"
+            sx={(theme) => ({
+              typography: 'subtitle2',
+              color: theme.vars.palette.text.secondary,
+            })}
           >
             Precisa de ajuda?
-          </Link>
+          </Link> */}
 
           <IconButton
             onClick={() => {
               setMode(mode === 'light' ? 'dark' : 'light');
               settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
             }}
-            sx={{ color: 'inherit', mr: 1 }}
+            sx={(theme) => ({
+              color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+              borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+              // display: 'none',
+              [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+            })}
+          // sx={{ color: 'inherit', mr: 1 }}
           >
             {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
 

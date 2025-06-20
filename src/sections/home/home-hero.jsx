@@ -69,7 +69,7 @@ export function HomeHero({ sx, ...other }) {
             justifyContent: 'center',
             fontFamily: theme.typography.fontSecondaryFamily,
             [theme.breakpoints.up(lgKey)]: {
-              fontSize: theme.typography.pxToRem(58),
+              fontSize: theme.typography.pxToRem(54),
               lineHeight: '90px',
             },
           },
@@ -90,7 +90,7 @@ export function HomeHero({ sx, ...other }) {
           }}
           sx={{
             ...theme.mixins.textGradient(
-              `300deg, ${theme.vars.palette.primary.main} 0%, ${theme.vars.palette.warning.main} 25%, ${theme.vars.palette.primary.main} 50%, ${theme.vars.palette.warning.main} 75%, ${theme.vars.palette.primary.main} 100%`
+              `300deg, ${theme.vars.palette.primary.lighter} 0%, ${theme.vars.palette.primary.light} 25%, ${theme.vars.palette.primary.main} 50%, ${theme.vars.palette.primary.light} 75%, ${theme.vars.palette.primary.lighter} 100%`
             ),
             backgroundSize: '400%',
             ml: { xs: 0.75, md: 1, xl: 1.5 },
@@ -117,32 +117,6 @@ export function HomeHero({ sx, ...other }) {
     </m.div>
   );
 
-  const renderRatings = () => (
-    <m.div {...motionProps}>
-      <Box
-        sx={{
-          gap: 1.5,
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          typography: 'subtitle2',
-          justifyContent: 'center',
-        }}
-      >
-        <AvatarGroup sx={{ [`& .${avatarClasses.root}`]: { width: 32, height: 32 } }}>
-          {Array.from({ length: 3 }, (_, index) => (
-            <Avatar
-              key={_mock.fullName(index + 1)}
-              alt={_mock.fullName(index + 1)}
-              src={_mock.image.avatar(index + 1)}
-            />
-          ))}
-        </AvatarGroup>
-        160+ Happy customers
-      </Box>
-    </m.div>
-  );
-
   const renderButtons = () => (
     <Box
       sx={{
@@ -157,10 +131,17 @@ export function HomeHero({ sx, ...other }) {
           <Button
             component={RouterLink}
             href={paths.pricing}
-            // color="inherit"
             size="large"
-            variant="contained"
+            // variant="contained"
             startIcon={<Iconify width={24} icon="iconoir:flash" />}
+            sx={(theme) => ({
+              backgroundColor: "#0236fc",
+              color: '#fff',
+              px: 2,
+              '&:hover': {
+                background: theme.palette.primary.dark,
+              },
+            })}
           >
             <span>
               Teste Grátis por 7 dias
@@ -184,37 +165,6 @@ export function HomeHero({ sx, ...other }) {
         </Button>
       </m.div>
     </Box>
-  );
-
-  const renderIcons = () => (
-    <Stack spacing={3} sx={{ textAlign: 'center' }}>
-      <m.div {...motionProps}>
-        <Typography variant="overline" sx={{ opacity: 0.4 }}>
-          Available For
-        </Typography>
-      </m.div>
-
-      <Box sx={{ gap: 2.5, display: 'flex' }}>
-        {['js', 'ts', 'nextjs', 'vite', 'figma'].map((platform) => (
-          <m.div {...motionProps} key={platform}>
-            <Box
-              component="img"
-              alt={platform}
-              src={`${CONFIG.assetsDir}/assets/icons/platforms/ic-${platform}.svg`}
-              sx={[
-                {
-                  width: 24,
-                  height: 24,
-                  ...theme.applyStyles('dark', {
-                    ...(platform === 'nextjs' && { filter: 'invert(1)' }),
-                  }),
-                },
-              ]}
-            />
-          </m.div>
-        ))}
-      </Box>
-    </Stack>
   );
 
   return (
@@ -271,9 +221,7 @@ export function HomeHero({ sx, ...other }) {
             <m.div style={{ y: y2 }}>{renderText()}</m.div>
           </Stack>
 
-          {/* <m.div style={{ y: y3 }}>{renderRatings()}</m.div> */}
           <m.div style={{ y: y4 }}>{renderButtons()}</m.div>
-          {/* <m.div style={{ y: y5 }}>{renderIcons()}</m.div> */}
         </Container>
 
         <HeroBackground />

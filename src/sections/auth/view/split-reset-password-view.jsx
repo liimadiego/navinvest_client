@@ -108,9 +108,16 @@ export function SplitResetPasswordView() {
         fullWidth
         size="large"
         type="submit"
-        variant="contained"
+        // variant="contained"
         loading={isSubmitting}
         loadingIndicator="Enviar pedido..."
+        sx={(theme) => ({
+          backgroundColor: theme.palette.primary.main,
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+          },
+        })}
       >
         Enviar pedido
       </LoadingButton>

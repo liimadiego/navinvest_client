@@ -116,7 +116,7 @@ export function InvestorGlossary() {
                     backgroundColor: alpha(theme.palette.primary.main, 0.05)
                 }}
             >
-                <SearchIcon sx={{ color: 'text.secondary', mr: 1 }} />
+                <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
                 <TextField
                     fullWidth
                     placeholder="Pesquisar termos..."

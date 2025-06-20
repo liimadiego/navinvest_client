@@ -211,12 +211,20 @@ export function AiWalletImporter({ }) {
                                 </Button>
                             )}
                             <Button
-                                variant="contained"
+                                // variant="contained"
                                 startIcon={<Iconify icon="eva:cloud-upload-fill" />}
                                 onClick={handleUpload}
                                 disabled={isFeatureDisabled || loading}
                                 loading={loading}
                                 loadingPosition="end"
+                                sx={(theme) => ({
+                                    backgroundColor: theme.palette.primary.main,
+                                    color: '#fff',
+                                    px: 2,
+                                    '&:hover': {
+                                        backgroundColor: theme.palette.primary.dark,
+                                    },
+                                })}
                             >
                                 Importar Transações
                             </Button>

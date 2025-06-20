@@ -179,15 +179,23 @@ export function InvestorProfile() {
                         </Typography>
                     </Box>
                     <Button
-                        variant="contained"
+                        // variant="contained"
                         onClick={handleOpenModal}
                         startIcon={<TrendingUpIcon />}
-                        sx={{
-                            borderRadius: 2,
-                            px: 3,
-                            py: 1,
-                            fontWeight: 'bold'
-                        }}
+                        sx={(theme) => ({
+                            backgroundColor: theme.palette.primary.main,
+                            color: '#fff',
+                            px: 2,
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.dark,
+                            },
+                        })}
+                    // sx={{
+                    //     borderRadius: 2,
+                    //     px: 3,
+                    //     py: 1,
+                    //     fontWeight: 'bold'
+                    // }}
                     >
                         Definir Perfil
                     </Button>
@@ -296,10 +304,17 @@ export function InvestorProfile() {
                             </Typography>
                             <Box display="flex" justifyContent="center">
                                 <Button
-                                    variant="contained"
-                                    size="large"
+                                    // variant="contained"
+                                    // size="large"
                                     onClick={handleStartQuestions}
-                                    sx={{ px: 4, borderRadius: 2 }}
+                                    sx={(theme) => ({
+                                        backgroundColor: theme.palette.primary.main,
+                                        color: '#fff',
+                                        px: 2,
+                                        '&:hover': {
+                                            backgroundColor: theme.palette.primary.dark,
+                                        },
+                                    })}
                                 >
                                     Iniciar Questionário
                                 </Button>
@@ -369,9 +384,17 @@ export function InvestorProfile() {
                                     </Button>
                                 ) : (
                                     <Button
-                                        variant="contained"
+                                        // variant="contained"
                                         onClick={handleNext}
                                         disabled={!answers[formQuestions[activeStep].id]}
+                                        sx={(theme) => ({
+                                            backgroundColor: theme.palette.primary.main,
+                                            color: '#fff',
+                                            px: 2,
+                                            '&:hover': {
+                                                backgroundColor: theme.palette.primary.dark,
+                                            },
+                                        })}
                                     >
                                         Próximo
                                     </Button>

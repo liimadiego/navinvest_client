@@ -36,7 +36,7 @@ export function NavIdea() {
               fontSize: '0.875rem',
               fontWeight: 500,
               ml: 1.5,
-              color: 'text.secondary',
+              color: '#919EAB',
             }}
           >
             Enviar Ideia

@@ -380,21 +380,24 @@ export function CompoundInterestCalculator() {
               onClick={handleClear}
               size="large"
               startIcon={<RestartAltIcon />}
-              sx={{ py: 1.5, borderRadius: 1 }}
+              sx={{ borderRadius: 1 }}
             >
               Limpar
             </Button>
             <Button
               fullWidth
-              variant="contained"
+              // variant="contained"
               onClick={handleCalculate}
               size="large"
               startIcon={<CalculateIcon />}
-              sx={{
-                py: 1.5,
-                borderRadius: 1,
-                // background: theme => `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-              }}
+              sx={(theme) => ({
+                backgroundColor: theme.palette.primary.main,
+                color: '#fff',
+                px: 2,
+                '&:hover': {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+              })}
             >
               Calcular
             </Button>

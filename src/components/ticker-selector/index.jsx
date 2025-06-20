@@ -136,6 +136,7 @@ export function TickerSelector({
                     padding: 1,
                     zIndex: 9999,
                     maxHeight: '300px',
+                    overflowY: 'auto',
                 }}>
                     <Box>
                         {tickersSearchOptions.map((ticker, index) => (
@@ -221,6 +222,7 @@ export function TickerSelector({
                                                             mb: { xs: "5px", sm: 0 },
                                                             width: { xs: "100%", sm: "auto" },
                                                             textAlign: "center",
+                                                            color: 'white',
                                                         }}
                                                     >
                                                         {translateAssetType(ticker?.type || "treasury")}
