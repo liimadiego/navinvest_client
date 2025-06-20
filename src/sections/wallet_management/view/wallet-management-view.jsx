@@ -197,15 +197,22 @@ export function WalletManagementView() {
                     <>
                         {currentWallet?.id && Object.keys(tableData).length > 0 && <Button
                             onClick={handleSeeIndividualTransactions}
-                            variant="contained"
+                            variant="outlined"
                             startIcon={<VisibilityIcon />}
                         >
                             Ver lançamentos
                         </Button>}
                         {currentWallet?.id && <Button
                             onClick={handleOpenTransactionModal}
-                            variant="contained"
                             startIcon={<AddCircle />}
+                            sx={(theme) => ({
+                                backgroundColor: theme.palette.primary.main,
+                                color: '#fff',
+                                px: 2,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.dark,
+                                },
+                            })}
                         >
                             Adicionar lançamento
                         </Button>}

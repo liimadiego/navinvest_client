@@ -124,7 +124,7 @@ export function CurrencyConverter() {
           display: 'flex',
           alignItems: 'center',
           fontWeight: 600,
-          color: 'primary.main'
+          color: 'text.primary'
         }}>
           <CurrencyExchangeIcon sx={{ mr: 1 }} />
           Conversor de Moedas

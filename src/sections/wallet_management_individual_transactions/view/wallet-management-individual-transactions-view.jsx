@@ -145,8 +145,16 @@ export function WalletManagementIndividualTransactionsView() {
                     <>
                         <Button
                             onClick={handleOpenTransactionModal}
-                            variant="contained"
+                            // variant="contained"
                             startIcon={<Iconify icon="mingcute:add-line" />}
+                            sx={(theme) => ({
+                                backgroundColor: theme.palette.primary.main,
+                                color: '#fff',
+                                px: 2,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.dark,
+                                },
+                            })}
                         >
                             Adicionar lançamento
                         </Button>
