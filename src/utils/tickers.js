@@ -30,7 +30,8 @@ export async function getTickerList(query, limit = 5, type = "") {
                     }
                 }
 
-                let imagePath = ticker.asset_type === "cripto" ? ticker.asset_image_url : `/assets/tickers/${ticker.ticker}.jpg`;
+                // let imagePath = ticker.asset_type === "cripto" ? ticker.asset_image_url : `/assets/tickers/${ticker.ticker}.jpg`;
+                let imagePath = ticker.asset_image_url;
 
                 if (ticker.asset_type === "bdr" || ticker.asset_type === "etf") {
                     imagePath = `https://icons.brapi.dev/icons/${ticker.ticker}.svg`;
