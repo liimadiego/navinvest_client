@@ -28,12 +28,12 @@ export const themeConfig = {
       contrastText: '#FFFFFF',
     },
     secondary: {
-      lighter: '#EFD6FF',
-      light: '#C684FF',
-      main: '#8E33FF',
-      dark: '#5119B7',
-      darker: '#27097A',
-      contrastText: '#FFFFFF',
+      lighter: '#a995fd',
+      light: '#9e88fd',
+      main: '#947bfd',
+      dark: '#856ee3',
+      darker: '#7662ca',
+      contrastText: '#0e0c19',
     },
     info: {
       lighter: '#CAFDF5',

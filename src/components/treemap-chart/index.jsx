@@ -4,8 +4,9 @@ import CardHeader from '@mui/material/CardHeader';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-import { Chart, useChart, ChartLegends } from 'src/components/chart';
+import { Chart, useChart } from 'src/components/chart';
 import SeoIllustration from 'src/assets/illustrations/upload-illustration';
+import { themeConfig } from 'src/theme/theme-config.js';
 
 // ----------------------------------------------------------------------
 
@@ -13,17 +14,44 @@ export function TreemapChart({ title, subheader, chart, sx, ...other }) {
   const theme = useTheme();
 
   const chartColors = chart.colors ?? [
-    theme.palette.primary.light,
-    theme.palette.warning.main,
-    theme.palette.info.main,
-    theme.palette.error.main,
-    theme.palette.success.main,
+    themeConfig.palette.primary.darker,
+    themeConfig.palette.secondary.darker,
+    
+    themeConfig.palette.primary.dark,
+    themeConfig.palette.secondary.dark,
+
+    themeConfig.palette.primary.main,
+    themeConfig.palette.secondary.main,
+
+    themeConfig.palette.primary.light,
+    themeConfig.palette.secondary.light,
+    
+    themeConfig.palette.primary.lighter,
+    themeConfig.palette.secondary.lighter,
   ];
 
   const chartOptions = useChart({
     legend: { show: false },
     colors: chartColors,
-    plotOptions: { treemap: { distributed: true } },
+    // fill: { colors: [ '#1A73E8', '#B32824' ] },
+    stroke: { show: false, width: 10, colors: [ '#FFFFFF' ], curve: 'straight' },
+    plotOptions: { 
+      treemap: { 
+        distributed: true,
+        useFillColorAsStroke: false,
+        dataLabels: { format: "truncate" }
+      } 
+    },
+    toolbar: { show: false },
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: '14px',
+        fontWeight: theme.typography.fontWeightBold,
+        colors: [theme.palette.common.white],
+      },
+      formatter: (text, opts) => [text, `${opts.value}%`],
+    },
     tooltip: {
       y: {
         formatter: (value) => `${value}%`,
@@ -42,23 +70,14 @@ export function TreemapChart({ title, subheader, chart, sx, ...other }) {
       <CardHeader title={title} subheader={subheader} />
 
       {!isEmpty ? (
-        <>
+        <Box sx={{ borderRadius: '8px', overflow: 'hidden' }}>
           <Chart
             type="treemap"
             series={seriesData}
             options={chartOptions}
-            sx={{ p: 2, height: 320 }}
+            sx={{ p: 2, height: 320, borderRadius: 1, overflow: 'hidden' }}
           />
-
-          <Divider sx={{ borderStyle: 'dashed' }} />
-
-          <ChartLegends
-            labels={seriesData[0].data.map((item) => item.x)}
-            values={seriesData[0].data.map((item) => `${item.y}%`)}
-            colors={chartOptions.colors}
-            sx={{ p: 3, justifyContent: 'center', alignItems: 'center' }}
-          />
-        </>
+        </Box>
       ) : (
         <Box height={370} display="flex" justifyContent="center">
           {SeoIllustration && (
