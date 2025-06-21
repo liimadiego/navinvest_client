@@ -74,7 +74,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
             setTickerInfo(!isFixedIncome ? {
                 current_price: isTreasury ? treasuryDetails.amount : editData.ticker?.current_price,
                 id: isTreasury ? treasuryDetails.id : editData.ticker.id,
-                image_url: isTreasury ? "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg" : editData.ticker.asset_image_url,
+                image_url: isTreasury ? "/assets/tickers/default.svg" : editData.ticker.asset_image_url,
                 name: isTreasury ? treasuryDetails.name : `${editData.ticker.ticker} - ${editData.ticker.asset_name}`,
                 currency: isTreasury ? "BRL" : editData.ticker.currency,
             } : null);

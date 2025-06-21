@@ -10,7 +10,7 @@ export async function getTickerList(query, limit = 5, type = "") {
                 throw new Error("Invalid response format: Expected an array of tickers");
             }
 
-            const defaultImagePath = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg";
+            const defaultImagePath = "/assets/tickers/default.svg";
 
             return data.map((ticker) => {
                 if (type === "treasury") {
