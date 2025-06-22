@@ -103,7 +103,7 @@ export const pricingPlans = [
     price: 0,
     priceYear: 0,
     caption: 'Você não paga nada',
-    lists: ['Dashboard completo', 'Notícias', 'Backtest', 'Gerenciador de carteira (1 carteira)', 'Conversor de moedas', 'Detalhe dos ativos', 'Glossário de investimentos', 'Agenda de dividendos', 'Comparação de ativos (simples)'],
+    lists: ['Dashboard completo', 'Notícias', 'Backtest', 'Gerenciador de carteira (1 carteira)', 'Conversor de moedas', 'Detalhe dos ativos', 'Glossário do Investidor', 'Agenda de dividendos', 'Comparação de ativos (simples)', 'Calculadora de Juros Compostos'],
     labelAction: 'Plano atual',
   },
   {
@@ -118,6 +118,7 @@ export const pricingPlans = [
       'Comparação de ativos (com relatório da IA)',
       'Importador inteligente de carteira',
       'Momento da empresa com IA',
+      'Momento do FII com IA',
       'Navi Diário (Jornal de investimentos gerado por IA)',
       // 'Importação automática de portfólio da B3'
     ],

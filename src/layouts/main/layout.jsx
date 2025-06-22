@@ -129,7 +129,8 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
 
   const renderFooter = () =>
     isHomePage ? (
-      <HomeFooter sx={slotProps?.footer?.sx} />
+      // <HomeFooter sx={slotProps?.footer?.sx} />
+      <Footer sx={{ ...slotProps?.footer?.sx, mt: 10 }} layoutQuery={layoutQuery} />
     ) : (
       <Footer sx={slotProps?.footer?.sx} layoutQuery={layoutQuery} />
     );
