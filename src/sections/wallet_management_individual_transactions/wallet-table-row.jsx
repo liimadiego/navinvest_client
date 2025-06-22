@@ -23,6 +23,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   const { currentWallet } = useWallet();
   const isFixedIncome = row.asset_type === "FIXED_INCOME";
   const isTreasury = row.asset_type === "TREASURY";
+  const isFund = row.asset_type === 'FUNDS';
 
   const handleSaveEditForm = async (transaction) => {
     setIsEditFormLoading(true);
@@ -54,6 +55,16 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
       objectToSend = {
         "portfolio_id": currentWallet.id,
         "treasury_id": transaction.tickerInfo.id,
+        "asset_type": transaction.asset_type,
+        "transaction_type": transaction.type,
+        "amount": transaction.quantity * transaction.price,
+        "quantity": transaction.quantity,
+        "transaction_date": transaction.date
+      }
+    } else if (transaction.asset_type === "FUNDS") {
+      objectToSend = {
+        "portfolio_id": currentWallet.id,
+        "fund_id": transaction.tickerInfo.id,
         "asset_type": transaction.asset_type,
         "transaction_type": transaction.type,
         "amount": transaction.quantity * transaction.price,
@@ -168,7 +179,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{
           isFixedIncome ?
             `${row.fixed_income_details?.issuer} - ${row.fixed_income_details?.investment_type}` :
-            (isTreasury ? row.treasury?.name : row.ticker?.ticker)}
+            (isTreasury ? row.treasury?.name : isFund ? (row.fund?.name?.slice(0, 20) + "..." || "-") : row.ticker?.ticker)}
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{row.transaction_type === "BUY" ? "Compra" : "Venda"}</TableCell>
@@ -180,14 +191,14 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(
           isFixedIncome ?
             row.fixed_income_details?.currency :
-            (isTreasury ? "BRL" : row.ticker?.currency),
+            (isTreasury || isFund ? "BRL" : row.ticker?.currency),
           isFixedIncome ?
             row.amount :
-            (isTreasury ? (row.amount / row.quantity) : row.price_per_unit)
+            (isTreasury || isFund ? (row.amount / row.quantity) : row.price_per_unit)
         )}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>{formatCurrency(
-          isFixedIncome ? row.fixed_income_details?.currency : (isTreasury ? "BRL" : row.ticker?.currency),
+          isFixedIncome ? row.fixed_income_details?.currency : (isTreasury || isFund ? "BRL" : row.ticker?.currency),
           row.amount
         )}</TableCell>
 

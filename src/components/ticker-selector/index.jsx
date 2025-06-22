@@ -45,7 +45,7 @@ export function TickerSelector({
         }
 
         const delayDebounceFn = setTimeout(() => {
-            if (searchTickerText.length > 2) {
+            if (searchTickerText.length > 1) {
                 fetchTickers(searchTickerText);
             }
         }, 100);
@@ -139,8 +139,8 @@ export function TickerSelector({
                     overflowY: 'auto',
                 }}>
                     <Box>
-                        {tickersSearchOptions.map((ticker, index) => (
-                            <Button
+                        {tickersSearchOptions.map((ticker, index) => {
+                            return <Button
                                 key={index}
                                 variant="outlined"
                                 onClick={() => handleSelectTicker(ticker.ticker, ticker)}
@@ -207,7 +207,7 @@ export function TickerSelector({
                                             >
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', width: "100%", flexDirection: { xs: "column-reverse", sm: "row" }, textAlign: { xs: "center", sm: "left" } }}>
                                                     <Typography sx={{ maxWidth: "200px", fontSize: { xs: "12px", sm: "14px" } }}>
-                                                        {ticker.ticker} {ticker.type === "treasury" ? "" : `- ${ticker.asset_name}`}
+                                                        {ticker.ticker} {ticker.type === "treasury" || ticker.type === "funds" ? "" : `- ${ticker.asset_name}`}
                                                     </Typography>
                                                     <Box
                                                         sx={{
@@ -225,7 +225,7 @@ export function TickerSelector({
                                                             color: 'white',
                                                         }}
                                                     >
-                                                        {translateAssetType(ticker?.type || "treasury")}
+                                                        {translateAssetType(ticker?.type || "")}
                                                     </Box>
                                                 </Box>
                                             </Box>
@@ -235,11 +235,11 @@ export function TickerSelector({
                                                 alignItems={{ xs: "flex-start", sm: "center" }}
                                                 sx={{ fontWeight: 400, width: { xs: "100%", sm: "auto" }, textAlign: { xs: "center", sm: "left" } }}
                                             >
-                                                <Typography sx={{ opacity: 0.7, mr: ticker.type != "treasury" ? 1 : 0, fontSize: { xs: "12px", sm: "14px" }, width: { xs: "100%", sm: "auto" } }}>
-                                                    {ticker.type !== "treasury" ? fCurrency(ticker.current_price, ticker.currency) : ""}
+                                                <Typography sx={{ opacity: 0.7, mr: (ticker.type != "treasury" && ticker.type != "funds") ? 1 : 0, fontSize: { xs: "12px", sm: "14px" }, width: { xs: "100%", sm: "auto" } }}>
+                                                    {ticker.type !== "treasury" && ticker.type !== "funds" ? fCurrency(ticker.current_price, ticker.currency) : ""}
                                                 </Typography>
 
-                                                {(ticker.last_twelve_months !== null && ticker.type !== "treasury") ?
+                                                {(ticker.last_twelve_months !== null && ticker.type !== "treasury" && ticker.type !== "funds") ?
                                                     <Box display="flex" alignItems="center" width={{ xs: "100%", sm: "auto" }} justifyContent={{ xs: "center", sm: "flex-start" }}>
                                                         <Typography
                                                             sx={{
@@ -263,7 +263,7 @@ export function TickerSelector({
                                                         </Typography>
                                                     </Box>
                                                     : <Typography sx={{ fontSize: "11px", opacity: 0.7 }}>
-                                                        {ticker.indexer ? camelize(ticker.indexer) : ""}
+                                                        {ticker.indexer ? camelize(ticker.indexer) : ticker.fund_class || ""}
                                                     </Typography>
                                                 }
                                             </Box>
@@ -271,7 +271,7 @@ export function TickerSelector({
                                     </Box>
                                 </Box>
                             </Button>
-                        ))}
+                        })}
                     </Box>
                 </Scrollbar>
             )}

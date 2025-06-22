@@ -7,7 +7,7 @@ import { Label } from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
-export function WalletTableRow({ row, isFixedIncome, isTreasury }) {
+export function WalletTableRow({ row, isFixedIncome, isTreasury, isFunds }) {
   const formatCurrency = (currency, amount) => {
     const formatWithDots = (value) => {
       return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -23,10 +23,6 @@ export function WalletTableRow({ row, isFixedIncome, isTreasury }) {
     }
   };
 
-  if (isTreasury) {
-    // console.log({ row });
-  }
-
   return (
     <>
       <TableRow hover tabIndex={-1}>
@@ -40,16 +36,16 @@ export function WalletTableRow({ row, isFixedIncome, isTreasury }) {
             />
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
-              {isFixedIncome ? row.asset_name : row.asset}
+              {isFixedIncome || isFunds ? row.asset_name : row.asset}
               {!isFixedIncome && <Box component="span" sx={{ color: 'text.disabled' }}>
-                {row.asset_name}
+                {isFunds ? row.fund_class : row.asset_name}
               </Box>}
             </Stack>
           </Box>
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.quantity}</TableCell>
-        {!isFixedIncome && !isTreasury && <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.averagePrice)}</TableCell>}
+        {!isFixedIncome && !isTreasury && !isFunds && <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, row.averagePrice)}</TableCell>}
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatCurrency(row.currency, isFixedIncome ? row.total_amount : row.currentPrice)}</TableCell>
 

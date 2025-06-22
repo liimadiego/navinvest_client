@@ -42,9 +42,10 @@ const formatCurrency = (currency, amount) => {
 export function WalletManagement({ _tableData, sx, accordionOpened = false, title, category_summary }) {
     const isFixedIncome = title === translateAssetType('fixed_income', 'BRL');
     const isTreasury = title === translateAssetType('treasury', 'BRL');
+    const isFunds = title === translateAssetType('funds', 'BRL');
     // console.log({ _tableData, sx, accordionOpened, title, category_summary })
 
-    const TABLE_HEAD = isFixedIncome || isTreasury ?
+    const TABLE_HEAD = isFixedIncome || isTreasury || isFunds ?
         [
             { id: 'asset', label: 'Ativo', alignRight: false },
             { id: 'quantity', label: 'Quantidade', alignRight: false },
@@ -162,6 +163,7 @@ export function WalletManagement({ _tableData, sx, accordionOpened = false, titl
                                                 <WalletTableRow
                                                     isFixedIncome={isFixedIncome}
                                                     isTreasury={isTreasury}
+                                                    isFunds={isFunds}
                                                     key={row.id}
                                                     row={row}
                                                 />

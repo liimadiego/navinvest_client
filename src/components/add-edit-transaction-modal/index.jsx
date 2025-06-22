@@ -67,6 +67,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
             const treasuryDetails = editData.treasury || false;
             const isFixedIncome = editData.asset_type === "FIXED_INCOME";
             const isTreasury = editData.asset_type === "TREASURY";
+            const isFunds = editData.asset_type === "FUNDS";
 
             setAssetType(editData.asset_type);
             setTransactionId(editData.id);
@@ -167,7 +168,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
             data.currency = currency;
         } else {
             data.tickerInfo = tickerInfo;
-            data.quantity = assetType === "TREASURY" ? parseFloat(quantity) : parseInt(quantity);
+            data.quantity = assetType === "TREASURY" || assetType === "FUNDS" ? parseFloat(quantity) : parseInt(quantity);
             data.costs = parseFloat(costs);
         }
 
@@ -181,7 +182,12 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         if (tickerInfo_?.type === "treasury" || assetType === "TREASURY") {
             setPrice(tickerInfo_.unit_price);
             setQuantity(1);
-        } else if (tickerInfo_?.currency) {
+        }
+        else if (tickerInfo_?.type === "funds" || assetType === "FUNDS") {
+            setPrice(tickerInfo_.current_price);
+            setQuantity(1);
+        }
+        else if (tickerInfo_?.currency) {
             const priceWith2Decimals = parseFloat(tickerInfo_.current_price).toFixed(2);
             setPrice(priceWith2Decimals);
             setQuantity(1);
@@ -193,7 +199,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
     };
 
     const handleSetQty = (value) => {
-        if (assetType === "TREASURY") {
+        if (assetType === "TREASURY" || assetType === "FUNDS") {
             value = value.replace(',', '.');
             value = value.replace(/[^0-9.]/g, '');
             if (value.includes('.')) {
@@ -270,15 +276,14 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                         }
                     }}
                 >
-                    <option value="STOCK">Ações</option>
+                    <option value="STOCK">Ações/REITs</option>
                     <option value="FII">FIIs</option>
                     <option value="TREASURY">Tesouro Direto</option>
                     <option value="FIXED_INCOME">Renda Fixa</option>
+                    <option value="FUNDS">Fundos de Investimentos</option>
                     <option value="CRYPTO">Cripto</option>
                     <option value="BDR">BDR</option>
                     <option value="ETF">ETF</option>
-                    <option value="REIT">REIT</option>
-                    <option value="MUTUAL_FUND">Fundo Mútuo</option>
                 </TextField>}
 
                 {!tickerInfo && assetType !== "FIXED_INCOME" && (
@@ -287,7 +292,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                         onAddTicker={handleAddTicker}
                         assetType={assetType}
                         selectedTickers={[]}
-                        placeholder="Buscar ativo"
+                        placeholder={assetType === "FUNDS" ? "Busque por CNPJ ou Nome do Ativo" : "Buscar ativo"}
                         error={!!errors.ticker}
                         helperText={errors.ticker}
                     />
@@ -404,7 +409,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     {indexationType !== "PRE_FIXED" && <option value="IPCA+">IPCA+</option>}
                 </TextField>}
 
-                {assetType !== "FIXED_INCOME" && <TextField
+                {(assetType !== "FIXED_INCOME") && <TextField
                     fullWidth
                     label="Quantidade"
                     type="number"
@@ -414,8 +419,8 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
                     error={!!errors.quantity}
                     helperText={errors.quantity}
                     inputProps={{
-                        step: assetType === "TREASURY" ? 0.01 : 1,
-                        min: assetType === "TREASURY" ? 0.01 : 1,
+                        step: assetType === "TREASURY" ? 0.01 : assetType === "FUNDS" ? 1e-8 : 1,
+                        min: assetType === "TREASURY" ? 0.01 : assetType === "FUNDS" ? 1e-8 : 1,
                     }}
                 />}
 
