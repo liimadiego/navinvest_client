@@ -10,7 +10,7 @@ export async function getTickerList(query, limit = 5, type = "") {
                 throw new Error("Invalid response format: Expected an array of tickers");
             }
 
-            const defaultImagePath = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg";
+            const defaultImagePath = "/assets/tickers/default.svg";
 
             return data.map((ticker) => {
                 if (type === "treasury") {
@@ -44,7 +44,22 @@ export async function getTickerList(query, limit = 5, type = "") {
                     }
                 }
 
-                let imagePath = ticker.asset_type === "cripto" ? ticker.asset_image_url : `/assets/tickers/${ticker.ticker}.jpg`;
+                if (type === 'funds') {
+                    return {
+                        id: ticker.id,
+                        name: ticker.trade_name,
+                        current_price: (ticker.current_price || 0).toFixed(2),
+                        type: "funds",
+                        fund_class: ticker.fund_class,
+                        ticker: ticker.trade_name,
+                        image_url: ticker.image_url || defaultImagePath,
+                        currency: "BRL",
+                        last_twelve_months: 0,
+                    }
+                }
+
+                // let imagePath = ticker.asset_type === "cripto" ? ticker.asset_image_url : `/assets/tickers/${ticker.ticker}.jpg`;
+                let imagePath = ticker.asset_image_url;
 
                 if (ticker.asset_type === "bdr" || ticker.asset_type === "etf") {
                     imagePath = `https://icons.brapi.dev/icons/${ticker.ticker}.svg`;

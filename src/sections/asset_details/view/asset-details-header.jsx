@@ -6,6 +6,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import IconButton from '@mui/material/IconButton';
 import { Box, Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
+import { useState } from 'react';
 
 export function AssetDetailsHeader({
     tickerData,
@@ -14,6 +15,8 @@ export function AssetDetailsHeader({
     refPrice,
     assetType
 }) {
+    const [imageError, setImageError] = useState(false);
+
     if (!tickerData) {
         return (
             <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1 }} flexDirection={{ xs: 'column', md: 'row' }}>
@@ -96,9 +99,12 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: assetInfo?.reit?.name || "",
         };
-        assetImage = `https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg`;
+        assetImage = '';
         tickerName = tickerData.tickerData.asset_name;
     }
+
+    // Use default image if there's an error loading the asset image
+    const displayedImage = imageError ? '/assets/tickers/default.svg' : assetImage;
 
     const scrollToSection = (ref) => {
         if (!ref.current) return;
@@ -115,8 +121,8 @@ export function AssetDetailsHeader({
         <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1, position: "relative" }} flexDirection={{ xs: 'column', md: 'row' }}>
             <Box display="flex" alignItems="center" gap={2} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <img
-                    src={assetImage}
-                    onError={(e) => e.target.src = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg"}
+                    src={displayedImage}
+                    onError={() => setImageError(true)}
                     alt=""
                     style={{ width: 70, height: 70, borderRadius: 8 }}
                 />

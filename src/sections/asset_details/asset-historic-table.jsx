@@ -308,6 +308,19 @@ export function AssetHistoricTable({ assetData, historicalDividendYieldData, ass
         if (!!assetData && assetType === 'fii') {
             const historicalFundamentalistIndicators = {
                 ano: [],
+                dividend_yield: {
+                    title: "DIVIDEND YIELD (DY)",
+                    data: [],
+                    type: 'percentage'
+                },
+                p_vp: {
+                    title: "P/VP",
+                    data: []
+                },
+                market_capitalization: {
+                    title: "VALOR DE MERCADO",
+                    data: []
+                },
                 patrimonial_value: {
                     title: "VALOR PATRIMONIAL",
                     data: []
@@ -316,25 +329,16 @@ export function AssetHistoricTable({ assetData, historicalDividendYieldData, ass
                     title: "VALOR PATRIMONIAL POR COTA",
                     data: []
                 },
-                number_of_shareholders: {
-                    title: "NUMERO DE COTISTAS",
-                    data: []
-                },
                 shares_issued: {
                     title: "COTAS EMITIDAS",
                     data: []
                 },
-                p_vp: {
-                    title: "P/VP",
+                number_of_shareholders: {
+                    title: "NUMERO DE COTISTAS",
                     data: []
                 },
-                dividend_yield: {
-                    title: "DIVIDEND YIELD (DY)",
-                    data: [],
-                    type: 'percentage'
-                },
-                market_capitalization: {
-                    title: "VALOR DE MERCADO",
+                number_of_properties: {
+                    title: "NÚMERO DE PROPRIEDADES",
                     data: []
                 },
                 total_area: {
@@ -345,17 +349,22 @@ export function AssetHistoricTable({ assetData, historicalDividendYieldData, ass
                     title: "AREA VAGA",
                     data: []
                 },
-                overdue_area: {
-                    title: "AREA INADIMPLENTE",
-                    data: []
-                },
                 vacancy: {
                     title: "VACANCIA FINANCEIRA",
                     data: [],
                     type: 'percentage'
                 },
                 physical_vacancy: {
-                    title: "VACANCIA FISICA",
+                    title: "VACANCIA FÍSICA",
+                    data: [],
+                    type: 'percentage'
+                },
+                overdue_area: {
+                    title: "AREA INADIMPLENTE",
+                    data: []
+                },
+                physical_default: {
+                    title: "INADIMPLENCIA FÍSICA",
                     data: [],
                     type: 'percentage'
                 },
@@ -370,16 +379,18 @@ export function AssetHistoricTable({ assetData, historicalDividendYieldData, ass
                     vacancy: VACANCIA_FINANCEIRA,
                     number_of_shareholders: NUMERO_DE_COTISTAS,
                     shares_issued: COTAS_EMITIDAS,
-                    properties,
+                    properties: _properties,
                     pvp: PVP,
                     dividend_yield: DY,
                     market_capitalization: VALOR_DE_MERCADO
                 } = data;
+                const properties = _properties || [];
 
                 let AREA_TOTAL = 0; 
                 let AREA_VAGA = 0;
                 let AREA_INADIMPLENTE = 0;
-                for (const property of properties || []) {
+                const NUMERO_DE_PROPRIEDADES = properties.length;
+                for (const property of properties) {
                     AREA_TOTAL += property.Area * 1 || 0;
                     AREA_VAGA += property.Area * property.PercentVacancia || 0;
                     AREA_INADIMPLENTE += property.Area * property.PercentInadimplencia || 0;
@@ -387,18 +398,22 @@ export function AssetHistoricTable({ assetData, historicalDividendYieldData, ass
                 const VACANCIA_FISICA = (AREA_VAGA / (AREA_TOTAL || 1)) || 0;
 
                 historicalFundamentalistIndicators.ano.push(reference_year);
+
+                historicalFundamentalistIndicators.dividend_yield.data.push(DY);
+                historicalFundamentalistIndicators.p_vp.data.push(fNumber(PVP));
+                historicalFundamentalistIndicators.market_capitalization.data.push('R$ ' + fShortenNumberToString(VALOR_DE_MERCADO));
                 historicalFundamentalistIndicators.patrimonial_value.data.push('R$ ' + fShortenNumberToString(VALOR_PATRIMONIAL));
                 historicalFundamentalistIndicators.patrimonial_value_per_share.data.push('R$ ' + fNumber(VALOR_PATRIMONIAL_POR_COTA));
-                historicalFundamentalistIndicators.number_of_shareholders.data.push(fNumber(NUMERO_DE_COTISTAS));
                 historicalFundamentalistIndicators.shares_issued.data.push(fNumber(COTAS_EMITIDAS));
-                historicalFundamentalistIndicators.p_vp.data.push(fNumber(PVP));
-                historicalFundamentalistIndicators.dividend_yield.data.push(DY);
-                historicalFundamentalistIndicators.market_capitalization.data.push('R$ ' + fShortenNumberToString(VALOR_DE_MERCADO));
+                historicalFundamentalistIndicators.number_of_shareholders.data.push(fNumber(NUMERO_DE_COTISTAS));
+                historicalFundamentalistIndicators.number_of_properties.data.push(fNumber(NUMERO_DE_PROPRIEDADES));
                 historicalFundamentalistIndicators.total_area.data.push(fNumber(Math.round(AREA_TOTAL)) + 'm²');
                 historicalFundamentalistIndicators.vacancy_area.data.push(fNumber(Math.round(AREA_VAGA)) + 'm²');
-                historicalFundamentalistIndicators.overdue_area.data.push(fNumber(Math.round(AREA_INADIMPLENTE)) + 'm²');
-                historicalFundamentalistIndicators.vacancy.data.push(VACANCIA_FINANCEIRA);
                 historicalFundamentalistIndicators.physical_vacancy.data.push(VACANCIA_FISICA);
+                historicalFundamentalistIndicators.vacancy.data.push(VACANCIA_FINANCEIRA);
+                historicalFundamentalistIndicators.overdue_area.data.push(fNumber(Math.round(AREA_INADIMPLENTE)) + 'm²');
+                historicalFundamentalistIndicators.physical_default.data.push((AREA_INADIMPLENTE / (AREA_TOTAL || 1)) || 0);
+
             }
 
             setHistoricalFundamentalistIndicators(historicalFundamentalistIndicators);

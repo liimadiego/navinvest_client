@@ -85,7 +85,7 @@ export function TickerSelector({
                     }
                 }
                 return !selectedTickers.some(selectedTicker => selectedTicker === ticker.ticker)
-            });
+            }); 
 
             setIsLoading(false);
             setTickersSearchOptions(tickers);
@@ -172,22 +172,22 @@ export function TickerSelector({
                                         mb={{ xs: 1, sm: 0 }}
                                     >
                                         <Box
-                                            component="img"
-                                            src={ticker.image_url}
-                                            alt={ticker.ticker}
-                                            onError={(e) => {
-                                                if (ticker.fallback_image_url) {
-                                                    e.target.src = ticker.fallback_image_url;
-                                                }
-                                            }}
-                                            sx={{
-                                                width: { xs: 24, sm: 32 },
-                                                height: { xs: 24, sm: 32 },
-                                                mr: 1.25,
-                                                borderRadius: 0.625,
-                                                transform: { xs: 'translateY(5px)', sm: 'translateY(0)' },
-                                            }}
-                                        />
+                                        component="img"
+                                        src={ticker.image_url}
+                                        alt={ticker.ticker}
+                                        // onError={(e) => {
+                                        //     if (ticker.fallback_image_url) {
+                                        //         e.target.src = ticker.fallback_image_url;
+                                        //     }
+                                        // }}
+                                        sx={{
+                                            width: { xs: 24, sm: 32 },
+                                            height: { xs: 24, sm: 32 },
+                                            mr: 1.25,
+                                            borderRadius: 0.625,
+                                            transform: { xs: 'translateY(5px)', sm: 'translateY(0)' },
+                                        }}
+                                    />
                                         <Box
                                             display="flex"
                                             flexDirection="column"

@@ -31,7 +31,7 @@ export function WalletTableRow({ row, isFixedIncome, isTreasury, isFunds }) {
             <img
               src={`/assets/tickers/${row.asset}.jpg`}
               alt={row.name}
-              onError={(e) => e.target.src = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg"}
+              onError={(e) => e.target.src = "/assets/tickers/default.svg"}
               style={{ borderRadius: 8, width: 40, height: 40 }}
             />
 
