@@ -72,6 +72,11 @@ export const navData = [
         icon: <WalletIcon />,
       },
       {
+        title: 'Notícias',
+        path: paths.dashboard.news,
+        icon: ICONS.blog,
+      },
+      {
         title: 'Importar Carteira',
         path: paths.dashboard.ai_wallet_importer,
         icon: <SimCardDownloadIcon />,

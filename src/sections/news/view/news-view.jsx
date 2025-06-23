@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { href, useParams } from 'react-router-dom';
 import { paths } from 'src/routes/paths';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
@@ -14,7 +14,7 @@ export function NewsView({ news, otherNews }) {
                 heading={"Portal de notícias"}
                 links={[
                     { name: 'Dashboard', href: paths.dashboard.root },
-                    { name: 'Notícias' },
+                    { name: 'Notícias', href: paths.dashboard.news },
                     { name: `${news?.title ?? ""}` }
                 ]}
                 sx={{ mb: { xs: 3, md: 0 } }}
