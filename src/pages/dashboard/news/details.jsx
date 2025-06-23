@@ -21,6 +21,7 @@ export default function Page() {
           coverUrl: data.image_url,
           buttonText: 'Ver mais',
           newsUrl: `/dashboard/noticias/${data.uuid}`,
+          publishedAt: data.published_at,
         };
         setNews(formattedData);
       })
@@ -38,6 +39,7 @@ export default function Page() {
             coverUrl: item.image_url,
             summary: item.content,
             newsUrl: `/dashboard/noticias/${item.uuid}`,
+            publishedAt: item.published_at,
           };
         });
         setOtherNews(formattedData);
