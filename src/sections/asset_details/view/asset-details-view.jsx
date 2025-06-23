@@ -126,14 +126,14 @@ export function AssetDetailsView() {
     axios.post(`${import.meta.env.VITE_SERVER_URL2}/asset-report-ai/generate-report`, {
       company_data: tickerData,
     })
-      .then(({ data }) => {
-        setReportData(data)
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        setReportData(null);
-        handleCloseModalAssetReport();
-      });
+    .then(({ data }) => {
+      setReportData(data)
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      setReportData(null);
+      handleCloseModalAssetReport();
+    });
   }
 
   const [isAssetReportAIModalOpen, setAssetReportModalOpen] = useState(false);
@@ -165,8 +165,8 @@ export function AssetDetailsView() {
         sx={{ mb: { xs: 3, md: 5 } }}
         action={
           <>
-            {!isFeatureDisabled && assetType == 'br_stock' && <>
-              <Tooltip title="Momento da empresa: IA gera relatório levando em consideração os dados atuais do ativo">
+            {!isFeatureDisabled && (assetType == 'br_stock' || assetType == 'fii') && <>
+              <Tooltip title={`Momento ${(assetType == 'br_stock' ? 'da empresa' : 'do FII')}: IA gera relatório levando em consideração os dados atuais do ativo`}>
                 <IconButton
                   onClick={handleAskAIReport}
                 >
