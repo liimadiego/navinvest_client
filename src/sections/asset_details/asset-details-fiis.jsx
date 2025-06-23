@@ -188,8 +188,6 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
     const assetImage = tickerData.tickerData.asset_image_url;
     const displayedImage = imageError ? '/assets/tickers/default.svg' : assetImage;
 
-    console.log('tickerData', tickerData);
-
     return (
         <>
             <Paper elevation={3} style={{ padding: '1rem' }}>
