@@ -273,13 +273,14 @@ function PlanCard({ plan, sx, ...other }) {
 const PLANS = Array.from({ length: 2 }, (_, index) => ({
   license: ['Grátis', 'Premium'][index],
   price: [0, 47.99][index],
-  commons: ['Dashboard completo', 'Notícias', 'Backtest', 'Gerenciador de carteira (1 carteira)', 'Conversor de moedas', 'Detalhe dos ativos', 'Glossário de investimentos', 'Agenda de dividendos', 'Comparação de ativos (simples)'],
+  commons: ['Dashboard completo', 'Notícias', 'Backtest', 'Gerenciador de carteira (1 carteira)', 'Conversor de moedas', 'Detalhe dos ativos', 'Glossário de investimentos', 'Agenda de dividendos', 'Comparação de ativos (simples)', 'Calculadora de Juros Compostos'],
   options: [
     'Assistente de investimentos com IA (24h)',
     'Gerenciador de carteira (até 3 carteiras)',
     'Comparação de ativos (com relatório da IA)',
     'Importador inteligente de carteira',
     'Momento da empresa com IA',
+    'Momento do FII com IA',
     'Navi Diário (Jornal de investimentos gerado por IA)',
     // 'Importação automática de portfólio da B3'
   ],
