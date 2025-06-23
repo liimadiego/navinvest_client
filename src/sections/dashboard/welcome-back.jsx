@@ -7,6 +7,7 @@ import { useAuthContext } from "src/auth/hooks";
 export function WelcomeBack({ sx }) {
     const { user } = useAuthContext();
     const { displayName } = user || {};
+    const userHasPremium = user?.plan != null;
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -20,7 +21,7 @@ export function WelcomeBack({ sx }) {
                 description="Explore novas oportunidades para aprimorar suas estratégias. Se precisar de algo, estamos por aqui!"
                 img={<SeoIllustration hideBackground />}
                 action={
-                    <Button variant="contained" color="primary" onClick={handleClick}>
+                    userHasPremium && <Button variant="contained" color="primary" onClick={handleClick}>
                         Ir para o Assistente
                     </Button>
                 }

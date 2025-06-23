@@ -103,7 +103,7 @@ export const pricingPlans = [
     price: 0,
     priceYear: 0,
     caption: 'Você não paga nada',
-    lists: ['Dashboard completo', 'Notícias', 'Backtest', 'Gerenciador de carteira (1 carteira)', 'Conversor de moedas', 'Detalhe dos ativos', 'Glossário de investimentos', 'Agenda de dividendos', 'Comparação de ativos (simples)'],
+    lists: ['Dashboard completo', 'Notícias', 'Backtest', 'Gerenciador de carteira (1 carteira)', 'Conversor de moedas', 'Detalhe dos ativos', 'Glossário do Investidor', 'Agenda de dividendos', 'Comparação de ativos (simples)', 'Calculadora de Juros Compostos'],
     labelAction: 'Plano atual',
   },
   {
@@ -118,8 +118,9 @@ export const pricingPlans = [
       'Comparação de ativos (com relatório da IA)',
       'Importador inteligente de carteira',
       'Momento da empresa com IA',
+      'Momento do FII com IA',
       'Navi Diário (Jornal de investimentos gerado por IA)',
-      'Importação automática de portfólio da B3'
+      // 'Importação automática de portfólio da B3'
     ],
     labelAction: 'Testar 7 dias grátis',
     iaLimitExplained: 'Para garantir a qualidade e estabilidade do serviço para todos, este plano inclui um limite generoso de uso da nossa Inteligência Artificial. Mas não se preocupe: o limite é bem alto e cobre centenas de interações mensais, e você sempre poderá acompanhar seu uso dentro da plataforma. Caso você se aproxime do limite, será possível identificar com antecedência.'

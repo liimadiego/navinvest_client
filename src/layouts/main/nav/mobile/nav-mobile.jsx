@@ -78,7 +78,7 @@ export function NavMobile({ data, open, onClose, slots, sx }) {
         >
           <SignInButton fullWidth />
 
-          <Button
+          {/* <Button
             fullWidth
             variant="contained"
             rel="noopener"
@@ -86,7 +86,7 @@ export function NavMobile({ data, open, onClose, slots, sx }) {
             href={paths.pricing}
           >
             Purchase
-          </Button>
+          </Button> */}
         </Box>
       )}
     </Drawer>

@@ -9,8 +9,6 @@ import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-
-import { _socials } from 'src/_mock';
 import { TwitterIcon, FacebookIcon, LinkedinIcon, InstagramIcon } from 'src/assets/icons';
 
 import { Logo } from 'src/components/logo';
@@ -18,22 +16,28 @@ import { Logo } from 'src/components/logo';
 // ----------------------------------------------------------------------
 
 const LINKS = [
+  // {
+  //   headline: 'Minimal',
+  //   children: [
+  //     { name: 'About us', href: paths.about },
+  //     { name: 'Contact us', href: paths.contact },
+  //     { name: 'FAQs', href: paths.faqs },
+  //   ],
+  // },
   {
-    headline: 'Minimal',
+    //lugar onde fica termos e politicas
+    headline: 'Como trabalhamos',
     children: [
-      { name: 'About us', href: paths.about },
-      { name: 'Contact us', href: paths.contact },
-      { name: 'FAQs', href: paths.faqs },
+      { name: 'Termos e Serviços', href: paths.terms_service },
+      { name: 'Política de Privacidade', href: paths.privacy_policy },
     ],
   },
-  {
-    headline: 'Legal',
-    children: [
-      { name: 'Terms and condition', href: '#' },
-      { name: 'Privacy policy', href: '#' },
-    ],
-  },
-  { headline: 'Contact', children: [{ name: 'support@minimals.cc', href: '#' }] },
+  { headline: 'Contato', children: [{ name: 'contato@navinvest.com', href: 'mailto:contato@navinvest.com' }] },
+];
+
+const _socials = [
+  { label: 'Instagram', value: 'instagram', link: '' },
+  { label: 'LinkedIn', value: 'linkedin', link: 'https://www.linkedin.com/company/navinvestai/' }
 ];
 
 // ----------------------------------------------------------------------
@@ -77,11 +81,10 @@ export function Footer({ sx, layoutQuery = 'md', ...other }) {
                 [theme.breakpoints.up(layoutQuery)]: { mx: 'unset' },
               })}
             >
-              The starting point for your next project with Minimal UI Kit, built on the newest
-              version of Material-UI ©, ready to be customized to your style.
+              A Nav Invest é uma plataforma de investimentos que conecta você a oportunidades e informações. Nossa missão é democratizar o acesso a investimentos de qualidade, oferecendo uma experiência simples e transparente.
             </Typography>
 
-            <Box
+            {/* <Box
               sx={(theme) => ({
                 mt: 3,
                 mb: 5,
@@ -91,14 +94,12 @@ export function Footer({ sx, layoutQuery = 'md', ...other }) {
               })}
             >
               {_socials.map((social) => (
-                <IconButton key={social.label}>
-                  {social.value === 'twitter' && <TwitterIcon />}
-                  {social.value === 'facebook' && <FacebookIcon />}
+                <IconButton key={social.label} href={social.link} target="_blank" rel="noopener" sx={{ mr: 1 }}>
                   {social.value === 'instagram' && <InstagramIcon />}
                   {social.value === 'linkedin' && <LinkedinIcon />}
                 </IconButton>
               ))}
-            </Box>
+            </Box> */}
           </Grid>
 
           <Grid size={{ xs: 12, [layoutQuery]: 6 }}>

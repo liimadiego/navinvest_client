@@ -6,6 +6,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import IconButton from '@mui/material/IconButton';
 import { Box, Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
+import { useState } from 'react';
 
 export function AssetDetailsHeader({
     tickerData,
@@ -14,6 +15,8 @@ export function AssetDetailsHeader({
     refPrice,
     assetType
 }) {
+    const [imageError, setImageError] = useState(false);
+
     if (!tickerData) {
         return (
             <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1 }} flexDirection={{ xs: 'column', md: 'row' }}>
@@ -45,7 +48,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: tickerData.tickerCompanyInfo.trade_name || assetInfo.name,
         };
-        assetImage = `/assets/tickers/${tickerData.tickerCompanyInfo.ticker}.jpg`;
+        assetImage = tickerData.tickerCompanyInfo.asset_image_url;
         tickerName = tickerData.tickerCompanyInfo.ticker;
     }
 
@@ -55,7 +58,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: assetInfo?.name,
         };
-        assetImage = `/assets/tickers/${tickerData.tickerCompanyInfo.ticker}.jpg`;
+        assetImage = tickerData.tickerCompanyInfo.asset_image_url;
         tickerName = tickerData.tickerCompanyInfo.ticker;
     }
 
@@ -75,7 +78,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: tickerData.tickerData.asset_name
         };
-        assetImage = tickerData.tickerData?.bdr ? tickerData.tickerData.bdr.logo_url : `/assets/tickers/${tickerData.tickerData.ticker}.jpg`;
+        assetImage = tickerData.tickerData.asset_image_url;
         tickerName = tickerData.tickerData.ticker;
     }
 
@@ -85,20 +88,22 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: tickerData.tickerData.asset_name
         };
-        assetImage = tickerData.tickerData?.etf ? tickerData.tickerData.etf.logo_url : `/assets/tickers/${tickerData.tickerData.ticker}.jpg`;
+        assetImage = tickerData.tickerData.asset_image_url;
         tickerName = tickerData.tickerData.ticker;
     }
 
-    // console.log("tickerData", tickerData, "assetType", assetType);
-    if (tickerData && tickerData.fii && assetType === 'fii') {
+    if (tickerData && tickerData.tickerData && assetType === 'fii') {
         assetInfo = tickerData.tickerData;
         assetInfo = {
             ...assetInfo,
             trade_name: assetInfo?.reit?.name || "",
         };
-        assetImage = `https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg`;
+        assetImage = tickerData.tickerData.asset_image_url;
         tickerName = tickerData.tickerData.asset_name;
     }
+
+    // Use default image if there's an error loading the asset image
+    const displayedImage = imageError ? '/assets/tickers/default.svg' : assetImage;
 
     const scrollToSection = (ref) => {
         if (!ref.current) return;
@@ -115,14 +120,14 @@ export function AssetDetailsHeader({
         <Box display="flex" justifyContent={{ xs: 'flex-start', md: 'space-between' }} sx={{ p: 1, position: "relative" }} flexDirection={{ xs: 'column', md: 'row' }}>
             <Box display="flex" alignItems="center" gap={2} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <img
-                    src={assetImage}
-                    onError={(e) => e.target.src = "https://investidor10.com.br/assets/front/images/business-and-trade-gray.svg"}
+                    src={displayedImage}
+                    onError={() => setImageError(true)}
                     alt=""
                     style={{ width: 70, height: 70, borderRadius: 8 }}
                 />
                 <Box style={{ height: 70 }}>
                     <Typography variant="h5">{tickerName}</Typography>
-                    <Typography variant="subtitle2">{assetInfo?.trade_name}</Typography> {/* Fixing the fiis data on database to include this type of information... */}
+                    <Typography variant="subtitle2">{assetInfo?.trade_name}</Typography>
                 </Box>
             </Box>
             <Box sx={{ mt: { xs: 4, md: 0 }, justifyContent: { xs: 'center', md: 'flex-end' } }} style={{ color: "#fff" }} flexDirection='row' display="flex" gap={2}>
@@ -137,10 +142,10 @@ export function AssetDetailsHeader({
                             <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Indicadores</Typography>
                         </IconButton>}
                     </Box>
-                    {(assetType === 'us_stock' || assetType === 'br_stock' || assetType === 'bdr') && <Box display={'flex'} gap={1}>
+                    {(assetType === 'us_stock' || assetType === 'br_stock' || assetType === 'bdr' || assetType === 'fii') && <Box display={'flex'} gap={1}>
                         <IconButton style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: { xs: 0, md: 2 }, cursor: 'pointer', borderRadius: 10, width: "80px" }} onClick={() => scrollToSection(refCompany)}>
                             <ApartmentIcon sx={{ fontSize: { xs: "20px", md: "30px" } }} />
-                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>Empresa</Typography>
+                            <Typography sx={{ fontSize: { xs: "13px", md: "13px" } }}>{(assetType === 'fii' ? 'Fundo' : 'Empresa')}</Typography>
                         </IconButton>
                     </Box>}
                 </Box>

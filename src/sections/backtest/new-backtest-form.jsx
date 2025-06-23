@@ -266,7 +266,14 @@ export function BacktestForm() {
                 </Box>
 
                 <Stack sx={{ mt: 3, alignItems: 'flex-end' }}>
-                  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  <LoadingButton type="submit" loading={isSubmitting} sx={(theme) => ({
+                    backgroundColor: theme.palette.primary.main,
+                    color: '#fff',
+                    px: 2,
+                    '&:hover': {
+                      backgroundColor: theme.palette.primary.dark,
+                    },
+                  })}>
                     Executar Backtest
                   </LoadingButton>
                 </Stack>

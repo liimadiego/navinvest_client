@@ -65,7 +65,7 @@ export function DonutChart({ title, subheader, chart, sx, ...other }) {
   });
 
   return (
-    <Card sx={sx} {...other}>
+    <Card sx={{ ...sx, backgroundColor: 'background.paper' }} {...other}>
       <CardHeader title={title} subheader={subheader} />
 
       {!isEmptyArray(chart.series) ? (

@@ -136,7 +136,7 @@ export function BacktestResults() {
                 <Button
                     sx={{ mb: 3 }}
                     variant="outlined"
-                    color="primary"
+                    // color="primary"
                     startIcon={<DownloadIcon />}
                     onClick={handleDownload}
                 >

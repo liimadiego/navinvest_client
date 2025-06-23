@@ -6,11 +6,14 @@ import { ComparisonColumn } from './comparison-column';
 import { MiddleComparisonColumn } from './middle-comparison-column';
 import { WarningComparison } from './warning-comparison';
 import axios from 'src/lib/axios';
+import { AssetReportAIModal } from 'src/components/asset-report-ai-modal';
 
 export function CompareAssets() {
 
   const [selectedTickers, setSelectedTickers] = useState([]);
   const [inComparison, setInComparison] = useState(false);
+
+  const [dataToCompare, setDataToCompare] = useState({});
 
   const [leftAsset, setLeftAsset] = useState({});
   const [rightAsset, setRightAsset] = useState({});
@@ -21,6 +24,9 @@ export function CompareAssets() {
   const [hasToShrinkThePanel, setHasToShrinkThePanel] = useState(false);
 
   const [warningMessage, setWarningMessage] = useState('');
+
+  const [reportData, setReportData] = useState(null);
+  const [isAssetReportAIModalOpen, setAssetReportModalOpen] = useState(false);
 
   const deleteRightAsset = () => {
     setRightAsset({});
@@ -62,6 +68,38 @@ export function CompareAssets() {
     }
   }
 
+  const handleOpenModalAssetReport = () => {
+    setAssetReportModalOpen(true);
+  };
+
+  const handleCloseModalAssetReport = () => {
+    setReportData(null);
+    setAssetReportModalOpen(false);
+  };
+
+  const handleAskAIReport = () => {
+    setReportData(null);
+
+    if (!leftAsset.ticker || !rightAsset.ticker) {
+      alert('Por favor, adicione dois ativos para gerar o relatório.');
+      return;
+    }
+
+    handleOpenModalAssetReport();
+
+    axios.post(`/companies/compare-with-ai`, {
+      companiesData: dataToCompare,
+    })
+      .then(({ data }) => {
+        setReportData(data)
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setReportData(null);
+        handleCloseModalAssetReport();
+      });
+  }
+
   const onAddTicker1 = async (ticker) => {
     const newLeftAsset = await getCoreAssetInfo(ticker);
     setLeftAsset(newLeftAsset);
@@ -80,6 +118,7 @@ export function CompareAssets() {
       .then((response) => {
         if (response.status === 200) {
           const assetsInfo = response.data;
+          setDataToCompare(assetsInfo);
           const leftAssetInfo = assetsInfo[leftAsset.ticker];
           const rightAssetInfo = assetsInfo[rightAsset.ticker];
           setLeftAssetInfo(leftAssetInfo);
@@ -102,9 +141,6 @@ export function CompareAssets() {
       .catch((error) => {
         console.error('Erro ao realizar comparação:', error);
       });
-
-
-    // setWarningMessage('Você está comparando ativos de setores diferentes. A comparação pode não ser precisa.');
   }
 
   const getTranslation = (key) => {
@@ -145,7 +181,7 @@ export function CompareAssets() {
     <>
       {!inComparison && <Alert severity="warning" sx={{ marginBottom: 2, borderRadius: "16px" }}>
         <Typography variant="body2" color="text.secondary">
-          O comparador de ativos atualmente só está disponível para ações brasileiras. Em breve, iremos expandir para outros tipos de ativos!
+          O comparador de ativos atualmente está disponível apenas para ações brasileiras. Em breve, iremos expandir para outros tipos de ativos!
         </Typography>
       </Alert>}
       <Box
@@ -165,18 +201,28 @@ export function CompareAssets() {
             maxWidth: "100%",
             overflow: 'visible'
           }}>
-            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} style={{
-              height: hasToShrinkThePanel ? '0px' : '50px',
+            <Box sx={{
+              height: { xs: hasToShrinkThePanel ? '0px' : '80px', md: hasToShrinkThePanel ? '0px' : '50px' },
               overflow: 'hidden',
               transition: 'height 0.3s ease-in-out',
+              display: 'flex',
+              justifyContent: { xs: 'center', md: 'space-between' },
+              alignItems: { xs: 'center', md: 'flex-start' },
+              flexDirection: { xs: 'column', md: 'row' },
+              mb: { xs: 2, md: 0 }
             }}>
-              <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"} sx={{ transform: 'translateY(7px)' }}>
+              <Typography variant="h6" gutterBottom padding={"0 0 8px 4px"} >
                 Comparador de Ativos
               </Typography>
 
-              {inComparison && <Button onClick={handleNewCompare} variant="outlined" type="button" color="primary">
-                Limpar
-              </Button>}
+              {inComparison && <Box display={'flex'} gap={1} alignItems={'center'}>
+                <Button onClick={handleNewCompare} variant="contained" type="button" color="primary">
+                  Limpar
+                </Button>
+                <Button variant='outlined' color="primary.main" onClick={handleAskAIReport}>
+                  Gerar Relatório com IA
+                </Button>
+              </Box>}
             </Box>
 
             <Box component="form" noValidate autoComplete="off">
@@ -201,6 +247,7 @@ export function CompareAssets() {
               </Box>}
             </Box>
           </Paper>
+
 
           {inComparison && warningMessage != '' && <Box width={inComparison ? "100%" : "100%"} maxWidth={"100%"} mt={2}>
             <WarningComparison text={warningMessage} />
@@ -252,6 +299,7 @@ export function CompareAssets() {
           </Paper>
         </Box>}
       </Box>
+      <AssetReportAIModal reportData={reportData} handleClose={handleCloseModalAssetReport} isOpen={isAssetReportAIModalOpen} />
     </>
   );
 }

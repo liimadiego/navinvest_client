@@ -28,12 +28,11 @@ import { signInWithPassword } from '../../context/jwt';
 const SignInSchema = zod.object({
   email: zod
     .string()
-    .min(1, { message: 'Email is required!' })
+    .min(1, { message: 'O campo email é obrigatório!' })
     .email({ message: 'Email must be a valid email address!' }),
   password: zod
     .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
+    .min(1, { message: 'O campo senha é obrigatório!' })
 });
 
 // ----------------------------------------------------------------------
@@ -118,16 +117,23 @@ export function JwtSignInView() {
 
       <LoadingButton
         fullWidth
-        color="inherit"
+        // color="inherit"
         size="large"
         type="submit"
-        variant="contained"
+        // variant="contained"
         loading={isSubmitting}
         loadingIndicator="Entrando..."
+        sx={(theme) => ({
+          backgroundColor: theme.palette.primary.main,
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+          },
+        })}
       >
         Entrar
       </LoadingButton>
-    </Box>
+    </Box >
   );
 
   return (
@@ -137,7 +143,12 @@ export function JwtSignInView() {
         description={
           <>
             {`Ainda não tem uma conta? `}
-            <Link component={RouterLink} href={paths.auth.jwt.signUp} variant="subtitle2">
+            <Link component={RouterLink} href={paths.auth.jwt.signUp} variant="subtitle2"
+              sx={(theme) => ({
+                mr: 1,
+                color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+                borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+              })}>
               Registrar
             </Link>
           </>

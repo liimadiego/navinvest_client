@@ -8,13 +8,15 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
 
     if (tickerData && assetType === 'fii') {
         const fiiMarketData = tickerData?.fii?.history?.[0];
+        const properties = fiiMarketData?.properties || [];
         
         const DY = tickerData.dividendYieldPast12m;
         
         let AREA_TOTAL = 0; 
         let AREA_VAGA = 0;
         let AREA_INADIMPLENTE = 0;
-        for (const property of fiiMarketData?.properties || []) {
+        const NUMERO_DE_PROPRIEDADES = properties.length;
+        for (const property of properties) {
             AREA_TOTAL += property.Area * 1 || 0;
             AREA_VAGA += property.Area * property.PercentVacancia || 0;
             AREA_INADIMPLENTE += property.Area * property.PercentInadimplencia || 0;
@@ -43,6 +45,42 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
                 "title": "P/VP",
                 "total": PVP || null,
                 "description": "P/VP = Preço da cota / Valor patrimonial por cota",
+            },
+            {
+                "title": "VALOR DE MERCADO",
+                "total": VALOR_DE_MERCADO || null,
+                "type": "currency_string",
+                "description": "Valor de mercado do FII",
+            },
+            {
+                "title": "VALOR PATRIMONIAL",
+                "total": VALOR_PATRIMONIAL || null,
+                "type": "currency_string",
+                "description": "Valor patrimonial do FII",
+            },
+            {
+                "title": "VALOR PATRIMONIAL POR COTA",
+                "total": VALOR_PATRIMONIAL_POR_COTA || null,
+                "type": "currency",
+                "description": "Valor patrimonial por cota do FII",
+            },
+            {
+                "title": "COTAS EMITIDAS",
+                "total": COTAS_EMITIDAS || null,
+                "type": "basic_number_format",
+                "description": "Quantidade de cotas emitidas pelo FII"
+            },
+            {
+                "title": "NÚMERO DE COTISTAS",
+                "total": NUMERO_DE_COTISTAS || null,
+                "type": "basic_number_format",
+                "description": "Número de cotistas do FII"
+            },
+            {
+                "title": "NÚMERO DE PROPRIEDADES",
+                "total": fNumber(Math.round(NUMERO_DE_PROPRIEDADES)),
+                "type": "string",
+                "description": "Número de propriedades do FII",
             },
             {
                 "title": "AREA TOTAL",
@@ -75,41 +113,11 @@ export function FundamentalIndicatorCard({ tickerData, assetType }) {
                 "description": "Área total inadimplente nos imóveis do FII",
             },
             {
-                "title": "INADIMPLENCIA (FÍSICA)",
+                "title": "INADIMPLENCIA FÍSICA",
                 "total": (AREA_INADIMPLENTE / (AREA_TOTAL || 1)) || 0,
                 "type": "percentage",
                 "description": "Inadimplência física é o percentual de área total que está inadimplente nos imóveis do FII",
             },
-            {
-                "title": "VALOR DE MERCADO",
-                "total": VALOR_DE_MERCADO || null,
-                "type": "currency_string",
-                "description": "Valor de mercado do FII",
-            },
-            {
-                "title": "VALOR PATRIMONIAL",
-                "total": VALOR_PATRIMONIAL || null,
-                "type": "currency_string",
-                "description": "Valor patrimonial do FII",
-            },
-            {
-                "title": "VAL. PATRIMONIAL P/ COTA",
-                "total": VALOR_PATRIMONIAL_POR_COTA || null,
-                "type": "currency",
-                "description": "Valor patrimonial por cota do FII",
-            },
-            {
-                "title": "COTAS EMITIDAS",
-                "total": COTAS_EMITIDAS || null,
-                "type": "basic_number_format",
-                "description": "Quantidade de cotas emitidas pelo FII"
-            },
-            {
-                "title": "NÚMERO DE COTISTAS",
-                "total": NUMERO_DE_COTISTAS || null,
-                "type": "basic_number_format",
-                "description": "Número de cotistas do FII"
-            }
         ];
     }
 

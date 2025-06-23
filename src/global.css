@@ -1,26 +1,29 @@
 /** **************************************
-* Fonts: app
-*************************************** */
-@import '@fontsource-variable/public-sans';
-
-@import '@fontsource/barlow/400.css';
-@import '@fontsource/barlow/500.css';
-@import '@fontsource/barlow/600.css';
-@import '@fontsource/barlow/700.css';
-@import '@fontsource/barlow/800.css';
-
-/** **************************************
 * Fonts: options
 *************************************** */
-@import '@fontsource-variable/dm-sans';
-@import '@fontsource-variable/inter';
-@import '@fontsource-variable/nunito-sans';
 
 /** **************************************
 * Plugins
 *************************************** */
 /* scrollbar */
 @import './components/scrollbar/styles.css';
+
+/** **************************************
+* Fonts: app
+*************************************** */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
 
 /** **************************************
 * Baseline
@@ -37,8 +40,13 @@ body,
   flex: 1 1 auto;
   min-height: 100%;
   flex-direction: column;
-
 }
+
+.simplebar-placeholder {
+  width: 100% !important;
+  /* override inline style */
+}
+
 
 img {
   max-width: 100%;

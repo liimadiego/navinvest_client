@@ -165,8 +165,8 @@ export function AssetDetailsView() {
         sx={{ mb: { xs: 3, md: 5 } }}
         action={
           <>
-            {!isFeatureDisabled && assetType == 'br_stock' && <>
-              <Tooltip title="Momento da empresa: IA gera relatório levando em consideração os dados atuais do ativo">
+            {!isFeatureDisabled && (assetType == 'br_stock' || assetType == 'fii') && <>
+              <Tooltip title={`Momento ${(assetType == 'br_stock' ? 'da empresa' : 'do FII')}: A IA gera relatório levando em consideração os dados atuais do ativo`}>
                 <IconButton
                   onClick={handleAskAIReport}
                 >

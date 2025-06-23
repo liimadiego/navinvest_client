@@ -117,9 +117,14 @@ export function AssetReportAIModal({ isOpen, handleClose, reportData }) {
           <CloseIcon />
         </IconButton>
         {!report ? (
-          <Typography sx={{ padding: "10px 30px", paddingTop: "35px", opacity: .7, textAlign: "center" }} variant="h6" gutterBottom>
-            Relatório de IA em construção... Aguarde um momento enquanto finalizamos
-          </Typography>
+          <>
+            <Typography sx={{ paddingTop: "25px", opacity: .7, textAlign: "center" }} variant="h6" gutterBottom>
+              Estamos preparando seu relatório com inteligência artificial...
+            </Typography>
+            <Typography sx={{ opacity: .7, textAlign: "center", pb: 3 }} variant="body2" gutterBottom>
+              Por favor, aguarde um momento enquanto finalizamos
+            </Typography>
+          </>
         ) : null}
         <Paper sx={{ paddingX: "5%", paddingBottom: "35px" }}>
           {!report ? (

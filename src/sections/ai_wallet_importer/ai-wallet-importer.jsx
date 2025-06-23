@@ -211,12 +211,20 @@ export function AiWalletImporter({ }) {
                                 </Button>
                             )}
                             <Button
-                                variant="contained"
+                                // variant="contained"
                                 startIcon={<Iconify icon="eva:cloud-upload-fill" />}
                                 onClick={handleUpload}
                                 disabled={isFeatureDisabled || loading}
                                 loading={loading}
                                 loadingPosition="end"
+                                sx={(theme) => ({
+                                    backgroundColor: theme.palette.primary.main,
+                                    color: '#fff',
+                                    px: 2,
+                                    '&:hover': {
+                                        backgroundColor: theme.palette.primary.dark,
+                                    },
+                                })}
                             >
                                 Importar Transações
                             </Button>
@@ -229,6 +237,12 @@ export function AiWalletImporter({ }) {
 
                         <Typography sx={{ fontSize: { xs: '14px', sm: '16px', md: '16px' } }}>Envie seu arquivo e deixe a IA organizar tudo para você! Com esta funcionalidade, você pode importar suas operações de forma rápida e inteligente usando uma imagem, CSV ou Excel. A IA vai identificar e converter as transações automaticamente, padronizando tudo no formato correto.</Typography>
                         <br />
+
+                        <Typography sx={{ fontSize: { xs: '14px', sm: '16px', md: '16px' } }}>
+                            ⚠️ Importante: o importador não importa fundos de investimentos ou tesouro direto
+                        </Typography>
+                        <br />
+
                         <Typography sx={{ fontSize: { xs: '14px', sm: '16px', md: '16px' } }}>
                             ✅ Envie uma imagem, CSV ou Excel com suas operações
                             <br />🔍 A IA irá identificar os dados e validar as transações automaticamente

@@ -12,28 +12,28 @@ export const themeConfig = {
    * Typography
    *************************************** */
   fontFamily: {
-    primary: 'Public Sans Variable',
-    secondary: 'Barlow',
+    primary: 'Poppins',
+    secondary: 'Poppins',
   },
   /** **************************************
    * Palette
    *************************************** */
   palette: {
     primary: {
-      lighter: '#C8FAD6',
-      light: '#5BE49B',
-      main: '#00A76F',
-      dark: '#007867',
-      darker: '#004B50',
+      lighter: '#6786fd',
+      light: '#345efc',
+      main: '#0236fc',
+      dark: '#012bc9',
+      darker: '#012097',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      lighter: '#EFD6FF',
-      light: '#C684FF',
-      main: '#8E33FF',
-      dark: '#5119B7',
-      darker: '#27097A',
-      contrastText: '#FFFFFF',
+      lighter: '#a995fd',
+      light: '#9e88fd',
+      main: '#947bfd',
+      dark: '#856ee3',
+      darker: '#7662ca',
+      contrastText: '#0e0c19',
     },
     info: {
       lighter: '#CAFDF5',
