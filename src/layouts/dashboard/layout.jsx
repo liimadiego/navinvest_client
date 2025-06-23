@@ -286,7 +286,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
             >
               Criar carteira
             </Button>
-            : _wallets.length < ((!user.plan) ? 1 : 3) && <IconButton
+            : _wallets.length < (user && (!user?.plan) ? 1 : 3) && <IconButton
               onClick={handleOpenWalletModal}
               sx={{
                 [theme.breakpoints.up(layoutQuery)]: { display: 'flex' },
