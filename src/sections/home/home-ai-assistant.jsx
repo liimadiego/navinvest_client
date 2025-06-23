@@ -11,7 +11,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { varFade, MotionViewport, AnimateCountUp } from 'src/components/animate';
 import { useEffect, useState, useRef } from 'react';
 import { FloatLine } from './components/svg-elements';
-import { Button, Grid2 as Grid, Stack } from '@mui/material';
+import { Button, Grid2 as Grid, Stack, useColorScheme } from '@mui/material';
 import { SectionTitle } from './components/section-title';
 import { paths } from 'src/routes/paths';
 
@@ -69,6 +69,7 @@ export function HomeAIAssistant({ sx, ...other }) {
   const [speed, setSpeed] = useState(75);
   const inputRef = useRef(null);
   const [visibleChars, setVisibleChars] = useState(40); // Default value
+  const { mode } = useColorScheme();
 
   // Calculate visible characters based on input width
   useEffect(() => {
@@ -174,7 +175,7 @@ export function HomeAIAssistant({ sx, ...other }) {
                         sx={{
                           display: 'flex',
                           alignItems: 'center',
-                          backgroundColor: 'background.paper',
+                          backgroundColor: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
                           borderRadius: 1,
                           padding: '0 2%',
                           pr: "1%",
@@ -189,18 +190,26 @@ export function HomeAIAssistant({ sx, ...other }) {
                           InputProps={{
                             disableUnderline: true,
                             sx: {
-                              color: 'white',
                               flex: 1,
                               userSelect: 'none',
                               pointerEvents: 'none',
                               whiteSpace: 'nowrap',
                               overflow: 'hidden',
-                              pl: 0.5
+                              pl: 0.5,
                             },
                           }}
                           fullWidth
                         />
-                        <IconButton sx={{ userSelect: 'none', pointerEvents: 'none', color: 'warning.main' }}>
+                        <IconButton sx={(theme) => ({
+                          userSelect: 'none',
+                          pointerEvents: 'none',
+                          ...(theme.palette.mode === 'light' && {
+                            color: 'primary.main',
+                          }),
+                          ...(theme.palette.mode === 'dark' && {
+                            color: 'primary.lighter',
+                          }),
+                        })}>
                           <SendIcon />
                         </IconButton>
                       </Box>
@@ -218,13 +227,22 @@ export function HomeAIAssistant({ sx, ...other }) {
                     <m.div variants={varFade('inUp', { distance: 24 })}>
                       <Stack>
                         <Button
-                          color="inherit"
                           size="large"
-                          variant="contained"
+                          // variant="contained"
                           target="_blank"
                           rel="noopener"
                           href={paths.pricing}
-                          sx={{ borderColor: 'text.primary', width: '200px', alignSelf: { xs: 'center', md: 'flex-start' } }}
+                          sx={(theme) => ({
+                            width: '200px',
+                            alignSelf: { xs: 'center', md: 'flex-start' },
+                            backgroundColor: theme.palette.primary.main,
+                            color: theme.palette.primary.contrastText,
+                            '&:hover': {
+
+                              background: theme.palette.primary.dark,
+
+                            },
+                          })}
                         >
                           <span>
                             Acessar Assistente

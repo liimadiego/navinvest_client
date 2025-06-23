@@ -66,7 +66,7 @@ export function WealthEvolution({ title, subheader, chart, sx, ...other }) {
   const currentSeries = chart.series.find((i) => i.name === selectedSeries);
 
   return (
-    <Card sx={sx} {...other}>
+    <Card sx={{ ...sx, backgroundColor: 'background.paper' }} {...other}>
       <CardHeader
         title={title}
         subheader={subheader}

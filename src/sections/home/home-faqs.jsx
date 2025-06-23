@@ -140,6 +140,14 @@ export function HomeFAQs({ sx, ...other }) {
               <Iconify
                 width={20}
                 icon={expanded === item.question ? 'mingcute:minimize-line' : 'mingcute:add-line'}
+                sx={(theme) => ({
+                  ...(theme.palette.mode === 'light' && {
+                    color: 'primary.main',
+                  }),
+                  ...(theme.palette.mode === 'dark' && {
+                    color: 'primary.lighter',
+                  }),
+                })}
               />
             }
             aria-controls={`panel${index}bh-content`}

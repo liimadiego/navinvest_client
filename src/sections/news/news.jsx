@@ -1,12 +1,16 @@
 import React from 'react';
-import { Box, Paper, Typography, Skeleton } from '@mui/material';
+import { Box, Paper, Typography, Skeleton, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export function News({ news, otherNews }) {
     const navigate = useNavigate();
 
+    let newsContentArr = news?.content?.split('\n') || [];
+
+    newsContentArr = newsContentArr.filter(item => item.trim() !== '').filter(item => item !== 'Publicidade' && item !== 'Continua depois da publicidade')
+
     return (
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'column', md: 'row' }, mt: 3, gap: 3, px: { xs: "2%", sm: "3%", md: "6%", xl: "10%" } }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'column', md: 'row' }, mt: 3, gap: 3 }}> {/*,px: { xs: "2%", sm: "3%", md: "6%", xl: "10%" } */}
             {news ?
                 <>
                     <Box flex={2}>
@@ -24,7 +28,11 @@ export function News({ news, otherNews }) {
                                     />
                                 </Box>
                             )}
-                            <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: news?.content }} />
+                            {newsContentArr.map((item, index) => (
+                                <Typography key={index} variant="body1" sx={{ mb: 2 }}>
+                                    {item}
+                                </Typography>
+                            ))}
                         </Paper>
                     </Box>
                     <Box flex={.7} sx={{ display: 'flex', flexDirection: "column" }}>
@@ -42,13 +50,23 @@ export function News({ news, otherNews }) {
                                             sx={{ width: '100%', height: 'auto', borderRadius: 1, mb: 2, aspectRatio: '16/9', objectFit: 'cover' }}
                                         />
                                     </Box>}
+                                    {/* //publishedAt */}
+                                    <Typography variant="caption" color="textSecondary" sx={{ mb: 1 }}>
+                                        {new Date(item.publishedAt).toLocaleDateString('pt-BR', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                        })}
+                                    </Typography>
                                     <Typography variant="subtitle1">
-                                        {item.title}
+                                        {item.title.slice(0, 45)}...
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
                                         {item.summary.slice(0, 80)}...
                                     </Typography>
+                                    <Divider sx={{ my: 2 }} key={`divider-${index}`} />
                                 </Box>
+
                             ))}
                         </Paper>
                     </Box>

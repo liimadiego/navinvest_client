@@ -136,7 +136,14 @@ export function FeatureRequestModal({ open, onClose }) {
             onChange={(e) => setDescription(e.target.value)}
             sx={{ mb: 3 }}
           />
-          <Button type="submit" variant="contained" fullWidth>
+          <Button type="submit" fullWidth sx={(theme) => ({
+            backgroundColor: theme.palette.primary.main,
+            color: '#fff',
+            px: 2,
+            '&:hover': {
+              backgroundColor: theme.palette.primary.dark,
+            },
+          })}>
             Contribuir
           </Button>
         </Paper>

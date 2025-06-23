@@ -108,16 +108,19 @@ export default function AddEditWalletModal({ open, onClose, onSave, editData = n
                     label="Objetivo"
                     fullWidth
                     onChange={(e) => setObjective(e.target.value)}
+                    value={objective || ""}
                     SelectProps={{
                         native: true,
                     }}
                     sx={{ mt: 1, mb: 2 }}
+                    error={Boolean(errors.objective)}
+                    helperText={errors.objective}
                 >
                     <option value="" disabled>
                         Selecione um objetivo
                     </option>
                     {objectiveOptions.map((option) => (
-                        <option key={option.value} value={option.value} selected={option.value ? option.value === objective : false}>
+                        <option key={option.value} value={option.value} >
                             {option.label}
                         </option>
                     ))}
@@ -139,7 +142,7 @@ export default function AddEditWalletModal({ open, onClose, onSave, editData = n
                 <Button onClick={onClose} color="inherit">
                     Cancelar
                 </Button>
-                <Button loading={isLoading} loadingPosition="end" onClick={handleSave} variant="contained" color="primary">
+                <Button disabled={isLoading} onClick={handleSave} variant="contained" color="primary">
                     {editData ? "Salvar" : "Adicionar"}
                 </Button>
             </DialogActions>

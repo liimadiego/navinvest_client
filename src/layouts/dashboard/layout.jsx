@@ -286,7 +286,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
             >
               Criar carteira
             </Button>
-            : _wallets.length < 3 && <IconButton
+            : _wallets.length < (user && (!user?.plan) ? 1 : 3) && <IconButton
               onClick={handleOpenWalletModal}
               sx={{
                 [theme.breakpoints.up(layoutQuery)]: { display: 'flex' },
@@ -322,7 +322,13 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
               setMode(mode === 'light' ? 'dark' : 'light');
               settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
             }}
-            sx={{ color: 'inherit', mr: 1 }}
+            sx={(theme) => ({
+              mr: 1,
+              color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+              borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+              // display: 'none',
+              // [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+            })}
           >
             {mode === 'light' ? <BedtimeIcon sx={{ transform: 'scale(0.8)' }} /> : <BrightnessHighIcon sx={{ transform: 'scale(0.8)' }} />}
 

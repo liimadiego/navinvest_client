@@ -201,42 +201,33 @@ export function Texts({ sx, ...other }) {
       ]}
       {...other}
     >
-      <Box
-        component="svg"
-        sx={[
-          (theme) => ({
-            width: 1,
-            height: 1,
-            '& text': {
-              fill: 'none',
-              fontSize: 200,
-              fontWeight: 800,
-              strokeDasharray: 4,
-              textTransform: 'uppercase',
-              stroke: 'var(--hero-text-stroke-color)',
-              strokeWidth: 'var(--hero-text-stroke-width)',
-              fontFamily: theme.typography.fontSecondaryFamily,
-            },
-          }),
-        ]}
-      >
-        <m.text
-          x="0"
-          y="12px"
-          dominantBaseline="hanging"
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 64, ease: 'linear', repeat: Infinity }}
-        >
-          Navinvest AI Navinvest AI
-        </m.text>
-      </Box>
     </Box>
   );
 }
 
 // ----------------------------------------------------------------------
 
-function Dot({ color = 'primary', animate, transition, sx, ...other }) {
+function Dot({ color = '#0236fc', animate, transition, sx, ...other }) {
+  // Generate lighter and darker versions of the hex color
+  const lighterColor = (hex) => {
+    // Simple lightening algorithm - actual implementation might need adjusting
+    const r = Math.min(255, parseInt(hex.slice(1, 3), 16) + 40);
+    const g = Math.min(255, parseInt(hex.slice(3, 5), 16) + 40);
+    const b = Math.min(255, parseInt(hex.slice(5, 7), 16) + 40);
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  };
+
+  const darkerColor = (hex) => {
+    // Simple darkening algorithm
+    const r = Math.max(0, parseInt(hex.slice(1, 3), 16) - 40);
+    const g = Math.max(0, parseInt(hex.slice(3, 5), 16) - 40);
+    const b = Math.max(0, parseInt(hex.slice(5, 7), 16) - 40);
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  };
+
+  const lighter = lighterColor(color);
+  const darker = darkerColor(color);
+
   return (
     <Box
       component={m.div}
@@ -268,15 +259,15 @@ function Dot({ color = 'primary', animate, transition, sx, ...other }) {
           }
         }
         sx={[
-          (theme) => ({
+          () => ({
             width: 1,
             height: 1,
             borderRadius: '50%',
-            boxShadow: `0px -2px 4px 0px ${theme.vars.palette[color].main} inset`,
-            background: `linear-gradient(135deg, ${theme.vars.palette[color].lighter}, ${theme.vars.palette[color].light})`,
-            ...theme.applyStyles('dark', {
-              boxShadow: `0px -2px 4px 0px ${theme.vars.palette[color].dark} inset`,
-            }),
+            boxShadow: `0px -2px 4px 0px ${color} inset`,
+            background: `linear-gradient(135deg, ${lighter}, ${color})`,
+            '@media (prefers-color-scheme: dark)': {
+              boxShadow: `0px -2px 4px 0px ${darker} inset`,
+            },
           }),
           ...(Array.isArray(sx) ? sx : [sx]),
         ]}
@@ -289,31 +280,31 @@ export function Dots() {
   return (
     <>
       <Dot
-        color="error"
+        color="#947bfd"
         animate={{ x: 24 }}
         sx={{ width: 14, height: 14, transform: 'translate(calc(50% - 457px), calc(50% - 259px))' }}
       />
 
       <Dot
-        color="warning"
+        color="#809afd"
         animate={{ y: 24 }}
         sx={{ transform: 'translate(calc(50% - 356px), calc(50% + 37px))' }}
       />
 
       <Dot
-        color="info"
+        color="#947bfd"
         animate={{ x: 24 }}
         sx={{ transform: 'translate(calc(50% + 332px), calc(50% + 135px))' }}
       />
 
       <Dot
-        color="secondary"
+        color="#f1e4ed"
         animate={{ x: 24 }}
         sx={{ transform: 'translate(calc(50% + 430px), calc(50% - 160px))' }}
       />
 
       <Dot
-        color="success"
+        color="#b3c2fe"
         animate={{ y: 24 }}
         sx={{ transform: 'translate(calc(50% + 136px), calc(50% + 332px))' }}
       />

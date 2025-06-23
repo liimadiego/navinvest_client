@@ -24,6 +24,7 @@ export const AnimateLogoZoom = forwardRef((props, ref) => {
       >
         {logo ?? (
           <Logo
+            isSingle={true}
             disabled
             {...slotProps?.logo}
             sx={[

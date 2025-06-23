@@ -174,9 +174,16 @@ export function SplitUpdatePasswordView() {
         fullWidth
         size="large"
         type="submit"
-        variant="contained"
+        // variant="contained"
         loading={isSubmitting}
         loadingIndicator="Atualizar senha..."
+        sx={(theme) => ({
+          backgroundColor: theme.palette.primary.main,
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+          },
+        })}
       >
         Atualizar senha
       </LoadingButton>

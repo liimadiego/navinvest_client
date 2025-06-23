@@ -16,7 +16,8 @@ export function translateAssetType(assetType, currency = 'BRL') {
     crypto: 'Criptomoedas',
     cripto: 'Criptomoedas',
     stablecoin: 'Criptomoedas',
+    funds: 'Fundos',
   };
 
-  return typeMap[type] || 'Others';
+  return typeMap[type] || 'Outros';
 }

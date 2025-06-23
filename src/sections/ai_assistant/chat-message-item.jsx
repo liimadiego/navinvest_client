@@ -83,8 +83,8 @@ export function ChatMessageItem({ message }) {
             maxWidth: { xs: '95%', sm: '90%', md: '80%' },
             borderRadius: 1,
             typography: 'body2',
-            bgcolor: message.warning ? '#7A4100' : 'background.neutral',
-            ...(me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
+            bgcolor: message.warning ? '#7A4100' : 'background.default',
+            ...(me && { color: '#fff', bgcolor: 'primary.light' }),
           }}
         >
           {me || !message.animate ? (

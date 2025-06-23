@@ -61,14 +61,19 @@ const renderButtons = () => (
     <m.div {...motionProps}>
       <Stack>
         <Button
-          color="inherit"
+          // color="inherit"
           size="large"
-          variant="contained"
+          // variant="contained"
           target="_blank"
           rel="noopener"
           href={paths.pricing}
           // startIcon={<Iconify width={24} icon="eva:log-in-fill" />}
-          sx={{ borderColor: 'text.primary', width: '200px', alignSelf: { xs: 'center', md: 'flex-start' } }}
+          sx={{
+            backgroundColor: "#0236fc", color: "#fff", px: 2, alignSelf: { xs: 'center', md: 'flex-start' },
+            '&:hover': {
+              background: (theme) => theme.palette.primary.dark,
+            }
+          }}
 
         >
           <span>

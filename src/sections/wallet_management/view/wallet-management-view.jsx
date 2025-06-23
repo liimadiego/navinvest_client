@@ -78,15 +78,17 @@ export function WalletManagementView() {
 
         const isFixedIncome = transaction.asset_type === 'FIXED_INCOME';
         const isTreasury = transaction.asset_type === 'TREASURY';
+        const isFund = transaction.asset_type === 'FUNDS';
 
         axios.post(`/portfolio-transactions`, {
             "portfolio_id": currentWallet.id,
             "treasury_id": isTreasury ? transaction.tickerInfo.id : null,
-            "ticker_id": !isFixedIncome && !isTreasury ? transaction.tickerInfo.id : null,
+            "fund_id": isFund ? transaction.tickerInfo.id : null,
+            "ticker_id": !isFixedIncome && !isTreasury && !isFund ? transaction.tickerInfo.id : null,
             "asset_type": transaction.asset_type,
             "transaction_type": transaction.type,
             "amount": transaction.quantity * transaction.price,
-            "price_per_unit": !isFixedIncome && !isTreasury ? transaction.price : null,
+            "price_per_unit": !isFixedIncome && !isTreasury && !isFund ? transaction.price : null,
             "transaction_date": transaction.date,
             "quantity": transaction.quantity,
             "issuer": transaction.issuer || null,
@@ -142,6 +144,7 @@ export function WalletManagementView() {
                             category_name: row.category_name,
                             total_amount: row.total_amount,
                             current_value: parseFloat(row.current_value),
+                            fund_class: row.fund?.fund_class || "null",
                         });
                     });
                     formatted_arr[group.category].category_summary = calculateCategorySummary(group.assets, data);
@@ -197,15 +200,22 @@ export function WalletManagementView() {
                     <>
                         {currentWallet?.id && Object.keys(tableData).length > 0 && <Button
                             onClick={handleSeeIndividualTransactions}
-                            variant="contained"
+                            variant="outlined"
                             startIcon={<VisibilityIcon />}
                         >
                             Ver lançamentos
                         </Button>}
                         {currentWallet?.id && <Button
                             onClick={handleOpenTransactionModal}
-                            variant="contained"
                             startIcon={<AddCircle />}
+                            sx={(theme) => ({
+                                backgroundColor: theme.palette.primary.main,
+                                color: '#fff',
+                                px: 2,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.dark,
+                                },
+                            })}
                         >
                             Adicionar lançamento
                         </Button>}

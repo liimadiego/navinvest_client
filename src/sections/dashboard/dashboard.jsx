@@ -317,8 +317,8 @@ export function Dashboard() {
                     subheader={`(${totalAssetEvolutionTwelveMonths < 0 ? "-" : "+"}${totalAssetEvolutionTwelveMonths ? totalAssetEvolutionTwelveMonths.toFixed(2) : 0}%) no último ano`}
                     chart={{
                         colors: [
-                            theme.palette.info.dark,
-                            theme.palette.info.light,
+                            theme.palette.primary.main,
+                            theme.palette.primary.lighter,
                         ],
                         categories: walletEvolution?.categories,
                         series: walletEvolution?.series,

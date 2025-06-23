@@ -199,7 +199,10 @@ export function JwtSignUpView() {
         description={
           <>
             {`Já possui uma conta? Acesse o seu `}
-            <Link component={RouterLink} href={paths.auth.jwt.signIn} variant="subtitle2">
+            <Link component={RouterLink} href={paths.auth.jwt.signIn} variant="subtitle2" sx={(theme) => ({
+              color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+              borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+            })}>
               Login
             </Link>
           </>
