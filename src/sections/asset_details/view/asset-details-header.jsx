@@ -48,7 +48,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: tickerData.tickerCompanyInfo.trade_name || assetInfo.name,
         };
-        assetImage = `/assets/tickers/${tickerData.tickerCompanyInfo.ticker}.jpg`;
+        assetImage = tickerData.tickerData.asset_image_url;
         tickerName = tickerData.tickerCompanyInfo.ticker;
     }
 
@@ -58,7 +58,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: assetInfo?.name,
         };
-        assetImage = `/assets/tickers/${tickerData.tickerCompanyInfo.ticker}.jpg`;
+        assetImage = tickerData.tickerData.asset_image_url;
         tickerName = tickerData.tickerCompanyInfo.ticker;
     }
 
@@ -78,7 +78,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: tickerData.tickerData.asset_name
         };
-        assetImage = tickerData.tickerData?.bdr ? tickerData.tickerData.bdr.logo_url : `/assets/tickers/${tickerData.tickerData.ticker}.jpg`;
+        assetImage = tickerData.tickerData.asset_image_url;
         tickerName = tickerData.tickerData.ticker;
     }
 
@@ -88,7 +88,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: tickerData.tickerData.asset_name
         };
-        assetImage = tickerData.tickerData?.etf ? tickerData.tickerData.etf.logo_url : `/assets/tickers/${tickerData.tickerData.ticker}.jpg`;
+        assetImage = tickerData.tickerData.asset_image_url;
         tickerName = tickerData.tickerData.ticker;
     }
 
@@ -99,7 +99,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: assetInfo?.reit?.name || "",
         };
-        assetImage = '';
+        assetImage = tickerData.tickerData.asset_image_url;
         tickerName = tickerData.tickerData.asset_name;
     }
 
