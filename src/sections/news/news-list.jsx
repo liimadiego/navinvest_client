@@ -21,16 +21,16 @@ export function NewsList() {
 
   useEffect(() => {
     axios
-      .get(`/news?page=${page}&per_page=${rowsPerPage}`)
+      .get(`/news/get-all-news?page=${page}&limit=${rowsPerPage}`)
       .then(({ data }) => {
-        const formatted = (data.results ?? data).map((item) => ({
+        const formatted = (data.result ?? data).map((item) => ({
           id: item.uuid,
           title: item.title,
           summary: item.content,
           coverUrl: item.image_url,
         }));
         setItems(formatted);
-        setTotalPages(data.total_pages ?? data.totalPages ?? 1);
+        setTotalPages(data.total_pages ?? 1);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -46,11 +46,18 @@ export function NewsList() {
       <Stack spacing={3}>
         {items.map((item) => (
           <Card key={item.id}>
-            <CardActionArea onClick={() => navigate(`/dashboard/noticias/${item.id}`)}>
+            <CardActionArea
+              onClick={() => navigate(`/dashboard/noticias/${item.id}`)}
+              sx={{ display: 'flex', alignItems: 'flex-start' }}
+            >
               {item.coverUrl && (
-                <CardMedia component="img" image={item.coverUrl} sx={{ height: 160 }} />
+                <CardMedia
+                  component="img"
+                  image={item.coverUrl}
+                  sx={{ width: 160, height: 160 }}
+                />
               )}
-              <CardContent>
+              <CardContent sx={{ flex: 1 }}>
                 <Typography variant="h6" gutterBottom>
                   {item.title}
                 </Typography>
