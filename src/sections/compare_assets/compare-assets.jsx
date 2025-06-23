@@ -87,17 +87,17 @@ export function CompareAssets() {
 
     handleOpenModalAssetReport();
 
-    // axios.post(`/companies/compare-with-ai`, {
-    //   companiesData: dataToCompare,
-    // })
-    //   .then(({ data }) => {
-    //     setReportData(data)
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //     setReportData(null);
-    //     handleCloseModalAssetReport();
-    //   });
+    axios.post(`/companies/compare-with-ai`, {
+      companiesData: dataToCompare,
+    })
+      .then(({ data }) => {
+        setReportData(data)
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setReportData(null);
+        handleCloseModalAssetReport();
+      });
   }
 
   const onAddTicker1 = async (ticker) => {
