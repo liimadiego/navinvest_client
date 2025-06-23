@@ -48,7 +48,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: tickerData.tickerCompanyInfo.trade_name || assetInfo.name,
         };
-        assetImage = tickerData.tickerData.asset_image_url;
+        assetImage = tickerData.tickerCompanyInfo.asset_image_url;
         tickerName = tickerData.tickerCompanyInfo.ticker;
     }
 
@@ -58,7 +58,7 @@ export function AssetDetailsHeader({
             ...assetInfo,
             trade_name: assetInfo?.name,
         };
-        assetImage = tickerData.tickerData.asset_image_url;
+        assetImage = tickerData.tickerCompanyInfo.asset_image_url;
         tickerName = tickerData.tickerCompanyInfo.ticker;
     }
 
@@ -92,7 +92,7 @@ export function AssetDetailsHeader({
         tickerName = tickerData.tickerData.ticker;
     }
 
-    if (tickerData && tickerData.fii && assetType === 'fii') {
+    if (tickerData && tickerData.tickerData && assetType === 'fii') {
         assetInfo = tickerData.tickerData;
         assetInfo = {
             ...assetInfo,
