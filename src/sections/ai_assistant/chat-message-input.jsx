@@ -23,10 +23,13 @@ import { fSub } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 
+import { useWallet } from 'src/context/WalletContext';
+
 // ----------------------------------------------------------------------
 
 export function ChatMessageInput({ isDisabled = false }) {
   const { user } = useAuthContext();
+  const { currentWallet } = useWallet();
   const me = user?.id || 1;
   const { chatId, chatHistory, setChatHistory, setIsLoading } = useChat();
   const router = useRouter();
@@ -51,7 +54,7 @@ export function ChatMessageInput({ isDisabled = false }) {
         setChatHistory((prev) => [...prev, formattedMessage]);
         setMessage('');
         setIsLoading(true);
-        const responseMessages = await sendMessage(message, chatId);
+        const responseMessages = await sendMessage(message, chatId, currentWallet?.id);
         setIsLoading(false);
         if (!responseMessages) {
           setError(true);
@@ -82,7 +85,7 @@ export function ChatMessageInput({ isDisabled = false }) {
       setChatHistory((prev) => [...prev, formattedMessage]);
       setMessage('');
       setIsLoading(true);
-      const responseMessages = await sendMessage(message, chatId);
+      const responseMessages = await sendMessage(message, chatId, currentWallet?.id);
       setIsLoading(false);
       if (!responseMessages) {
         setError(true);
