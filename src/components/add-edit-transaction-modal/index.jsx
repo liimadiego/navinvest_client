@@ -65,6 +65,7 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
         if (editData) {
             const fixedIncomeDetails = editData.fixed_income_details || false;
             const treasuryDetails = editData.treasury || false;
+            const fundDetails = editData.fund || false;
             const isFixedIncome = editData.asset_type === "FIXED_INCOME";
             const isTreasury = editData.asset_type === "TREASURY";
             const isFunds = editData.asset_type === "FUNDS";
@@ -73,11 +74,11 @@ export default function AddEditTransactionModal({ open, onClose, onSave, editDat
             setTransactionId(editData.id);
             setType(editData.type);
             setTickerInfo(!isFixedIncome ? {
-                current_price: isTreasury ? treasuryDetails.amount : editData.ticker?.current_price,
-                id: isTreasury ? treasuryDetails.id : editData.ticker.id,
-                image_url: isTreasury ? "/assets/tickers/default.svg" : editData.ticker.asset_image_url,
-                name: isTreasury ? treasuryDetails.name : `${editData.ticker.ticker} - ${editData.ticker.asset_name}`,
-                currency: isTreasury ? "BRL" : editData.ticker.currency,
+                current_price: isTreasury ? treasuryDetails.amount : isFunds ? fundDetails.current_price : editData.ticker?.current_price,
+                id: isTreasury ? treasuryDetails.id : isFunds ? fundDetails.id : editData.ticker.id,
+                image_url: isTreasury || isFunds ? "/assets/tickers/default.svg" : editData.ticker.asset_image_url,
+                name: isTreasury ? treasuryDetails.name : isFunds ? fundDetails.trade_name : `${editData.ticker.ticker} - ${editData.ticker.asset_name}`,
+                currency: isTreasury || isFunds ? "BRL" : editData.ticker.currency,
             } : null);
             setDate(editData.date?.slice(0, 10));
             setQuantity(editData.quantity);

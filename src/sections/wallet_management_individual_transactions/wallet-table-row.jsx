@@ -133,13 +133,14 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
   }
 
   const handleEditTransaction = async (data) => {
-    const { type, tickerInfo, date, quantity, price, costs, amount, id, asset_type, fixed_income_details, treasury } = data;
+    const { type, tickerInfo, date, quantity, price, costs, amount, id, asset_type, fixed_income_details, treasury, fund } = data;
     const transactionData = {
       asset_type,
       type,
       ticker: tickerInfo,
       fixed_income_details,
       treasury,
+      fund,
       date,
       quantity,
       amount,
@@ -217,11 +218,12 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
                   tickerInfo: row.asset_type == "TREASURY" ? row.treasury : row.ticker,
                   date: row.transaction_date,
                   quantity: row.quantity,
-                  price: row.fixed_income_details || row.treasury ? (row.amount / row.quantity) : row.price_per_unit,
+                  price: row.fixed_income_details || row.treasury || row.fund ? (row.amount / row.quantity) : row.price_per_unit,
                   costs: row.costs,
                   asset_type: row.asset_type,
                   fixed_income_details: row.fixed_income_details,
                   treasury: row.treasury,
+                  fund: row.fund,
                 })}
               >
                 <Iconify icon="solar:pen-bold" />
