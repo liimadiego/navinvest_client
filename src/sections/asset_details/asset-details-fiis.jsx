@@ -185,8 +185,10 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
     const refIndicators = useRef(null);
     const refPrice = useRef(null);
 
-    const assetImage = tickerData.asset_image_url;
+    const assetImage = tickerData.tickerData.asset_image_url;
     const displayedImage = imageError ? '/assets/tickers/default.svg' : assetImage;
+
+    console.log('tickerData', tickerData);
 
     return (
         <>
