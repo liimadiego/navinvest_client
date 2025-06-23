@@ -221,6 +221,7 @@ export function Dashboard() {
                 })
                 .catch((error) => {
                     console.error('Error fetching wallet data:', error);
+                    localStorage.removeItem('selectedWallet');
                     setError(true);
                     setLoading(false);
                 });
