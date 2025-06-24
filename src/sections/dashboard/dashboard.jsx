@@ -444,7 +444,7 @@ export function Dashboard() {
                     Evolução da carteira por setor
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Typography variant="subtitle1" sx={{ color: colors.grey[600] }}>
+                    <Typography variant="subtitle1">
                         Selecione um setor para visualizar a evolução da carteira:
                     </Typography>
                     {isSectorDataLoading ? (
