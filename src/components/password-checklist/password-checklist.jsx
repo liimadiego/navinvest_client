@@ -4,6 +4,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { Typography } from '@mui/material';
 
 export function PasswordChecklist({ password = '' }) {
   const requirements = [
@@ -14,19 +15,24 @@ export function PasswordChecklist({ password = '' }) {
   ];
 
   return (
-    <List dense sx={{ mt: 1 }}>
+    <List dense sx={{ mb: 3 }}>
       {requirements.map((req) => {
         const passed = req.test(password);
         return (
           <ListItem key={req.label} disableGutters sx={{ p: 0.25 }}>
-            <ListItemIcon sx={{ minWidth: 24 }}>
+            <ListItemIcon sx={{ minWidth: 24, mr: 0.5 }}>
               {passed ? (
                 <CheckCircleOutlineIcon color="success" fontSize="small" />
               ) : (
                 <RadioButtonUncheckedIcon color="disabled" fontSize="small" />
               )}
             </ListItemIcon>
-            <ListItemText primary={req.label} primaryTypographyProps={{ variant: 'caption' }} />
+            <Typography
+              variant="caption"
+              sx={{ color: passed ? 'text.primary' : 'text.disabled', fontWeight: 500, fontSize: '0.875rem' }}
+            >
+              {req.label}
+            </Typography>
           </ListItem>
         );
       })}
