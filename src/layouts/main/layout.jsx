@@ -80,7 +80,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
             <Button
               // variant="contained"
               rel="noopener"
-              href={paths.pricing}
+              href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.pricing}
               sx={(theme) => ({
                 backgroundColor: "#0236fc",
                 color: theme.palette.common.white,

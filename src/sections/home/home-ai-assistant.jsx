@@ -231,7 +231,7 @@ export function HomeAIAssistant({ sx, ...other }) {
                           // variant="contained"
                           target="_blank"
                           rel="noopener"
-                          href={paths.pricing}
+                          href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.pricing}
                           sx={(theme) => ({
                             width: '200px',
                             alignSelf: { xs: 'center', md: 'flex-start' },
