@@ -17,6 +17,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
+import { PasswordChecklist } from 'src/components/password-checklist';
 
 import { signUp } from '../../context/jwt';
 import { useAuthContext } from '../../hooks';
@@ -69,6 +70,7 @@ export function JwtSignUpView() {
     resolver: zodResolver(SignUpSchema),
     defaultValues,
   });
+  const passwordValue = methods.watch('password');
 
   const mostCompletePhoneMaskHandler = (value) => {
     const digits = value.replace(/\D/g, '');
@@ -177,6 +179,8 @@ export function JwtSignUpView() {
         }}
         helperText="Deve conter letras maiúsculas, minúsculas, números e caracteres especiais (8+ caracteres)"
       />
+
+      <PasswordChecklist password={passwordValue} />
 
       <LoadingButton
         fullWidth

@@ -33,6 +33,7 @@ import {
     CheckCircle as CheckCircleIcon,
     Pix as PixIcon,
 } from '@mui/icons-material';
+import { PasswordChecklist } from 'src/components/password-checklist';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { setSession } from 'src/auth/context/jwt';
@@ -400,6 +401,7 @@ export function Payment() {
                                     autoComplete="new-password"
                                     inputProps={{ autoComplete: 'new-password', form: { autoComplete: 'off' } }}
                                 />
+                                <PasswordChecklist password={formData.password} />
                             </Box>
                         </Box>
                         }
