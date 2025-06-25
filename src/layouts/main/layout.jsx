@@ -85,6 +85,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
                 backgroundColor: "#0236fc",
                 color: theme.palette.common.white,
                 px: 2,
+                display: { xs: 'none', md: 'inline-flex' },
                 '&:hover': {
                   ...(theme.palette.mode === 'light' && {
                     background: theme.palette.primary.dark,
