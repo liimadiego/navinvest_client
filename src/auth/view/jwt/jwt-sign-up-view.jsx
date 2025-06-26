@@ -17,6 +17,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
+import { PasswordChecklist } from 'src/components/password-checklist';
 
 import { signUp } from '../../context/jwt';
 import { useAuthContext } from '../../hooks';
@@ -69,6 +70,7 @@ export function JwtSignUpView() {
     resolver: zodResolver(SignUpSchema),
     defaultValues,
   });
+  const passwordValue = methods.watch('password');
 
   const mostCompletePhoneMaskHandler = (value) => {
     const digits = value.replace(/\D/g, '');
@@ -117,7 +119,7 @@ export function JwtSignUpView() {
   });
 
   const renderForm = () => (
-    <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Box
         sx={{ display: 'flex', gap: { xs: 3, sm: 2 }, flexDirection: { xs: 'column', sm: 'row' } }}
       >
@@ -126,12 +128,14 @@ export function JwtSignUpView() {
           label="Primeiro nome"
           placeholder="Nome"
           slotProps={{ inputLabel: { shrink: true } }}
+          sx={{ mb: 3 }}
         />
         <Field.Text
           name="lastName"
           label="Sobrenome"
           placeholder="Sobrenome"
           slotProps={{ inputLabel: { shrink: true } }}
+          sx={{ mb: 3 }}
         />
       </Box>
 
@@ -154,9 +158,10 @@ export function JwtSignUpView() {
         onInput={(e) => {
           e.target.value = mostCompletePhoneMaskHandler(e.target.value.replace(/[^0-9\s-]/g, ''));
         }}
+        sx={{ mb: 3 }}
       />
 
-      <Field.Text name="email" label="Email" placeholder="Email" slotProps={{ inputLabel: { shrink: true } }} />
+      <Field.Text name="email" label="Email" placeholder="Email" slotProps={{ inputLabel: { shrink: true } }} sx={{ mb: 3 }} />
 
       <Field.Text
         name="password"
@@ -175,8 +180,10 @@ export function JwtSignUpView() {
             ),
           },
         }}
-        helperText="Deve conter letras maiúsculas, minúsculas, números e caracteres especiais (8+ caracteres)"
+      // helperText="Deve conter letras maiúsculas, minúsculas, números e caracteres especiais (8+ caracteres)"
       />
+
+      <PasswordChecklist password={passwordValue} />
 
       <LoadingButton
         fullWidth
