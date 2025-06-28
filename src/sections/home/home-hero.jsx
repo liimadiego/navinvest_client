@@ -62,23 +62,22 @@ export function HomeHero({ sx, ...other }) {
             my: 0,
             mt: { xs: 3, md: 10 },
             mx: 'auto',
-            maxWidth: 900,
+            maxWidth: 950,
             display: 'flex',
             flexWrap: 'wrap',
             typography: 'h2',
             justifyContent: 'center',
             fontFamily: theme.typography.fontSecondaryFamily,
             [theme.breakpoints.up(lgKey)]: {
-              fontSize: theme.typography.pxToRem(48),
-              lineHeight: '90px',
+              fontSize: theme.typography.pxToRem(38),
+              lineHeight: '70px',
             },
           },
         ]}
       >
         <Box component="span" sx={{ width: 1, opacity: 0.24, mb: { xs: 1, md: 0 } }}>
-          {/* Invista com segurança e inteligência */}
         </Box>
-        Inteligência Artificial para investir
+        Invista com inteligência e liberdade
         <Box
           component={m.span}
           animate={{ backgroundPosition: '200% center' }}
@@ -92,12 +91,14 @@ export function HomeHero({ sx, ...other }) {
             ...theme.mixins.textGradient(
               `300deg, ${theme.vars.palette.primary.lighter} 0%, ${theme.vars.palette.primary.light} 25%, ${theme.vars.palette.primary.main} 50%, ${theme.vars.palette.primary.light} 75%, ${theme.vars.palette.primary.lighter} 100%`
             ),
+            display: 'block',
             backgroundSize: '400%',
             ml: { xs: 0.75, md: 1, xl: 1.5 },
             mt: { xs: 1, md: 0 },
+            fontSize: { xs: 32, md: 36 },
           }}
         >
-          Navinvest
+          Uma IA imparcial, 24h por dia, focada em você.
         </Box>
       </Box>
     </m.div>
@@ -113,27 +114,10 @@ export function HomeHero({ sx, ...other }) {
           [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
         }}
       >
-        O jeito mais inteligente de investir no Brasil e no mundo: nossa plataforma usa Inteligência Artificial<br />
-        para te orientar e acompanhar sua carteira, 24/7
-        <Typography
-          variant="body2"
-          sx={{
-            mx: 'auto',
-            [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-            [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
-            display: { xs: 'none', md: 'inline' }
-          }}>, sem vieses, sem comissão oculta.<br />
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            mx: 'auto',
-            [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-            [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
-            display: { xs: 'none', md: 'inline' }
-          }}>
-          Simples, fácil e transparente — do iniciante ao investidor experiente.
-        </Typography>
+        Com a NavInvest.ai, você compara ativos com base em fundamentos, faz backtests realistas e  <br />
+        gerencia suas carteiras com visão profissional — tudo em um só lugar. Cadastre-se grátis e  <br />
+        tenha controle total do seu dinheiro, com ferramentas pensadas para investidores de verdade. <br />
+
       </Typography>
 
 
@@ -146,18 +130,7 @@ export function HomeHero({ sx, ...other }) {
           [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
         }}
       >
-        {`Cadastre-se grátis e use ferramentas como comparador de ativos, gerenciador de carteira e backtest.`}
-      </Typography>
-      <Typography
-        variant="body2"
-        sx={{
-          mt: 0,
-          mx: 'auto',
-          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
-        }}
-      >
-        ✨ IA avançada disponível no plano Pro — sem compromisso.
+        ✨ Quer mais? Ative o plano Premium e desbloqueie nossa IA avançada — sem compromisso.
       </Typography>
     </m.div>
   );
