@@ -78,7 +78,7 @@ export function HomeHero({ sx, ...other }) {
         <Box component="span" sx={{ width: 1, opacity: 0.24, mb: { xs: 1, md: 0 } }}>
           {/* Invista com segurança e inteligência */}
         </Box>
-        Tenha orientações 24h para investir
+        Inteligência Artificial para investir
         <Box
           component={m.span}
           animate={{ backgroundPosition: '200% center' }}
