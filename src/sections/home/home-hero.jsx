@@ -68,6 +68,7 @@ export function HomeHero({ sx, ...other }) {
             typography: 'h2',
             justifyContent: 'center',
             fontFamily: theme.typography.fontSecondaryFamily,
+            fontSize: { xs: 28 },
             [theme.breakpoints.up(lgKey)]: {
               fontSize: theme.typography.pxToRem(38),
               lineHeight: '70px',
@@ -95,7 +96,7 @@ export function HomeHero({ sx, ...other }) {
             backgroundSize: '400%',
             ml: { xs: 0.75, md: 1, xl: 1.5 },
             mt: { xs: 1, md: 0 },
-            fontSize: { xs: 32, md: 36 },
+            fontSize: { xs: 28, md: 36 },
           }}
         >
           Uma IA imparcial, 24h por dia, focada em você.
