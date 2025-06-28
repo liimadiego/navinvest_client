@@ -72,12 +72,15 @@ const renderButtons = () => (
             backgroundColor: "#0236fc", color: "#fff", px: 2, alignSelf: { xs: 'center', md: 'flex-start' },
             '&:hover': {
               background: (theme) => theme.palette.primary.dark,
-            }
+            },
+            textAlign: 'center',
+            height: '60px'
           }}
 
         >
           <span>
-            Teste Grátis por 7 dias
+            Crie sua conta grátis e<br />
+            melhore seus investimentos
           </span>
         </Button>
       </Stack>

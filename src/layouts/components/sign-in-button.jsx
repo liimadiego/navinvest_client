@@ -26,8 +26,8 @@ export function SignInButton({ sx, ...other }) {
       </Button>
 
       <Button
-        variant="outlined"
-        sx={{ ...sx, transform: { xs: 'translateX(8px)', md: 'none' } }}
+        // variant="outlined"
+        sx={{ ...sx, transform: { xs: 'translateX(8px)', md: 'none' }, backgroundColor: "#0236fc", color: "#fff", px: 2 }}
         {...other}
         onClick={() => navigate(paths.auth.jwt.signUp)}
       >

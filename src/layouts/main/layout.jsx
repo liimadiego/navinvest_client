@@ -74,10 +74,10 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
             {/* <SettingsButton /> */}
 
             {/** @slot Sign in button */}
-            <SignInButton sx={{ border: 'none', opacity: 0.7 }} />
+            <SignInButton />
 
             {/** @slot Purchase button */}
-            <Button
+            {/* <Button
               // variant="contained"
               rel="noopener"
               href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.pricing}
@@ -95,7 +95,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
               })}
             >
               Teste Grátis
-            </Button>
+            </Button> */}
 
             <IconButton
               onClick={() => {

@@ -62,23 +62,23 @@ export function HomeHero({ sx, ...other }) {
             my: 0,
             mt: { xs: 3, md: 10 },
             mx: 'auto',
-            maxWidth: 880,
+            maxWidth: 950,
             display: 'flex',
             flexWrap: 'wrap',
             typography: 'h2',
             justifyContent: 'center',
             fontFamily: theme.typography.fontSecondaryFamily,
             [theme.breakpoints.up(lgKey)]: {
-              fontSize: theme.typography.pxToRem(54),
+              fontSize: theme.typography.pxToRem(48),
               lineHeight: '90px',
             },
           },
         ]}
       >
-        <Box component="span" sx={{ width: 1, opacity: 0.24 }}>
-          Invista com inteligência.
+        <Box component="span" sx={{ width: 1, opacity: 0.24, mb: { xs: 1, md: 0 } }}>
+          Invista com segurança e inteligência
         </Box>
-        IA sem conflito de interesses.
+        Tenha orientações 24h para você
         <Box
           component={m.span}
           animate={{ backgroundPosition: '200% center' }}
@@ -94,6 +94,7 @@ export function HomeHero({ sx, ...other }) {
             ),
             backgroundSize: '400%',
             ml: { xs: 0.75, md: 1, xl: 1.5 },
+            mt: { xs: 1, md: 0 },
           }}
         >
           Navinvest
@@ -144,13 +145,13 @@ export function HomeHero({ sx, ...other }) {
             })}
           >
             <span>
-              Teste Grátis por 7 dias
+              Crie sua conta grátis
             </span>
           </Button>
         </Stack>
       </m.div>
 
-      <m.div {...motionProps}>
+      {/* <m.div {...motionProps}>
         <Button
           color="inherit"
           size="large"
@@ -163,7 +164,7 @@ export function HomeHero({ sx, ...other }) {
         >
           Crie sua conta grátis
         </Button>
-      </m.div>
+      </m.div> */}
     </Box>
   );
 
