@@ -63,7 +63,6 @@ export const navData = [
         title: 'Backtest',
         path: paths.dashboard.backtest,
         icon: ICONS.analytics,
-        onlyPaying: true,
       },
       { title: 'Comparar Ativos', path: paths.dashboard.compare_assets, icon: ICONS.file },
       {

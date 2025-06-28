@@ -62,7 +62,7 @@ export function HomeHero({ sx, ...other }) {
             my: 0,
             mt: { xs: 3, md: 10 },
             mx: 'auto',
-            maxWidth: 950,
+            maxWidth: 850,
             display: 'flex',
             flexWrap: 'wrap',
             typography: 'h2',
@@ -76,7 +76,7 @@ export function HomeHero({ sx, ...other }) {
         ]}
       >
         <Box component="span" sx={{ width: 1, opacity: 0.24, mb: { xs: 1, md: 0 } }}>
-          Invista com segurança e inteligência
+          {/* Invista com segurança e inteligência */}
         </Box>
         Tenha orientações 24h para você
         <Box
@@ -110,10 +110,54 @@ export function HomeHero({ sx, ...other }) {
         sx={{
           mx: 'auto',
           [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-          [theme.breakpoints.up(lgKey)]: { fontSize: 20, lineHeight: '36px' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
         }}
       >
-        {`O jeito mais inteligente de investir no Brasil e no mundo: nossa plataforma usa Inteligência Artificial\n para montar e acompanhar sua carteira, 24/7, sem vieses, sem comissão oculta.\n Simples, fácil e transparente — do iniciante ao investidor experiente.`}
+        O jeito mais inteligente de investir no Brasil e no mundo: nossa plataforma usa Inteligência Artificial<br />
+        para te orientar e acompanhar sua carteira, 24/7
+        <Typography
+          variant="body2"
+          sx={{
+            mx: 'auto',
+            [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+            [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+            display: { xs: 'none', md: 'inline' }
+          }}>, sem vieses, sem comissão oculta.<br />
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            mx: 'auto',
+            [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+            [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+            display: { xs: 'none', md: 'inline' }
+          }}>
+          Simples, fácil e transparente — do iniciante ao investidor experiente.
+        </Typography>
+      </Typography>
+
+
+      <Typography
+        variant="body2"
+        sx={{
+          mt: 2,
+          mx: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+        }}
+      >
+        {`Cadastre-se grátis e use ferramentas como comparador de ativos, gerenciador de carteira e backtest.`}
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          mt: 0,
+          mx: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+        }}
+      >
+        ✨ IA avançada disponível no plano Pro — sem compromisso.
       </Typography>
     </m.div>
   );
