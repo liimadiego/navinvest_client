@@ -62,15 +62,15 @@ export function HomeHero({ sx, ...other }) {
             my: 0,
             mt: { xs: 3, md: 10 },
             mx: 'auto',
-            maxWidth: 950,
+            maxWidth: { md: 950, xl: 1200 },
             display: 'flex',
             flexWrap: 'wrap',
             typography: 'h2',
             justifyContent: 'center',
             fontFamily: theme.typography.fontSecondaryFamily,
-            fontSize: { xs: 28 },
+            fontSize: { xs: 28, md: 36, xl: 46 },
             [theme.breakpoints.up(lgKey)]: {
-              fontSize: theme.typography.pxToRem(38),
+              // fontSize: theme.typography.pxToRem(38),
               lineHeight: '70px',
             },
           },
@@ -96,7 +96,7 @@ export function HomeHero({ sx, ...other }) {
             backgroundSize: '400%',
             ml: { xs: 0.75, md: 1, xl: 1.5 },
             mt: { xs: 1, md: 0 },
-            fontSize: { xs: 28, md: 36 },
+            fontSize: { xs: 28, md: 36, xl: 46 },
           }}
         >
           Uma IA imparcial, 24h por dia, focada em você.
@@ -115,10 +115,28 @@ export function HomeHero({ sx, ...other }) {
           [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
         }}
       >
-        Com a NavInvest.ai, você compara ativos com base em fundamentos, faz backtests realistas e  <br />
-        gerencia suas carteiras com visão profissional — tudo em um só lugar. Cadastre-se grátis e  <br />
-        tenha controle total do seu dinheiro, com ferramentas pensadas para investidores de verdade. <br />
-
+        Com a NavInvest.ai, você compara ativos com base em fundamentos, faz backtests realistas e
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          mx: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+        }}
+      >
+        gerencia suas carteiras com visão profissional — tudo em um só lugar.
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          mx: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+        }}
+      >
+        Cadastre-se grátis e tenha controle total do seu dinheiro, com ferramentas pensadas para investidores de verdade.
       </Typography>
 
 
