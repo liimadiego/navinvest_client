@@ -108,6 +108,9 @@ export function JwtSignUpView() {
         lastName: data.lastName,
         phone: data.phone.replaceAll(/[^0-9]/g, ''),
       });
+
+      gtagSendEvent();
+
       await checkUserSession?.();
 
       router.refresh();

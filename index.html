@@ -10,6 +10,25 @@
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17262566018"></script>
+
+  <!-- Google tag (gtag.js) event - delayed navigation helper -->
+  <script>
+    function gtagSendEvent(url) {
+      var callback = function () {
+        if (typeof url === 'string') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion_event_submit_lead_form', {
+        'event_callback': callback,
+        'event_timeout': 2000,
+        // <event_parameters>
+      });
+      return false;
+    }
+  </script>
+
+
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
@@ -28,11 +47,11 @@
     gtag('config', 'G-8HLTD4M05B');
   </script>
   <!-- Google tag (gtag.js) event -->
-<script>
-  gtag('event', 'ads_conversion_SUBMIT_LEAD_FORM_1', {
-    // <event_parameters>
-  });
-</script>
+  <script>
+    gtag('event', 'ads_conversion_SUBMIT_LEAD_FORM_1', {
+      // <event_parameters>
+    });
+  </script>
 
 </head>
 
