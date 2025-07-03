@@ -35,6 +35,7 @@ import { useWallet } from 'src/context/WalletContext';
 import { Button, Modal, Paper, styled, Typography, useColorScheme } from '@mui/material';
 import { useWallets } from 'src/context/WalletsContext';
 import { useAuthContext } from 'src/auth/hooks';
+import { useUserPlan } from 'src/context/UserPlan';
 import axios from 'src/lib/axios';
 import { useChat } from 'src/context/ChatContext';
 import { TokenProgress } from 'src/components/token-progress';
@@ -46,12 +47,41 @@ import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
 export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery = 'lg' }) {
   const theme = useTheme();
   const { currentWallet, setCurrentWallet } = useWallet();
+  const {
+    setUserPlanExpirated,
+    setUserPlan,
+    setIsLoading,
+    setShouldShowPromotions,
+    setShouldUserUsePremiumFeatures
+  } = useUserPlan();
   const { _wallets, _setWallets } = useWallets();
   const { mode, setMode } = useColorScheme();
 
   const { chatId, setChatId, chatHistory, setChatHistory } = useChat();
   const { user } = useAuthContext();
 
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const hoje = new Date();
+    const planExpirationDate = user?.plan_expiration ? new Date(user.plan_expiration) : null;
+
+    if (user.plan && user.plan.slug === "premium" && (planExpirationDate > hoje)) {
+      setUserPlanExpirated(false);
+      setUserPlan(user.plan);
+      setIsLoading(false);
+      setShouldShowPromotions(false);
+      setShouldUserUsePremiumFeatures(true);
+    } else {
+      setUserPlanExpirated(true);
+      setUserPlan([]);
+      setIsLoading(false);
+      setShouldShowPromotions(true);
+      setShouldUserUsePremiumFeatures(false);
+    }
+  }, [user])
 
 
   useEffect(() => {

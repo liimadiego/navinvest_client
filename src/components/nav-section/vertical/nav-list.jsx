@@ -9,12 +9,17 @@ import { navSectionClasses } from '../styles';
 import { useAuthContext } from 'src/auth/hooks';
 import { NavUl, NavLi, NavCollapse } from '../components';
 import { PlanOfferModal } from 'src/components/plan-offer-modal';
+import { useUserPlan } from 'src/context/UserPlan';
 
 // ----------------------------------------------------------------------
 
 export function NavList({ data, depth, render, slotProps, currentRole, enabledRootRedirect }) {
   const { user } = useAuthContext();
-  const useHasAccess = data.onlyPaying ? user?.plan !== null : true;
+  const {
+    shouldUserUsePremiumFeatures
+  } = useUserPlan();
+
+  const useHasAccess = data.onlyPaying ? shouldUserUsePremiumFeatures !== null : true;
   const pathname = usePathname();
   const navItemRef = useRef(null);
 

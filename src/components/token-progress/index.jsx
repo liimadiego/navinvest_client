@@ -5,16 +5,18 @@ import { useEffect, useState } from "react";
 import axios from 'src/lib/axios';
 import { useTokenUsage } from 'src/context/TokenUsage';
 import { useAuthContext } from "src/auth/hooks";
+import { useUserPlan } from "src/context/UserPlan";
 
 export function TokenProgress({ sx = {} }) {
-    const { user } = useAuthContext();
-    const userHasPlan = user?.plan !== null;
+    const {
+        shouldUserUsePremiumFeatures
+    } = useUserPlan();
     const { _tokenUsage, setTokenUsage } = useTokenUsage();
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (userHasPlan) {
+        if (shouldUserUsePremiumFeatures) {
             axios.get('/users/token-usage')
                 .then((response) => {
                     if ((response.data.tokens_used * 100) > 100) {
@@ -31,7 +33,7 @@ export function TokenProgress({ sx = {} }) {
                     setError(error.response.data.message);
                 });
         }
-    })
+    }, [shouldUserUsePremiumFeatures]);
 
     const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
         height: 8,
@@ -48,7 +50,7 @@ export function TokenProgress({ sx = {} }) {
     }));
 
     return (
-        error === null && userHasPlan ?
+        error === null && shouldUserUsePremiumFeatures ?
             <Box sx={{ display: 'flex', alignItems: 'center', ...sx }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Tooltip title="Este indicador mostra quanto do seu limite mensal de uso da inteligência artificial você já utilizou. Cada interação com a IA consome uma quantidade de tokens. Quando atingir 100%, você precisará aguardar a renovação no próximo mês ou mudar de plano para continuar usando.">

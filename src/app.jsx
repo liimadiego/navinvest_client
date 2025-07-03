@@ -17,6 +17,7 @@ import { BacktestProvider } from './context/BacktestContext';
 import { WalletProvider } from './context/WalletContext';
 import { WalletsProvider } from './context/WalletsContext';
 import { ChatProvider } from './context/ChatContext';
+import { UserPlanProvider } from './context/UserPlan';
 import { TokenUsageProvider } from './context/TokenUsage';
 
 globalThis.getTranslation = getTranslation;
@@ -31,27 +32,29 @@ export default function App({ children }) {
     <AuthProvider>
       <SettingsProvider defaultSettings={defaultSettings}>
         <TokenUsageProvider>
-          <WalletsProvider>
-            <WalletProvider>
-              <ChatProvider>
-                <BacktestProvider>
-                  <LanguageProvider>
-                    <ThemeProvider
-                      noSsr
-                      defaultMode={themeConfig.defaultMode}
-                      modeStorageKey={themeConfig.modeStorageKey}
-                    >
-                      <MotionLazy>
-                        <ProgressBar />
-                        <SettingsDrawer defaultSettings={defaultSettings} />
-                        {children}
-                      </MotionLazy>
-                    </ThemeProvider>
-                  </LanguageProvider>
-                </BacktestProvider>
-              </ChatProvider>
-            </WalletProvider>
-          </WalletsProvider>
+          <UserPlanProvider>
+            <WalletsProvider>
+              <WalletProvider>
+                <ChatProvider>
+                  <BacktestProvider>
+                    <LanguageProvider>
+                      <ThemeProvider
+                        noSsr
+                        defaultMode={themeConfig.defaultMode}
+                        modeStorageKey={themeConfig.modeStorageKey}
+                      >
+                        <MotionLazy>
+                          <ProgressBar />
+                          <SettingsDrawer defaultSettings={defaultSettings} />
+                          {children}
+                        </MotionLazy>
+                      </ThemeProvider>
+                    </LanguageProvider>
+                  </BacktestProvider>
+                </ChatProvider>
+              </WalletProvider>
+            </WalletsProvider>
+          </UserPlanProvider>
         </TokenUsageProvider>
       </SettingsProvider>
     </AuthProvider>

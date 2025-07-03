@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { AuthContext } from 'src/auth/context/auth-context';
 import { paths } from 'src/routes/paths';
+import { useUserPlan } from 'src/context/UserPlan';
 
 const modalStyle = {
     position: 'absolute',
@@ -30,14 +31,10 @@ const modalStyle = {
 const MyProfile = ({ onClose }) => {
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
-    const [isUserPremium, setIsUserPremium] = useState(false);
+    const {
+        shouldUserUsePremiumFeatures
+    } = useUserPlan();
     const [menuOpen, setMenuOpen] = useState(false);
-
-    useEffect(() => {
-        if (user && user.plan !== null) {
-            setIsUserPremium(true);
-        }
-    }, [user]);
 
     const [open, setOpen] = useState(false);
 
@@ -74,7 +71,7 @@ const MyProfile = ({ onClose }) => {
                             Meu Perfil
                         </Typography>
 
-                        {isUserPremium && (
+                        {shouldUserUsePremiumFeatures && (
                             <Box sx={{ position: 'relative' }}>
                                 <Button
                                     onClick={(e) => {
