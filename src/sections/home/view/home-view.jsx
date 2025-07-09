@@ -42,9 +42,10 @@ import {
   Menu,
   BarChart,
   PersonOutline,
-  StarOutline
+  Star
 } from '@mui/icons-material';
 import { m } from 'framer-motion';
+import FAQAccordion from '../components/faqs';
 
 // Custom theme with dark mode focus and mobile optimization
 const customTheme = createTheme({
@@ -117,7 +118,7 @@ const customTheme = createTheme({
     body2: {
       fontWeight: 400,
       fontSize: '0.875rem',
-      lineHeight: 1.6,
+      lineHeight: 1.4,
       '@media (min-width:600px)': {
         fontSize: '1rem',
       }
@@ -236,11 +237,11 @@ export function HomeView() {
       variant={variant}
       size={size}
       sx={{
-        py: isMobile ? 1.5 : 2,
-        px: isMobile ? 3 : 4,
-        fontSize: isMobile ? '1rem' : '1.1rem',
+        py: 1.5,
+        px: isMobile ? 2 : 4,
+        fontSize: isMobile ? '0.875rem' : '1.1rem',
         fontWeight: 600,
-        borderRadius: 3,
+        borderRadius: 2,
         background: theme.palette.background.gradient,
         boxShadow: `0 8px 16px ${alpha('#0236fc', 0.25)}`,
         '&:hover': {
@@ -347,166 +348,111 @@ export function HomeView() {
         <Box
           id="hero"
           sx={{
-            pt: { xs: '6rem', md: '8rem' },
-            pb: { xs: 8, md: 12 },
+            py: { xs: 6, md: 0 },
+            pt: { xs: 3, md: 0 },
             position: 'relative',
-            height: { xs: 'auto', md: 'calc(100vh - 64px)' },
+            // height: { xs: 'auto', md: 'calc(100vh - 64px)' },
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
           }}
         >
           <Container maxWidth="lg">
             <Grid container spacing={4} alignItems="center">
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={12}>
                 <Box
                   component={m.div}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
-                >
-                  <Typography
-                    variant="h1"
-                    sx={{
-                      mb: 3
-                    }}
-                  >
-                    A inteligência que revoluciona seus investimentos
-                  </Typography>
-
-                  <Typography
-                    variant="body1"
-                    color="text.secondary"
-                    sx={{ mb: 4, fontSize: { xs: '1rem', md: '1.125rem' } }}
-                  >
-                    Imagine ter um assessor que nunca dorme, não tem comissões ocultas e age 100% no seu interesse. A Navinvest é a primeira IA no Brasil dedicada exclusivamente a ajudar investidores a tomarem decisões mais inteligentes, com base em dados e sem conflitos de interesse.
-                  </Typography>
-
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
-                    <CTAButton>
-                      Comece grátis
-                    </CTAButton>
-
-                    <Button
-                      variant="outlined"
-                      sx={{
-                        borderColor: alpha(theme.palette.primary.main, 0.3),
-                        color: 'text.primary',
-                        '&:hover': {
-                          borderColor: 'primary.main',
-                          bgcolor: alpha(theme.palette.primary.main, 0.05)
-                        }
-                      }}
-                    >
-                      Como funciona
-                    </Button>
-                  </Box>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-                    <Box sx={{ display: 'flex' }}>
-                      {[...Array(5)].map((_, i) => (
-                        <StarOutline key={i} sx={{ color: '#FFD700', fontSize: 18 }} />
-                      ))}
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      <strong>4.9/5</strong> com mais de <strong>1.200+ avaliações</strong>
-                    </Typography>
-                    <Chip
-                      label="7 dias grátis"
-                      size="small"
-                      sx={{
-                        bgcolor: alpha(theme.palette.primary.main, 0.1),
-                        color: 'primary.main',
-                        fontWeight: 600
-                      }}
-                    />
-                  </Box>
-                </Box>
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <Box
-                  component={m.div}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
                   sx={{
-                    position: 'relative',
-                    borderRadius: 4,
-                    overflow: 'hidden',
-                    boxShadow: `0 16px 40px ${alpha('#000', 0.3)}`,
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    height: '100%',
                   }}
                 >
-                  <Box
-                    component="img"
-                    src="https://placehold.co/600x400/1E1E2A/345efc?text=NavInvest+Dashboard"
-                    alt="NavInvest Dashboard"
-                    sx={{
-                      width: '100%',
-                      height: 'auto',
-                      borderRadius: 4,
-                      border: '1px solid',
-                      borderColor: 'divider'
-                    }}
-                  />
+                  <Box>
+                    <Typography
+                      variant="h2"
+                      sx={{
+                        mb: 3,
+                        mt: { xs: 3, md: 0 },
+                        // fontSize: 100,
+                      }}
+                    >
+                      Conheça a inteligência artificial que está revolucionando os investimentos e agora trabalha pra você.
+                    </Typography>
 
-                  {/* Floating elements for visual appeal */}
-                  <Box
-                    component={m.div}
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 3 }}
-                    sx={{
-                      position: 'absolute',
-                      top: '10%',
-                      right: '10%',
-                      bgcolor: 'background.paper',
-                      borderRadius: 2,
-                      p: 2,
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      boxShadow: `0 8px 16px ${alpha('#000', 0.2)}`,
-                    }}
-                  >
-                    <TrendingUp sx={{ color: 'success.main', fontSize: 20 }} />
+                    <Typography
+                      variant="body1"
+                      color="text.secondary"
+                      sx={{ mb: 4, fontSize: { xs: '1rem', md: '1.125rem' } }}
+                    >
+                      Imagine ter um assessor que nunca dorme, não tem comissões ocultas e age 100% no seu interesse. A Navinvest é a primeira IA no Brasil dedicada exclusivamente a ajudar investidores a tomarem decisões mais inteligentes, com base em dados e sem conflitos de interesse.
+                    </Typography>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+                      <CTAButton>
+                        Comece agora a usar a IA que pensa como você
+                      </CTAButton>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+                      <Box sx={{ display: 'flex' }}>
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} sx={{ color: '#FFD700', fontSize: 18 }} />
+                        ))}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>4.95/5</strong> com mais de <strong>1.200+ avaliações</strong>
+                      </Typography>
+                      <Chip
+                        label="7 dias grátis"
+                        size="small"
+                        sx={{
+                          bgcolor: alpha(theme.palette.primary.main, 0.3),
+                          color: 'primary.lighter',
+                          fontWeight: 600
+                        }}
+                      />
+                    </Box>
                   </Box>
 
+                  {/* Scroll indicator */}
                   <Box
+                    onClick={() => {
+                      const nextSection = document.getElementById('comparison');
+                      if (nextSection) {
+                        // Scroll to the next section with 64px offset
+                        window.scrollTo({
+                          top: nextSection.offsetTop,
+                          behavior: 'smooth'
+                        });
+                      }
+                    }}
                     component={m.div}
                     animate={{ y: [0, 10, 0] }}
-                    transition={{ repeat: Infinity, duration: 4, delay: 1 }}
+                    transition={{ repeat: Infinity, duration: 2 }}
                     sx={{
-                      position: 'absolute',
-                      bottom: '15%',
-                      left: '5%',
-                      bgcolor: 'background.paper',
-                      borderRadius: 2,
-                      p: 2,
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      boxShadow: `0 8px 16px ${alpha('#000', 0.2)}`,
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      mt: 8,
+                      opacity: 0.7,
+                      display: { xs: 'flex', md: 'flex' },
+                      cursor: 'pointer',
                     }}
                   >
-                    <BarChart sx={{ color: 'primary.main', fontSize: 20 }} />
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Explore mais
+                    </Typography>
+                    <ArrowDownward sx={{ color: 'text.secondary' }} />
                   </Box>
                 </Box>
               </Grid>
             </Grid>
-
-            {/* Scroll indicator */}
-            <Box
-              component={m.div}
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              sx={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                mt: 8,
-                opacity: 0.7,
-                display: { xs: 'none', md: 'flex' }
-              }}
-            >
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                Explore mais
-              </Typography>
-              <ArrowDownward sx={{ color: 'text.secondary' }} />
-            </Box>
           </Container>
         </Box>
 
@@ -514,13 +460,16 @@ export function HomeView() {
         <Box
           id="comparison"
           sx={{
-            py: { xs: 8, md: 12 },
+            py: { xs: 6, md: 0 },
+            minHeight: { xs: 'auto', md: 'calc(100vh - 64px)' },
+            display: 'flex',
+            alignItems: 'center',
             bgcolor: alpha(theme.palette.background.paper, 0.3)
           }}
         >
           <Container maxWidth="lg">
             <SectionTitle
-              title="Por que usar a NavInvest?"
+              title="Por que usar a Navinvest?"
               subtitle="A diferença entre a assessoria tradicional e nossa tecnologia de IA"
             />
 
@@ -534,21 +483,21 @@ export function HomeView() {
                   viewport={{ once: true }}
                   sx={{
                     height: '100%',
-                    bgcolor: alpha(theme.palette.error.main, 0.05),
+                    bgcolor: alpha(theme.palette.error.main, 0.1),
                     border: '1px solid',
-                    borderColor: alpha(theme.palette.error.main, 0.2),
+                    borderColor: alpha(theme.palette.error.main, 0.1),
                   }}
                 >
-                  <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h4" sx={{ mb: 3, color: 'error.light' }}>
+                  <CardContent sx={{ p: 3, opacity: 0.85 }}>
+                    <Typography variant="h4" sx={{ mb: 3, color: 'error.main', opacity: 0.85 }}>
                       Assessores Tradicionais
                     </Typography>
                     <List disablePadding>
                       {[
+                        'Empurram ativos para bater metas',
+                        'Recomendam produtos que geram comissão',
+                        'Agem por interesse próprio',
                         'Recomendam produtos com altas comissões',
-                        'Disponíveis apenas em horário comercial',
-                        'Conhecimento limitado a certos produtos',
-                        'Podem ter conflitos de interesse'
                       ].map((item, index) => (
                         <ListItem
                           key={index}
@@ -579,20 +528,22 @@ export function HomeView() {
                   viewport={{ once: true }}
                   sx={{
                     height: '100%',
-                    background: theme.palette.background.gradient,
-                    boxShadow: `0 12px 24px ${alpha('#0236fc', 0.3)}`
+                    background: alpha(theme.palette.primary.main, 0.05),
+                    border: '1px solid',
+                    borderColor: alpha('#0236fc', 0.2),
+                    // boxShadow: `0 0 12px ${alpha('#0236fc', 0.3)}`
                   }}
                 >
                   <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h4" sx={{ mb: 3, color: 'white' }}>
-                      NavInvest IA
+                    <Typography variant="h4" sx={{ mb: 3, color: theme.palette.mode == 'light' ? theme.palette.primary.dark : 'inherit', fontWeight: 'bold' }}>
+                      Navinvest AI
                     </Typography>
                     <List disablePadding>
                       {[
-                        { text: 'Análises imparciais sem conflitos de interesse', icon: <Shield /> },
-                        { text: 'Disponível 24 horas por dia, 7 dias por semana', icon: <Bolt /> },
-                        { text: 'Processamento de dados em tempo real', icon: <Assessment /> },
-                        { text: 'Decisões baseadas em fatos, não em comissões', icon: <Verified /> }
+                        { text: 'Analisa ativos com profundidade', icon: <Shield /> },
+                        { text: 'Compara oportunidades em tempo real', icon: <Bolt /> },
+                        { text: 'Interpreta movimentos do mercado', icon: <Assessment /> },
+                        { text: 'Entrega insights imparciais como nenhum outro sistema', icon: <Verified /> }
                       ].map((item, index) => (
                         <ListItem
                           key={index}
@@ -600,12 +551,12 @@ export function HomeView() {
                           disablePadding
                           sx={{ mb: 2 }}
                         >
-                          <ListItemIcon sx={{ minWidth: 36 }}>
-                            <CheckCircle sx={{ color: 'white' }} />
+                          <ListItemIcon sx={{ minWidth: 36, color: 'primary.light' }}>
+                            <CheckCircle />
                           </ListItemIcon>
                           <ListItemText
                             primary={item.text}
-                            primaryTypographyProps={{ color: 'white' }}
+                          // primaryTypographyProps={{ color: 'primary.contrastText' }}
                           />
                         </ListItem>
                       ))}
@@ -636,49 +587,134 @@ export function HomeView() {
           </Container>
         </Box>
 
-        {/* How it Works */}
+        {/* FAQ Section */}
         <Box
-          id="how"
-          sx={{ py: { xs: 8, md: 12 } }}
+          id="faq"
+          sx={{
+            py: { xs: 6, md: 0 },
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
+          }}
         >
           <Container maxWidth="lg">
             <SectionTitle
-              title="Como a NavInvest funciona"
-              subtitle="Uma plataforma intuitiva que facilita suas decisões de investimento"
+              title="Mas será que é pra mim?"
+              subtitle="Respostas para as dúvidas que travam sua evolução"
+              sx={{ mb: { xs: 1, md: 5 } }}
             />
 
-            <Grid container spacing={3}>
-              {[
-                {
-                  icon: <Chat />,
-                  title: "Converse com a IA",
-                  description: "Faça perguntas em linguagem natural sobre qualquer investimento ou estratégia"
-                },
-                {
-                  icon: <Assessment />,
-                  title: "Análise profunda",
-                  description: "Receba análises detalhadas baseadas em dados atualizados em tempo real"
-                },
-                {
-                  icon: <Compare />,
-                  title: "Compare opções",
-                  description: "Compare diferentes ativos e estratégias para encontrar a melhor opção para você"
-                },
-                {
-                  icon: <Timeline />,
-                  title: "Acompanhe resultados",
-                  description: "Monitore o desempenho da sua carteira e receba sugestões de otimização"
-                }
-              ].map((feature, index) => (
-                <Grid item xs={12} sm={6} md={3} key={index}>
-                  <FeatureCard
-                    icon={feature.icon}
-                    title={feature.title}
-                    description={feature.description}
-                  />
-                </Grid>
-              ))}
+            <Grid container spacing={4} sx={{ mt: { xs: 0, md: 4 } }}>
+              <Grid item xs={12} md={4}>
+                <Box
+                  component={m.div}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
+                  sx={{
+                    p: 4,
+                    borderRadius: 4,
+                    bgcolor: 'background.card',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    height: '100%'
+                  }}
+                >
+                  <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                    "Não sou especialista em investimentos. Vou conseguir usar?"
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                    <strong>Sim!</strong> A Navinvest usa linguagem natural. Você pergunta como se estivesse conversando com um assessor no WhatsApp e a IA te responde com clareza.
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <Box
+                  component={m.div}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  viewport={{ once: true }}
+                  sx={{
+                    p: 4,
+                    borderRadius: 4,
+                    bgcolor: 'background.card',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    height: '100%'
+                  }}
+                >
+                  <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                    "Posso confiar nas sugestões?"
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                    <strong>Sim.</strong> Diferente de um assessor com metas de venda, a IA foi programada para agir no seu melhor interesse — sem influências externas.
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <Box
+                  component={m.div}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  sx={{
+                    p: 4,
+                    borderRadius: 4,
+                    bgcolor: 'background.card',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    height: '100%'
+                  }}
+                >
+                  <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                    "Já invisto. Isso é útil pra mim?"
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                    <strong>Muito.</strong> A IA analisa sua carteira atual, simula rendimentos passados e aponta pontos de melhoria baseados em dados e histórico real.
+                  </Typography>
+                </Box>
+              </Grid>
             </Grid>
+
+            <Box
+              component={m.div}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+              sx={{
+                mt: 6,
+                textAlign: 'center'
+              }}
+            >
+              <CTAButton>
+                Veja como investir pode ser simples
+              </CTAButton>
+            </Box>
+          </Container>
+        </Box>
+
+        {/* What is Navinvest Section */}
+        <Box
+          id="what-is"
+          sx={{
+            py: { xs: 6, md: 0 },
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
+            background: alpha(theme.palette.background.paper, 0.3)
+          }}
+        >
+          <Container maxWidth="lg">
+            <SectionTitle
+              title="O que é a Navinvest?"
+              subtitle="Uma revolução no jeito de decidir seus investimentos"
+            />
 
             <Box
               component={m.div}
@@ -687,30 +723,43 @@ export function HomeView() {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
               sx={{
-                mt: 8,
-                textAlign: 'center',
-                p: 4,
+                mt: 6,
+                p: 6,
                 borderRadius: 4,
                 bgcolor: 'background.card',
                 border: '1px solid',
-                borderColor: 'divider'
+                borderColor: 'divider',
+                textAlign: 'center'
               }}
             >
-              <Typography variant="h5" sx={{ mb: 3 }}>
-                Veja como é simples usar a NavInvest
-              </Typography>
-              <Box
-                component="video"
-                poster="https://placehold.co/800x450/262636/345efc?text=Video+Tutorial"
-                controls
+              <Typography
+                variant="h6"
                 sx={{
-                  width: '100%',
+                  mb: 4,
+                  lineHeight: 1.4,
+                  color: 'text.primary',
                   maxWidth: 800,
-                  borderRadius: 3,
-                  border: '1px solid',
-                  borderColor: 'divider'
+                  mx: 'auto'
                 }}
-              />
+              >
+                A Navinvest é uma plataforma digital com inteligência artificial que centraliza todas as informações dos ativos brasileiros e americanos, incluindo dados históricos, cotações, comparações, notícias e análises — tudo interpretado por uma IA que conversa com você.
+              </Typography>
+
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 4,
+                  lineHeight: 1.4,
+                  color: 'primary.light',
+                  fontWeight: 'bold'
+                }}
+              >
+                É como ter um analista de dados e um consultor neutro em um só lugar.
+              </Typography>
+
+              <CTAButton>
+                Conheça agora o assistente de investimentos que trabalha para você
+              </CTAButton>
             </Box>
           </Container>
         </Box>
@@ -719,14 +768,17 @@ export function HomeView() {
         <Box
           id="testimonials"
           sx={{
-            py: { xs: 8, md: 12 },
-            bgcolor: alpha(theme.palette.background.paper, 0.3)
+            py: { xs: 6, md: 0 },
+            // bgcolor: alpha(theme.palette.background.paper, 0.3),
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
           }}
         >
           <Container maxWidth="lg">
             <SectionTitle
               title="O que nossos usuários dizem"
-              subtitle="Descubra como a NavInvest está transformando a maneira como as pessoas investem"
+              subtitle="Descubra como a Navinvest está transformando a maneira como as pessoas investem"
             />
 
             <Box
@@ -754,19 +806,21 @@ export function HomeView() {
                     borderColor: 'divider'
                   }}
                 >
-                  <CardContent sx={{ p: 3, flexGrow: 1 }}>
-                    <Rating value={testimonial.rating} readOnly size="small" sx={{ mb: 2 }} />
+                  <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                    <Box>
+                      <Rating value={testimonial.rating} readOnly size="small" sx={{ mb: 2 }} />
 
-                    <Typography
-                      variant="body1"
-                      color="text.secondary"
-                      sx={{
-                        mb: 3,
-                        minHeight: { xs: 'auto', md: 120 }
-                      }}
-                    >
-                      "{testimonial.content}"
-                    </Typography>
+                      <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        sx={{
+                          mb: 3,
+                          minHeight: { xs: 'auto', md: 120 }
+                        }}
+                      >
+                        "{testimonial.content}"
+                      </Typography>
+                    </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Avatar
@@ -804,87 +858,125 @@ export function HomeView() {
           </Container>
         </Box>
 
-        {/* Pricing */}
+        {/* How it Works Section */}
         <Box
-          id="plans"
-          sx={{ py: { xs: 8, md: 12 } }}
+          id="how-it-works"
+          sx={{
+            py: { xs: 6, md: 0 },
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
+            bgcolor: alpha(theme.palette.background.paper, 0.3)
+          }}
         >
           <Container maxWidth="lg">
             <SectionTitle
-              title="Planos acessíveis para todos os investidores"
-              subtitle="Escolha o plano que melhor se adapta às suas necessidades"
+              title="Como funciona?"
+              subtitle="Tudo o que você precisa em um só lugar, 24h por dia"
             />
 
-            <Grid container spacing={4} sx={{ mb: 6 }}>
+            <Box
+              component={m.div}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              sx={{
+                mt: 6,
+                p: 6,
+                borderRadius: 4,
+                bgcolor: 'background.card',
+                border: '1px solid',
+                borderColor: 'divider',
+                textAlign: 'center'
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 4,
+                  lineHeight: 1.4,
+                  color: 'text.primary',
+                  maxWidth: 800,
+                  mx: 'auto'
+                }}
+              >
+                Você acessa a plataforma, abre o chat e conversa com a IA. Pode pedir uma análise de qualquer ativo, comparar dois ou mais investimentos, entender notícias do dia e até simular como sua carteira teria se comportado nos últimos anos.
+              </Typography>
+
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 4,
+                  lineHeight: 1.4,
+                  color: 'primary.light',
+                  fontWeight: 'bold'
+                }}
+              >
+                A IA busca dados dos principais ativos do Brasil e dos EUA e organiza tudo pra você entender de forma simples, visual e estratégica.
+              </Typography>
+
+              <CTAButton>
+                Experimente agora o poder de investir com embasamento real
+              </CTAButton>
+            </Box>
+          </Container>
+        </Box>
+
+        <Box
+          id="two-paths"
+          sx={{
+            py: { xs: 6, md: 0 },
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
+            // bgcolor: alpha(theme.palette.background.paper, 0.3),
+          }}
+        >
+          <Container maxWidth="lg">
+            <SectionTitle
+              title="Dois caminhos possíveis"
+              subtitle="Escolha entre investir à moda antiga ou com inteligência artificial"
+            />
+
+            <Grid container spacing={4} sx={{ mt: 4 }}>
               <Grid item xs={12} md={6}>
                 <Card
                   component={m.div}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5 }}
                   viewport={{ once: true }}
                   sx={{
                     height: '100%',
-                    bgcolor: 'background.card',
+                    bgcolor: alpha(theme.palette.error.main, 0.1),
                     border: '1px solid',
-                    borderColor: 'divider',
-                    position: 'relative'
+                    borderColor: alpha(theme.palette.error.main, 0.1),
                   }}
                 >
-                  <CardContent sx={{ p: 4 }}>
-                    <Typography variant="h5" sx={{ mb: 1 }}>
-                      Plano Mensal
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography variant="h4" sx={{ mb: 3, color: 'error.main', opacity: 0.85 }}>
+                      Sem Navinvest
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                      Ideal para quem quer experimentar mês a mês
-                    </Typography>
-
-                    <Typography variant="h3" sx={{ mb: 1 }}>
-                      R$59,90
-                      <Typography component="span" variant="body2" color="text.secondary">
-                        /mês
-                      </Typography>
-                    </Typography>
-
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-                      Sem compromisso, cancele quando quiser
-                    </Typography>
-
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      sx={{
-                        mb: 4,
-                        borderColor: alpha(theme.palette.primary.main, 0.3),
-                        color: 'text.primary',
-                        '&:hover': {
-                          borderColor: 'primary.main',
-                          bgcolor: alpha(theme.palette.primary.main, 0.05)
-                        }
-                      }}
-                    >
-                      Comece agora
-                    </Button>
-
                     <List disablePadding>
                       {[
-                        'Acesso completo à plataforma',
-                        'Análises ilimitadas',
-                        'Comparações em tempo real',
-                        'Suporte por email'
-                      ].map((feature, index) => (
+                        'Perder horas buscando dados em sites diferentes',
+                        'Receber análises rasas ou influenciadas por comissões',
+                        'Tomar decisões sem clareza ou embasamento real',
+                        'Depender de assessores com conflito de interesse',
+                      ].map((item, index) => (
                         <ListItem
                           key={index}
                           disableGutters
                           disablePadding
-                          sx={{ mb: 1.5 }}
+                          sx={{ mb: 2 }}
                         >
                           <ListItemIcon sx={{ minWidth: 36 }}>
-                            <CheckCircle sx={{ color: 'primary.main', fontSize: 20 }} />
+                            <Close sx={{ color: 'error.main' }} />
                           </ListItemIcon>
                           <ListItemText
-                            primary={feature}
-                            primaryTypographyProps={{ variant: 'body2' }}
+                            primary={item}
+                            primaryTypographyProps={{ color: 'text.secondary' }}
                           />
                         </ListItem>
                       ))}
@@ -896,86 +988,219 @@ export function HomeView() {
               <Grid item xs={12} md={6}>
                 <Card
                   component={m.div}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
                   viewport={{ once: true }}
                   sx={{
                     height: '100%',
-                    background: theme.palette.background.gradient,
-                    position: 'relative',
-                    boxShadow: `0 12px 24px ${alpha('#0236fc', 0.3)}`
+                    background: alpha(theme.palette.primary.main, 0.05),
+                    border: '1px solid',
+                    borderColor: alpha('#0236fc', 0.2),
                   }}
                 >
-                  <Chip
-                    label="MAIS POPULAR"
-                    size="small"
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16,
-                      bgcolor: alpha('#ffffff', 0.9),
-                      color: 'primary.main',
-                      fontWeight: 600
-                    }}
-                  />
-
-                  <CardContent sx={{ p: 4 }}>
-                    <Typography variant="h5" sx={{ mb: 1, color: 'white' }}>
-                      Plano Anual
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography variant="h4" sx={{ mb: 3, color: theme.palette.mode === 'light' ? theme.palette.primary.dark : 'inherit', fontWeight: 'bold' }}>
+                      Com Navinvest
                     </Typography>
-                    <Typography variant="body2" sx={{ mb: 3, color: alpha('#ffffff', 0.7) }}>
-                      Melhor valor para investidores comprometidos
-                    </Typography>
-
-                    <Typography variant="h3" sx={{ mb: 1, color: 'white' }}>
-                      R$47,90
-                      <Typography component="span" variant="body2" sx={{ color: alpha('#ffffff', 0.7) }}>
-                        /mês
-                      </Typography>
-                    </Typography>
-
-                    <Typography variant="body2" sx={{ mb: 4, color: alpha('#ffffff', 0.7) }}>
-                      Faturado anualmente (R$574,80)
-                    </Typography>
-
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      sx={{
-                        mb: 4,
-                        bgcolor: 'white',
-                        color: 'primary.main',
-                        '&:hover': {
-                          bgcolor: alpha('#ffffff', 0.9)
-                        }
-                      }}
-                    >
-                      Economize 20%
-                    </Button>
-
                     <List disablePadding>
                       {[
-                        'Tudo do plano mensal',
-                        'Economia de R$144 por ano',
-                        'Acesso a recursos exclusivos',
-                        'Suporte prioritário',
-                        'Sem reajustes durante 12 meses'
-                      ].map((feature, index) => (
+                        { text: 'Todas as informações centralizadas em um só lugar', icon: <Shield /> },
+                        { text: 'Análises imparciais sem conflito de interesse', icon: <Bolt /> },
+                        { text: 'Insights profundos sobre qualquer ativo', icon: <Assessment /> },
+                        { text: 'IA que trabalha 24/7 exclusivamente para você', icon: <Verified /> }
+                      ].map((item, index) => (
                         <ListItem
                           key={index}
                           disableGutters
                           disablePadding
-                          sx={{ mb: 1.5 }}
+                          sx={{ mb: 2 }}
                         >
-                          <ListItemIcon sx={{ minWidth: 36 }}>
-                            <CheckCircle sx={{ color: 'white', fontSize: 20 }} />
+                          <ListItemIcon sx={{ minWidth: 36, color: 'primary.light' }}>
+                            <CheckCircle />
                           </ListItemIcon>
                           <ListItemText
-                            primary={feature}
+                            primary={item.text}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+
+            <Box
+              component={m.div}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              sx={{
+                mt: 6,
+                textAlign: 'center'
+              }}
+            >
+              <CTAButton>
+                Escolha o caminho inteligente
+              </CTAButton>
+              <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
+                7 dias grátis, cancele quando quiser
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+
+        {/* Pricing Section */}
+        <Box
+          id="pricing"
+          sx={{
+            py: { xs: 6, md: 8 },
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
+            bgcolor: alpha(theme.palette.background.paper, 0.3)
+          }}
+        >
+          <Container maxWidth="lg">
+            <SectionTitle
+              title="Planos acessíveis para quem leva o dinheiro a sério"
+              subtitle="Escolha o plano que melhor se adapta às suas necessidades de investimento"
+            />
+
+            <Grid container spacing={4} sx={{ mt: 4 }}>
+              {/* Monthly Plan */}
+              <Grid item xs={12} md={6}>
+                <Card
+                  component={m.div}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
+                  sx={{
+                    height: '100%',
+                    bgcolor: 'background.card',
+                    border: '1px solid',
+                    borderColor: alpha(theme.palette.primary.main, 0.2),
+                    position: 'relative'
+                  }}
+                >
+                  <CardContent sx={{ p: 4 }}>
+                    <Typography variant="h4" sx={{ mb: 1, fontWeight: 600, color: 'primary.light' }}>
+                      Plano Mensal
+                    </Typography>
+
+                    <Typography variant="h3" sx={{ mb: 2, fontWeight: 700 }}>
+                      R$59,99
+                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês</Typography>
+                    </Typography>
+
+                    <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
+                      Ideal para quem quer experimentar mês a mês.
+                    </Typography>
+
+                    <List disablePadding>
+                      {[
+                        'Acesso total à plataforma e à IA',
+                        'Simulações, comparações e análises diárias',
+                        'Notícias e relatórios do mercado',
+                        'Cancelamento fácil e rápido',
+                        'Teste grátis por 7 dias'
+                      ].map((item, index) => (
+                        <ListItem
+                          key={index}
+                          disableGutters
+                          disablePadding
+                          sx={{ mb: 2 }}
+                        >
+                          <ListItemIcon sx={{ minWidth: 36, color: 'primary.light' }}>
+                            <CheckCircle />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              {/* Annual Plan */}
+              <Grid item xs={12} md={6}>
+                <Card
+                  component={m.div}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
+                  sx={{
+                    height: '100%',
+                    background: alpha(theme.palette.primary.main, 0.05),
+                    border: '1px solid',
+                    borderColor: alpha(theme.palette.primary.main, 0.3),
+                    position: 'relative',
+                    overflow: 'visible'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: -12,
+                      right: { xs: 'calc(50% - 60px)', md: 24 },
+                      bgcolor: 'background.gradient',
+                      color: 'white',
+                      px: 2,
+                      py: 0.5,
+                      borderRadius: 2,
+                      fontWeight: 'bold',
+                      fontSize: '0.875rem',
+                      zIndex: 1,
+                      boxShadow: `0 4px 8px ${alpha(theme.palette.primary.main, 0.25)}`,
+                      background: theme.palette.primary.main,
+                    }}
+                  >
+                    MAIS POPULAR
+                  </Box>
+
+                  <CardContent sx={{ p: 4 }}>
+                    <Typography variant="h4" sx={{ mb: 1, fontWeight: 600, color: 'primary.main' }}>
+                      Plano Anual
+                    </Typography>
+
+                    <Typography variant="h3" sx={{ mb: 1, fontWeight: 700 }}>
+                      R$47,99
+                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês</Typography>
+                    </Typography>
+
+                    <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
+                      (pago anualmente)
+                    </Typography>
+
+                    <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
+                      Perfeito para quem leva seus investimentos a sério.
+                    </Typography>
+
+                    <List disablePadding>
+                      {[
+                        'Todos os recursos do plano mensal',
+                        'Economia de mais de R$140 por ano',
+                        'Acesso garantido por 12 meses sem reajustes',
+                        'Tranquilidade para planejar sua carteira com visão de longo prazo'
+                      ].map((item, index) => (
+                        <ListItem
+                          key={index}
+                          disableGutters
+                          disablePadding
+                          sx={{ mb: 2 }}
+                        >
+                          <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
+                            <CheckCircle />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item}
                             primaryTypographyProps={{
-                              variant: 'body2',
-                              color: 'white'
+                              fontWeight: index === 1 ? 600 : 400
                             }}
                           />
                         </ListItem>
@@ -990,10 +1215,49 @@ export function HomeView() {
               component={m.div}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+              sx={{
+                mt: 6,
+                textAlign: 'center'
+              }}
+            >
+              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+                Cancelamento sem complicações. Teste grátis por 7 dias, sem compromisso.
+              </Typography>
+
+              <CTAButton>
+                Comece agora com o melhor assistente de investimentos
+              </CTAButton>
+            </Box>
+          </Container>
+        </Box>
+
+        {/* Final Call to Action Section */}
+        <Box
+          id="final-cta"
+          sx={{
+            py: { xs: 6, md: 0 },
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Container maxWidth="lg">
+            <SectionTitle
+              title="Sua nova maneira de investir começa hoje"
+              subtitle=""
+            />
+
+            <Box
+              component={m.div}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
               sx={{
-                p: 4,
+                mt: 6,
+                p: 6,
                 borderRadius: 4,
                 bgcolor: 'background.card',
                 border: '1px solid',
@@ -1001,100 +1265,126 @@ export function HomeView() {
                 textAlign: 'center'
               }}
             >
-              <Typography variant="h5" sx={{ mb: 2 }}>
-                Satisfação garantida
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Se você não estiver satisfeito nos primeiros 30 dias, devolveremos seu dinheiro
-              </Typography>
-              <Button
-                variant="outlined"
+              <Typography
+                variant="h5"
                 sx={{
-                  borderColor: alpha(theme.palette.primary.main, 0.3),
+                  mb: 4,
+                  lineHeight: 1.4,
                   color: 'text.primary',
-                  '&:hover': {
-                    borderColor: 'primary.main',
-                    bgcolor: alpha(theme.palette.primary.main, 0.05)
-                  }
+                  maxWidth: 700,
+                  mx: 'auto'
                 }}
               >
-                Ver detalhes da garantia
-              </Button>
+                O mundo dos investimentos mudou. E quem quiser melhores resultados vai precisar de mais do que intuição: vai precisar de inteligência.
+              </Typography>
+
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 4,
+                  lineHeight: 1.4,
+                  color: 'text.secondary',
+                  maxWidth: 700,
+                  mx: 'auto'
+                }}
+              >
+                Não é mais sobre ter tempo — é sobre ter a ferramenta certa. A Navinvest é essa ferramenta. E você pode experimentar agora mesmo.
+              </Typography>
+
+              <CTAButton>
+                Comece agora com o plano ideal para o seu perfil
+              </CTAButton>
             </Box>
           </Container>
         </Box>
 
-        {/* Final CTA */}
+        {/* FAQ Section */}
         <Box
+          id="pricing"
           sx={{
-            py: { xs: 8, md: 12 },
+            py: { xs: 6, md: 8 },
+            minHeight: 'calc(100vh - 64px)',
+            display: 'flex',
+            alignItems: 'center',
             bgcolor: alpha(theme.palette.background.paper, 0.3)
           }}
         >
-          <Container maxWidth="md">
-            <Card
+          <FAQAccordion />
+        </Box>
+
+        {/* Final Decision Section */}
+        <Box
+          id="final-decision"
+          sx={{
+            py: { xs: 8, md: 12 },
+            mt: { xs: 4, md: 0 },
+            background: 'linear-gradient(135deg, #02c 0%, #6786fd 100%)',
+            color: 'white'
+          }}
+        >
+          <Container maxWidth="lg">
+            <Box
               component={m.div}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
               sx={{
-                background: theme.palette.background.gradient,
-                p: { xs: 4, md: 6 },
                 textAlign: 'center',
-                overflow: 'hidden',
-                position: 'relative'
+                p: 6,
+                borderRadius: 4,
+                bgcolor: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)'
               }}
             >
-              {/* Abstract shape for visual appeal */}
-              <Box
+              <Typography
+                variant="h3"
                 sx={{
-                  position: 'absolute',
-                  top: -100,
-                  right: -100,
-                  width: 300,
-                  height: 300,
-                  borderRadius: '50%',
-                  bgcolor: alpha('#ffffff', 0.05),
-                  zIndex: 0
+                  mb: 4,
+                  fontWeight: 'bold',
+                  color: 'white'
                 }}
-              />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  bottom: -80,
-                  left: -80,
-                  width: 200,
-                  height: 200,
-                  borderRadius: '50%',
-                  bgcolor: alpha('#ffffff', 0.05),
-                  zIndex: 0
-                }}
-              />
+              >
+                Você ainda vai investir como antes? Ou vai deixar a inteligência trabalhar por você?
+              </Typography>
 
-              <Box sx={{ position: 'relative', zIndex: 1 }}>
-                <Typography variant="h2" sx={{ color: 'white', mb: 3 }}>
-                  Comece sua jornada hoje
-                </Typography>
-                <Typography variant="body1" sx={{ color: alpha('#ffffff', 0.8), mb: 5, maxWidth: 600, mx: 'auto' }}>
-                  Junte-se a milhares de investidores que estão tomando decisões mais inteligentes com a ajuda da NavInvest.
-                </Typography>
-                <CTAButton
-                  sx={{
-                    bgcolor: 'white',
-                    color: 'primary.main',
-                    '&:hover': {
-                      bgcolor: alpha('#ffffff', 0.9)
-                    }
-                  }}
-                >
-                  Experimente grátis por 7 dias
-                </CTAButton>
-                <Typography variant="body2" sx={{ mt: 2, color: alpha('#ffffff', 0.7) }}>
-                  Sem necessidade de cartão de crédito
-                </Typography>
-              </Box>
-            </Card>
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: 6,
+                  lineHeight: 1.4,
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  maxWidth: 600,
+                  mx: 'auto'
+                }}
+              >
+                A escolha é sua. Continuar buscando dados em mil lugares, ou conversar com uma IA treinada para te ajudar a decidir melhor?
+              </Typography>
+
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  // py: 3,
+                  px: 6,
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  fontSize: '1.2rem',
+                  fontWeight: 'bold',
+                  bgcolor: 'white',
+                  color: 'primary.main',
+                  '&:hover': {
+                    bgcolor: 'rgba(255, 255, 255, 0.9)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 25px rgba(0,0,0,0.1)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Comece agora com 7 dias grátis
+              </Button>
+            </Box>
           </Container>
         </Box>
       </Box>

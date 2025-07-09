@@ -292,7 +292,7 @@ const TESTIMONIALS = [
     name: 'Mariana Costa',
     category: 'O melhor que já usei',
     rating: 5,
-    content: `A NavInvest é a melhor plataforma de investimentos que já usei, a inteligência artificial é muito boa `,
+    content: `A Navinvest é a melhor plataforma de investimentos que já usei, a inteligência artificial é muito boa `,
     postedAt: 'June 19, 2025 23:15:30',
   },
   {

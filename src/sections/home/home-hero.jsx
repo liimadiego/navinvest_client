@@ -10,7 +10,6 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import ComparisonSection from './components/comparinson-section';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -211,7 +210,6 @@ export function HomeHero({ sx, ...other }) {
           <Stack spacing={3} sx={{ textAlign: 'center' }}>
             <m.div style={{ y: y1 }}>{renderHeading()}</m.div>
             <m.div style={{ y: y2 }}>{renderText()}</m.div>
-            <ComparisonSection />
             <m.div style={{ y: y3 }}></m.div>
           </Stack>
 

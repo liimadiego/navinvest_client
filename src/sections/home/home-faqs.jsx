@@ -25,7 +25,7 @@ const FAQs = [
     question: 'Preciso entender de investimentos para usar?',
     answer: (
       <Typography>
-        Não. A NavInvest foi criada para ser fácil de usar para qualquer pessoa, independentemente do nível de conhecimento.
+        Não. A Navinvest foi criada para ser fácil de usar para qualquer pessoa, independentemente do nível de conhecimento.
       </Typography>
     ),
   },
@@ -41,7 +41,7 @@ const FAQs = [
     question: 'Como funciona o teste grátis?',
     answer: (
       <Typography>
-        Você pode experimentar a NavInvest gratuitamente por 7 dias, com acesso total à plataforma.
+        Você pode experimentar a Navinvest gratuitamente por 7 dias, com acesso total à plataforma.
       </Typography>
     ),
   },
@@ -62,10 +62,10 @@ const FAQs = [
     ),
   },
   {
-    question: 'É possível usar a NavInvest no celular?',
+    question: 'É possível usar a Navinvest no celular?',
     answer: (
       <Typography>
-        Sim! A NavInvest é totalmente responsiva e funciona perfeitamente em dispositivos móveis.
+        Sim! A Navinvest é totalmente responsiva e funciona perfeitamente em dispositivos móveis.
       </Typography>
     ),
   },
