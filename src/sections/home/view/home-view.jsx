@@ -46,6 +46,8 @@ import {
 } from '@mui/icons-material';
 import { m } from 'framer-motion';
 import FAQAccordion from '../components/faqs';
+import { useNavigate } from 'react-router-dom';
+import { paths } from 'src/routes/paths';
 
 // Custom theme with dark mode focus and mobile optimization
 const customTheme = createTheme({
@@ -204,6 +206,7 @@ const TESTIMONIALS = [
 ];
 
 export function HomeView() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [menuOpen, setMenuOpen] = useState(false);
@@ -234,6 +237,7 @@ export function HomeView() {
 
   const CTAButton = ({ children, variant = 'contained', size = 'large', sx = {}, ...props }) => (
     <Button
+      onClick={() => navigate(paths.payment)}
       variant={variant}
       size={size}
       sx={{
@@ -1381,6 +1385,7 @@ export function HomeView() {
                   },
                   transition: 'all 0.3s ease'
                 }}
+                onClick={() => navigate(paths.payment)}
               >
                 Comece agora com 7 dias grátis
               </Button>

@@ -29,10 +29,10 @@ export function SignInButton({ sx, ...other }) {
         // variant="outlined"
         sx={{ ...sx, transform: { xs: 'translateX(8px)', md: 'none' }, backgroundColor: "#0236fc", color: "#fff", px: 2 }}
         {...other}
-        onClick={() => navigate(paths.auth.jwt.signUp)}
+        onClick={() => navigate(paths.payment)}
       >
         <Typography variant="body2" sx={{ textTransform: 'none' }}>
-          Registrar
+          Teste Grátis
         </Typography>
         {/* <Login sx={{ pr: 0, mr: 0, display: { xs: 'inline-block', md: 'none' } }} /> */}
       </Button>
