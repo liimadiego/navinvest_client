@@ -6,7 +6,7 @@ const AI_ASSISTANT_ENDPOINT = endpoints.ai_assistant;
 
 // ----------------------------------------------------------------------
 
-export async function sendMessage(messageData, chatId) {
+export async function sendMessage(messageData, chatId, portfolioId) {
   if (!messageData || !chatId) {
     return;
   }
@@ -15,7 +15,8 @@ export async function sendMessage(messageData, chatId) {
 
   await axios.post(`${AI_ASSISTANT_ENDPOINT}`, {
     message: messageData,
-    chatId: chatId
+    chatId: chatId,
+    portfolioId: portfolioId,
   })
     .then(response => {
       response = response.data;

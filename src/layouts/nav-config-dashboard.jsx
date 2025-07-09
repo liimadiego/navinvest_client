@@ -63,13 +63,17 @@ export const navData = [
         title: 'Backtest',
         path: paths.dashboard.backtest,
         icon: ICONS.analytics,
-        onlyPaying: true,
       },
       { title: 'Comparar Ativos', path: paths.dashboard.compare_assets, icon: ICONS.file },
       {
         title: 'Gerenciar Carteira',
         path: paths.dashboard.wallet_management,
         icon: <WalletIcon />,
+      },
+      {
+        title: 'Notícias',
+        path: paths.dashboard.news,
+        icon: ICONS.blog,
       },
       {
         title: 'Importar Carteira',

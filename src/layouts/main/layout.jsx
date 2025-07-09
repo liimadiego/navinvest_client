@@ -74,17 +74,18 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
             {/* <SettingsButton /> */}
 
             {/** @slot Sign in button */}
-            <SignInButton sx={{ border: 'none', opacity: 0.7 }} />
+            <SignInButton />
 
             {/** @slot Purchase button */}
-            <Button
+            {/* <Button
               // variant="contained"
               rel="noopener"
-              href={paths.pricing}
+              href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.pricing}
               sx={(theme) => ({
                 backgroundColor: "#0236fc",
                 color: theme.palette.common.white,
                 px: 2,
+                display: { xs: 'none', md: 'inline-flex' },
                 '&:hover': {
                   ...(theme.palette.mode === 'light' && {
                     background: theme.palette.primary.dark,
@@ -94,7 +95,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
               })}
             >
               Teste Grátis
-            </Button>
+            </Button> */}
 
             <IconButton
               onClick={() => {

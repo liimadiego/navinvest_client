@@ -66,18 +66,21 @@ const renderButtons = () => (
           // variant="contained"
           target="_blank"
           rel="noopener"
-          href={paths.pricing}
+          href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.pricing}
           // startIcon={<Iconify width={24} icon="eva:log-in-fill" />}
           sx={{
             backgroundColor: "#0236fc", color: "#fff", px: 2, alignSelf: { xs: 'center', md: 'flex-start' },
             '&:hover': {
               background: (theme) => theme.palette.primary.dark,
-            }
+            },
+            textAlign: 'center',
+            height: '60px'
           }}
 
         >
           <span>
-            Teste Grátis por 7 dias
+            Crie sua conta grátis e<br />
+            melhore seus investimentos
           </span>
         </Button>
       </Stack>

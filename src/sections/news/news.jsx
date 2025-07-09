@@ -15,9 +15,18 @@ export function News({ news, otherNews }) {
                 <>
                     <Box flex={2}>
                         <Paper sx={{ p: 3, pt: 2, borderRadius: 1 }}>
-                            <Typography variant="h4" sx={{ mb: 2 }}>
+                            <Typography variant="h4">
                                 {news?.title}
                             </Typography>
+                            <Box width={"100%"} textAlign={"right"} sx={{ mb: 1 }}>
+                                <Typography variant="caption" color="textSecondary">
+                                    {new Date(news.publishedAt).toLocaleDateString('pt-BR', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric'
+                                    })}
+                                </Typography>
+                            </Box>
                             {news?.coverUrl && (
                                 <Box width={"100%"} sx={{ display: 'flex', justifyContent: 'center' }}>
                                     <Box

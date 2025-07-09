@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { WelcomeBack } from './welcome-back';
 import { CompleteCarousel } from 'src/components/complete-carousel';
-import { Box, colors, Skeleton } from '@mui/material';
+import { Box, colors, Divider, Skeleton, Typography } from '@mui/material';
 
 import Grid from '@mui/material/Grid2';
 import { IndicatorChartMini } from 'src/components/indicator-chart-mini';
@@ -14,6 +14,7 @@ import { ComparisonChart } from 'src/components/comparison-chart';
 import { WalletContext } from 'src/context/WalletContext';
 import { numToMonth } from 'src/utils/format-date';
 import axios from 'src/lib/axios';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 export function Dashboard() {
     const [news, setNews] = useState(null);
@@ -29,6 +30,11 @@ export function Dashboard() {
     const [totalInvested, setTotalInvested] = useState(null);
     const [portfolioDivision, setPortfolioDivision] = useState(null);
     const [walletEvolution, setWalletEvolution] = useState(null);
+
+    const [sectorWalletEvolution, setSectorWalletEvolution] = useState(null);
+    const [sectorsAvailable, setSectorsAvailable] = useState(null);
+    const [sectorSelected, setSectorSelected] = useState(null);
+    const [isSectorDataLoading, setIsSectorDataLoading] = useState(false);
 
     const theme = useTheme();
     const { currentWallet } = useContext(WalletContext);
@@ -98,6 +104,19 @@ export function Dashboard() {
             setError(false);
             setLoading(true);
 
+            axios.get(`/investment-portfolio/get-sectors-available-from-portfolio/${currentWallet.id}`)
+                .then(({ data }) => {
+                    setSectorsAvailable(data || []);
+                    if (sectorSelected === null && data && data.length > 0) {
+                        setSectorSelected(data[0]);
+                    }
+                })
+                .catch(() => {
+                    setError(true);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
 
             axios.get(`/investment-portfolio/portfolio-data/${currentWallet.id}`)
                 .then(({ data }) => {
@@ -221,11 +240,105 @@ export function Dashboard() {
                 })
                 .catch((error) => {
                     console.error('Error fetching wallet data:', error);
+                    localStorage.removeItem('selectedWallet');
                     setError(true);
                     setLoading(false);
                 });
         }
     }, [currentWallet]);
+
+    useEffect(() => {
+        if (currentWallet && currentWallet.id && sectorSelected !== null) {
+            setIsSectorDataLoading(true);
+
+            axios.get(`/investment-portfolio/portfolio-data/${currentWallet.id}?sector=${sectorSelected}`)
+                .then(({ data }) => {
+                    // Sempre definir o estado, mesmo que não haja dados
+                    if (data && data.historicalData && data.historicalData.length > 0) {
+                        const totalAssetsChartCategories = data.historicalData.map((item) => {
+                            const month = numToMonth(item.month);
+                            return month;
+                        });
+
+                        const monthsReversed = totalAssetsChartCategories.reverse();
+
+                        const totalAssetsChartSeries = data.historicalData.map((item) => {
+                            return item?.totalAssets || 0;
+                        });
+
+                        const totalInvestedChartSeries = data.historicalData.map((item) => {
+                            return item.totalInvested || 0;
+                        });
+
+                        const totalAssetReversed = totalAssetsChartSeries.reverse();
+                        const totalInvestedReversed = totalInvestedChartSeries.reverse();
+
+                        setSectorWalletEvolution({
+                            categories: monthsReversed,
+                            series: [
+                                {
+                                    name: "Evolução da carteira",
+                                    data: [
+                                        {
+                                            name: 'Valor aplicado',
+                                            data: totalInvestedReversed
+                                        },
+                                        {
+                                            name: 'Ganho de capital',
+                                            data: totalAssetReversed.map((item, index) => {
+                                                return Number((item - totalInvestedReversed[index]).toFixed(2)) || 0;
+                                            })
+                                        },
+                                    ],
+                                }
+                            ]
+                        });
+                    } else {
+                        // Definir dados vazios quando não há histórico
+                        setSectorWalletEvolution({
+                            categories: [...getLast12Months()],
+                            series: [{
+                                name: "Evolução da carteira",
+                                data: [
+                                    {
+                                        name: 'Valor aplicado',
+                                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                    },
+                                    {
+                                        name: 'Ganho de capital',
+                                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                    },
+                                ],
+                            }]
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching sector wallet data:', error);
+                    // Definir dados vazios em caso de erro
+                    setSectorWalletEvolution({
+                        categories: [...getLast12Months()],
+                        series: [{
+                            name: "Evolução da carteira",
+                            data: [
+                                {
+                                    name: 'Valor aplicado',
+                                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                },
+                                {
+                                    name: 'Ganho de capital',
+                                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                },
+                            ],
+                        }]
+                    });
+                })
+                .finally(() => {
+                    // Sempre finalizar o loading, independente do resultado
+                    setIsSectorDataLoading(false);
+                });
+        }
+    }, [currentWallet, sectorSelected]);
 
     const calculatePatrimonyEvolution = (historicalData) => {
         if (!historicalData || historicalData.length === 0) {
@@ -238,8 +351,6 @@ export function Dashboard() {
 
         const monthlyReturn = (currentMonthIncome - lastMonthIncome) / historicalData[1].totalInvested;
         baseValue = (1 + monthlyReturn);
-
-
 
         return (baseValue - 1) * 100;
     }
@@ -313,7 +424,7 @@ export function Dashboard() {
             <Grid size={{ xs: 12, md: 8, lg: 8 }}>
                 {walletEvolution ? <WealthEvolution
                     sx={{ height: 1 }}
-                    title="Evolução da carteira (12 meses)"
+                    title={`Evolução da carteira (12 meses)`}
                     subheader={`(${totalAssetEvolutionTwelveMonths < 0 ? "-" : "+"}${totalAssetEvolutionTwelveMonths ? totalAssetEvolutionTwelveMonths.toFixed(2) : 0}%) no último ano`}
                     chart={{
                         colors: [
@@ -326,9 +437,64 @@ export function Dashboard() {
                 /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
             </Grid>
 
+
+            {Array.isArray(sectorsAvailable) && sectorsAvailable.length > 0 && <Grid size={{ xs: 12, md: 12 }}>
+                <Divider sx={{ width: '100%', mb: 3, mt: 1 }} />
+                <Typography variant="h5" sx={{ mb: 2 }}>
+                    Evolução da carteira por setor
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Typography variant="subtitle1">
+                        Selecione um setor para visualizar a evolução da carteira:
+                    </Typography>
+                    {isSectorDataLoading ? (
+                        <Skeleton variant="rounded" width="100%" height={"40px"} />
+                    ) : (
+                        <Box sx={{ minWidth: 120 }}>
+                            {sectorsAvailable && sectorsAvailable.length > 0 ? (
+                                <FormControl fullWidth>
+                                    <InputLabel id="sector-select-label">Setor</InputLabel>
+                                    <Select
+                                        labelId="sector-select-label"
+                                        id="sector-select"
+                                        value={sectorSelected || ''}
+                                        label="Setor"
+                                        onChange={(e) => setSectorSelected(e.target.value)}
+                                    >
+                                        {sectorsAvailable.map((sector) => (
+                                            <MenuItem key={sector} value={sector}>
+                                                {sector}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            ) : (
+                                <Typography variant="body2" sx={{ color: colors.grey[600] }}>
+                                    Nenhum setor disponível
+                                </Typography>
+                            )}
+                        </Box>
+                    )}
+                </Box>
+                <Grid size={12} sx={{ mt: 3 }}>
+                    {sectorWalletEvolution && !isSectorDataLoading ? <WealthEvolution
+                        sx={{ height: 1 }}
+                        title={`Evolução da carteira (12 meses) - ${sectorSelected}`}
+                        chart={{
+                            colors: [
+                                theme.palette.primary.main,
+                                theme.palette.primary.lighter,
+                            ],
+                            categories: sectorWalletEvolution?.categories,
+                            series: sectorWalletEvolution?.series,
+                        }}
+                    /> : <Skeleton variant="rounded" width="100%" height={"100%"} />}
+                </Grid>
+            </Grid>}
+
             {/* <Grid size={{ xs: 12, md: 6, lg: 4 }}>
-                <AssetRankings title="Ranking de ativos" list={_appRelated} />
-            </Grid> */}
+                            <AssetRankings title="Ranking de ativos" list={_appRelated} />
+                        </Grid> */}
 
             {/* <Grid size={{ xs: 12, md: 12, lg: 12 }}>
                 <ComparisonChart

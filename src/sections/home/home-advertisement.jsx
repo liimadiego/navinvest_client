@@ -113,7 +113,7 @@ const renderDescription = () => (
           variant="contained"
           // target="_blank"
           rel="noopener"
-          href={paths.payment}
+          href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.payment}
         >
           Testar grátis
         </Button>

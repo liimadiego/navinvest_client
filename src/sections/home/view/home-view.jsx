@@ -16,6 +16,7 @@ import { HomeAIAssistant } from '../home-ai-assistant';
 import { HomeAdvertisement } from '../home-advertisement';
 import { HomeBacktest } from '../home-backtest';
 import { Box } from '@mui/material';
+import { HomeTestimonials } from '../home-testimonials';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,8 @@ export function HomeView() {
         <HomeBacktest />
 
         <HomeIntegrations />
+
+        <HomeTestimonials />
 
         <HomePricing />
 

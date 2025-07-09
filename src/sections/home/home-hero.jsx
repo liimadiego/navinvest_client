@@ -62,23 +62,23 @@ export function HomeHero({ sx, ...other }) {
             my: 0,
             mt: { xs: 3, md: 10 },
             mx: 'auto',
-            maxWidth: 880,
+            maxWidth: { md: 950, xl: 1200 },
             display: 'flex',
             flexWrap: 'wrap',
             typography: 'h2',
             justifyContent: 'center',
             fontFamily: theme.typography.fontSecondaryFamily,
+            fontSize: { xs: 28, md: 36, xl: 46 },
             [theme.breakpoints.up(lgKey)]: {
-              fontSize: theme.typography.pxToRem(54),
-              lineHeight: '90px',
+              // fontSize: theme.typography.pxToRem(38),
+              lineHeight: '70px',
             },
           },
         ]}
       >
-        <Box component="span" sx={{ width: 1, opacity: 0.24 }}>
-          Invista com inteligência.
+        <Box component="span" sx={{ width: 1, opacity: 0.24, mb: { xs: 1, md: 0 } }}>
         </Box>
-        IA sem conflito de interesses.
+        Invista com inteligência e liberdade
         <Box
           component={m.span}
           animate={{ backgroundPosition: '200% center' }}
@@ -92,11 +92,14 @@ export function HomeHero({ sx, ...other }) {
             ...theme.mixins.textGradient(
               `300deg, ${theme.vars.palette.primary.lighter} 0%, ${theme.vars.palette.primary.light} 25%, ${theme.vars.palette.primary.main} 50%, ${theme.vars.palette.primary.light} 75%, ${theme.vars.palette.primary.lighter} 100%`
             ),
+            display: 'block',
             backgroundSize: '400%',
             ml: { xs: 0.75, md: 1, xl: 1.5 },
+            mt: { xs: 1, md: 0 },
+            fontSize: { xs: 28, md: 36, xl: 46 },
           }}
         >
-          Navinvest
+          Uma IA imparcial, 24h por dia, focada em você.
         </Box>
       </Box>
     </m.div>
@@ -109,10 +112,44 @@ export function HomeHero({ sx, ...other }) {
         sx={{
           mx: 'auto',
           [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-          [theme.breakpoints.up(lgKey)]: { fontSize: 20, lineHeight: '36px' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
         }}
       >
-        {`O jeito mais inteligente de investir no Brasil e no mundo: nossa plataforma usa Inteligência Artificial\n para montar e acompanhar sua carteira, 24/7, sem vieses, sem comissão oculta.\n Simples, fácil e transparente — do iniciante ao investidor experiente.`}
+        Com a NavInvest.ai, você compara ativos com base em fundamentos, faz backtests realistas e
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          mx: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+        }}
+      >
+        gerencia suas carteiras com visão profissional — tudo em um só lugar.
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          mx: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+        }}
+      >
+        Cadastre-se grátis e tenha controle total do seu dinheiro, com ferramentas pensadas para investidores de verdade.
+      </Typography>
+
+
+      <Typography
+        variant="body2"
+        sx={{
+          mt: 2,
+          mx: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
+        }}
+      >
+        ✨ Quer mais? Ative o plano Premium e desbloqueie nossa IA avançada — sem compromisso.
       </Typography>
     </m.div>
   );
@@ -130,7 +167,7 @@ export function HomeHero({ sx, ...other }) {
         <Stack spacing={2.5} sx={{ alignItems: 'center' }}>
           <Button
             component={RouterLink}
-            href={paths.pricing}
+            href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.pricing}
             size="large"
             // variant="contained"
             startIcon={<Iconify width={24} icon="iconoir:flash" />}
@@ -144,13 +181,13 @@ export function HomeHero({ sx, ...other }) {
             })}
           >
             <span>
-              Teste Grátis por 7 dias
+              Crie sua conta grátis
             </span>
           </Button>
         </Stack>
       </m.div>
 
-      <m.div {...motionProps}>
+      {/* <m.div {...motionProps}>
         <Button
           color="inherit"
           size="large"
@@ -163,7 +200,7 @@ export function HomeHero({ sx, ...other }) {
         >
           Crie sua conta grátis
         </Button>
-      </m.div>
+      </m.div> */}
     </Box>
   );
 
