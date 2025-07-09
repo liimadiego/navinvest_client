@@ -7,8 +7,10 @@ import { MiddleComparisonColumn } from './middle-comparison-column';
 import { WarningComparison } from './warning-comparison';
 import axios from 'src/lib/axios';
 import { AssetReportAIModal } from 'src/components/asset-report-ai-modal';
+import { useAuthContext } from 'src/auth/hooks';
 
 export function CompareAssets() {
+  const { user } = useAuthContext();
 
   const [selectedTickers, setSelectedTickers] = useState([]);
   const [inComparison, setInComparison] = useState(false);
@@ -219,9 +221,9 @@ export function CompareAssets() {
                 <Button onClick={handleNewCompare} variant="contained" type="button" color="primary">
                   Limpar
                 </Button>
-                <Button variant='outlined' color="primary.main" onClick={handleAskAIReport}>
+                {!!user.plan && <Button variant='outlined' color="primary.main" onClick={handleAskAIReport}>
                   Gerar Relatório com IA
-                </Button>
+                </Button>}
               </Box>}
             </Box>
 
