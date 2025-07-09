@@ -81,7 +81,7 @@ export function Footer({ sx, layoutQuery = 'md', ...other }) {
                 [theme.breakpoints.up(layoutQuery)]: { mx: 'unset' },
               })}
             >
-              A Nav Invest é uma plataforma de investimentos que conecta você a oportunidades e informações. Nossa missão é democratizar o acesso a investimentos de qualidade, oferecendo uma experiência simples e transparente.
+              A Navinvest é uma plataforma de investimentos que conecta você a oportunidades e informações. Nossa missão é democratizar o acesso a investimentos de qualidade, oferecendo uma experiência simples e transparente.
             </Typography>
 
             {/* <Box

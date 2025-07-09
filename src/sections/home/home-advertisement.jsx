@@ -84,7 +84,7 @@ const renderDescription = () => (
       }}
     >
       Teste por 7 dias
-      <br /> e descubra o poder do NavInvest
+      <br /> e descubra o poder do Navinvest
       <Box
         component="span"
         sx={(theme) => ({

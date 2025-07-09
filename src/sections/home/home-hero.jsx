@@ -10,7 +10,6 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Avatar, { avatarClasses } from '@mui/material/Avatar';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -57,28 +56,12 @@ export function HomeHero({ sx, ...other }) {
     <m.div {...motionProps}>
       <Box
         component="h1"
-        sx={[
-          {
-            my: 0,
-            mt: { xs: 3, md: 10 },
-            mx: 'auto',
-            maxWidth: { md: 950, xl: 1200 },
-            display: 'flex',
-            flexWrap: 'wrap',
-            typography: 'h2',
-            justifyContent: 'center',
-            fontFamily: theme.typography.fontSecondaryFamily,
-            fontSize: { xs: 28, md: 36, xl: 46 },
-            [theme.breakpoints.up(lgKey)]: {
-              // fontSize: theme.typography.pxToRem(38),
-              lineHeight: '70px',
-            },
-          },
-        ]}
+        sx={{
+          maxWidth: '100%',
+          textAlign: 'center',
+          mb: 0
+        }}
       >
-        <Box component="span" sx={{ width: 1, opacity: 0.24, mb: { xs: 1, md: 0 } }}>
-        </Box>
-        Invista com inteligência e liberdade
         <Box
           component={m.span}
           animate={{ backgroundPosition: '200% center' }}
@@ -94,12 +77,14 @@ export function HomeHero({ sx, ...other }) {
             ),
             display: 'block',
             backgroundSize: '400%',
-            ml: { xs: 0.75, md: 1, xl: 1.5 },
-            mt: { xs: 1, md: 0 },
-            fontSize: { xs: 28, md: 36, xl: 46 },
+            // ml: { xs: 0.75, md: 1, xl: 1.5 },
+            // mt: { xs: 1, md: 0 },
+            fontSize: { xs: 28, md: 36, xl: 36 },
+            textAlign: 'center',
+            width: '100%',
           }}
         >
-          Uma IA imparcial, 24h por dia, focada em você.
+          Conheça a inteligência artificial que está revolucionando os investimentos e agora, trabalha pra você.
         </Box>
       </Box>
     </m.div>
@@ -111,45 +96,15 @@ export function HomeHero({ sx, ...other }) {
         variant="body2"
         sx={{
           mx: 'auto',
-          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          maxWidth: '90%',
+          overflowWrap: 'break-word',
+          wordWrap: 'break-word',
+          hyphens: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'normal' },
           [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
         }}
       >
-        Com a NavInvest.ai, você compara ativos com base em fundamentos, faz backtests realistas e
-      </Typography>
-      <Typography
-        variant="body2"
-        sx={{
-          mx: 'auto',
-          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
-        }}
-      >
-        gerencia suas carteiras com visão profissional — tudo em um só lugar.
-      </Typography>
-      <Typography
-        variant="body2"
-        sx={{
-          display: { xs: 'none', md: 'block' },
-          mx: 'auto',
-          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
-        }}
-      >
-        Cadastre-se grátis e tenha controle total do seu dinheiro, com ferramentas pensadas para investidores de verdade.
-      </Typography>
-
-
-      <Typography
-        variant="body2"
-        sx={{
-          mt: 2,
-          mx: 'auto',
-          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-          [theme.breakpoints.up(lgKey)]: { fontSize: 18, lineHeight: '32px' },
-        }}
-      >
-        ✨ Quer mais? Ative o plano Premium e desbloqueie nossa IA avançada — sem compromisso.
+        Imagine ter um assessor que nunca dorme, não tem comissões ocultas e age 100% no seu interesse. A Navinvest é a primeira IA no Brasil dedicada exclusivamente a ajudar investidores a tomarem decisões mais inteligentes, com base em dados e sem conflitos de interesse.
       </Typography>
     </m.div>
   );
@@ -169,7 +124,6 @@ export function HomeHero({ sx, ...other }) {
             component={RouterLink}
             href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.pricing}
             size="large"
-            // variant="contained"
             startIcon={<Iconify width={24} icon="iconoir:flash" />}
             sx={(theme) => ({
               backgroundColor: "#0236fc",
@@ -256,6 +210,7 @@ export function HomeHero({ sx, ...other }) {
           <Stack spacing={3} sx={{ textAlign: 'center' }}>
             <m.div style={{ y: y1 }}>{renderHeading()}</m.div>
             <m.div style={{ y: y2 }}>{renderText()}</m.div>
+            <m.div style={{ y: y3 }}></m.div>
           </Stack>
 
           <m.div style={{ y: y4 }}>{renderButtons()}</m.div>
