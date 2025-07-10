@@ -40,11 +40,11 @@ export default function CardInput({ formData, handleInputChange }) {
         <Box
             sx={{
                 border: "1px solid",
-                borderColor: "divider",
-                borderRadius: "12px",
+                borderColor: "dividerLowOpacity",
+                borderRadius: "8px",
                 display: "flex",
                 alignItems: "center",
-                padding: "6px 12px",
+                padding: "8px 12px",
                 gap: 1,
                 width: "100%"
             }}
@@ -64,12 +64,12 @@ export default function CardInput({ formData, handleInputChange }) {
                         </InputAdornment>
                     ),
                     disableUnderline: true,
-                    style: { fontSize: 18, minWidth: 140 },
-                    inputProps: { maxLength: 19, inputMode: "numeric" },
+                    style: { fontSize: 14, minWidth: 140 },
+                    inputProps: { maxLength: 19, inputMode: "numeric" }
                 }}
                 sx={{
                     flex: 2,
-                    ".MuiInputBase-input": { padding: "8px 0" },
+                    ".MuiInputBase-input": { padding: "8px 0", fontSize: 14 },
                 }}
             />
 
@@ -94,13 +94,13 @@ export default function CardInput({ formData, handleInputChange }) {
                         onChange={handleMonthInput}
                         InputProps={{
                             disableUnderline: true,
-                            style: { width: 50, fontSize: 18, textAlign: "center" },
+                            style: { width: 50, fontSize: 14, textAlign: "center" },
                             inputProps: { maxLength: 2, inputMode: "numeric" },
                         }}
-                        sx={{ flex: 0.7, ".MuiInputBase-input": { padding: "8px 0", textAlign: "center" } }}
+                        sx={{ flex: 0.7, ".MuiInputBase-input": { padding: "8px 0", textAlign: "center", fontSize: 14 } }}
                     />
 
-                    <span style={{ color: "#888", fontSize: 18, margin: "0 2px" }}>/</span>
+                    <span style={{ color: "#888", fontSize: 14, margin: "0 2px" }}>/</span>
 
                     {/* YY */}
                     <TextField
@@ -112,10 +112,10 @@ export default function CardInput({ formData, handleInputChange }) {
                         onChange={handleYearInput}
                         InputProps={{
                             disableUnderline: true,
-                            style: { width: 30, fontSize: 18, textAlign: "center" },
+                            style: { width: 30, fontSize: 14, textAlign: "center" },
                             inputProps: { maxLength: 2, inputMode: "numeric" },
                         }}
-                        sx={{ flex: 0.7, ".MuiInputBase-input": { padding: "8px 0", textAlign: "center" } }}
+                        sx={{ flex: 0.7, ".MuiInputBase-input": { padding: "8px 0", textAlign: "center", fontSize: 14 } }}
                     />
                 </Box>
 
@@ -129,10 +129,10 @@ export default function CardInput({ formData, handleInputChange }) {
                     onChange={handleCvvInput}
                     InputProps={{
                         disableUnderline: true,
-                        style: { width: 38, fontSize: 18, textAlign: "center" },
+                        style: { width: 38, fontSize: 14, textAlign: "center" },
                         inputProps: { maxLength: 4, inputMode: "numeric" },
                     }}
-                    sx={{ flex: 0.9, ".MuiInputBase-input": { padding: "8px 0", textAlign: "center" } }}
+                    sx={{ flex: 0.9, ".MuiInputBase-input": { padding: "8px 0", textAlign: "center", fontSize: 14 } }}
                 />
             </Box>
         </Box>

@@ -90,6 +90,7 @@ export const basePalette = {
   common,
   grey,
   divider: varAlpha(grey['500Channel'], 0.2),
+  dividerLowOpacity: varAlpha(grey['500Channel'], 0.17),
 };
 
 export const palette = {
