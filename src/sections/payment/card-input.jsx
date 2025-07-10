@@ -39,13 +39,13 @@ export default function CardInput({ formData, handleInputChange }) {
     return (
         <Box
             sx={{
-                border: "1px solid #ddd",
+                border: "1px solid",
+                borderColor: "divider",
                 borderRadius: "12px",
                 display: "flex",
                 alignItems: "center",
                 padding: "6px 12px",
                 gap: 1,
-                background: "#fff",
                 width: "100%"
             }}
         >
@@ -53,7 +53,7 @@ export default function CardInput({ formData, handleInputChange }) {
             <TextField
                 inputRef={cardRef}
                 label=""
-                placeholder="Card Number"
+                placeholder="Número do Cartão"
                 variant="standard"
                 value={formData.cardNumber}
                 onChange={handleCardInput}
@@ -106,7 +106,7 @@ export default function CardInput({ formData, handleInputChange }) {
                     <TextField
                         inputRef={yearRef}
                         label=""
-                        placeholder="YY"
+                        placeholder="AA"
                         variant="standard"
                         value={formData.expiryYear}
                         onChange={handleYearInput}
