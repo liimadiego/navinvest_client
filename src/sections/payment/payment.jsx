@@ -528,6 +528,22 @@ export function Payment() {
 
                             {paymentMethod !== 'pix' ? (
                                 <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            fullWidth
+                                            label="Nome e Sobrenome*"
+                                            value={formData.fullName}
+                                            onChange={handleInputChange('fullName')}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            fullWidth
+                                            label="CPF*"
+                                            value={formData.cpf}
+                                            onChange={handleInputChange('cpf')}
+                                        />
+                                    </Grid>
                                     <Grid item xs={12} sm={12}>
                                         <CardInput formData={formData} handleInputChange={handleInputChange} />
                                     </Grid>
