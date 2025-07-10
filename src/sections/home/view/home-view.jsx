@@ -22,7 +22,7 @@ import {
   IconButton,
   SwipeableDrawer,
   Avatar,
-  Stack
+  Stack,
 } from '@mui/material';
 import {
   CheckCircle,
@@ -42,7 +42,7 @@ import {
   Menu,
   BarChart,
   PersonOutline,
-  Star
+  Star,
 } from '@mui/icons-material';
 import { m } from 'framer-motion';
 import FAQAccordion from '../components/faqs';
@@ -65,13 +65,13 @@ const customTheme = createTheme({
       paper: '#1E1E2A',
       default: '#13131A',
       card: '#262636',
-      gradient: 'linear-gradient(145deg, #0236fc 0%, #345efc 100%)'
+      gradient: 'linear-gradient(145deg, #0236fc 0%, #345efc 100%)',
     },
     text: {
       primary: '#ffffff',
       secondary: '#B4B4C7',
     },
-    divider: 'rgba(255,255,255,0.08)'
+    divider: 'rgba(255,255,255,0.08)',
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -82,7 +82,7 @@ const customTheme = createTheme({
       letterSpacing: '-0.02em',
       '@media (min-width:600px)': {
         fontSize: '3.5rem',
-      }
+      },
     },
     h2: {
       fontWeight: 700,
@@ -91,7 +91,7 @@ const customTheme = createTheme({
       letterSpacing: '-0.01em',
       '@media (min-width:600px)': {
         fontSize: '2.5rem',
-      }
+      },
     },
     h3: {
       fontWeight: 700,
@@ -99,7 +99,7 @@ const customTheme = createTheme({
       lineHeight: 1.3,
       '@media (min-width:600px)': {
         fontSize: '2rem',
-      }
+      },
     },
     h4: {
       fontWeight: 700,
@@ -107,7 +107,7 @@ const customTheme = createTheme({
       lineHeight: 1.4,
       '@media (min-width:600px)': {
         fontSize: '1.5rem',
-      }
+      },
     },
     body1: {
       fontWeight: 400,
@@ -115,7 +115,7 @@ const customTheme = createTheme({
       lineHeight: 1.7,
       '@media (min-width:600px)': {
         fontSize: '1.1rem',
-      }
+      },
     },
     body2: {
       fontWeight: 400,
@@ -123,11 +123,11 @@ const customTheme = createTheme({
       lineHeight: 1.4,
       '@media (min-width:600px)': {
         fontSize: '1rem',
-      }
-    }
+      },
+    },
   },
   shape: {
-    borderRadius: 16
+    borderRadius: 16,
   },
   components: {
     MuiButton: {
@@ -138,7 +138,7 @@ const customTheme = createTheme({
           fontWeight: 600,
           textTransform: 'none',
           boxShadow: 'none',
-          transition: 'all 0.3s ease'
+          transition: 'all 0.3s ease',
         },
       },
     },
@@ -147,9 +147,9 @@ const customTheme = createTheme({
         root: {
           borderRadius: 16,
           boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-          overflow: 'hidden'
-        }
-      }
+          overflow: 'hidden',
+        },
+      },
     },
     MuiContainer: {
       styleOverrides: {
@@ -159,11 +159,11 @@ const customTheme = createTheme({
           '@media (min-width:600px)': {
             paddingLeft: 24,
             paddingRight: 24,
-          }
-        }
-      }
-    }
-  }
+          },
+        },
+      },
+    },
+  },
 });
 
 const TESTIMONIALS = [
@@ -202,7 +202,7 @@ const TESTIMONIALS = [
     category: 'A IA é incrível',
     rating: 5,
     content: `É incrível onde a tecnologia chegou, a IA parece uma pessoa de verdade, um analista de investimentos`,
-  }
+  },
 ];
 
 export function HomeView() {
@@ -216,23 +216,27 @@ export function HomeView() {
   useEffect(() => {
     const sections = ['hero', 'comparison', 'how', 'testimonials', 'plans'];
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setVisibleSection(entry.target.id);
-        }
-      });
-    }, { threshold: 0.3 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
 
-    sections.forEach(section => {
+    sections.forEach((section) => {
       const element = document.getElementById(section);
       if (element) observer.observe(element);
     });
 
-    return () => sections.forEach(section => {
-      const element = document.getElementById(section);
-      if (element) observer.unobserve(element);
-    });
+    return () =>
+      sections.forEach((section) => {
+        const element = document.getElementById(section);
+        if (element) observer.unobserve(element);
+      });
   }, []);
 
   const CTAButton = ({ children, variant = 'contained', size = 'large', sx = {}, ...props }) => (
@@ -255,7 +259,7 @@ export function HomeView() {
         '&:active': {
           transform: 'translateY(1px)',
         },
-        ...sx
+        ...sx,
       }}
       {...props}
     >
@@ -278,7 +282,7 @@ export function HomeView() {
         bgcolor: 'background.card',
         border: '1px solid',
         borderColor: alpha(theme.palette.primary.main, 0.1),
-        overflow: 'visible'
+        overflow: 'visible',
       }}
     >
       <CardContent sx={{ p: 3 }}>
@@ -292,7 +296,7 @@ export function HomeView() {
             alignItems: 'center',
             justifyContent: 'center',
             mb: 2,
-            color: 'primary.main'
+            color: 'primary.main',
           }}
         >
           {icon}
@@ -332,7 +336,7 @@ export function HomeView() {
           sx={{
             maxWidth: center ? '800px' : 'none',
             mx: center ? 'auto' : 0,
-            fontSize: { xs: '1rem', md: '1.125rem' }
+            fontSize: { xs: '1rem', md: '1.125rem' },
           }}
         >
           {subtitle}
@@ -343,17 +347,18 @@ export function HomeView() {
 
   return (
     <ThemeProvider theme={customTheme}>
-      <Box sx={{
-        bgcolor: 'background.default',
-        minHeight: '100vh',
-        overflow: 'hidden',
-        position: 'relative'
-      }}>
+      <Box
+        sx={{
+          bgcolor: 'background.default',
+          minHeight: '100vh',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
         <Box
           id="hero"
           sx={{
-            py: { xs: 6, md: 0 },
-            pt: { xs: 3, md: 0 },
+            py: { xs: 10, md: 12 },
             position: 'relative',
             // height: { xs: 'auto', md: 'calc(100vh - 64px)' },
             minHeight: 'calc(100vh - 64px)',
@@ -387,7 +392,8 @@ export function HomeView() {
                         // fontSize: 100,
                       }}
                     >
-                      Conheça a inteligência artificial que está revolucionando os investimentos e agora trabalha pra você.
+                      Conheça a inteligência artificial que está revolucionando os investimentos e
+                      agora trabalha pra você.
                     </Typography>
 
                     <Typography
@@ -395,16 +401,25 @@ export function HomeView() {
                       color="text.secondary"
                       sx={{ mb: 4, fontSize: { xs: '1rem', md: '1.125rem' } }}
                     >
-                      Imagine ter um assessor que nunca dorme, não tem comissões ocultas e age 100% no seu interesse. A Navinvest é a primeira IA no Brasil dedicada exclusivamente a ajudar investidores a tomarem decisões mais inteligentes, com base em dados e sem conflitos de interesse.
+                      Imagine ter um assessor que nunca dorme, não tem comissões ocultas e age 100%
+                      no seu interesse. A Navinvest é a primeira IA no Brasil dedicada
+                      exclusivamente a ajudar investidores a tomarem decisões mais inteligentes, com
+                      base em dados e sem conflitos de interesse.
                     </Typography>
 
                     <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-                      <CTAButton>
-                        Comece agora a usar a IA que pensa como você
-                      </CTAButton>
+                      <CTAButton>Comece agora a usar a IA que pensa como você</CTAButton>
                     </Box>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 2,
+                        flexWrap: 'wrap',
+                        justifyContent: 'center',
+                      }}
+                    >
                       <Box sx={{ display: 'flex' }}>
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} sx={{ color: '#FFD700', fontSize: 18 }} />
@@ -414,12 +429,12 @@ export function HomeView() {
                         <strong>4.95/5</strong> com mais de <strong>1.200+ avaliações</strong>
                       </Typography>
                       <Chip
-                        label="7 dias grátis"
+                        label="1º mês por R$1"
                         size="small"
                         sx={{
                           bgcolor: alpha(theme.palette.primary.main, 0.3),
                           color: 'primary.lighter',
-                          fontWeight: 600
+                          fontWeight: 600,
                         }}
                       />
                     </Box>
@@ -433,7 +448,7 @@ export function HomeView() {
                         // Scroll to the next section with 64px offset
                         window.scrollTo({
                           top: nextSection.offsetTop,
-                          behavior: 'smooth'
+                          behavior: 'smooth',
                         });
                       }
                     }}
@@ -464,11 +479,11 @@ export function HomeView() {
         <Box
           id="comparison"
           sx={{
-            py: { xs: 6, md: 0 },
+            py: { xs: 10, md: 12 },
             minHeight: { xs: 'auto', md: 'calc(100vh - 64px)' },
             display: 'flex',
             alignItems: 'center',
-            bgcolor: alpha(theme.palette.background.paper, 0.3)
+            bgcolor: alpha(theme.palette.background.paper, 0.3),
           }}
         >
           <Container maxWidth="lg">
@@ -503,12 +518,7 @@ export function HomeView() {
                         'Agem por interesse próprio',
                         'Recomendam produtos com altas comissões',
                       ].map((item, index) => (
-                        <ListItem
-                          key={index}
-                          disableGutters
-                          disablePadding
-                          sx={{ mb: 2 }}
-                        >
+                        <ListItem key={index} disableGutters disablePadding sx={{ mb: 2 }}>
                           <ListItemIcon sx={{ minWidth: 36 }}>
                             <Close sx={{ color: 'error.main' }} />
                           </ListItemIcon>
@@ -539,7 +549,15 @@ export function HomeView() {
                   }}
                 >
                   <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h4" sx={{ mb: 3, color: theme.palette.mode == 'light' ? theme.palette.primary.dark : 'inherit', fontWeight: 'bold' }}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        mb: 3,
+                        color:
+                          theme.palette.mode == 'light' ? theme.palette.primary.dark : 'inherit',
+                        fontWeight: 'bold',
+                      }}
+                    >
                       Navinvest AI
                     </Typography>
                     <List disablePadding>
@@ -547,20 +565,18 @@ export function HomeView() {
                         { text: 'Analisa ativos com profundidade', icon: <Shield /> },
                         { text: 'Compara oportunidades em tempo real', icon: <Bolt /> },
                         { text: 'Interpreta movimentos do mercado', icon: <Assessment /> },
-                        { text: 'Entrega insights imparciais como nenhum outro sistema', icon: <Verified /> }
+                        {
+                          text: 'Entrega insights imparciais como nenhum outro sistema',
+                          icon: <Verified />,
+                        },
                       ].map((item, index) => (
-                        <ListItem
-                          key={index}
-                          disableGutters
-                          disablePadding
-                          sx={{ mb: 2 }}
-                        >
+                        <ListItem key={index} disableGutters disablePadding sx={{ mb: 2 }}>
                           <ListItemIcon sx={{ minWidth: 36, color: 'primary.light' }}>
                             <CheckCircle />
                           </ListItemIcon>
                           <ListItemText
                             primary={item.text}
-                          // primaryTypographyProps={{ color: 'primary.contrastText' }}
+                            // primaryTypographyProps={{ color: 'primary.contrastText' }}
                           />
                         </ListItem>
                       ))}
@@ -578,14 +594,12 @@ export function HomeView() {
               viewport={{ once: true }}
               sx={{
                 mt: 6,
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
-              <CTAButton>
-                Experimente sem compromisso
-              </CTAButton>
+              <CTAButton>Experimente sem compromisso</CTAButton>
               <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
-                7 dias grátis, cancele quando quiser
+                Primeiro mês por apenas R$1
               </Typography>
             </Box>
           </Container>
@@ -595,7 +609,7 @@ export function HomeView() {
         <Box
           id="faq"
           sx={{
-            py: { xs: 6, md: 0 },
+            py: { xs: 10, md: 12 },
             minHeight: 'calc(100vh - 64px)',
             display: 'flex',
             alignItems: 'center',
@@ -622,14 +636,16 @@ export function HomeView() {
                     bgcolor: 'background.card',
                     border: '1px solid',
                     borderColor: 'divider',
-                    height: '100%'
+                    height: '100%',
                   }}
                 >
                   <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
                     "Não sou especialista em investimentos. Vou conseguir usar?"
                   </Typography>
                   <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                    <strong>Sim!</strong> A Navinvest usa linguagem natural. Você pergunta como se estivesse conversando com um assessor no WhatsApp e a IA te responde com clareza.
+                    <strong>Sim!</strong> A Navinvest usa linguagem natural. Você pergunta como se
+                    estivesse conversando com um assessor no WhatsApp e a IA te responde com
+                    clareza.
                   </Typography>
                 </Box>
               </Grid>
@@ -647,14 +663,15 @@ export function HomeView() {
                     bgcolor: 'background.card',
                     border: '1px solid',
                     borderColor: 'divider',
-                    height: '100%'
+                    height: '100%',
                   }}
                 >
                   <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
                     "Posso confiar nas sugestões?"
                   </Typography>
                   <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                    <strong>Sim.</strong> Diferente de um assessor com metas de venda, a IA foi programada para agir no seu melhor interesse — sem influências externas.
+                    <strong>Sim.</strong> Diferente de um assessor com metas de venda, a IA foi
+                    programada para agir no seu melhor interesse — sem influências externas.
                   </Typography>
                 </Box>
               </Grid>
@@ -672,14 +689,15 @@ export function HomeView() {
                     bgcolor: 'background.card',
                     border: '1px solid',
                     borderColor: 'divider',
-                    height: '100%'
+                    height: '100%',
                   }}
                 >
                   <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
                     "Já invisto. Isso é útil pra mim?"
                   </Typography>
                   <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                    <strong>Muito.</strong> A IA analisa sua carteira atual, simula rendimentos passados e aponta pontos de melhoria baseados em dados e histórico real.
+                    <strong>Muito.</strong> A IA analisa sua carteira atual, simula rendimentos
+                    passados e aponta pontos de melhoria baseados em dados e histórico real.
                   </Typography>
                 </Box>
               </Grid>
@@ -693,12 +711,10 @@ export function HomeView() {
               viewport={{ once: true }}
               sx={{
                 mt: 6,
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
-              <CTAButton>
-                Veja como investir pode ser simples
-              </CTAButton>
+              <CTAButton>Veja como investir pode ser simples</CTAButton>
             </Box>
           </Container>
         </Box>
@@ -707,11 +723,11 @@ export function HomeView() {
         <Box
           id="what-is"
           sx={{
-            py: { xs: 6, md: 0 },
+            py: { xs: 10, md: 12 },
             minHeight: 'calc(100vh - 64px)',
             display: 'flex',
             alignItems: 'center',
-            background: alpha(theme.palette.background.paper, 0.3)
+            background: alpha(theme.palette.background.paper, 0.3),
           }}
         >
           <Container maxWidth="lg">
@@ -733,7 +749,7 @@ export function HomeView() {
                 bgcolor: 'background.card',
                 border: '1px solid',
                 borderColor: 'divider',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               <Typography
@@ -743,10 +759,13 @@ export function HomeView() {
                   lineHeight: 1.4,
                   color: 'text.primary',
                   maxWidth: 800,
-                  mx: 'auto'
+                  mx: 'auto',
                 }}
               >
-                A Navinvest é uma plataforma digital com inteligência artificial que centraliza todas as informações dos ativos brasileiros e americanos, incluindo dados históricos, cotações, comparações, notícias e análises — tudo interpretado por uma IA que conversa com você.
+                A Navinvest é uma plataforma digital com inteligência artificial que centraliza
+                todas as informações dos ativos brasileiros e americanos, incluindo dados
+                históricos, cotações, comparações, notícias e análises — tudo interpretado por uma
+                IA que conversa com você.
               </Typography>
 
               <Typography
@@ -755,7 +774,7 @@ export function HomeView() {
                   mb: 4,
                   lineHeight: 1.4,
                   color: 'primary.light',
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
                 }}
               >
                 É como ter um analista de dados e um consultor neutro em um só lugar.
@@ -772,7 +791,7 @@ export function HomeView() {
         <Box
           id="testimonials"
           sx={{
-            py: { xs: 6, md: 0 },
+            py: { xs: 10, md: 12 },
             // bgcolor: alpha(theme.palette.background.paper, 0.3),
             minHeight: 'calc(100vh - 64px)',
             display: 'flex',
@@ -790,7 +809,7 @@ export function HomeView() {
                 display: 'flex',
                 flexDirection: { xs: 'column', md: 'row' },
                 gap: 3,
-                mb: 6
+                mb: 6,
               }}
             >
               {TESTIMONIALS.map((testimonial, index) => (
@@ -807,10 +826,18 @@ export function HomeView() {
                     flexDirection: 'column',
                     bgcolor: 'background.card',
                     border: '1px solid',
-                    borderColor: 'divider'
+                    borderColor: 'divider',
                   }}
                 >
-                  <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                  <CardContent
+                    sx={{
+                      p: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      height: '100%',
+                    }}
+                  >
                     <Box>
                       <Rating value={testimonial.rating} readOnly size="small" sx={{ mb: 2 }} />
 
@@ -819,7 +846,7 @@ export function HomeView() {
                         color="text.secondary"
                         sx={{
                           mb: 3,
-                          minHeight: { xs: 'auto', md: 120 }
+                          minHeight: { xs: 'auto', md: 120 },
                         }}
                       >
                         "{testimonial.content}"
@@ -830,7 +857,7 @@ export function HomeView() {
                       <Avatar
                         sx={{
                           bgcolor: alpha(theme.palette.primary.main, 0.1),
-                          color: 'primary.main'
+                          color: 'primary.main',
                         }}
                       >
                         {testimonial.avatar}
@@ -855,9 +882,7 @@ export function HomeView() {
               viewport={{ once: true }}
               sx={{ textAlign: 'center' }}
             >
-              <CTAButton>
-                Junte-se a milhares de usuários satisfeitos
-              </CTAButton>
+              <CTAButton>Junte-se a milhares de usuários satisfeitos</CTAButton>
             </Box>
           </Container>
         </Box>
@@ -866,11 +891,11 @@ export function HomeView() {
         <Box
           id="how-it-works"
           sx={{
-            py: { xs: 6, md: 0 },
+            py: { xs: 10, md: 12 },
             minHeight: 'calc(100vh - 64px)',
             display: 'flex',
             alignItems: 'center',
-            bgcolor: alpha(theme.palette.background.paper, 0.3)
+            bgcolor: alpha(theme.palette.background.paper, 0.3),
           }}
         >
           <Container maxWidth="lg">
@@ -892,7 +917,7 @@ export function HomeView() {
                 bgcolor: 'background.card',
                 border: '1px solid',
                 borderColor: 'divider',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               <Typography
@@ -902,10 +927,12 @@ export function HomeView() {
                   lineHeight: 1.4,
                   color: 'text.primary',
                   maxWidth: 800,
-                  mx: 'auto'
+                  mx: 'auto',
                 }}
               >
-                Você acessa a plataforma, abre o chat e conversa com a IA. Pode pedir uma análise de qualquer ativo, comparar dois ou mais investimentos, entender notícias do dia e até simular como sua carteira teria se comportado nos últimos anos.
+                Você acessa a plataforma, abre o chat e conversa com a IA. Pode pedir uma análise de
+                qualquer ativo, comparar dois ou mais investimentos, entender notícias do dia e até
+                simular como sua carteira teria se comportado nos últimos anos.
               </Typography>
 
               <Typography
@@ -914,15 +941,14 @@ export function HomeView() {
                   mb: 4,
                   lineHeight: 1.4,
                   color: 'primary.light',
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
                 }}
               >
-                A IA busca dados dos principais ativos do Brasil e dos EUA e organiza tudo pra você entender de forma simples, visual e estratégica.
+                A IA busca dados dos principais ativos do Brasil e dos EUA e organiza tudo pra você
+                entender de forma simples, visual e estratégica.
               </Typography>
 
-              <CTAButton>
-                Experimente agora o poder de investir com embasamento real
-              </CTAButton>
+              <CTAButton>Experimente agora o poder de investir com embasamento real</CTAButton>
             </Box>
           </Container>
         </Box>
@@ -930,7 +956,7 @@ export function HomeView() {
         <Box
           id="two-paths"
           sx={{
-            py: { xs: 6, md: 0 },
+            py: { xs: 10, md: 12 },
             minHeight: 'calc(100vh - 64px)',
             display: 'flex',
             alignItems: 'center',
@@ -969,12 +995,7 @@ export function HomeView() {
                         'Tomar decisões sem clareza ou embasamento real',
                         'Depender de assessores com conflito de interesse',
                       ].map((item, index) => (
-                        <ListItem
-                          key={index}
-                          disableGutters
-                          disablePadding
-                          sx={{ mb: 2 }}
-                        >
+                        <ListItem key={index} disableGutters disablePadding sx={{ mb: 2 }}>
                           <ListItemIcon sx={{ minWidth: 36 }}>
                             <Close sx={{ color: 'error.main' }} />
                           </ListItemIcon>
@@ -1004,28 +1025,35 @@ export function HomeView() {
                   }}
                 >
                   <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h4" sx={{ mb: 3, color: theme.palette.mode === 'light' ? theme.palette.primary.dark : 'inherit', fontWeight: 'bold' }}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        mb: 3,
+                        color:
+                          theme.palette.mode === 'light' ? theme.palette.primary.dark : 'inherit',
+                        fontWeight: 'bold',
+                      }}
+                    >
                       Com Navinvest
                     </Typography>
                     <List disablePadding>
                       {[
-                        { text: 'Todas as informações centralizadas em um só lugar', icon: <Shield /> },
+                        {
+                          text: 'Todas as informações centralizadas em um só lugar',
+                          icon: <Shield />,
+                        },
                         { text: 'Análises imparciais sem conflito de interesse', icon: <Bolt /> },
                         { text: 'Insights profundos sobre qualquer ativo', icon: <Assessment /> },
-                        { text: 'IA que trabalha 24/7 exclusivamente para você', icon: <Verified /> }
+                        {
+                          text: 'IA que trabalha 24/7 exclusivamente para você',
+                          icon: <Verified />,
+                        },
                       ].map((item, index) => (
-                        <ListItem
-                          key={index}
-                          disableGutters
-                          disablePadding
-                          sx={{ mb: 2 }}
-                        >
+                        <ListItem key={index} disableGutters disablePadding sx={{ mb: 2 }}>
                           <ListItemIcon sx={{ minWidth: 36, color: 'primary.light' }}>
                             <CheckCircle />
                           </ListItemIcon>
-                          <ListItemText
-                            primary={item.text}
-                          />
+                          <ListItemText primary={item.text} />
                         </ListItem>
                       ))}
                     </List>
@@ -1042,14 +1070,12 @@ export function HomeView() {
               viewport={{ once: true }}
               sx={{
                 mt: 6,
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
-              <CTAButton>
-                Escolha o caminho inteligente
-              </CTAButton>
+              <CTAButton>Escolha o caminho inteligente</CTAButton>
               <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
-                7 dias grátis, cancele quando quiser
+                Primeiro mês por apenas R$1
               </Typography>
             </Box>
           </Container>
@@ -1059,11 +1085,11 @@ export function HomeView() {
         <Box
           id="pricing"
           sx={{
-            py: { xs: 6, md: 8 },
+            py: { xs: 10, md: 12 },
             minHeight: 'calc(100vh - 64px)',
             display: 'flex',
             alignItems: 'center',
-            bgcolor: alpha(theme.palette.background.paper, 0.3)
+            bgcolor: alpha(theme.palette.background.paper, 0.3),
           }}
         >
           <Container maxWidth="lg">
@@ -1086,17 +1112,41 @@ export function HomeView() {
                     bgcolor: 'background.card',
                     border: '1px solid',
                     borderColor: alpha(theme.palette.primary.main, 0.2),
-                    position: 'relative'
+                    position: 'relative',
                   }}
                 >
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: -12,
+                      right: { xs: 'calc(50% - 60px)', md: 24 },
+                      bgcolor: 'background.gradient',
+                      color: 'white',
+                      px: 2,
+                      py: 0.5,
+                      borderRadius: 2,
+                      fontWeight: 'bold',
+                      fontSize: '0.875rem',
+                      zIndex: 1,
+                      boxShadow: `0 4px 8px ${alpha(theme.palette.primary.main, 0.25)}`,
+                      background: theme.palette.primary.main,
+                    }}
+                  >
+                    1º mês R$1
+                  </Box>
                   <CardContent sx={{ p: 4 }}>
-                    <Typography variant="h4" sx={{ mb: 1, fontWeight: 600, color: 'primary.light' }}>
+                    <Typography
+                      variant="h4"
+                      sx={{ mb: 1, fontWeight: 600, color: 'primary.light' }}
+                    >
                       Plano Mensal
                     </Typography>
 
                     <Typography variant="h3" sx={{ mb: 2, fontWeight: 700 }}>
                       R$59,99
-                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês</Typography>
+                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>
+                        /mês
+                      </Typography>
                     </Typography>
 
                     <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
@@ -1109,20 +1159,13 @@ export function HomeView() {
                         'Simulações, comparações e análises diárias',
                         'Notícias e relatórios do mercado',
                         'Cancelamento fácil e rápido',
-                        'Teste grátis por 7 dias'
+                        'Primeiro mês por apenas R$1',
                       ].map((item, index) => (
-                        <ListItem
-                          key={index}
-                          disableGutters
-                          disablePadding
-                          sx={{ mb: 2 }}
-                        >
+                        <ListItem key={index} disableGutters disablePadding sx={{ mb: 2 }}>
                           <ListItemIcon sx={{ minWidth: 36, color: 'primary.light' }}>
                             <CheckCircle />
                           </ListItemIcon>
-                          <ListItemText
-                            primary={item}
-                          />
+                          <ListItemText primary={item} />
                         </ListItem>
                       ))}
                     </List>
@@ -1144,7 +1187,7 @@ export function HomeView() {
                     border: '1px solid',
                     borderColor: alpha(theme.palette.primary.main, 0.3),
                     position: 'relative',
-                    overflow: 'visible'
+                    overflow: 'visible',
                   }}
                 >
                   <Box
@@ -1174,7 +1217,9 @@ export function HomeView() {
 
                     <Typography variant="h3" sx={{ mb: 1, fontWeight: 700 }}>
                       R$47,99
-                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês</Typography>
+                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>
+                        /mês
+                      </Typography>
                     </Typography>
 
                     <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
@@ -1190,21 +1235,16 @@ export function HomeView() {
                         'Todos os recursos do plano mensal',
                         'Economia de mais de R$140 por ano',
                         'Acesso garantido por 12 meses sem reajustes',
-                        'Tranquilidade para planejar sua carteira com visão de longo prazo'
+                        'Tranquilidade para planejar sua carteira com visão de longo prazo',
                       ].map((item, index) => (
-                        <ListItem
-                          key={index}
-                          disableGutters
-                          disablePadding
-                          sx={{ mb: 2 }}
-                        >
+                        <ListItem key={index} disableGutters disablePadding sx={{ mb: 2 }}>
                           <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
                             <CheckCircle />
                           </ListItemIcon>
                           <ListItemText
                             primary={item}
                             primaryTypographyProps={{
-                              fontWeight: index === 1 ? 600 : 400
+                              fontWeight: index === 1 ? 600 : 400,
                             }}
                           />
                         </ListItem>
@@ -1223,16 +1263,14 @@ export function HomeView() {
               viewport={{ once: true }}
               sx={{
                 mt: 6,
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
-                Cancelamento sem complicações. Teste grátis por 7 dias, sem compromisso.
+                Cancelamento sem complicações. Primeiro mês por apenas R$1.
               </Typography>
 
-              <CTAButton>
-                Comece agora com o melhor assistente de investimentos
-              </CTAButton>
+              <CTAButton>Comece agora com o melhor assistente de investimentos</CTAButton>
             </Box>
           </Container>
         </Box>
@@ -1241,17 +1279,14 @@ export function HomeView() {
         <Box
           id="final-cta"
           sx={{
-            py: { xs: 6, md: 0 },
+            py: { xs: 10, md: 12 },
             minHeight: 'calc(100vh - 64px)',
             display: 'flex',
             alignItems: 'center',
           }}
         >
           <Container maxWidth="lg">
-            <SectionTitle
-              title="Sua nova maneira de investir começa hoje"
-              subtitle=""
-            />
+            <SectionTitle title="Sua nova maneira de investir começa hoje" subtitle="" />
 
             <Box
               component={m.div}
@@ -1266,7 +1301,7 @@ export function HomeView() {
                 bgcolor: 'background.card',
                 border: '1px solid',
                 borderColor: 'divider',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               <Typography
@@ -1276,10 +1311,11 @@ export function HomeView() {
                   lineHeight: 1.4,
                   color: 'text.primary',
                   maxWidth: 700,
-                  mx: 'auto'
+                  mx: 'auto',
                 }}
               >
-                O mundo dos investimentos mudou. E quem quiser melhores resultados vai precisar de mais do que intuição: vai precisar de inteligência.
+                O mundo dos investimentos mudou. E quem quiser melhores resultados vai precisar de
+                mais do que intuição: vai precisar de inteligência.
               </Typography>
 
               <Typography
@@ -1289,15 +1325,14 @@ export function HomeView() {
                   lineHeight: 1.4,
                   color: 'text.secondary',
                   maxWidth: 700,
-                  mx: 'auto'
+                  mx: 'auto',
                 }}
               >
-                Não é mais sobre ter tempo — é sobre ter a ferramenta certa. A Navinvest é essa ferramenta. E você pode experimentar agora mesmo.
+                Não é mais sobre ter tempo — é sobre ter a ferramenta certa. A Navinvest é essa
+                ferramenta. E você pode experimentar agora mesmo.
               </Typography>
 
-              <CTAButton>
-                Comece agora com o plano ideal para o seu perfil
-              </CTAButton>
+              <CTAButton>Comece agora com o plano ideal para o seu perfil</CTAButton>
             </Box>
           </Container>
         </Box>
@@ -1306,11 +1341,11 @@ export function HomeView() {
         <Box
           id="pricing"
           sx={{
-            py: { xs: 6, md: 8 },
+            py: { xs: 10, md: 12 },
             minHeight: 'calc(100vh - 64px)',
             display: 'flex',
             alignItems: 'center',
-            bgcolor: alpha(theme.palette.background.paper, 0.3)
+            bgcolor: alpha(theme.palette.background.paper, 0.3),
           }}
         >
           <FAQAccordion />
@@ -1320,10 +1355,10 @@ export function HomeView() {
         <Box
           id="final-decision"
           sx={{
-            py: { xs: 8, md: 12 },
+            py: { xs: 10, md: 12 },
             mt: { xs: 4, md: 0 },
             background: 'linear-gradient(135deg, #02c 0%, #6786fd 100%)',
-            color: 'white'
+            color: 'white',
           }}
         >
           <Container maxWidth="lg">
@@ -1339,7 +1374,7 @@ export function HomeView() {
                 borderRadius: 4,
                 bgcolor: 'rgba(255, 255, 255, 0.1)',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)'
+                border: '1px solid rgba(255, 255, 255, 0.2)',
               }}
             >
               <Typography
@@ -1347,7 +1382,7 @@ export function HomeView() {
                 sx={{
                   mb: 4,
                   fontWeight: 'bold',
-                  color: 'white'
+                  color: 'white',
                 }}
               >
                 Você ainda vai investir como antes? Ou vai deixar a inteligência trabalhar por você?
@@ -1360,10 +1395,11 @@ export function HomeView() {
                   lineHeight: 1.4,
                   color: 'rgba(255, 255, 255, 0.9)',
                   maxWidth: 600,
-                  mx: 'auto'
+                  mx: 'auto',
                 }}
               >
-                A escolha é sua. Continuar buscando dados em mil lugares, ou conversar com uma IA treinada para te ajudar a decidir melhor?
+                A escolha é sua. Continuar buscando dados em mil lugares, ou conversar com uma IA
+                treinada para te ajudar a decidir melhor?
               </Typography>
 
               <Button
@@ -1381,13 +1417,13 @@ export function HomeView() {
                   '&:hover': {
                     bgcolor: 'rgba(255, 255, 255, 0.9)',
                     transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 25px rgba(0,0,0,0.1)'
+                    boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
                   },
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
                 }}
                 onClick={() => navigate(paths.payment)}
               >
-                Comece agora com 7 dias grátis
+                Comece agora por R$1 no primeiro mês
               </Button>
             </Box>
           </Container>
