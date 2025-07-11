@@ -1098,7 +1098,7 @@ export function HomeView() {
                       <span style={{ textDecoration: 'line-through', opacity: 0.6, fontSize: '0.875rem' }}>R$59,99</span><br />
                       <span>R$26,99</span>
                       <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês </Typography>
-                      <span style={{ opacity: 0.8, fontSize: '0.95rem' }}>Por tempo limitado</span>
+                      <i style={{ opacity: 0.8, fontSize: '0.95rem' }}>No primeiro ano</i>
                     </Typography>
 
                     <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
@@ -1178,7 +1178,7 @@ export function HomeView() {
                       <span style={{ textDecoration: 'line-through', opacity: 0.6, fontSize: '0.875rem' }}>R$47,99</span><br />
                       <span>R$21,59</span>
                       <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês </Typography>
-                      <span style={{ opacity: 0.6, fontSize: '0.875rem' }}>Por tempo limitado</span>
+                      <i style={{ opacity: 0.6, fontSize: '0.875rem' }}>No primeiro ano</i>
                     </Typography>
 
                     <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>

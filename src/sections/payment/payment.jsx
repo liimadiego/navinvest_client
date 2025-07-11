@@ -408,7 +408,7 @@ export function Payment() {
                         {/* Billing Preference */}
                         <Box sx={{ mb: 4 }}>
                             <Typography variant="h6" component="h2" gutterBottom fontWeight="medium">
-                                Preferência de cobrança
+                                Preferência de cobrança - 55% off no primeiro ano
                             </Typography>
                             <FormControl component="fieldset" sx={{ mt: 2, width: '100%' }}>
                                 <RadioGroup
