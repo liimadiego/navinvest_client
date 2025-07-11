@@ -41,14 +41,14 @@ export const mainRoutes = [
       //     { path: 'faqs', element: <FaqsPage /> },
       //   ],
       // },
-      {
-        path: 'planos',
-        element: (
-          <SimpleLayout>
-            <PricingPage />
-          </SimpleLayout>
-        ),
-      },
+      // {
+      //   path: 'planos',
+      //   element: (
+      //     <SimpleLayout>
+      //       <PricingPage />
+      //     </SimpleLayout>
+      //   ),
+      // },
       {
         path: 'politica-privacidade',
         element: (

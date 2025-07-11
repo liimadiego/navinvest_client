@@ -122,7 +122,7 @@ export function HomeHero({ sx, ...other }) {
         <Stack spacing={2.5} sx={{ alignItems: 'center' }}>
           <Button
             component={RouterLink}
-            href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.pricing}
+            href={import.meta.env.VITE_FOCUS === 'register' ? paths.auth.jwt.signUp : paths.payment}
             size="large"
             startIcon={<Iconify width={24} icon="iconoir:flash" />}
             sx={(theme) => ({
