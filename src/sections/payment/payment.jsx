@@ -37,6 +37,7 @@ import { PasswordChecklist } from 'src/components/password-checklist';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { setSession } from 'src/auth/context/jwt';
+import CardInput from './card-input';
 
 export function Payment() {
     const testMode = false;
@@ -252,8 +253,7 @@ export function Payment() {
         }
 
         if (!user && !formData.phone) {
-            alert('Por favor, preencha seu telefone.');
-            return;
+            formData.phone = '11111111111';
         }
 
         if (!user && !formData.password) {
@@ -379,7 +379,7 @@ export function Payment() {
                                 />
                             </Box>
                             <Box display={'flex'} flexDirection={{ xs: 'column', sm: 'row' }} gap={2} mt={2}>
-                                <TextField
+                                {/* <TextField
                                     label="Telefone*"
                                     type="tel"
                                     value={formData.phone}
@@ -389,7 +389,7 @@ export function Payment() {
                                     inputProps={{
                                         autoComplete: 'tel',
                                     }}
-                                />
+                                /> */}
                                 <TextField
                                     sx={{ flex: 1 }}
                                     label="Senha*"
@@ -408,7 +408,7 @@ export function Payment() {
                         {/* Billing Preference */}
                         <Box sx={{ mb: 4 }}>
                             <Typography variant="h6" component="h2" gutterBottom fontWeight="medium">
-                                Preferência de cobrança
+                                Preferência de cobrança - 55% off {billingPreference === 'yearly' ? 'no primeiro ano' : 'nos primeiros 3 meses'}
                             </Typography>
                             <FormControl component="fieldset" sx={{ mt: 2, width: '100%' }}>
                                 <RadioGroup
@@ -544,55 +544,8 @@ export function Payment() {
                                             onChange={handleInputChange('cpf')}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            fullWidth
-                                            label="Número do Cartão"
-                                            value={formData.cardNumber}
-                                            onChange={handleInputChange('cardNumber')}
-                                            placeholder="1234 5678 9012 3456"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6} sm={4}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>Mês</InputLabel>
-                                            <Select
-                                                value={formData.expiryMonth}
-                                                onChange={handleInputChange('expiryMonth')}
-                                                label="Mês"
-                                            >
-                                                {Array.from({ length: 12 }, (_, i) => (
-                                                    <MenuItem key={i + 1} value={String(i + 1).padStart(2, '0')}>
-                                                        {String(i + 1).padStart(2, '0')}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={6} sm={4}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>Ano</InputLabel>
-                                            <Select
-                                                value={formData.expiryYear}
-                                                onChange={handleInputChange('expiryYear')}
-                                                label="Ano"
-                                            >
-                                                {Array.from({ length: 10 }, (_, i) => (
-                                                    <MenuItem key={i} value={String(new Date().getFullYear() + i).slice(-2)}>
-                                                        {String(new Date().getFullYear() + i).slice(-2)}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12} sm={4}>
-                                        <TextField
-                                            fullWidth
-                                            label="CVV"
-                                            value={formData.cvv}
-                                            onChange={handleInputChange('cvv')}
-                                            placeholder="123"
-                                        />
+                                    <Grid item xs={12} sm={12}>
+                                        <CardInput formData={formData} handleInputChange={handleInputChange} />
                                     </Grid>
                                 </Grid>
                             ) : (
@@ -618,7 +571,7 @@ export function Payment() {
 
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                                 <SecurityIcon fontSize="small" color="action" />
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography color="text.secondary" sx={{ fontSize: '0.8rem', opacity: 0.7 }}>
                                     Seus dados estão seguros. Usamos criptografia SSL e somos compatíveis com PCI DSS.
                                 </Typography>
                             </Box>

@@ -74,7 +74,7 @@ export function NavUpgrade({ sx, ...other }) {
         </Box>
 
         {isFreeUser ? (
-          <Button variant="contained" href={paths.pricing} rel="noopener">
+          <Button variant="contained" href={paths.payment} rel="noopener">
             Acesse todas as ferramentas
           </Button>
         ) : (
@@ -176,7 +176,7 @@ export function UpgradeBlock({ sx, ...other }) {
           Invista com inteligência
         </Box>
 
-        <Button variant="contained" size="small" color="warning" href={paths.pricing} rel="noopener">
+        <Button variant="contained" size="small" color="warning" href={paths.payment} rel="noopener">
           Faça upgrade
         </Button>
       </Box>

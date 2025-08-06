@@ -8,10 +8,10 @@ import { Typography } from '@mui/material';
 
 export function PasswordChecklist({ password = '' }) {
   const requirements = [
-    { label: 'Pelo menos 8 caracteres', test: (pw) => pw.length >= 8 },
     { label: 'Letras min\u00fasculas', test: (pw) => /[a-z]/.test(pw) },
     { label: 'Letras mai\u00fasculas', test: (pw) => /[A-Z]/.test(pw) },
     { label: 'N\u00fameros', test: (pw) => /[0-9]/.test(pw) },
+    { label: 'Caracteres especiais', test: (pw) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw) },
   ];
 
   return (

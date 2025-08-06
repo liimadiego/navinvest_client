@@ -1090,13 +1090,15 @@ export function HomeView() {
                   }}
                 >
                   <CardContent sx={{ p: 4 }}>
-                    <Typography variant="h4" sx={{ mb: 1, fontWeight: 600, color: 'primary.light' }}>
+                    <Typography variant="h4" sx={{ mb: 0, fontWeight: 600, color: 'primary.light' }}>
                       Plano Mensal
                     </Typography>
 
                     <Typography variant="h3" sx={{ mb: 2, fontWeight: 700 }}>
-                      R$59,99
-                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês</Typography>
+                      <span style={{ textDecoration: 'line-through', opacity: 0.6, fontSize: '0.875rem' }}>R$59,99</span><br />
+                      <span>R$26,99</span>
+                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês </Typography>
+                      <i style={{ opacity: 0.8, fontSize: '0.95rem' }}>Nos primeiros 3 meses</i>
                     </Typography>
 
                     <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
@@ -1168,13 +1170,15 @@ export function HomeView() {
                   </Box>
 
                   <CardContent sx={{ p: 4 }}>
-                    <Typography variant="h4" sx={{ mb: 1, fontWeight: 600, color: 'primary.main' }}>
+                    <Typography variant="h4" sx={{ mb: 0, fontWeight: 600, color: 'primary.main' }}>
                       Plano Anual
                     </Typography>
 
                     <Typography variant="h3" sx={{ mb: 1, fontWeight: 700 }}>
-                      R$47,99
-                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês</Typography>
+                      <span style={{ textDecoration: 'line-through', opacity: 0.6, fontSize: '0.875rem' }}>R$47,99</span><br />
+                      <span>R$21,59</span>
+                      <Typography component="span" variant="body1" sx={{ color: 'text.secondary' }}>/mês </Typography>
+                      <i style={{ opacity: 0.6, fontSize: '0.875rem' }}>No primeiro ano</i>
                     </Typography>
 
                     <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
