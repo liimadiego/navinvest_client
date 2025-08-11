@@ -153,6 +153,8 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
     setEditFormOpen(true)
   }
 
+  console.log('row:', row);
+
   return (
     <>
       <TableRow hover>
@@ -204,7 +206,7 @@ export function WalletTableRow({ row, onDeleteRow, fetchTableData }) {
         )}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap', fontWeight: 400 }}>
-          Manual
+          {( row.adjustment_description || "Manual" )}
         </TableCell>
 
         <TableCell width={100}>
