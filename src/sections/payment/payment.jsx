@@ -82,7 +82,7 @@ export function Payment() {
     const [formData, setFormData] = useState({
         email: testMode ? 'userteste@navinvest.ai' : '',
         phone: testMode ? '11951595132' : '',
-        password: testMode ? '123456' : '',
+        password: testMode ? 'Aa123456!!!!!!!' : '',
         cardNumber: testMode ? '4444444444444444' : '',
         expiryMonth: testMode ? '01' : '',
         expiryYear: testMode ? '31' : '',

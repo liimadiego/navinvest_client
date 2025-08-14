@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { WalletManagement } from '../wallet-management';
 import { _userList } from 'src/_mock';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
@@ -11,8 +11,13 @@ import ChillWoman2 from 'src/assets/characters/character-8.webp';
 import ChillWoman from 'src/assets/characters/character-3.webp';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
-import { AddCircle } from '@mui/icons-material';
+import { AddCircle, Circle, Sync } from '@mui/icons-material';
 import axios from 'src/lib/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
+import SyncB3Modal from 'src/components/sync-b3-modal';
+import { validateCpf } from 'src/utils/cpf';
+
 
 function calculateCategorySummary(category, fullPortfolio) {
     let totalPortfolioInvested = 0;
@@ -47,12 +52,138 @@ function calculateCategorySummary(category, fullPortfolio) {
 }
 
 export function WalletManagementView() {
+
     const navigate = useNavigate();
     const [tableData, setTableData] = useState([]);
     const [transactionModal, setTransactionModal] = useState(false);
     const { currentWallet } = useWallet();
     const [isLoading, setIsLoading] = useState(true);
     const [isTransactionModalLoading, setIsTransactionModalLoading] = useState(false);
+    
+    const [b3Modal, setB3Modal] = useState(false);
+    const [b3ModaErrors, setB3ModaErrors] = useState({});
+    // const [b3ModalIsLoading, setB3ModalIsLoading] = useState(false);
+    
+    const { user, checkUserSession } = useAuthContext();
+    const [userCpf, setUserCpf] = useState(user.cpf);
+    const [b3UserAuthorization, setB3UserAuthorization] = useState(false);
+
+    const b3PopupRef = useRef(null);
+    const b3PopupIntervalRef = useRef(null);
+
+    const fetchUserAuthorization = async () => {
+        setIsLoading(true);
+        try {
+            const { data: { authorized } } = await axios.get(`/b3-import/user-authorization`);
+            setB3UserAuthorization(authorized);
+        } catch (error) {
+            if (!error.message === 'Usuário não possui CPF cadastrado') {
+                console.error('Error fetching user authorization:', error);
+            }
+        }
+        setIsLoading(false);
+    };
+
+    useEffect(() => {
+        fetchUserAuthorization();
+    }, [userCpf]);
+
+    const handleSyncB3Modal = () => {
+        setB3Modal(true);
+    };
+
+    const handleCloseSyncB3ModalModal = () => {
+        setB3Modal(false);
+    };
+    
+    const handleUserCpfSubmit = async (cpf) => {
+        setB3ModaErrors({});
+        setIsLoading(true);
+        try {
+            if (!validateCpf(cpf)) {
+                setB3ModaErrors({ ...b3ModaErrors, cpf: 'CPF inválido' });
+            }
+            const cpfNumber = cpf.replace(/\D/g, '');
+
+            const r = await axios.post('/users/set-cpf', { cpf: cpfNumber });
+            if (!r?.data?.success) throw r;
+
+            setUserCpf(cpfNumber);
+
+        } catch (error) {
+            console.error('[E] handleUserCpfSubmit (cpf= ' + cpf + '):', error);
+            setB3ModaErrors({ ...b3ModaErrors, cpf: 'Não foi possível definir o CPF no momento. Tente novamente mais tarde...' });
+        }
+        setIsLoading(false);
+    };
+
+    const cleanupPopup = () => {
+        if (b3PopupIntervalRef.current) {
+            clearInterval(b3PopupIntervalRef.current);
+            b3PopupIntervalRef.current = null;
+        }
+        window.removeEventListener('focus', afterB3AuthorizationPopup);
+        document.removeEventListener('visibilitychange', afterB3AuthorizationPopup);
+        b3PopupRef.current = null;
+    };
+
+    const afterB3AuthorizationPopup = (e) => {
+        // console.log('afterB3AuthorizationPopup triggered: e.type=', e.type, ', document.visibilityState=', document.visibilityState, ', b3PopupRef.current?.closed=', b3PopupRef.current?.closed);
+
+        // Ignore visibility change when page becomes hidden
+        if (e.type === 'visibilitychange' && document.visibilityState !== 'visible') {
+            return;
+        }
+
+        if (b3PopupRef.current?.closed) {
+            // console.log('Cleaning B3 Authorization Popup and calling user authorization fetch...');
+            cleanupPopup();
+            fetchUserAuthorization();
+        }
+    };
+
+    const openB3AuthorizationPopup = () => {
+        // Clean up any existing popup
+        cleanupPopup();
+
+        b3PopupRef.current = window.open(
+            'https://b3investidor.b2clogin.com/b3investidor.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_FINTECH&client_id=2c4fc414-1667-4d4c-84bb-edfd8e5f28c0&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fwww.investidor.b3.com.br&scope=openid&response_type=code&prompt=login', 
+            'b3Popup',
+            `width=750,height=800,left=${Math.round(window.screen.width / 2 - 375)},top=${Math.round(window.screen.height / 2 - 400)}`
+        );
+        if (!b3PopupRef.current) { // Talvez o navegador esteja bloqueando pop-ups
+            console.error('Não foi possível abrir a janela para autorização B3.');
+            return;
+        }
+        
+        console.log('Adding event listeners because of B3 Authorization Popup...');
+
+        // Set up event listeners for popup detection
+        window.addEventListener('focus', afterB3AuthorizationPopup, { passive: true });
+        document.addEventListener('visibilitychange', afterB3AuthorizationPopup, { passive: true });
+
+        // Polling fallback for browsers that don't support the above events reliably
+        b3PopupIntervalRef.current = setInterval(() => afterB3AuthorizationPopup({ type: 'pool' }), 500);
+
+        // console.log('[!] Opened B3 Authorization Popup.');
+    };
+    
+    const handleSyncB3Sumbit = async (portfolioId) => {
+        setIsLoading(true);
+        try {
+            const r = await axios.get(`/b3-import/user-transactions?portfolioId=${portfolioId}&fromStart=true`);
+            if (!r?.data?.success) throw r;
+            checkUserSession(); // Refresh user session to update the user data
+            setB3Modal(false);
+            if (portfolioId === currentWallet?.id) {
+                fetchTableData(currentWallet?.id);
+            }
+            
+        } catch (error) {
+            console.error('Error synchronizing user with B3:', error);
+        }
+        setIsLoading(false);
+    };
 
     const handleOpenTransactionModal = () => {
         setTransactionModal(true);
@@ -219,6 +350,37 @@ export function WalletManagementView() {
                         >
                             Adicionar lançamento
                         </Button>}
+                        {currentWallet?.id && <Button
+                            loading={isLoading}
+                            disabled={((user.b3SyncPortfolioId === currentWallet.id) || isLoading)}
+                            variant={(user.b3SyncPortfolioId === currentWallet.id || isLoading) ? "outlined" : undefined}
+                            onClick={(user.b3SyncPortfolioId === currentWallet.id) ? undefined : handleSyncB3Modal}
+                            startIcon={
+                                isLoading ? 
+                                undefined : (
+                                    (user.b3SyncPortfolioId === currentWallet.id) ?
+                                    <Circle 
+                                        color="success" 
+                                        sx={{ width: '12px' }} 
+                                    /> :
+                                    <Sync />
+                                )
+                            }
+                            sx={(theme) => ({
+                                // borderColor: theme.palette.primary.main,
+                                backgroundColor: (user.b3SyncPortfolioId === currentWallet.id || isLoading) ? undefined : theme.palette.primary.main,
+                                color: '#fff',
+                                px: 2,
+                                '&:hover': {
+                                    // backgroundColor: 'transparent',
+                                    backgroundColor: theme.palette.primary.dark,
+                                    // borderColor: theme.palette.primary.dark,
+                                    // boxShadow: 0
+                                },
+                            })}
+                        >
+                            {(user.b3SyncPortfolioId === currentWallet.id) ? "Carteira sincronizada" : "Sincronizar com a B3"}
+                        </Button>}
                     </>
                 }
                 sx={{ mb: { xs: 3, md: 5 } }}
@@ -254,6 +416,18 @@ export function WalletManagementView() {
                     </Box> : <Skeleton variant="rectangular" width={'100%'} height={500} sx={{ borderRadius: 2 }} />}
 
                     <AddEditTransactionModal isLoading={isTransactionModalLoading} open={transactionModal} onClose={handleCloseTransactionModal} onSave={handleSaveTransaction} />
+
+                    <SyncB3Modal 
+                        open={b3Modal}
+                        handleUserCpfSubmit= {handleUserCpfSubmit}
+                        errors= {b3ModaErrors}
+                        userCpf={userCpf}
+                        onClose={handleCloseSyncB3ModalModal}
+                        isLoading={isLoading}
+                        b3UserAuthorization={b3UserAuthorization}
+                        handleSyncB3Sumbit={handleSyncB3Sumbit}
+                        openB3AuthorizationPopup={openB3AuthorizationPopup}
+                    />
                 </> :
 
                 <ShowWarningImageAndMessage

@@ -32,6 +32,19 @@ import {
     TableNoData,
 } from 'src/components/table';
 
+function sanitizeJsonString(text) {
+  return text
+    .replace(/\r\n?/g, "\\n")                      // quebra de linha → \n
+    .replace(/[\u201C\u201D]/g, '\\"')              // aspas duplas curvas → \"
+    .replace(/[\u2018\u2019]/g, "'")                // aspas simples curvas → '
+    .replace(/\t/g, "\\t");                         // tabulação → \t
+}
+
+function parseSafeJson(raw) {
+  const sanitized = sanitizeJsonString(raw);
+  return JSON.parse(sanitized);
+}
+
 export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, assetType }) {
     const [imageError, setImageError] = useState(false);
     const [aboutFormated, setAboutFormated] = useState(<></>);
@@ -58,10 +71,15 @@ export function AssetDetailsFiis({ ticker, tickerData, chart, proftability, asse
 
     useEffect(() => {
         if (assetInfo?.about) {
-            try {
-                assetInfo.about = JSON.parse(assetInfo.about);
-            } catch (error) {
-                // If parsing fails, keep it as is
+            if (typeof assetInfo.about === 'string') {
+                try {
+                    assetInfo.about = parseSafeJson(assetInfo.about);
+                } catch (error) {
+                    // If parsing fails, keep it as is
+                    console.error('Failed to parse "assetInfo.about":', error);
+                    console.log('assetInfo.about:', assetInfo.about, '\n ');
+                    return;
+                }
             }
 
             const contentElements = [];
