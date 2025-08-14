@@ -19,7 +19,7 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
     shouldUserUsePremiumFeatures
   } = useUserPlan();
 
-  const useHasAccess = data.onlyPaying ? shouldUserUsePremiumFeatures !== null : true;
+  const useHasAccess = data.onlyPaying ? shouldUserUsePremiumFeatures === true : true;
   const pathname = usePathname();
   const navItemRef = useRef(null);
 
@@ -32,7 +32,6 @@ export function NavList({ data, depth, render, slotProps, currentRole, enabledRo
     if (!isActive) {
       onClose();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const handleToggleMenu = useCallback(() => {

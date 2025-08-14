@@ -24,8 +24,6 @@ import { useAuthContext } from '../../hooks';
 import { getErrorMessage } from '../../utils';
 import { FormHead } from '../../components/form-head';
 import { SignUpTerms } from '../../components/sign-up-terms';
-
-import { useNavigate } from 'react-router-dom';
 // ----------------------------------------------------------------------
 
 export const SignUpSchema = zod.object({
@@ -52,199 +50,183 @@ export const SignUpSchema = zod.object({
 // ----------------------------------------------------------------------
 
 export function JwtSignUpView() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
-  //manda o user para a página de pagamento
-  const handleNavigateToPayment = () => {
-    navigate(paths.payment);
+  const showPassword = useBoolean();
+
+  const { checkUserSession } = useAuthContext();
+
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const defaultValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
   };
 
-  useEffect(() => {
-    // Redireciona para a página de pagamento ao montar o componente
-    handleNavigateToPayment();
-  }, []);
+  const methods = useForm({
+    resolver: zodResolver(SignUpSchema),
+    defaultValues,
+  });
+  const passwordValue = methods.watch('password');
 
+  const mostCompletePhoneMaskHandler = (value) => {
+    const digits = value.replace(/\D/g, '');
 
-  // const router = useRouter();
+    if (!digits) return '';
 
-  // const showPassword = useBoolean();
+    if (digits.length <= 2) {
+      return `(${digits}`;
+    } else if (digits.length <= 6) {
+      return `(${digits.substring(0, 2)}) ${digits.substring(2)}`;
+    } else if (digits.length <= 10) {
+      const areaCode = digits.substring(0, 2);
+      const firstPart = digits.substring(2, 6);
+      const secondPart = digits.substring(6);
+      return `(${areaCode}) ${firstPart}-${secondPart}`;
+    } else {
+      const areaCode = digits.substring(0, 2);
+      const firstPart = digits.substring(2, 7);
+      const secondPart = digits.substring(7, 11);
+      return `(${areaCode}) ${firstPart}-${secondPart}`;
+    }
+  };
 
-  // const { checkUserSession } = useAuthContext();
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
 
-  // const [errorMessage, setErrorMessage] = useState('');
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await signUp({
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone.replaceAll(/[^0-9]/g, ''),
+      });
 
-  // const defaultValues = {
-  //   firstName: '',
-  //   lastName: '',
-  //   email: '',
-  //   password: '',
-  // };
+      await checkUserSession?.();
 
-  // const methods = useForm({
-  //   resolver: zodResolver(SignUpSchema),
-  //   defaultValues,
-  // });
-  // const passwordValue = methods.watch('password');
+      router.push(paths.dashboard.root);
+    } catch (error) {
+      console.error(error);
+      const feedbackMessage = getErrorMessage(error);
+      setErrorMessage(feedbackMessage);
+    }
+  });
 
-  // const mostCompletePhoneMaskHandler = (value) => {
-  //   const digits = value.replace(/\D/g, '');
+  const renderForm = () => (
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box
+        sx={{ display: 'flex', gap: { xs: 3, sm: 2 }, flexDirection: { xs: 'column', sm: 'row' } }}
+      >
+        <Field.Text
+          name="firstName"
+          label="Primeiro nome"
+          placeholder="Nome"
+          slotProps={{ inputLabel: { shrink: true } }}
+          sx={{ mb: 3 }}
+        />
+        <Field.Text
+          name="lastName"
+          label="Sobrenome"
+          placeholder="Sobrenome"
+          slotProps={{ inputLabel: { shrink: true } }}
+          sx={{ mb: 3 }}
+        />
+      </Box>
 
-  //   if (!digits) return '';
+      <Field.Text
+        name="phone"
+        label="Telefone"
+        placeholder="(00) 00000-0000"
+        slotProps={{ inputLabel: { shrink: true } }}
+        InputProps={{
+          inputComponent: 'input',
+          inputProps: {
+            maxLength: 15,
+            pattern: '\\d{2}\\s\\d{5}-\\d{4}',
+          },
+        }}
+        helperText="Formato: (00) 00000-0000"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        onInput={(e) => {
+          e.target.value = mostCompletePhoneMaskHandler(e.target.value.replace(/[^0-9\s-]/g, ''));
+        }}
+        sx={{ mb: 3 }}
+      />
 
-  //   if (digits.length <= 2) {
-  //     return `(${digits}`;
-  //   } else if (digits.length <= 6) {
-  //     return `(${digits.substring(0, 2)}) ${digits.substring(2)}`;
-  //   } else if (digits.length <= 10) {
-  //     const areaCode = digits.substring(0, 2);
-  //     const firstPart = digits.substring(2, 6);
-  //     const secondPart = digits.substring(6);
-  //     return `(${areaCode}) ${firstPart}-${secondPart}`;
-  //   } else {
-  //     const areaCode = digits.substring(0, 2);
-  //     const firstPart = digits.substring(2, 7);
-  //     const secondPart = digits.substring(7, 11);
-  //     return `(${areaCode}) ${firstPart}-${secondPart}`;
-  //   }
-  // };
+      <Field.Text name="email" label="Email" placeholder="Email" slotProps={{ inputLabel: { shrink: true } }} sx={{ mb: 3 }} />
 
-  // const {
-  //   handleSubmit,
-  //   formState: { isSubmitting },
-  // } = methods;
+      <Field.Text
+        name="password"
+        label="Senha"
+        placeholder="8+ caracteres"
+        type={showPassword.value ? 'text' : 'password'}
+        slotProps={{
+          inputLabel: { shrink: true },
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={showPassword.onToggle} edge="end">
+                  <Iconify icon={showPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
+      />
 
-  // const onSubmit = handleSubmit(async (data) => {
-  //   try {
-  //     await signUp({
-  //       email: data.email,
-  //       password: data.password,
-  //       firstName: data.firstName,
-  //       lastName: data.lastName,
-  //       phone: data.phone.replaceAll(/[^0-9]/g, ''),
-  //     });
+      <PasswordChecklist password={passwordValue} />
 
-  //     gtagSendEvent();
+      <LoadingButton
+        fullWidth
+        color="inherit"
+        size="large"
+        type="submit"
+        variant="contained"
+        loading={isSubmitting}
+        loadingIndicator="Criar conta..."
+      >
+        Criar conta
+      </LoadingButton>
+    </Box>
+  );
 
-  //     await checkUserSession?.();
+  return (
+    <>
+      <FormHead
+        title="Registre-se de graça"
+        description={
+          <>
+            {`Já possui uma conta? Acesse o seu `}
+            <Link component={RouterLink} href={paths.auth.jwt.signIn} variant="subtitle2" sx={(theme) => ({
+              color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+              borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
+            })}>
+              Login
+            </Link>
+          </>
+        }
+        sx={{ textAlign: { xs: 'center', md: 'left' } }}
+      />
 
-  //     router.refresh();
-  //   } catch (error) {
-  //     console.error(error);
-  //     const feedbackMessage = getErrorMessage(error);
-  //     setErrorMessage(feedbackMessage);
-  //   }
-  // });
+      {!!errorMessage && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {errorMessage}
+        </Alert>
+      )}
 
-  // const renderForm = () => (
-  //   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-  //     <Box
-  //       sx={{ display: 'flex', gap: { xs: 3, sm: 2 }, flexDirection: { xs: 'column', sm: 'row' } }}
-  //     >
-  //       <Field.Text
-  //         name="firstName"
-  //         label="Primeiro nome"
-  //         placeholder="Nome"
-  //         slotProps={{ inputLabel: { shrink: true } }}
-  //         sx={{ mb: 3 }}
-  //       />
-  //       <Field.Text
-  //         name="lastName"
-  //         label="Sobrenome"
-  //         placeholder="Sobrenome"
-  //         slotProps={{ inputLabel: { shrink: true } }}
-  //         sx={{ mb: 3 }}
-  //       />
-  //     </Box>
+      <Form methods={methods} onSubmit={onSubmit}>
+        {renderForm()}
+      </Form>
 
-  //     <Field.Text
-  //       name="phone"
-  //       label="Telefone"
-  //       placeholder="(00) 00000-0000"
-  //       slotProps={{ inputLabel: { shrink: true } }}
-  //       InputProps={{
-  //         inputComponent: 'input',
-  //         inputProps: {
-  //           maxLength: 15,
-  //           pattern: '\\d{2}\\s\\d{5}-\\d{4}',
-  //         },
-  //       }}
-  //       helperText="Formato: (00) 00000-0000"
-  //       InputLabelProps={{
-  //         shrink: true,
-  //       }}
-  //       onInput={(e) => {
-  //         e.target.value = mostCompletePhoneMaskHandler(e.target.value.replace(/[^0-9\s-]/g, ''));
-  //       }}
-  //       sx={{ mb: 3 }}
-  //     />
-
-  //     <Field.Text name="email" label="Email" placeholder="Email" slotProps={{ inputLabel: { shrink: true } }} sx={{ mb: 3 }} />
-
-  //     <Field.Text
-  //       name="password"
-  //       label="Senha"
-  //       placeholder="8+ caracteres"
-  //       type={showPassword.value ? 'text' : 'password'}
-  //       slotProps={{
-  //         inputLabel: { shrink: true },
-  //         input: {
-  //           endAdornment: (
-  //             <InputAdornment position="end">
-  //               <IconButton onClick={showPassword.onToggle} edge="end">
-  //                 <Iconify icon={showPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-  //               </IconButton>
-  //             </InputAdornment>
-  //           ),
-  //         },
-  //       }}
-  //     // helperText="Deve conter letras maiúsculas, minúsculas, números e caracteres especiais (8+ caracteres)"
-  //     />
-
-  //     <PasswordChecklist password={passwordValue} />
-
-  //     <LoadingButton
-  //       fullWidth
-  //       color="inherit"
-  //       size="large"
-  //       type="submit"
-  //       variant="contained"
-  //       loading={isSubmitting}
-  //       loadingIndicator="Criar conta..."
-  //     >
-  //       Criar conta
-  //     </LoadingButton>
-  //   </Box>
-  // );
-
-  // return (
-  //   <>
-  //     <FormHead
-  //       title="Registre-se de graça"
-  //       description={
-  //         <>
-  //           {`Já possui uma conta? Acesse o seu `}
-  //           <Link component={RouterLink} href={paths.auth.jwt.signIn} variant="subtitle2" sx={(theme) => ({
-  //             color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
-  //             borderColor: theme.palette.mode === 'dark' ? '#fff' : theme.palette.primary.main,
-  //           })}>
-  //             Login
-  //           </Link>
-  //         </>
-  //       }
-  //       sx={{ textAlign: { xs: 'center', md: 'left' } }}
-  //     />
-
-  //     {!!errorMessage && (
-  //       <Alert severity="error" sx={{ mb: 3 }}>
-  //         {errorMessage}
-  //       </Alert>
-  //     )}
-
-  //     <Form methods={methods} onSubmit={onSubmit}>
-  //       {renderForm()}
-  //     </Form>
-
-  //     <SignUpTerms />
-  //   </>
-  // );
+      <SignUpTerms />
+    </>
+  );
 }
