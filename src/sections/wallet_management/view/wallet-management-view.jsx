@@ -18,6 +18,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import SyncB3Modal from 'src/components/sync-b3-modal';
 import { validateCpf } from 'src/utils/cpf';
 
+const B3_AUTHORIZATION_URL = import.meta.env.VITE_B3_AUTHORIZATION_URL;
 
 function calculateCategorySummary(category, fullPortfolio) {
     let totalPortfolioInvested = 0;
@@ -147,7 +148,7 @@ export function WalletManagementView() {
         cleanupPopup();
 
         b3PopupRef.current = window.open(
-            'https://b3investidor.b2clogin.com/b3investidor.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_FINTECH&client_id=2c4fc414-1667-4d4c-84bb-edfd8e5f28c0&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fwww.investidor.b3.com.br&scope=openid&response_type=code&prompt=login', 
+            B3_AUTHORIZATION_URL,
             'b3Popup',
             `width=750,height=800,left=${Math.round(window.screen.width / 2 - 375)},top=${Math.round(window.screen.height / 2 - 400)}`
         );
